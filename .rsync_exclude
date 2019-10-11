@@ -1,2 +1,2 @@
-data/studies/*/*.yaml
-data/studies/*/*.R
+studies/*/*.yaml
+studies/*/*.R

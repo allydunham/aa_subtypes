@@ -11,8 +11,8 @@
 # Sync only desired folders based on args
 
 ## Config ##
-project_name="Amino Acid SubtypesProject"
-local_dir=$HOME/phd/test
+project_name="Amino Acid Subtypes Project"
+local_dir=$HOME/phd/subtypes
 remote_dirs=( "ebi:/nfs/research1/beltrao/ally/subtypes" "ebi:/hps/research1/beltrao/ally/subtypes" )
 folders=( "data" "meta" "figures" "docs" )
 
