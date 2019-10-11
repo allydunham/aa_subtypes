@@ -1,0 +1,5 @@
+/data/*
+!/data/studies/
+!/data/studies/*/**
+!/data/studies/*/*.R
+!/data/studies/*/*.yaml
