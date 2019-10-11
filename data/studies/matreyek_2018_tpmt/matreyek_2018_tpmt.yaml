@@ -1,0 +1,18 @@
+study: 'matreyek_2018_tpmt'
+gene: 'TPMT'
+uniprot_id: 'P51580'
+gene_type: 'Methyltransferase' 
+species: 'H. sapiens'
+seq: "MDGTRTSLDIEEYSDTEVQKNQVLTLEEWQDKWVNGKTAFHQEQGHQLLKKHLD
+TFLKGKSGLRVFFPLCGKAVEMKWFADRGHSVVGVEISELGIQEFFTEQNLSYSEEPITE
+IPGTKVFKSSSGNISLYCCSIFDLPRTNIGKFDMIWDRGALVAINPGDRKCYADTMFSLL
+GKKFQYLLCVLSYDPTKHPGPPFYVPHAEIERLFGKICNIRCLEKVDAFEERHKSWGIDC
+LFEKLYLLTEK"
+experiment: 'VAMP-seq'
+transform: "Standard VAMP-seq transform"
+authour: 'Matreyek et al.'
+year: 2018
+title: 'Multiplex assessment of protein variant abundance by massively parallel sequencing'
+doi: '10.1038/s41588-018-0122-z'
+pmid: '29785012'
+url: 'https://www.nature.com/articles/s41588-018-0122-z'
