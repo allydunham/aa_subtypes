@@ -3,3 +3,4 @@
 !/data/studies/*/**
 !/data/studies/*/*.R
 !/data/studies/*/*.yaml
+/figures/**
