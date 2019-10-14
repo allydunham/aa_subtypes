@@ -1,0 +1,3 @@
+genes: [yap1, np, tpmt, adrb2, pten, hsp90, hsp90]
+studies: [araya_2012_yap1, ashenberg_2017_np, matreyek_2018_tpmt, jones_2019_adrb2,
+  matreyek_2018_pten, heitpas_2011_hsp90, jiang_2013_hsp90]
