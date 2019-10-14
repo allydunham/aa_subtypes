@@ -1,3 +1,4 @@
+.snakemake/**
 /data/*
 !/data/studies/
 /data/studies/*/**
