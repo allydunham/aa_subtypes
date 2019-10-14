@@ -1,2 +1,3 @@
 studies/*/*.yaml
 studies/*/*.R
+meta/study_template.yaml
