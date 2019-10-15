@@ -30,7 +30,7 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
   ggsave(str_c('figures/0_data_properties/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
   ggsave(str_c('figures/0_data_properties/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
   
-  write_tsv(select(dm_data, position, wt, mut, score), str_c('data/studies/', study_id, '/', study_id, '.tsv'))
+  write_tsv(select(dm_data, position, wt, mut, score, raw_score, class), str_c('data/studies/', study_id, '/', study_id, '.tsv'))
 }
 
 ## Function to determine variant class
