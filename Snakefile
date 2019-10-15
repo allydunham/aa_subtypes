@@ -15,10 +15,24 @@ rule standardise_data:
         "data/studies/{study}/standardise_{study}.R"
 
     output:
-        "data/studies/{study}/{study}.tsv"
+        "data/studies/{study}/{study}.tsv",
+        "figures/0_data_properties/{study}/original_distribution.pdf",
+        "figures/0_data_properties/{study}/transformed_distribution.pdf"
 
-    shell:
-        "Rscript {input}"
+    script:
+        "{input}"
+
+# Test multiple mutation averaging
+rule validate_multi_muts:
+    input:
+        "data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx",
+        "data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv"
+
+    output:
+        "figures/0_data_properties/averaging_multi_mutants.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_multi_muts.R"
 
 # Make all SIFT predictions for study genes
 # TODO Change layout so as to only run each gene once
@@ -45,3 +59,5 @@ rule sift4g:
 
 # Make all FoldX for study genes
 # TODO
+
+# Plots
