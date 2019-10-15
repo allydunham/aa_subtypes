@@ -1,5 +1,6 @@
 study: 'jones_2019_adrb2'
 gene: 'ADRB2'
+uniprot_id: 'P07550'
 gene_type: 'GPCR'
 species: 'H. sapiens'
 seq: "MGQPGNGSAFLLAPNGSHAPDHDVTQERDEVWVVGMGIVMSLIVLAIVFGNVLV\
