@@ -4,9 +4,6 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'jiang_2013_hsp90'
-transform = 'log2(x)'
-
 # Import and process data
 meta <- read_yaml('data/studies/jiang_2013_hsp90/jiang_2013_hsp90.yaml')
 dm_data <- read_xlsx('data/studies/jiang_2013_hsp90/raw/jiang_2013_hsp90.xlsx', skip = 2) %>%
@@ -21,4 +18,5 @@ dm_data <- read_xlsx('data/studies/jiang_2013_hsp90/raw/jiang_2013_hsp90.xlsx', 
          class = get_variant_class(wt, mut))
   
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)
+

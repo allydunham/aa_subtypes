@@ -4,9 +4,6 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'araya_2012_yap1'
-transform = 'log2(x)'
-
 # Import and process data
 meta <- read_yaml('data/studies/araya_2012_yap1/araya_2012_yap1.yaml')
 dm_data <- read_tsv('data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv', na = 'na',
@@ -27,4 +24,4 @@ dm_data <- read_tsv('data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv',
          score = score / -min(score, na.rm = TRUE))
 
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)

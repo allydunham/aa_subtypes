@@ -11,11 +11,9 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'STUDY'
-transform = 'None'
-
 # Import and process data
+meta <- read_yaml('IMPORT META YAML')
 dm_data <- read_csv('IMPORT STUDY DATA')
 
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)

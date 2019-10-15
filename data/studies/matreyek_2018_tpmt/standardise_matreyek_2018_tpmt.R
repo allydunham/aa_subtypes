@@ -4,10 +4,8 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'matreyek_2018_tpmt'
-transform = 'VAMP-seq Scaling'
-
 # Import and process data
+meta <- read_yaml('data/studies/metreyek_2018_tpmt/matreyek_2018_tpmt.yaml')
 dm_data <- read_csv('data/studies/matreyek_2018_tpmt/raw/TPMT.csv',
                     col_types = cols(.default = col_character(), position = col_integer(), score = col_double())) %>%
   select(-X1) %>%
@@ -17,4 +15,5 @@ dm_data <- read_csv('data/studies/matreyek_2018_tpmt/raw/TPMT.csv',
          score = transform_vamp_seq(raw_score))
 
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)
+

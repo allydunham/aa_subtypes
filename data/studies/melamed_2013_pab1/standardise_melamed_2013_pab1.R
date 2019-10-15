@@ -4,9 +4,6 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'melamed_2013_pab1'
-transform = 'None'
-
 # Import and process data
 meta <- read_yaml('data/studies/melamed_2013_pab1/melamed_2013_pab1.yaml')
 dm_data <- read_xlsx('data/studies/melamed_2013_pab1/raw/melamed_2013_pab1_rrm_enrichment_ratios.xlsx') %>%
@@ -15,4 +12,5 @@ dm_data <- read_xlsx('data/studies/melamed_2013_pab1/raw/melamed_2013_pab1_rrm_e
   mutate(score = raw_score / -min(raw_score, na.rm = TRUE), class = get_variant_class(wt, mut))
 
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)
+

@@ -4,9 +4,6 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-study_id = 'starita_2013_ube4b'
-transform = 'None'
-
 # Import and process data
 meta <- read_yaml('data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml')
 dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx', na = c('NA', '')) %>%
@@ -32,4 +29,5 @@ dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubo
          class = get_variant_class(wt, mut))
 
 # Save output
-standardise_study(dm_data, study_id, transform)
+standardise_study(dm_data, meta$study, meta$transform)
+
