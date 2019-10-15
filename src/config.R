@@ -44,7 +44,10 @@ AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
                 G='antiquewhite2', P='black', X='grey')
 
 # Generic ggplot theme - clean with centered title by default
-theme_set(theme_pubclean() + theme(legend.position = 'right', plot.title = element_text(hjust = 0.5)))
+theme_set(theme_pubclean() + theme(legend.position = 'right',
+                                   plot.title = element_text(hjust = 0.5),
+                                   plot.subtitle = element_text(hjust = 0.5),
+                                   strip.background = element_blank()))
 
 # Function to format study names
 format_study <- function(x, max_width=60){
