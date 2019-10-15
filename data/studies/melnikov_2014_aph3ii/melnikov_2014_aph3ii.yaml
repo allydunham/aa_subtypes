@@ -1,0 +1,19 @@
+study: 'melnikov_2014_aph3ii'
+gene: "APH3II"
+uniprot_id: 'Q58HT3'
+gene_type: 'kinase'
+species: 'E. coli'
+seq: "MIEQDGLHAGSPAAWVERLFGYDWAQQTIGCSDAAVFRLSAQGRPVLFVKTDLSGALNEL\
+      QDEAARLSWLATTGVPCAAVLDVVTEAGRDWLLLGEVPGQDLLSSHLAPAEKVSIMADAM\
+      RRLHTLDPATCPFDHQAKHRIERARTRMEAGLVDQDDLDEEHQGLAPAELFARLKARMPD\
+      GEDLVVTHGDACLPNIMVENGRFSGFIDCGRLGVADRYQDIALATRDIAEELGGEWADRF\
+      LVLYGIAAPDSQRIAFYRLLDEFF" 
+experiment: 'Coupled growth'
+transform: 'mean of different drug concs (raw is at 1:1 MIC)'
+authour: 'Melnikov et al.'
+year: 2014
+title: 'Comprehensive mutational scanning of a kinase in vivo reveals substrate-dependent fitness landscapes'
+doi: '10.1093/nar/gku511'
+pmid: '24914046'
+url: 'https://academic.oup.com/nar/article/42/14/e112/1266940'
+note: "Real gene name is APH(3')-II, which has been transformed to be computer readable (and because its a terrible name)"
