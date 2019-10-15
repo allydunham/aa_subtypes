@@ -9,6 +9,8 @@ pylint = "*"
 [packages]
 snakemake = "*"
 ruamel-yaml = "*"
+biopython = "*"
+colorama = "*"
 
 [requires]
 python_version = "3.7"
