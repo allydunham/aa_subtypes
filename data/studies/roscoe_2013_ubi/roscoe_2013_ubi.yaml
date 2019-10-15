@@ -1,0 +1,16 @@
+study: 'roscoe_2013_ubi' 
+gene: 'UBI'
+uniprot_id: 'P0CG63'
+gene_type: 'Ubi'
+species: 'S. cerevisiae'
+seq: "MQIFVKTLTGKTITLEVESSDTIDNVKSKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN\
+      IQKESTLHLVLRLRGG"
+experiment: 'Growth'
+transform: 'None'
+authour: 'Roscoe et al.'
+year: 2013
+title: 'Analyses of the effects of all ubiquitin point mutants on yeast growth rate'
+doi: '10.1016/j.jmb.2013.01.032'
+pmid: '23376099'
+url: 'https://www.sciencedirect.com/science/article/pii/S0022283613000636'
+
