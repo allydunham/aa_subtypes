@@ -1,0 +1,19 @@
+study: 'firnberg_2014_tem1' 
+gene: 'TEM1'
+uniprot_id: 'Q6SJ61'
+gene_type: 'Metabolic'
+species: 'E. coli'
+seq: "MSIQHFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRP\
+      EERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVREL\
+      CSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTM\
+      PAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGS\
+      RGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW" 
+experiment: 'Coupled Growth'
+transform: 'log2(x)' 
+authour: 'Firnberg et al.'
+year: 2014
+title: 'A Comprehensive, High-Resolution Map of a Gene’s Fitness Landscape'
+doi: '10.1093/molbev/msu081'
+pmid: '24567513'
+url: 'https://academic.oup.com/mbe/article/31/6/1581/2925654'
+
