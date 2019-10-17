@@ -2,3 +2,4 @@ studies/*/*.yaml
 studies/*/*.R
 study_template.yaml
 fasta/**
+graveyard/README.md
