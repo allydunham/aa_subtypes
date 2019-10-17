@@ -9,6 +9,32 @@ yaml = YAML(typ='safe')
 
 UNIREF90_DB_PATH = '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
 
+#### Validate Data ####
+# Test multiple mutation averaging
+rule validate_multi_muts:
+    input:
+        "data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx",
+        "data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv"
+
+    output:
+        "figures/0_data_properties/averaging_multi_mutants.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_multi_muts.R"
+
+# Validate Melnikov et al. 2014 (APH(3')-II)
+rule validate_melnikov:
+    # Requires Melnikov .aacount files to be in data/studies/melnikov_2014_aph3ii/raw
+    output:
+        "figures/0_data_properties/melnikov_2014_aph3ii/initial_library_correlation.pdf",
+        "figures/0_data_properties/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
+        "figures/0_data_properties/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
+        "figures/0_data_properties/melnikov_2014_aph3ii/drug_correlation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_melnikov.R"
+
+#### Standardise Data ####
 # Process the raw data from each study
 rule standardise_data:
     input:
@@ -22,18 +48,7 @@ rule standardise_data:
     script:
         "{input}"
 
-# Test multiple mutation averaging
-rule validate_multi_muts:
-    input:
-        "data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx",
-        "data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv"
-
-    output:
-        "figures/0_data_properties/averaging_multi_mutants.pdf"
-
-    script:
-        "bin/analysis/0_data_properties/validate_multi_muts.R"
-
+#### Make Tool Predictions ####
 # Make all SIFT predictions for study genes
 # TODO Change layout so as to only run each gene once
 rule make_fasta:
