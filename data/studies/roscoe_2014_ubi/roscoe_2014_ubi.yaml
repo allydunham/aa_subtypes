@@ -1,0 +1,19 @@
+study: 'roscoe_2014_ubi' 
+gene: 'UBI'
+uniprot_id: 'P0CG63'
+gene_type: 'Ubiquitin'
+species: 'S. cerevisiae'
+seq: "MQIFVKTLTGKTITLEVESSDTIDNVKSKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN\
+      IQKESTLHLVLRLRGG" 
+experiment: 'Reactivity'
+transform: 'None'
+authour: 'Roscoe & Bolon'
+year: 2014
+title: 'Systematic Exploration of Ubiquitin Sequence, E1 Activation Efficiency, and Experimental Fitness in Yeast'
+doi: '10.1016/j.jmb.2014.05.019'
+pmid: '24862281'
+url: 'https://www.sciencedirect.com/science/article/pii/S0022283614002587'
+notes: "Uniprot ID is for UBI4, took first repeat of sequence from here as very conserved.
+        Also have data for excess E1, but for 18 rather than 75 positions, so I only use
+        the limiting case"
+
