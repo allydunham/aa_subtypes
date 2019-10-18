@@ -14,6 +14,10 @@ library(GGally)
 #library(Rtsne)
 library(yaml)
 
+# Custom packages, available at github.com/allydunham/XXX
+#library(tblhelpr)
+#library(plotlistr)
+
 # Source custom functions
 # source('src/util/misc_util.R')
 # source('src/util/autoplot.R')
