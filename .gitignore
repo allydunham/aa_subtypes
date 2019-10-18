@@ -4,4 +4,8 @@
 /data/studies/*/**
 !/data/studies/*/*.R
 !/data/studies/*/*.yaml
+!/data/graveyard/
+/data/graveyard/*/**
+!/data/graveyard/*/*.R
+!/data/graveyard/*/*.yaml
 /figures/**
