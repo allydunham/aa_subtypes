@@ -32,7 +32,18 @@ rule validate_melnikov:
         "figures/0_data_properties/melnikov_2014_aph3ii/drug_correlation.pdf"
 
     script:
-        "bin/analysis/0_data_properties/validate_melnikov.R"
+        "bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
+
+# Validate Kitzman et al. 2015 (GAL4)
+rule validate_kitzman:
+    input:
+        "data/studies/kitzman_2015_gal4/raw/kitzman_2015_gal4_enrichment.xlsx"
+
+    output:
+        "figures/0_data_properties/kitzman_2015_gal4/validate_selection_combination.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
 
 #### Standardise Data ####
 # Process the raw data from each study
