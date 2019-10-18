@@ -118,3 +118,16 @@ melnikov_fitness <- function(sel, exp_name, bkg){
   return(fitness)
 }
 ########
+
+#### Functions for Kitzman et al. 2015 (GAL4) ####
+read_kitzman_sheet <- function(path, sheet){
+  tbl <- read_xlsx(path, skip = 1, na = 'ND', sheet = sheet) %>%
+    rename(position = `Residue #`) %>%
+    mutate(wt = apply(., 1, function(x, nam){nam[x == 'wt' & !is.na(x)]}, nam = names(.)),
+           label = sheet) %>%
+    gather(key = 'mut', value = 'log2_enrichment', -position, -wt, -label) %>%
+    mutate(log2_enrichment = if_else(log2_enrichment == 'wt', '0', log2_enrichment)) %>% # set wt to 0 log2 enrichment ratio
+    mutate(log2_enrichment = as.numeric(log2_enrichment))
+  return(tbl)
+}
+########
