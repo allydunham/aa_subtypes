@@ -8,10 +8,13 @@ meta <- read_yaml('data/studies/mishra_2016_hsp90/mishra_2016_hsp90.yaml')
 path <- 'data/studies/mishra_2016_hsp90/raw/mishra_2016_hsp90_enrichment.xlsx'
 dm_data <- map(excel_sheets(path), read_mishra_sheet, path = path) %>%
   bind_rows() %>%
-  mutate(wt = str_split(meta$seq, '')[[1]][position],
+  select(position, mut=aa, raw_score=avg) %>%
+  mutate(raw_score = na_if(raw_score, -999),
+         wt = str_split(meta$seq, '')[[1]][position],
          score = raw_score / -min(raw_score, na.rm = TRUE),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, raw_score, score, class)
+  select(position, wt, mut, raw_score, score, class) %>%
+  arrange(position, mut)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

@@ -133,41 +133,27 @@ read_kitzman_sheet <- function(path, sheet){
 ########
 
 #### Functions for Mishra et al. 2016 (HSP90) ####
-find_next_empty_row <- function(start_row, tbl){
-  r <- start_row
-  final_row <- dim(tbl)[1]
-  repeat{
-    if (all(is.na(tbl[r,]))){
-      return(r)
-    } else if (r == final_row){
-      return(r)
-    } else {
-      r <- r + 1
-    }
-  }
-}
-
 read_mishra_sheet <- function(path, sheet){
-  tbl <- read_xlsx(path, sheet = sheet, col_names = FALSE)
+  tbl <- read_xlsx(path, sheet = sheet, col_names = str_c('col', 1:13))
   
   # Check sheet type
   if (tbl[1,1] == 'Stop counts'){
     ## Process sheets with a single replicate
     nom <- tbl[7,] %>% unlist(., use.names = FALSE)
-    tbl <- tbl[8:length(tbl),] %>%
+    tbl <- tbl[8:nrow(tbl),] %>%
       set_names(nom) %>%
       rename_at(vars(-position, -aa), list( ~ paste0('rep1_', .))) %>%
       mutate_at(vars(-aa), as.numeric) %>%
-      rename(alt_aa = aa) %>%
-      mutate(avg_norm_ratiochange = rep1_norm_ratiochange)
+      mutate(avg = rep1_norm_ratiochange)
     
   } else {
     ## Process sheets with replicates
     # Get first row of sub-tables
-    top_row <- which(tbl$...1 == 'position') + 1
+    top_row <- which(tbl$col1 == 'position') + 1
     
     # Get bottom row of sub-tables
-    bot_row <- sapply(top_row, find_next_empty_row, tbl=tbl) - 1
+    bot_row <- c(which(apply(tbl, 1, function(x){all(is.na(x))})) - 1, dim(tbl)[1])
+    bot_row <- sapply(top_row, function(x){bot_row[which(bot_row > x)[1]]})
     
     # Extract sub-table names
     rep_nom <- tbl[top_row[1] - 1,] %>% unlist(., use.names = FALSE)
@@ -186,14 +172,12 @@ read_mishra_sheet <- function(path, sheet){
     ave <- tbl[top_row[3]:bot_row[3],] %>%
       select_if(colSums(!is.na(.)) > 0) %>%
       set_names(ave_nom) %>%
-      select(-s1, -s2) %>%
+      select(-s1, -s2) %>% # also found in rep tbls
       rename(aa = `amino acid`)
     
-    tbl <- full_join(rep1, rep2, by=c('position', 'aa')) %>%
-      full_join(., ave, by=c('position', 'aa')) %>%
-      mutate_at(vars(-aa), as.numeric) %>%
-      rename(mut = aa,
-             raw_score = avg)
+    tbl <- full_join(ave, rep1,, by=c('position', 'aa')) %>%
+      full_join(., rep2, by=c('position', 'aa')) %>%
+      mutate_at(vars(-aa), as.numeric)
   }
   return(tbl)
 }
