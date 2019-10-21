@@ -1,7 +1,7 @@
 study: 'roscoe_2013_ubi' 
 gene: 'UBI'
 uniprot_id: 'P0CG63'
-gene_type: 'Ubi'
+gene_type: 'PTM'
 species: 'S. cerevisiae'
 seq: "MQIFVKTLTGKTITLEVESSDTIDNVKSKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYN\
       IQKESTLHLVLRLRGG"
