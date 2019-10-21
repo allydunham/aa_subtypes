@@ -45,6 +45,19 @@ rule validate_kitzman:
     script:
         "bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
 
+# Validate Giacomelli et al. 2018 (TP53)
+rule validate giacomelli:
+    input:
+        "data/studies/giacomelli_2018_tp53/raw/41588_2018_204_MOESM5_ESM.xlsx"
+
+    output:
+        "figures/0_data_properties/giacomelli_2018_tp53/initial_experiment_cor.pdf",
+        "figures/0_data_properties/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
+        "figures/0_data_properties/giacomelli_2018_tp53/conditions.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
+
 #### Standardise Data ####
 # Process the raw data from each study
 rule standardise_data:
