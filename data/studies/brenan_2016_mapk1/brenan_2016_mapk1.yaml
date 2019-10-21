@@ -1,0 +1,21 @@
+study: 'brenan_2016_mapk1' 
+gene: 'MAPK1'
+uniprot_id: 'P28482'
+gene_type: 'Kinase'
+species: 'H. sapiens'
+seq: "MAAAAAAGAGPEMVRGQVFDVGPRYTNLSYIGEGAYGMVCSAYDNVNKVRVAIKKISPFE\
+      HQTYCQRTLREIKILLRFRHENIIGINDIIRAPTIEQMKDVYIVQDLMETDLYKLLKTQH\
+      LSNDHICYFLYQILRGLKYIHSANVLHRDLKPSNLLLNTTCDLKICDFGLARVADPDHDH\
+      TGFLTEYVATRWYRAPEIMLNSKGYTKSIDIWSVGCILAEMLSNRPIFPGKHYLDQLNHI\
+      LGILGSPSQEDLNCIINLKARNYLLSLPHKNKVPWNRLFPNADSKALDLLDKMLTFNPHK\
+      RIEVEQALAHPYLEQYYDPSDEPIAEAPFKFDMELDDLPKEKLKELIFEETARFQPGYRS" 
+experiment: 'Growth'
+transform: '-1 * x'
+authour: 'Brenan et al.'
+year: 2016
+title: 'Phenotypic Characterization of a Comprehensive Set of MAPK1/ERK2 Missense Mutants'
+doi: '10.1016/j.celrep.2016.09.061'
+pmid: '27760319'
+url: 'https://www.sciencedirect.com/science/article/pii/S2211124716313171'
+notes: 'Transform by -1 because the selection scheme they used favoured lof > wt > gof.'
+
