@@ -1,0 +1,27 @@
+study: 'giacomelli_2018_tp53' 
+gene: 'TP53'
+uniprot_id: 'P04637'
+gene_type: 'TF'
+species: 'H. sapiens'
+seq: "MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP\
+      DEAPRMPEAAPPVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAK\
+      SVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHE\
+      RCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNS\
+      SCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACPGRDRRTEEENLRKKGEPHHELP\
+      PGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPG\
+      GSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD" 
+experiment: 'Complement'
+transform: '-1 * x'
+authour: 'Giacomelli et al.'
+year: 2018
+title: 'Mutational processes shape the landscape of TP53 mutations in human cancer'
+doi: '10.1038/s41588-018-0204-y'
+pmid: '30224644'
+url: 'https://www.nature.com/articles/s41588-018-0204-y'
+notes: "Score is in Z-score format across 3 different conditions:\
+        wt p53 background and nutlin3 to select for dominant negatives;\
+        null p53 background and nutlin3 to select for LOF;
+        and null p53 background and etoposide to select for WT like.\
+        Here I only use p53 NULL, Etoposide because it aligns most\
+        directly with our objective of a functional protein"
+    
