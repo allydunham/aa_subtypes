@@ -23,7 +23,7 @@ dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubo
   group_by(position, mut) %>%
   summarise(raw_score = mean(raw_score)) %>%
   ungroup() %>%
-  mutate(score = raw_score / -min(raw_score, na.rm = TRUE),
+  mutate(score =normalise_score(raw_score), 
          position = as.integer(position) + 1072, # tested region starts at +1072 according to Starita (slightly before uniprot UBOX) This does lead to ref seq aligning
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut))

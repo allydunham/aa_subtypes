@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/firnberg_2014_tem1/firnberg_2014_tem1.yaml')
-dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xlsx', ) %>%
+dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xlsx') %>%
   rename(position = `Ambler Position`,
          ref_codon = `WT codon`,
          alt_codon = `Mutant codon`,
@@ -32,9 +32,9 @@ dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xls
   filter(!wt == '*') %>%
   mutate(position = rep(1:nchar(meta$seq), each=64)) %>% # Numbering seems broken - starts at 3 and then misses 237 & 251
   group_by(position, wt, mut) %>%
-  summarise(raw_score = mean(raw_score, na.rm = TRUE)) %>% # Average over codons
-  mutate(score = log2(raw_score),
-         score = score / -min(score, na.rm = TRUE),
+  summarise(raw_score = mean(raw_score, na.rm = TRUE),
+            score = mean(log2(score), na.rm = TRUE)) %>% # Average over codons
+  mutate(score = normalise_score(score), 
          class = get_variant_class(wt, mut))
 
 # Save output

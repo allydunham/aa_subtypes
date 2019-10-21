@@ -11,7 +11,7 @@ dm_data <- map(excel_sheets(path), read_mishra_sheet, path = path) %>%
   select(position, mut=aa, raw_score=avg) %>%
   mutate(raw_score = na_if(raw_score, -999),
          wt = str_split(meta$seq, '')[[1]][position],
-         score = raw_score / -min(raw_score, na.rm = TRUE),
+         score = normalise_score(raw_score), 
          class = get_variant_class(wt, mut)) %>%
   select(position, wt, mut, raw_score, score, class) %>%
   arrange(position, mut)

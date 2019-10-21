@@ -11,7 +11,7 @@ dm_data <- read_csv('data/studies/hietpas_2011_hsp90/raw/hietpas_2011_pdz_ligand
   mutate(wt = str_split(meta$seq, '')[[1]][position]) %>%
   group_by(position, wt, mut) %>%
   summarise(raw_score = mean(raw_score)) %>%
-  mutate(score = raw_score / -min(raw_score, na.rm = TRUE))
+  mutate(score = normalise_score(raw_score))
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

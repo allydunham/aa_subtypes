@@ -8,7 +8,7 @@ source('src/study_standardising.R')
 meta <- read_csv('data/studies/ashenberg_2017_np/ashenberg_2017_np.yaml')
 dm_data <- read_csv('data/studies/ashenberg_2017_np/raw/ashenberg_2017_flu_np.csv') %>%
   rename(position = site, raw_score = diffsel) %>%
-  mutate(score = raw_score / -min(raw_score, na.rm = TRUE),
+  mutate(score = normalise_score(raw_score),
          class = get_variant_class(wt, mut))
 
 # Save output

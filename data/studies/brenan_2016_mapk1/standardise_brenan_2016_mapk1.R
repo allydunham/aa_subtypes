@@ -10,7 +10,7 @@ dm_data <- read_xlsx('data/studies/brenan_2016_mapk1/raw/brenan_2016_erk2.xlsx',
   rename(wt = wt_aa, mut = mutant_aa) %>%
   mutate(raw_score = `lfc_(etp_vs._dox)`,
          score = -raw_score, # The selection scheme they used favoured lof > wt > gof
-         score = score / -min(score, na.rm = TRUE),
+         score = normalise_score(raw_score),
          class = get_variant_class(wt, mut)) %>% 
   mutate_at(vars(nuc_acid_changes, dox_rank, sch_rank, vrt_rank, vrt_specific_allele, sch_specific_allele), as.integer)
 

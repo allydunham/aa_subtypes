@@ -12,8 +12,7 @@ dm_data <- read_xlsx('data/studies/jiang_2013_hsp90/raw/jiang_2013_hsp90.xlsx', 
   rename(mut = `amino acid`,
          sd = `standard deviation`) %>%
   mutate(raw_score = as.numeric(str_remove(average, '<')), # Set all instances of <0.034 to 0.034
-         score = log2(raw_score),
-         score = score / -min(score, na.rm = TRUE),
+         score = normalise_score(log2(raw_score)),
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut))
   

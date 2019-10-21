@@ -46,6 +46,11 @@ get_variant_class <- function(wt, mut){
   return(out)
 }
 
+## Normalise Score
+normalise_score <- function(x){
+  x / -min(x, na.rm = TRUE)
+}
+
 ## Scale and normalise VAMP-seq style
 # data ranges from ~0 (NULL) -> 1 (wt) -) >1 beneficial
 transform_vamp_seq <- function(x){
@@ -54,7 +59,7 @@ transform_vamp_seq <- function(x){
   y <- log2(y + min(y[y > 0], na.rm = TRUE))
   
   # Normalise
-  y <- y / -min(y, na.rm = TRUE)
+  return(normalise_score(y))
 }
 
 # Calculate E-score equivalent to Enrich1 
