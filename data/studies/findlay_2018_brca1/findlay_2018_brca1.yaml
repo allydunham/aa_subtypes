@@ -43,4 +43,6 @@ title: 'Accurate classification of BRCA1 variants with saturation genome editing
 doi: '10.1038/s41586-018-0461-z'
 pmid: '30209399'
 url: 'https://www.nature.com/articles/s41586-018-0461-z'
+notes: "Mutated nucleotides exhaustively rather than AAs, so only has \
+        AAs that can be reached in a single substitution"
 
