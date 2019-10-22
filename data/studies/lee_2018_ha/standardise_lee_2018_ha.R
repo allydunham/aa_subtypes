@@ -6,6 +6,7 @@ source('src/study_standardising.R')
 # Import and process data
 meta <- read_yaml('data/studies/lee_2018_ha/lee_2018_ha.yaml')
 
+# Extract overall protein position - is split into signal peptide and HA1/HA2 chains in original file
 get_position <- function(x){
   if (grepl('\\-', x)){
     return(as.numeric(x) + 17)
@@ -20,11 +21,14 @@ get_position <- function(x){
 dm_data <- read_xlsx('data/studies/lee_2018_ha/raw/lee_2018_influenza_ha.xlsx', sheet = 'avg_prefs') %>%
   rename(position = site) %>%
   gather(key = 'mut', value = 'raw_score', -position, -entropy, -neffective) %>%
-  mutate(score = normalise_score(log2(raw_score * 5)),
-         position = sapply(position, get_position),
+  mutate(position = sapply(position, get_position),
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class)
+  arrange(position, mut) %>%
+  group_by(position) %>%
+  mutate(score = log2(raw_score / raw_score[which(mut == first(wt))])) %>%
+  ungroup() %>%
+  mutate(score = normalise_score(score))
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
