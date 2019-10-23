@@ -46,7 +46,7 @@ rule validate_kitzman:
         "bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
 
 # Validate Giacomelli et al. 2018 (TP53)
-rule validate giacomelli:
+rule validate_giacomelli:
     input:
         "data/studies/giacomelli_2018_tp53/raw/41588_2018_204_MOESM5_ESM.xlsx"
 
@@ -57,6 +57,21 @@ rule validate giacomelli:
 
     script:
         "bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
+
+# Validate Heredia et al. 2018
+rule validate_heredia:
+    input:
+        "data/studies/heredia_2018_ccr5/raw/GSE100368_enrichment_ratios_CCR5.xlsx"
+
+    output:
+        "figures/0_data_properties/heredia_2018_ccr5/replicate_correlation.pdf",
+        "figures/0_data_properties/heredia_2018_ccr5/experiment_correlation.pdf",
+        "figures/0_data_properties/heredia_2018_cxcr4/replicate_correlation.pdf",
+        "figures/0_data_properties/heredia_2018_cxcr4/experiment_correlation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_heredia.R"
+
 
 #### Standardise Data ####
 # Process the raw data from each study
