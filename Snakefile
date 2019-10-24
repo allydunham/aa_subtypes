@@ -3,6 +3,7 @@
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
 
+from Bio import SeqIO
 from ruamel.yaml import YAML
 
 import subtypes_utils as sutil
@@ -131,7 +132,7 @@ rule sift4g:
         "data/sift/{gene}.SIFTprediction"
 
     resources:
-        mem_mb = lambda wildcards: 
+        mem_mb = 8000
 
     shell:
         "sift4g -q {input.fa} -d {input.db} --out data/studies/{study}"
