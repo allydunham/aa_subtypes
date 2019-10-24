@@ -5,9 +5,19 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 
 from ruamel.yaml import YAML
 
-yaml = YAML(typ='safe')
+import subtypes_utils as sutil
 
+yaml = YAML(typ='safe')
 UNIREF90_DB_PATH = '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
+FASTA_LINE_LENGTH = 80
+
+configfile: 'snakemake.yaml'
+localrules: all, make_sift_fastas
+
+rule all:
+    input:
+        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
 
 #### Validate Data ####
 # Test multiple mutation averaging
@@ -75,7 +85,7 @@ rule validate_heredia:
 
 #### Standardise Data ####
 # Process the raw data from each study
-rule standardise_data:
+rule standardise_study:
     input:
         "data/studies/{study}/standardise_{study}.R"
 
@@ -89,24 +99,39 @@ rule standardise_data:
 
 #### Make Tool Predictions ####
 # Make all SIFT predictions for study genes
-# TODO Change layout so as to only run each gene once
-rule make_fasta:
+rule make_sift_fastas:
     input:
-        "data/studies/{study}/{study}.yaml"
+        expand('data/studies/{study}/{study}.yaml', study=config['studies'])
 
     output:
-        "data/studies/{study}/{study}.fa"
+        expand("data/sift/{gene}.fa", gene=config['genes'])
 
-    shell:
-        "python bin/make_study_fasta.py -l 80 {input} > {output}"
+    run:
+        genes = []
+        for study_yaml in input:
+            with open(study_yaml, 'r') as yaml_file:
+                conf = yaml.load(yaml_file)
+
+            if conf['gene'] in genes:
+                continue
+
+            genes.append(conf['gene'])
+            gene_filesafe = sutil.gene_to_filename(conf['gene'])
+            with open(f"data/sift/{gene_filesafe}.fa", 'w') as fasta_file:
+                print(f">{conf['gene']}", file=fasta_file)
+                for i in range(0, len(conf['seq']), FASTA_LINE_LENGTH):
+                    print(conf['seq'][i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
 
 rule sift4g:
     input:
-        fa = "data/studies/{study}/{study}.fa",
+        fa = "data/sift/{gene}.fa",
         db = UNIREF90_DB_PATH
 
     output:
-        "data/studies/{study}/{study}.SIFTprediction"
+        "data/sift/{gene}.SIFTprediction"
+
+    resources:
+        mem_mb = lambda wildcards: 
 
     shell:
         "sift4g -q {input.fa} -d {input.db} --out data/studies/{study}"

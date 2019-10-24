@@ -6,6 +6,8 @@ import argparse
 import os
 from ruamel.yaml import YAML
 
+import subtypes_utils as sutil
+
 def main(args):
     """Main script"""
     yaml = YAML(typ='safe')
@@ -28,7 +30,9 @@ def main(args):
             meta = yaml.load(yaml_file)
 
         conf['studies'].append(meta['study'])
-        conf['genes'].append(meta['gene'].lower())
+        conf['genes'].append(sutil.gene_to_filename(meta['gene']))
+
+    conf['genes'] = list(set(conf['genes']))
 
     with open(args.yaml, 'w') as yaml_file:
         yaml.dump(conf, yaml_file)

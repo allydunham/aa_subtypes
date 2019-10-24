@@ -1,3 +1,8 @@
-genes: [yap1, np, tpmt, adrb2, pten, hsp90, hsp90]
-studies: [araya_2012_yap1, ashenberg_2017_np, matreyek_2018_tpmt, jones_2019_adrb2,
-  matreyek_2018_pten, heitpas_2011_hsp90, jiang_2013_hsp90]
+genes: [pten, tpmt, proteing, mapk1, calm1, hsp90, tp53, tpk1, brca1, ube4b, np, ube2i,
+  aph3ii, ubi, adrb2, gal4, cxcr4, yap1, ccr5, sumo1, tdp43, ha, tem1, pab1]
+studies: [araya_2012_yap1, giacomelli_2018_tp53, olson_2014_proteing, kitzman_2015_gal4,
+  findlay_2018_brca1, heredia_2018_cxcr4, lee_2018_ha, weile_2017_sumo1, ashenberg_2017_np,
+  brenan_2016_mapk1, weile_2017_tpk1, starita_2013_ube4b, weile_2017_ube2i, matreyek_2018_tpmt,
+  jones_2019_adrb2, heredia_2018_ccr5, melnikov_2014_aph3ii, melamed_2013_pab1, matreyek_2018_pten,
+  bolognesi_2019_tdp43, starita_2015_brca1, weile_2017_calm1, roscoe_2013_ubi, hietpas_2011_hsp90,
+  firnberg_2014_tem1, jiang_2013_hsp90, roscoe_2014_ubi, mishra_2016_hsp90]
