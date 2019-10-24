@@ -3,3 +3,5 @@ studies/*/*.R
 study_template.yaml
 fasta/**
 graveyard/README.md
+graveyard/*/*.yaml
+graveyard/*/*.R
