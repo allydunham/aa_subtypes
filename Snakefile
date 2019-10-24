@@ -135,7 +135,7 @@ rule sift4g:
         mem_mb = 8000
 
     shell:
-        "sift4g -q {input.fa} -d {input.db} --out data/studies/{study}"
+        "sift4g -q {input.fa} -d {input.db} --out data/sift"
 
 # Make all FoldX for study genes
 # TODO
