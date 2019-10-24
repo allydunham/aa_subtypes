@@ -13,6 +13,8 @@ from Bio import SeqIO
 from colorama import Fore
 from colorama import Style
 
+import subtypes_utils as sutil
+
 PROJECT_ROOT = '/Users/ally/phd/subtypes'
 DEFAULT_STUDIES = f'{PROJECT_ROOT}/data/studies'
 DEFAULT_FASTA = f'{PROJECT_ROOT}/meta/fasta'
@@ -57,7 +59,7 @@ def main(args):
         else:
             species = yaml['species'].lower().replace('. ', '_')
 
-        name = f"{species}_{yaml['gene'].lower()}"
+        name = f"{species}_{sutil.gene_to_filename(yaml['gene'])}"
 
         if not name in seqs:
             print(f'{Fore.RED}{study}{Style.RESET_ALL}: No fasta sequence available')
