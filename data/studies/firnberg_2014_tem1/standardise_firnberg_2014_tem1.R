@@ -5,35 +5,17 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/firnberg_2014_tem1/firnberg_2014_tem1.yaml')
-dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xlsx') %>%
-  rename(position = `Ambler Position`,
-         ref_codon = `WT codon`,
-         alt_codon = `Mutant codon`,
-         wt = `WT AA`,
-         mut = `Mutant AA`,
-         base_changes = `Base Changes`,
-         seq_counts_0.25 = `Sequencing Counts`,
-         seq_counts_0.5 = ...8,
-         seq_counts_1 = ...9,
-         seq_counts_2 = ...10,
-         seq_counts_4 = ...11,
-         seq_counts_8 = ...12,
-         seq_counts_16 = ...13,
-         seq_counts_32 = ...14,
-         seq_counts_64 = ...15,
-         seq_counts_128 = ...16,
-         seq_counts_256 = ...17,
-         seq_counts_512 = ...18,
-         seq_counts_1024 = ...19,
-         total_seq_count = `Total Counts`,
-         raw_score = Fitness,
-         fitness_err = `Estimated error in fitness`) %>%
+dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xlsx', skip = 1,
+                     col_names = c('position', 'ref_codon', 'alt_codon', 'wt', 'mut', 'base_changes', 'seq_counts_0.25',
+                                   'seq_counts_0.5', 'seq_counts_1', 'seq_counts_2', 'seq_counts_4', 'seq_counts_8',
+                                   'seq_counts_16', 'seq_counts_32', 'seq_counts_64', 'seq_counts_128', 'seq_counts_256', 
+                                   'seq_counts_512', 'seq_counts_1024', 'total_seq_count', 'raw_score', 'fitness_err')) %>%
   drop_na(position) %>%
   filter(!wt == '*') %>%
   mutate(position = rep(1:nchar(meta$seq), each=64)) %>% # Numbering seems broken - starts at 3 and then misses 237 & 251
   group_by(position, wt, mut) %>%
   summarise(raw_score = mean(raw_score, na.rm = TRUE),
-            score = mean(log2(score), na.rm = TRUE)) %>% # Average over codons
+            score = mean(log2(raw_score), na.rm = TRUE)) %>% # Average over codons
   mutate(score = normalise_score(score), 
          class = get_variant_class(wt, mut))
 
