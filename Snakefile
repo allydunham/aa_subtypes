@@ -131,11 +131,14 @@ rule sift4g:
     output:
         "data/sift/{gene}.SIFTprediction"
 
+    log:
+        'logs/sift4g/{gene}.log'
+
     resources:
         mem_mb = 8000
 
     shell:
-        "sift4g -q {input.fa} -d {input.db} --out data/sift"
+        "sift4g -q {input.fa} -d {input.db} --out data/sift 2> {log}"
 
 # Make all FoldX for study genes
 # TODO
