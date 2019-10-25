@@ -5,7 +5,7 @@ source('src/config.R')
 source('src/study_standardising.R')
 
 # Import and process data
-meta <- read_yaml('data/studies/metreyek_2018_tpmt/matreyek_2018_tpmt.yaml')
+meta <- read_yaml('data/studies/matreyek_2018_tpmt/matreyek_2018_tpmt.yaml')
 dm_data <- read_csv('data/studies/matreyek_2018_tpmt/raw/TPMT.csv',
                     col_types = cols(.default = col_character(), position = col_integer(), score = col_double())) %>%
   select(-X1) %>%
