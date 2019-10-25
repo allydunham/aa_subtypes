@@ -22,18 +22,18 @@ dm_data <- mapply(melnikov_fitness, counts, names(counts), MoreArgs = list(bkg=b
   # which we alread accounted for) -> discard round
   separate(experiment, c('round', 'drug', 'library'), sep='_') %>%
   select(position, wt, mut, score, drug, library) %>% 
+  mutate(rel_conc = 1/as.numeric(str_sub(drug, -1)), drug = str_sub(drug, 1, -3)) %>%
   
   # Process library pairs - discard datasets where libraries don't agree and filter outlier points, then average L1 & L2
-  pivot_wider(id_cols = c('position', 'wt', 'mut', 'drug'), names_from = library, values_from = 'score') %>%
+  pivot_wider(id_cols = c('position', 'wt', 'mut', 'drug', 'rel_conc'), names_from = library, values_from = score) %>%
   mutate(diff = abs(L1 - L2)) %>%
-  filter(dm_data, !(drug == 'Ami' & rel_conc == 0.25), !(drug %in% c('G418', 'Ami', 'Kan') & rel_conc == 0.125)) %>%
+  filter(!(drug == 'Ami' & rel_conc == 0.25), !(drug %in% c('G418', 'Ami', 'Kan') & rel_conc == 0.125)) %>%
   filter(diff < sd(diff, na.rm = TRUE) * 3) %>%
   mutate(score = (L1 + L2)/2) %>%
   drop_na(score) %>%
   
   # Select the best conc for each drug, based on ER distribution
-  filter(dm_data,
-         (drug == 'Ami' & rel_conc == 0.5) |
+  filter((drug == 'Ami' & rel_conc == 0.5) |
            (drug == 'G418' & rel_conc == 0.25) |
            (drug == 'Kan' & rel_conc == 0.25) |
            (drug == 'Neo' & rel_conc == 0.25) |
@@ -42,7 +42,7 @@ dm_data <- mapply(melnikov_fitness, counts, names(counts), MoreArgs = list(bkg=b
   select(drug, position, wt, mut, score) %>%
   
   # Filter Ami as it doesn't correlate with other drugs, then average
-  filter(dm_data, !drug == 'Ami') %>%
+  filter(!drug == 'Ami') %>%
   group_by(position, wt, mut) %>%
   summarise(score = mean(score, na.rm=TRUE)) %>%
   ungroup() %>%
