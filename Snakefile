@@ -95,8 +95,11 @@ rule standardise_study:
         "figures/0_data_properties/{study}/original_distribution.pdf",
         "figures/0_data_properties/{study}/transformed_distribution.pdf"
 
-    script:
-        "{input}"
+    log:
+        "logs/standardise_study/{study}.log"
+
+    shell:
+        "Rscript {input} 2> {log}"
 
 #### Make Tool Predictions ####
 # Make all SIFT predictions for study genes
