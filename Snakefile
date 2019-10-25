@@ -119,7 +119,7 @@ rule make_sift_fastas:
             genes.append(conf['gene'])
             gene_filesafe = sutil.gene_to_filename(conf['gene'])
             with open(f"data/sift/{gene_filesafe}.fa", 'w') as fasta_file:
-                print(f">{conf['gene']}", file=fasta_file)
+                print(f">{gene_filesafe}", file=fasta_file)
                 for i in range(0, len(conf['seq']), FASTA_LINE_LENGTH):
                     print(conf['seq'][i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
 
