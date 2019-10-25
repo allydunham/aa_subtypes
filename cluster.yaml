@@ -1,6 +1,6 @@
 __default__:
-    output: 'logs/{rule}.{wildcards}.%J'
-    error: 'logs/{rule}.{wildcards}.%J'
+    output: '{rule}.{wildcards}.%J'
+    error: '{rule}.{wildcards}.%J'
     queue: 'research-rh74'
     name: 'Subtypes.{rule}.{wildcards}'
     memory: 4096 
