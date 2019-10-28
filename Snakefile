@@ -81,7 +81,18 @@ rule validate_heredia:
         "figures/0_data_properties/heredia_2018_cxcr4/experiment_correlation.pdf"
 
     script:
-        "bin/analysis/0_data_properties/validate_heredia.R"
+        "bin/analysis/0_data_properties/validate_heredia_2018.R"
+
+# Validate Heredia et al. 2018
+rule validate_melnikov:
+    input:
+        "data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv"
+
+    output:
+        "figures/0_data_properties/sarkisyan_2016_gfp/multi_mut_validation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
 
 
 #### Standardise Data ####

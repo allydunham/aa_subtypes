@@ -1,0 +1,18 @@
+study: 'sarkisyan_2016_gfp' 
+gene: 'GFP'
+uniprot_id: 'P42212'
+gene_type: 'Flourescent Protein'
+species: 'A. victoria'
+seq: "MSKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTL\
+      VTTFSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLV\
+      NRIELKGIDFKEDGNILGHKLEYNYNSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLAD\
+      HYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGMDELYK" 
+experiment: 'Flourescence level'
+transform: 'log2(x/F_wt)'
+authour: 'Sarkisyan et al.'
+year: 2016
+title: 'Local fitness landscape of the green fluorescent protein'
+doi: '10.1038/nature17995'
+pmid: '27193686'
+url: 'https://www.nature.com/articles/nature17995'
+
