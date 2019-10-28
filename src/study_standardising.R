@@ -3,6 +3,9 @@
 
 source('src/config.R')
 
+AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
+AA_THREE_2_ONE['Ter'] <- '*'
+
 ## general study data saving function
 # dm_data = tibble with columns position, wt, mut, score, raw_score
 # study_id = authour_year_gene style standard study id
@@ -71,6 +74,25 @@ e_score <- function(sel, bkg){
   freq_bkg <- bkg/sum(bkg, na.rm = TRUE)
   
   return(freq_sel/freq_bkg)
+}
+
+## Import MAVEDB study
+read_mavedb <- function(path, score_col, score_transform=identity, position_offset = 0){
+  if (rlang::is_missing(score_col)){
+    score_col <- quo(activity_score)
+  } else {
+    score_col <- enquo(score_col)
+  }
+  
+  read_csv(path, skip = 4) %>%
+    tidyr::extract(hgvs_pro, into = c('wt', 'position', 'mut'), "p.([A-Za-z]{3})([0-9]+)([A-Za-z]{3})", convert = TRUE) %>%
+    mutate(wt = AA_THREE_2_ONE[wt], mut = AA_THREE_2_ONE[mut], position = position + position_offset) %>%
+    rename(raw_score = !!score_col) %>%
+    mutate(score = normalise_score(score_transform(raw_score)),
+           class = get_variant_class(wt, mut)) %>%
+    select(position, wt, mut, score, raw_score, class) %>%
+    arrange(position, mut) %>%
+    return()
 }
 
 #### Functions for Melnikov et al. 2014 (APH(3')-II) ####
