@@ -1,0 +1,19 @@
+study: 'nodagarcia_2019_gdh' 
+gene: 'GDH'
+uniprot_id: 'P12310'
+gene_type: 'Metabolic'
+species: 'B. subtilis'
+seq: "MYPDLKGKVVAITGAASGLGKAMAIRFGKEQAKVVINYYSNKQDPNEVKEEVIKAGGEAV\
+      VVQGDVTKEEDVKNIVQTAIKEFGTLDIMINNAGLENPVPSHEMPLKDWDKVIGTNLTGA\
+      FLGSREAIKYFVENDIKGNVINMSSVHEVIPWPLFVHYAASKGGIKLMTETLALEYAPKG\
+      IRVNNIGPGAINTPINAEKFADPKQKADVESMIPMGYIGEPEEIAAVAAWLASKEASYVT\
+      GITLFADGGMTQYPSFQAGRG" 
+experiment: 'Growth in many biological conditions'
+transform: 
+authour: 'Noda-García et al.'
+year: 2019
+title: 'Chance and pleiotropy dominate genetic diversity in complex bacterial environments'
+doi: '10.1038/s41564-019-0412-y'
+pmid: '30936490'
+url: 'https://www.nature.com/articles/s41564-019-0412-y'
+
