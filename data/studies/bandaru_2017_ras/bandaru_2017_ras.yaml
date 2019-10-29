@@ -1,0 +1,18 @@
+study: 'bandaru_2017_ras' 
+gene: 'Ras'
+uniprot_id: 'P01112'
+gene_type: 'GTPase'
+species: 'H. sapiens'
+seq: "MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAG\
+      QEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDL\
+      AARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPG\
+      CMSCKCVLS" 
+experiment: 'Coupled growth'
+transform: 'x/ln(2)'
+authour: 'Bandaru et al.'
+year: 2017
+title: 'Deconstruction of the Ras switching cycle through saturation mutagenesis'
+doi: '10.7554/eLife.27810'
+pmid: '28686159'
+url: 'https://elifesciences.org/articles/27810'
+
