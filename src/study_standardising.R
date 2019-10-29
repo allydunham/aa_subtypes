@@ -79,7 +79,7 @@ e_score <- function(sel, bkg){
 ## Import MAVEDB study
 read_mavedb <- function(path, score_col, score_transform=identity, position_offset = 0){
   if (rlang::is_missing(score_col)){
-    score_col <- quo(activity_score)
+    score_col <- quo(score)
   } else {
     score_col <- enquo(score_col)
   }
