@@ -7,7 +7,7 @@ seq: "MASNFTQFVLVDNGGTGDVTVAPSNFANGVAEWISSNSRSQAYKVTCSVRQSSAQNRKYT\
       IKVEVPKVATQTVGGVELPVAAWRSYLNMELTIPIFATNSDCELIVKAMQGLLKDGNPIP\
       SAIAANSGIY"
 experiment: 'Viral coat assembly'
-transform: 
+transform: 'None' 
 authour: 'Hatrman et al.'
 year: 2018
 title: 'Quantitative characterization of all single amino acid variants of a viral capsid-based drug delivery vehicle'
