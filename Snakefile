@@ -83,7 +83,7 @@ rule validate_heredia:
     script:
         "bin/analysis/0_data_properties/validate_heredia_2018.R"
 
-# Validate Heredia et al. 2018
+# Validate Melnikov et al. 2014 (APH3II)
 rule validate_melnikov:
     input:
         "data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv"
@@ -94,6 +94,18 @@ rule validate_melnikov:
     script:
         "bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
 
+# Validate Dorrity et al. 2018 (STE12)
+rule validate_dorrity:
+    input:
+        "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx",
+        "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd02.xlsx"
+
+    output:
+        "figures/0_data_properties/dorrity_2018_ste12/rep_correlation.pdf",
+        "figures/0_data_properties/dorrity_2018_ste12/multi_mut_validation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
 
 #### Standardise Data ####
 # Process the raw data from each study

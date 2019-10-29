@@ -95,6 +95,12 @@ read_mavedb <- function(path, score_col, score_transform=identity, position_offs
     return()
 }
 
+# Untangle seqIDs of the form 1,2-A,D
+process_split_seqid <- function(x){
+  x <- str_split(x, '[-,]')[[1]]
+  return(str_c(x[1:(length(x)/2)], x[(length(x)/2 + 1):length(x)], collapse = ','))
+}
+
 #### Functions for Melnikov et al. 2014 (APH(3')-II) ####
 # Read aa count tables from melnikov et al. 2014
 read_melnikov_table <- function(fi){
