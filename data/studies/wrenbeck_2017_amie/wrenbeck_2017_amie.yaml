@@ -1,0 +1,20 @@
+study: 'wrenbeck_2017_amie' 
+gene: 'amiE'
+uniprot_id: 'P11436'
+gene_type: 'Metabolic'
+species: 'P. aeruginosa'
+seq: "MRHGDISSSNDTVGVAVVNYKMPRLHTAAEVLDNARKIAEMIVGMKQGLPGMDLVVFPEY\
+      SLQGIMYDPAEMMETAVAIPGEETEIFSRACRKANVWGVFSLTGERHEEHPRKAPYNTLV\
+      LIDNNGEIVQKYRKIIPWCPIEGWYPGGQTYVSEGPKGMKISLIICDDGNYPEIWRDCAM\
+      KGAELIVRCQGYMYPAKDQQVMMAKAMAWANNCYVAVANAAGFDGVYSYFGHSAIIGFDG\
+      RTLGECGEEEMGIQYAQLSLSQIRDARANDQSQNHLFKILHRGYSGLQASGDGDRGLAEC\
+      PFEFYRTWVTDAEKARENVERLTRSTTGVAQCPVGRLPYEGLEKEA" 
+experiment: 'Coupled growth'
+transform: 'None'
+authour: 'Wrenbeck et al.'
+year: 2017
+title: 'Single-mutation fitness landscapes for an enzyme on multiple substrates reveal specificity is globally encoded'
+doi: '10.1038/ncomms15695'
+pmid: '28585537'
+url: 'https://www.nature.com/articles/ncomms15695'
+
