@@ -10,7 +10,7 @@ path <- 'data/studies/kitzman_2015_gal4/raw/kitzman_2015_gal4_enrichment.xlsx'
 dm_data <- lapply(excel_sheets(path), read_kitzman_sheet, path = path) %>%
   bind_rows(.) %>%
   spread(key = 'label', value = 'log2_enrichment') %>%
-  mutate(raw_score = (SEL_A_24h + SEL_A_40h + SEL_B_40h + SEL_C_40h + SEL_C_64h)/5, # Average over replicates (diff times found to still correlate well)
+  mutate(raw_score = rowMeans(select(., SEL_A_24h, SEL_A_40h, SEL_B_40h, SEL_C_40h, SEL_C_64h), na.rm = TRUE) %>% replace_na(NA), # Average over replicates (diff times found to still correlate well)
          score = normalise_score(raw_score),
          class = get_variant_class(wt, mut)) %>%
   filter(!mut == 'delInFrame')

@@ -8,13 +8,13 @@ meta <- read_yaml('data/studies/dorrity_2018_ste12/dorrity_2018_ste12.yaml')
 mating_data <- read_xlsx('data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx') %>%
   mutate(mut = sapply(seqID, process_split_seqid, USE.NAMES = FALSE),
          nmut = str_count(mut, ',') + 1,
-         mating_avg = (mating_30C_rep1 + mating_30C_rep2 + mating_30C_rep3)/3) %>%
+         mating_avg = rowMeans(select(., mating_30C_rep1, mating_30C_rep2, mating_30C_rep3), na.rm = TRUE) %>% replace_na(NA)) %>%
   select(mut, nmut, mating_avg, starts_with('mating_30C_'))
 
 invasion_data <- read_xlsx('data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd02.xlsx') %>%
   mutate(mut = sapply(seqID, process_split_seqid, USE.NAMES = FALSE),
          nmut = str_count(mut, ',') + 1,
-         invasion_avg = (invasion_30C_rep1 + invasion_30C_rep2 + invasion_30C_rep3)/3) %>%
+         invasion_avg = rowMeans(select(., invasion_30C_rep1, invasion_30C_rep2, invasion_30C_rep3), na.rm = TRUE) %>% replace_na(NA)) %>%
   select(mut, nmut, invasion_avg, starts_with('invasion_30C_'))
 
 dm_data <- full_join(mating_data, invasion_data, by = c('mut', 'nmut')) %>%

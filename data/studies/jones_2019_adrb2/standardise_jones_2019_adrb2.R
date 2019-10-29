@@ -12,7 +12,7 @@ dm_data <- read_csv('data/studies/jones_2019_adrb2/raw/lib-med.csv') %>%
   group_by(position, mut) %>%
   summarise(raw_score = median(raw_score)) %>% # Average biological repeats
   mutate(wt = str_split(meta$seq, '')[[1]][position],
-         score = normalise_score(log2(raw_score / 2)), # Divide by 2 as twice missense peaks around 2?
+         score = normalise_score(log2(raw_score / 2)), # Divide by 2 as neutral seems to peaks around 2?
          class = get_variant_class(wt, mut))
 
 # Save output

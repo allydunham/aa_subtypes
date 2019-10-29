@@ -15,7 +15,7 @@ dm_data <- read_xlsx('data/studies/findlay_2014_dbr1/raw/findlay_2014_dbr1_exon2
          mut_type = `Variant Class`) %>%
   mutate(position = as.integer(position),
          mut = ifelse(mut == 'WT', wt, mut),
-         raw_score = (log2_enrichment_score_day11_rep1 + log2_enrichment_score_day11_rep2)/2,
+         raw_score = rowMeans(select(., log2_enrichment_score_day11_rep1, log2_enrichment_score_day11_rep2), na.rm = TRUE) %>% replace_na(NA),
          score = normalise_score(raw_score),
          class = get_variant_class(wt, mut)) %>%
   drop_na(position, raw_score) %>%
