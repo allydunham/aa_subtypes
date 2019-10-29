@@ -1,0 +1,17 @@
+study: 'hartman_2018_cp' 
+gene: 'CP'
+uniprot_id: 'P03612'
+gene_type: 'Viral Coat'
+species: 'Bacteriophage MS2'
+seq: "MASNFTQFVLVDNGGTGDVTVAPSNFANGVAEWISSNSRSQAYKVTCSVRQSSAQNRKYT\
+      IKVEVPKVATQTVGGVELPVAAWRSYLNMELTIPIFATNSDCELIVKAMQGLLKDGNPIP\
+      SAIAANSGIY"
+experiment: 'Viral coat assembly'
+transform: 
+authour: 'Hatrman et al.'
+year: 2018
+title: 'Quantitative characterization of all single amino acid variants of a viral capsid-based drug delivery vehicle'
+doi: '10.1038/s41467-018-03783-y'
+pmid: '29643335'
+url: 'https://www.nature.com/articles/s41467-018-03783-y'
+
