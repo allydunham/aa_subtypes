@@ -12,3 +12,5 @@ Datasets which have been partially or fully processed but deemed unstuitable for
 
 * nodagarcia\_2019\_gdh: Tested a large number of conditions, with very different fitness properties, 
     which is challenging to integrate.
+
+* spencer\_2017\_cas9: Only performed single nucleotide substitutions - not enough AA coverage
