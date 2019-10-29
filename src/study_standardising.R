@@ -101,6 +101,16 @@ process_split_seqid <- function(x){
   return(str_c(x[1:(length(x)/2)], x[(length(x)/2 + 1):length(x)], collapse = ','))
 }
 
+# Get muts from seq, expects each as a character vector
+muts_from_seq <- function(mut_seq, wt_seq){
+  if (all(mut_seq == wt_seq)){
+    return(NA)
+  }
+  
+  pos <- which(!mut_seq == wt_seq)
+  return(str_c(wt_seq[pos], pos, mut_seq[pos], collapse = ','))
+}
+
 #### Functions for Melnikov et al. 2014 (APH(3')-II) ####
 # Read aa count tables from melnikov et al. 2014
 read_melnikov_table <- function(fi){
