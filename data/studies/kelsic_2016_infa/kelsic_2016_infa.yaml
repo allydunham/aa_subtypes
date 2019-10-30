@@ -1,0 +1,16 @@
+study: 'kelsic_2016_infa' 
+gene: 'infA'
+uniprot_id: 'P69222'
+gene_type: 'Translation'
+species: 'E. coli'
+seq: "MAKEDNIEMQGTVLETLPNTMFRVELENGHVVTAHISGKMRKNYIRILTGDKVTVELTPY\
+      DLSKGRIVFRSR" 
+experiment: 'Growth'
+transform: 'VAMP-seq transform'
+authour: 'Kelsic et al.'
+year: 2016
+title: 'RNA Structural Determinants of Optimal Codons Revealed by MAGE-Seq'
+doi: '10.1016/j.cels.2016.11.004'
+pmid: '28009265'
+url: 'https://www.sciencedirect.com/science/article/pii/S2405471216303684'
+
