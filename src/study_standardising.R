@@ -56,13 +56,18 @@ normalise_score <- function(x){
 
 ## Scale and normalise VAMP-seq style
 # data ranges from ~0 (NULL) -> 1 (wt) -) >1 beneficial
-transform_vamp_seq <- function(x){
+transform_vamp_seq <- function(x, normalise=TRUE){
   # Transform
   y <- 1 + (x - 1) / -min(x - 1, na.rm = TRUE)
   y <- log2(y + min(y[y > 0], na.rm = TRUE))
   
   # Normalise
-  return(normalise_score(y))
+  if (normalise){
+    return(normalise_score(y))
+  } else {
+    return(y)
+  }
+  
 }
 
 # Calculate E-score equivalent to Enrich1 
