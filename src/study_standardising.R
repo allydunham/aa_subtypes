@@ -82,11 +82,10 @@ e_score <- function(sel, bkg){
 }
 
 ## Import MAVEDB study
-read_mavedb <- function(path, score_col, score_transform=identity, position_offset = 0){
-  if (rlang::is_missing(score_col)){
+read_mavedb <- function(path, score_col=NULL, score_transform=identity, position_offset = 0){
+  score_col <- enquo(score_col)
+  if (rlang::quo_is_null(score_col)){
     score_col <- quo(score)
-  } else {
-    score_col <- enquo(score_col)
   }
   
   read_csv(path, skip = 4) %>%
