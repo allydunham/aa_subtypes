@@ -32,7 +32,7 @@ def import_single_seq_fasta_dir(directory):
     """Import a directory of single sequence fasta files into a dict, keyed by the file names"""
     seqs = {}
     for fasta in os.listdir(directory):
-        seq = list(SeqIO.parse(f'{directory}/{fasta}', 'fasta', ))
+        seq = list(SeqIO.parse(f'{directory}/{fasta}', 'fasta'))
 
         if not seq:
             print(f'Warning: non-fasta formatted file found in directory ({fasta})')
@@ -57,7 +57,7 @@ def check_yaml_seq(yaml, seqs):
         elif yaml['strain'] == 'Human adapted A/Perth/16/2009, H3N2':
             species = 'H3N2_A_Perth_16_2009'
     else:
-        species = yaml['species'].lower().replace('. ', '_')
+        species = yaml['species'].lower().replace('.', '').replace(' ', '_')
 
     name = f"{species}_{sutil.gene_to_filename(yaml['gene'])}"
 
