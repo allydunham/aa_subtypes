@@ -83,8 +83,8 @@ rule validate_heredia:
     script:
         "bin/analysis/0_data_properties/validate_heredia_2018.R"
 
-# Validate Melnikov et al. 2014 (APH3II)
-rule validate_melnikov:
+# Validate Sarkisyan et al. 2016 (GFP)
+rule validate_sarkisyan:
     input:
         "data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv"
 
