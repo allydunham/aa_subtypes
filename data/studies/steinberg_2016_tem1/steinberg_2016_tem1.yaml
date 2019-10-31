@@ -1,0 +1,19 @@
+study: 'steinberg_2016_tem1'
+gene: 'TEM1'
+uniprot_id: 'Q6SJ61'
+gene_type: 'Metabolic'
+species: 'E. coli'
+seq: "MSIQHFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRP\
+      EERFPMMSTFKVLLCGAVLSRVDAGQEQLGRRIHYSQNDLVEYSPVTEKHLTDGMTVREL\
+      CSAAITMSDNTAANLLLTTIGGPKELTAFLHNMGDHVTRLDRWEPELNEAIPNDERDTTM\
+      PAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGS\
+      RGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW"
+experiment: 'Concentration of beta-lactam'
+transform: 
+authour: 'Steinberg & Ostermeier'
+year: 2016
+title: 'Shifting Fitness and Epistatic Landscapes Reflect Trade-offs along an Evolutionary Pathway'
+doi: '10.1016/j.jmb.2016.04.033'
+pmid: '27173379'
+url: 'https://www.sciencedirect.com/science/article/pii/S0022283616301450'
+
