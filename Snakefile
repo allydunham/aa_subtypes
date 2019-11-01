@@ -124,7 +124,8 @@ rule standardise_study:
     output:
         "data/studies/{study}/{study}.tsv",
         "figures/0_data_properties/{study}/original_distribution.pdf",
-        "figures/0_data_properties/{study}/transformed_distribution.pdf"
+        "figures/0_data_properties/{study}/transformed_distribution.pdf",
+        "figures/0_data_properties/{study}/normalised_distribution.pdf"
 
     log:
         "logs/standardise_study/{study}.log"
@@ -134,6 +135,7 @@ rule standardise_study:
 
 #### Make Tool Predictions ####
 # Make all SIFT predictions for study genes
+# TODO currently overwrites all and re-runs sift every time
 rule make_sift_fastas:
     input:
         expand('data/studies/{study}/{study}.yaml', study=config['studies'])
