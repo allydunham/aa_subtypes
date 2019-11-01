@@ -2,7 +2,7 @@
 """
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
-
+import os
 from Bio import SeqIO
 from ruamel.yaml import YAML
 
@@ -134,30 +134,28 @@ rule standardise_study:
         "Rscript {input} 2> {log}"
 
 #### Make Tool Predictions ####
-# Make all SIFT predictions for study genes
-# TODO currently overwrites all and re-runs sift every time
-rule make_sift_fastas:
+rule make_gene_fasta:
     input:
-        expand('data/studies/{study}/{study}.yaml', study=config['studies'])
+        lambda wildcards: [f'data/studies/{i}/{i}.yaml' for i in config['genes'][wildcards.gene]]
 
     output:
-        expand("data/sift/{gene}.fa", gene=config['genes'])
+        "data/sift/{gene}.fa"
 
     run:
-        genes = []
+        seq = None
         for study_yaml in input:
             with open(study_yaml, 'r') as yaml_file:
                 conf = yaml.load(yaml_file)
 
-            if conf['gene'] in genes:
-                continue
+            if seq is None:
+                seq = conf['seq']
+            elif not seq == conf['seq']:
+                raise ValueError(f"Two studies on {wildcards.gene} have different sequences")
 
-            genes.append(conf['gene'])
-            gene_filesafe = sutil.gene_to_filename(conf['gene'])
-            with open(f"data/sift/{gene_filesafe}.fa", 'w') as fasta_file:
-                print(f">{gene_filesafe}", file=fasta_file)
-                for i in range(0, len(conf['seq']), FASTA_LINE_LENGTH):
-                    print(conf['seq'][i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
+        with open(output, 'w') as fasta_file:
+            print(f">{wildcards.genee}", file=fasta_file)
+            for i in range(0, len(seq), FASTA_LINE_LENGTH):
+                print(seq[i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
 
 rule sift4g:
     input:
