@@ -58,7 +58,7 @@ get_variant_class <- function(wt, mut){
 
 ## Normalise Score
 normalise_score <- function(x){
-  q <- quantile(x, 0.1, na.rm=TRUE)
+  q <- quantile(x, 0.15, na.rm=TRUE)
   return(x / -median(x[x <= q], na.rm = TRUE))
 }
 
@@ -95,7 +95,7 @@ read_mavedb <- function(path, score_col=NULL, score_transform=identity, position
     mutate(transformed_score = score_transform(raw_score),
            score = normalise_score(transformed_score),
            class = get_variant_class(wt, mut)) %>%
-    select(position, wt, mut, score, raw_score, class) %>%
+    select(position, wt, mut, score, transformed_score, raw_score, class) %>%
     arrange(position, mut) %>%
     return()
 }
