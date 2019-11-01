@@ -4,8 +4,8 @@ source('src/config.R')
 source('src/study_standardising.R')
 
 # Import and process data
-meta <- read_yaml('data/graveyard/wagenaar_2014_braf/wagenaar_2014_braf.yaml')
-dm_data <- read_xls('data/graveyard/wagenaar_2014_braf/raw/wagenaar_2014_braf.xls', skip = 3) %>%
+meta <- read_yaml('data/studies/wagenaar_2014_braf/wagenaar_2014_braf.yaml')
+dm_data <- read_xls('data/studies/wagenaar_2014_braf/raw/wagenaar_2014_braf.xls', skip = 3) %>%
   rename(position = Position,
          mut = acid,
          median_enrichment = Median,
@@ -27,10 +27,11 @@ dm_data <- read_xls('data/graveyard/wagenaar_2014_braf/raw/wagenaar_2014_braf.xl
   filter(!is.na(rep1_codon1) & !rep1_codon1 == 'Replicate 1') %>%
   mutate_at(vars(-mut, -individually_tested, -possible_by_single_sub, -ic50_vs_brafV600E), as.numeric)%>%
   mutate(wt = str_split(meta$seq, '')[[1]][position],
-         score = log2(median_enrichment),
          raw_score = median_enrichment,
+         transformed_score = log2(median_enrichment),
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
