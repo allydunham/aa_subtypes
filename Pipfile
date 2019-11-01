@@ -11,6 +11,7 @@ snakemake = "*"
 ruamel-yaml = "*"
 biopython = "*"
 colorama = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
