@@ -4,6 +4,8 @@ Script to update the snakemake config YAML with all the studies/genes/structures
 """
 import argparse
 import os
+from collections import defaultdict
+
 from ruamel.yaml import YAML
 
 import subtypes_utils as sutil
@@ -23,16 +25,16 @@ def main(args):
         conf = {}
 
     conf['studies'] = []
-    conf['genes'] = []
+    conf['genes'] = defaultdict(list)
 
     for study in os.listdir(args.studies):
         with open(f'{args.studies}/{study}/{study}.yaml', 'r') as yaml_file:
             meta = yaml.load(yaml_file)
 
         conf['studies'].append(meta['study'])
-        conf['genes'].append(sutil.gene_to_filename(meta['gene']))
+        conf['genes'][sutil.gene_to_filename(meta['gene'])].append(meta['study'])
 
-    conf['genes'] = list(set(conf['genes']))
+    conf['genes'] = dict(conf['genes'])
 
     with open(args.yaml, 'w') as yaml_file:
         yaml.dump(conf, yaml_file)
