@@ -2,6 +2,7 @@ genes:
   adrb2: [jones_2019_adrb2]
   amie: [wrenbeck_2017_amie]
   aph3ii: [melnikov_2014_aph3ii]
+  braf: [wagenaar_2014_braf]
   brca1: [findlay_2018_brca1, starita_2015_brca1]
   calm1: [weile_2017_calm1]
   cbs: [sun_2018_cbs]
@@ -33,10 +34,10 @@ genes:
   ubi: [roscoe_2013_ubi, roscoe_2014_ubi]
   yap1: [araya_2012_yap1]
 studies: [araya_2012_yap1, giacomelli_2018_tp53, olson_2014_proteing, kitzman_2015_gal4,
-  findlay_2018_brca1, heredia_2018_cxcr4, lee_2018_ha, weile_2017_sumo1, ashenberg_2017_np,
-  brenan_2016_mapk1, weile_2017_tpk1, starita_2013_ube4b, weile_2017_ube2i, matreyek_2018_tpmt,
-  wrenbeck_2017_amie, jones_2019_adrb2, kelsic_2016_infa, sun_2018_cbs, sarkisyan_2016_gfp,
-  heredia_2018_ccr5, bandaru_2017_ras, melnikov_2014_aph3ii, dorrity_2018_ste12, melamed_2013_pab1,
-  matreyek_2018_pten, bolognesi_2019_tdp43, hartman_2018_cp, starita_2015_brca1, weile_2017_calm1,
-  roscoe_2013_ubi, hietpas_2011_hsp90, firnberg_2014_tem1, jiang_2013_hsp90, findlay_2014_dbr1,
-  roscoe_2014_ubi, steinberg_2016_tem1, mishra_2016_hsp90, ahler_2019_src]
+  findlay_2018_brca1, heredia_2018_cxcr4, wagenaar_2014_braf, lee_2018_ha, weile_2017_sumo1,
+  ashenberg_2017_np, brenan_2016_mapk1, weile_2017_tpk1, starita_2013_ube4b, weile_2017_ube2i,
+  matreyek_2018_tpmt, wrenbeck_2017_amie, jones_2019_adrb2, kelsic_2016_infa, sun_2018_cbs,
+  sarkisyan_2016_gfp, heredia_2018_ccr5, bandaru_2017_ras, melnikov_2014_aph3ii, dorrity_2018_ste12,
+  melamed_2013_pab1, matreyek_2018_pten, bolognesi_2019_tdp43, hartman_2018_cp, starita_2015_brca1,
+  weile_2017_calm1, roscoe_2013_ubi, hietpas_2011_hsp90, firnberg_2014_tem1, jiang_2013_hsp90,
+  findlay_2014_dbr1, roscoe_2014_ubi, steinberg_2016_tem1, mishra_2016_hsp90, ahler_2019_src]
