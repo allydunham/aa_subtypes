@@ -14,3 +14,6 @@ doi: '10.1016/j.jmb.2013.01.032'
 pmid: '23376099'
 url: 'https://www.sciencedirect.com/science/article/pii/S0022283613000636'
 notes: 'Uniprot ID is for UBI4, took first repeat of sequence from here as very conserved'
+qc:
+  filter: False
+  notes:

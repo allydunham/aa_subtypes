@@ -25,4 +25,6 @@ doi: '10.1111/pcmr.12171'
 pmid: '24112705'
 url: 'https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12171'
 notes: 'Only retained variants they deemed significantly different from wt'
-
+qc:
+  filter: True
+  notes: 'Selecting for drug resistance in oncogenic state - not exactly normal function'

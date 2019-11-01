@@ -11,7 +11,7 @@ seq: "MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP\
       PGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPG\
       GSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD" 
 experiment: 'Complement'
-transform: '-1 * x'
+transform: '-x'
 authour: 'Giacomelli et al.'
 year: 2018
 title: 'Mutational processes shape the landscape of TP53 mutations in human cancer'
@@ -24,4 +24,6 @@ notes: "Score is in Z-score format across 3 different conditions:\
         and null p53 background and etoposide to select for WT like.\
         Here I only use p53 NULL, Etoposide because it aligns most\
         directly with our objective of a functional protein"
-    
+qc:
+  filter: False
+  notes:

@@ -23,5 +23,7 @@ title: 'A fundamental protein property, thermodynamic stability, revealed solely
 doi: '10.1073/pnas.1209751109'
 pmid: '23035249'
 url: 'http://www.pnas.org/content/109/42/16858'
-note: 'Positions from paper are offset by 9, so add 160 to reach same start of WW domain in sequence'
-
+notes: 'Positions from paper are offset by 9, so add 160 to reach same start of WW domain in sequence'
+qc:
+  filter: False
+  notes:

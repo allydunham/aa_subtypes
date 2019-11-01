@@ -20,4 +20,6 @@ title: 'Deep mutational scanning identifies sites in influenza nucleoprotein tha
 doi: '10.1371/journal.ppat.1006288'
 pmid: '28346537'
 url: 'https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006288'
-
+qc:
+  filter: False
+  notes:

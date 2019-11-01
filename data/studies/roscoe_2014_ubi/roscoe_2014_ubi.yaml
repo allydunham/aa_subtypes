@@ -16,4 +16,6 @@ url: 'https://www.sciencedirect.com/science/article/pii/S0022283614002587'
 notes: "Uniprot ID is for UBI4, took first repeat of sequence from here as very conserved.
         Also have data for excess E1, but for 18 rather than 75 positions, so I only use
         the limiting case"
-
+qc:
+  filter: False
+  notes:

@@ -20,4 +20,6 @@ doi: '10.1038/s41467-019-12101-z'
 pmid: '31519910'
 url: 'http://www.nature.com/articles/s41467-019-12101-z'
 notes: 'Score was in base e rather than 2 and inverted to make toxic positive'
-
+qc:
+  filter: True
+  notes: 'Measure toxicity of a prion like protein - not really related to normal function'

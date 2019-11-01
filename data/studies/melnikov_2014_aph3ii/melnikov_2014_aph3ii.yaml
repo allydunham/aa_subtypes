@@ -20,3 +20,6 @@ notes: "Real gene name is APH(3')-II, which has been transformed to be computer
         readable (and because its a terrible name). To deal with multiple drugs I 
         removed bad drug-conc combinations and large outliers then averaged libraries,
         then selected best conc per drug filtered bad drugs and averaged."
+qc:
+  filter: False
+  notes:

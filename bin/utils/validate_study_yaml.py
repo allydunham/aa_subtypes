@@ -24,7 +24,7 @@ DEFAULT_FASTA = f'{PROJECT_ROOT}/meta/fasta'
 
 EXPECTED_FIELDS = ('study', 'gene', 'uniprot_id', 'gene_type', 'species', 'seq',
                    'experiment', 'transform', 'authour', 'year', 'title', 'doi',
-                   'pmid', 'url')
+                   'pmid', 'url', 'qc')
 
 HEADERS = ['Study', 'YAML Exists?', 'ID Correct?', 'Seq Correct?', 'Missing Fields?']
 

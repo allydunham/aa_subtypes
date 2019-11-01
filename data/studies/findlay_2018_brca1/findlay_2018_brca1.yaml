@@ -45,4 +45,6 @@ pmid: '30209399'
 url: 'https://www.nature.com/articles/s41586-018-0461-z'
 notes: "Mutated nucleotides exhaustively rather than AAs, so only has \
         AAs that can be reached in a single substitution"
-
+qc:
+  filter: False
+  notes:

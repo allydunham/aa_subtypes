@@ -26,4 +26,6 @@ title: 'Massively parallel single amino-acid mutagenesis'
 doi: '10.1038/nmeth.3223'
 pmid: '25559584'
 url: 'https://www.nature.com/articles/nmeth.3223'
-
+qc:
+  filter: False
+  notes:

@@ -26,4 +26,6 @@ title: 'Latent Effects of Hsp90 Mutants Revealed at Reduced Expression Levels'
 doi: '10.1371/journal.pgen.1003600'
 pmid: '23825969'
 url: 'https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1003600'
-
+qc:
+  filter: False
+  notes:

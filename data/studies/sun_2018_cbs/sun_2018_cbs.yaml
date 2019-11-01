@@ -23,4 +23,6 @@ pmid: ''
 url: 'https://www.biorxiv.org/content/10.1101/473983v3'
 mavedb: 'urn:mavedb:00000005-a'
 notes: 'Used low B6 dataset as they were similar but it produced stronger effects'
-
+qc:
+  filter: False
+  notes:

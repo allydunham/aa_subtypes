@@ -13,4 +13,6 @@ doi: '10.1016/j.cub.2014.09.072'
 pmid: '25455030'
 url: 'https://www.sciencedirect.com/science/article/pii/S0960982214012688'
 notes: 'Uniprot ID is for the Protein G precurssor which has a slightly different sequence'
-
+qc:
+  filter: False
+  notes:

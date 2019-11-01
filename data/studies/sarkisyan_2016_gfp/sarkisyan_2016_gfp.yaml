@@ -15,4 +15,6 @@ title: 'Local fitness landscape of the green fluorescent protein'
 doi: '10.1038/nature17995'
 pmid: '27193686'
 url: 'https://www.nature.com/articles/nature17995'
-
+qc:
+  filter: False
+  notes:
