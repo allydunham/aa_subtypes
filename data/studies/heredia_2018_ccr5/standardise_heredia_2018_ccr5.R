@@ -22,9 +22,10 @@ dm_data <- read_xlsx('data/studies/heredia_2018_ccr5/raw/GSE100368_enrichment_ra
   # Average surface expression score and take worst of three measured phenotypes
   mutate(surface_exp = rowMeans(select(., surface_exp_fitc_l1, surface_exp_alexa_l2), na.rm = TRUE) %>% replace_na(NA),
          raw_score = pmin(binding_2d7_l1, surface_exp, binding_gp120_cd4_l2),
-         score = normalise_score(raw_score),
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class)
 
 
 # Save output

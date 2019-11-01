@@ -11,7 +11,8 @@ dm_data <- read_xlsx('data/studies/bandaru_2017_ras/raw/elife-27810-supp1-v2.xls
   mutate_at(vars(-wt), as.numeric) %>%
   mutate(position = as.integer(position)) %>%
   pivot_longer(A:Y, names_to = 'mut', values_to = 'raw_score') %>%
-  mutate(score = normalise_score(raw_score/log(2)),
+  mutate(transformed_score = raw_score/log(2),
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut))
 
 # Save output

@@ -26,9 +26,9 @@ dm_data <- read_xlsx('data/studies/lee_2018_ha/raw/lee_2018_influenza_ha.xlsx', 
          class = get_variant_class(wt, mut)) %>%
   arrange(position, mut) %>%
   group_by(position) %>%
-  mutate(score = log2(raw_score / raw_score[which(mut == first(wt))])) %>%
+  mutate(transformed_score = log2(raw_score / raw_score[which(mut == first(wt))])) %>%
   ungroup() %>%
-  mutate(score = normalise_score(score))
+  mutate(score = normalise_score(transformed_score))
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

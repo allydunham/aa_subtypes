@@ -13,7 +13,8 @@ dm_data <- read_xlsx('data/studies/roscoe_2014_ubi/raw/roscoe_2014_ubi_limiting_
          rel_e1_reactivity = `Relative E1-reactivity (avg WT=1, avg STOP=0)`,
          sd_in_symonoymous_codons = `Standard deviation among synonymous codons`,
          notes = Notes) %>%
-  mutate(score =normalise_score(raw_score), 
+  mutate(transformed_score = raw_score,
+         score = normalise_score(transformed_score), 
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut))
 

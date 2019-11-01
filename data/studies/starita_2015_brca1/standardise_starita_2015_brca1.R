@@ -12,7 +12,8 @@ dm_data <- read_xls('data/studies/starita_2015_brca1/raw/starita_2015_brca1_ring
          class = get_variant_class(wt, mut)) %>%
   filter(!variant_id == 'NA-NA') %>%
   mutate(raw_score = pmin(e3_score, y2h_score, na.rm = TRUE),
-         score = transform_vamp_seq(raw_score))
+         transformed_score = transform_vamp_seq(raw_score),
+         score = normalise_score(transformed_score))
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

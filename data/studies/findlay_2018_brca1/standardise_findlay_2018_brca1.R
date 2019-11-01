@@ -14,9 +14,10 @@ dm_data <- read_xlsx('data/studies/findlay_2018_brca1/raw/findlay_2018_brca1_rin
          position = aa_pos) %>%
   drop_na(position) %>%
   mutate(raw_score = function.score.mean,
-         score = normalise_score(raw_score),
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

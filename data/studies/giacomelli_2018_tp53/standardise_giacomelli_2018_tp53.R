@@ -40,9 +40,10 @@ dm_data <- read_xlsx('data/studies/giacomelli_2018_tp53/raw/41588_2018_204_MOESM
   # Select appropriate experiment (p53 NULL, Etoposide selects for funcional p53), others test other functions that could possibly be integrated carefully
   filter(p53 == 'null', drug == 'etoposide') %>%
   
-  mutate(score = normalise_score(raw_score), 
+  mutate(transformed_score = raw_score,
+         score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class)
   
 
 # Save output

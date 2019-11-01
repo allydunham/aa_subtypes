@@ -16,8 +16,9 @@ dm_data <- read_xlsx('data/studies/olson_2014_proteing/raw/olson_2014_protein_g_
          mut = `Mutation`,
          input_count = `Input Count`,
          selection_count = `Selection Count`) %>%
-  mutate(raw_score = log2(((selection_count + min(selection_count[selection_count > 0], na.rm = TRUE))/input_count)/E_wt),
-         score = normalise_score(raw_score), 
+  mutate(raw_score = ((selection_count + min(selection_count[selection_count > 0], na.rm = TRUE))/input_count)/E_wt,
+         transformed_score = log2(raw_score),
+         score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut))
 
 # Save output

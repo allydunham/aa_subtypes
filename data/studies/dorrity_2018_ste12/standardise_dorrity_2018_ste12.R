@@ -34,7 +34,8 @@ dm_data <- full_join(mating_data, invasion_data, by = c('mut', 'nmut')) %>%
   group_by(position, wt, mut) %>%
   summarise(raw_score = ifelse(any(nmut == 1), mean(raw_score[nmut == 1], na.rm = TRUE), mean(raw_score[nmut <= 1], na.rm = TRUE))) %>%
   ungroup() %>%
-  mutate(score = normalise_score(raw_score),
+  mutate(transformed_score = raw_score,
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut))
 
 # Save output

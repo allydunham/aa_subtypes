@@ -12,9 +12,10 @@ dm_data <- read_csv('data/studies/weile_2017_calm1/raw/weile_2017_calm_score_com
   tidyr::extract(mut, into = c('wt', 'position', 'mut'), "p\\.([A-Z]+)([0-9]*)([A-Z=]+)", convert=TRUE) %>%
   mutate(mut = if_else(mut == '=', wt, mut),
          raw_score = score,
-         score = transform_vamp_seq(raw_score),
+         transformed_score = transform_vamp_seq(raw_score),
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, raw_score, class) %>%
+  select(position, wt, mut, score, transformed_score, raw_score, class) %>%
   arrange(position, mut)
 
 # Save output

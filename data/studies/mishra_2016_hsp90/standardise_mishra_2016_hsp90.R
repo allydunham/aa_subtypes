@@ -9,11 +9,12 @@ path <- 'data/studies/mishra_2016_hsp90/raw/mishra_2016_hsp90_enrichment.xlsx'
 dm_data <- map(excel_sheets(path), read_mishra_sheet, path = path) %>%
   bind_rows() %>%
   select(position, mut=aa, raw_score=avg) %>%
-  mutate(raw_score = na_if(raw_score, -999),
-         wt = str_split(meta$seq, '')[[1]][position],
-         score = normalise_score(raw_score), 
+  mutate(wt = str_split(meta$seq, '')[[1]][position],
+         raw_score = na_if(raw_score, -999),
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, raw_score, score, class) %>%
+  select(position, wt, mut, transformed_score, raw_score, score, class) %>%
   arrange(position, mut)
 
 # Save output

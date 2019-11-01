@@ -12,11 +12,11 @@ dm_data <- read_csv('data/studies/kelsic_2016_infa/raw/cels_206_mmc5.csv', skip 
                                   'fitness_stdev_rich', 'RCS',
                                   'mfe_ddG_43nt_sliding', 'tmp')) %>%
   select(codon:sd) %>%
-  mutate(score = transform_vamp_seq(raw_score, normalise = FALSE)) %>%
+  mutate(transformed_score = transform_vamp_seq(raw_score)) %>%
   group_by(position, mut) %>%
-  summarise_at(vars(score, raw_score), mean, na.rm=TRUE) %>%
+  summarise_at(vars(transformed_score, raw_score), mean, na.rm=TRUE) %>%
   ungroup() %>%
-  mutate(score = normalise_score(score),
+  mutate(score = normalise_score(transformed_score),
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut))
 

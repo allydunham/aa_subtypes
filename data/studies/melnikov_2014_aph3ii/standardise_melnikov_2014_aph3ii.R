@@ -47,7 +47,8 @@ dm_data <- mapply(melnikov_fitness, counts, names(counts), MoreArgs = list(bkg=b
   summarise(score = mean(score, na.rm=TRUE)) %>%
   ungroup() %>%
   mutate(raw_score = score,
-         score = normalise_score(raw_score),
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut))
 
 # Save output

@@ -7,7 +7,7 @@ AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrin
 AA_THREE_2_ONE['Ter'] <- '*'
 
 ## general study data saving function
-# dm_data = tibble with columns position, wt, mut, score, raw_score
+# dm_data = tibble with columns position, wt, mut, score, transformed_score, raw_score, class
 # study_id = authour_year_gene style standard study id
 # transform = string describing the transform applied
 # fill = column to colour distribution plots by. If NULL no colouring is applied
@@ -18,13 +18,19 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
     guides(fill = guide_legend(title = 'Variant Class')) +
     scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
     geom_histogram(bins = 30) +
-    labs(title = str_c('Original score distribution for ', study_name), x = 'Score', y = 'Count')
+    labs(title = str_c('Original score distribution for ', study_name), x = 'Raw Score', y = 'Count')
 
-  p_trans <- ggplot(dm_data, aes(x = score, fill = class)) +
+  p_trans <- ggplot(dm_data, aes(x = transformed_score, fill = class)) +
     guides(fill = guide_legend(title = 'Variant Class')) +
     scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
     geom_histogram(bins = 30) +
-    labs(title = str_c('Transformed score distribution for ', study_name), x = 'Score', y = 'Count')
+    labs(title = str_c('Transformed score distribution for ', study_name), x = 'Transformed Score', y = 'Count')
+  
+  p_norm <- ggplot(dm_data, aes(x = score, fill = class)) +
+    guides(fill = guide_legend(title = 'Variant Class')) +
+    scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
+    geom_histogram(bins = 30) +
+    labs(title = str_c('Normaliseded score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
   
   # Write output
   if (!dir.exists(str_c('figures/0_data_properties/', study_id))){
@@ -32,8 +38,9 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
   }
   ggsave(str_c('figures/0_data_properties/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
   ggsave(str_c('figures/0_data_properties/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data_properties/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
   
-  write_tsv(select(dm_data, position, wt, mut, score, raw_score, class), str_c('data/studies/', study_id, '/', study_id, '.tsv'))
+  write_tsv(select(dm_data, position, wt, mut, score, transformed_score, raw_score, class), str_c('data/studies/', study_id, '/', study_id, '.tsv'))
 }
 
 ## Function to determine variant class
@@ -51,23 +58,16 @@ get_variant_class <- function(wt, mut){
 
 ## Normalise Score
 normalise_score <- function(x){
-  x / -min(x, na.rm = TRUE)
+  q <- quantile(x, 0.1, na.rm=TRUE)
+  return(x / -median(x[x <= q], na.rm = TRUE))
 }
 
-## Scale and normalise VAMP-seq style
+## Scale VAMP-seq style
 # data ranges from ~0 (NULL) -> 1 (wt) -) >1 beneficial
-transform_vamp_seq <- function(x, normalise=TRUE){
+transform_vamp_seq <- function(x){
   # Transform
   y <- 1 + (x - 1) / -min(x - 1, na.rm = TRUE)
-  y <- log2(y + min(y[y > 0], na.rm = TRUE))
-  
-  # Normalise
-  if (normalise){
-    return(normalise_score(y))
-  } else {
-    return(y)
-  }
-  
+  return(log2(y + min(y[y > 0], na.rm = TRUE)))
 }
 
 # Calculate E-score equivalent to Enrich1 
@@ -92,7 +92,8 @@ read_mavedb <- function(path, score_col=NULL, score_transform=identity, position
     tidyr::extract(hgvs_pro, into = c('wt', 'position', 'mut'), "p.([A-Za-z]{3})([0-9]+)([A-Za-z]{3})", convert = TRUE) %>%
     mutate(wt = AA_THREE_2_ONE[wt], mut = AA_THREE_2_ONE[mut], position = position + position_offset) %>%
     rename(raw_score = !!score_col) %>%
-    mutate(score = normalise_score(score_transform(raw_score)),
+    mutate(transformed_score = score_transform(raw_score),
+           score = normalise_score(transformed_score),
            class = get_variant_class(wt, mut)) %>%
     select(position, wt, mut, score, raw_score, class) %>%
     arrange(position, mut) %>%

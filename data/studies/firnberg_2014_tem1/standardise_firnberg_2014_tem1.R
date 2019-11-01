@@ -15,8 +15,8 @@ dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xls
   mutate(position = rep(1:nchar(meta$seq), each=64)) %>% # Numbering seems broken - starts at 3 and then misses 237 & 251
   group_by(position, wt, mut) %>%
   summarise(raw_score = mean(raw_score, na.rm = TRUE),
-            score = mean(log2(raw_score), na.rm = TRUE)) %>% # Average over codons
-  mutate(score = normalise_score(score), 
+            transformed_score = mean(log2(raw_score), na.rm = TRUE)) %>% # Average over codons
+  mutate(score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut))
 
 # Save output

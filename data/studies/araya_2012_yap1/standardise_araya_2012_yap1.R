@@ -10,13 +10,13 @@ dm_data <- read_tsv('data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv',
                     col_types = cols(positions=col_character())) %>%
   separate(mutations, str_c('mutant', 1:max(.$mutation.count)), sep = ',', fill = 'right') %>%
   rename(raw_score = fitness) %>%
-  mutate(score = log2(raw_score)) %>%
+  mutate(transformed_score = log2(raw_score)) %>%
   pivot_longer(starts_with('mutant'), values_to = 'mutant') %>%
   select(-name) %>%
   drop_na(mutant) %>%
   separate(mutant, into = c('position', 'mut'), sep = -1, convert = TRUE) %>%
   group_by(position, mut) %>%
-  summarise(score = mean(score), raw_score = mean(raw_score)) %>% # Average over occurances of a variant?
+  summarise(transformed_score = mean(transformed_score), raw_score = mean(raw_score)) %>% # Average over occurances of a variant?
   ungroup() %>%
   mutate(position = position + 160,
          wt = str_split(meta$seq, '')[[1]][position],

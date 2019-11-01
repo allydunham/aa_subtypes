@@ -9,10 +9,11 @@ dm_data <- read_xlsx('data/studies/brenan_2016_mapk1/raw/brenan_2016_erk2.xlsx',
   rename_all(list( ~ gsub(' ', '_', tolower(.)))) %>%
   rename(wt = wt_aa, mut = mutant_aa, position = erk2_residue) %>%
   mutate(raw_score = `lfc_(etp_vs._dox)`, # Only general condition, other two are for specific drugs
-         score = normalise_score(-raw_score), # The selection scheme they used favoured lof > wt > gof
+         transformed_score = -raw_score,  # The selection scheme they used favoured lof > wt > gof
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>% 
   mutate_at(vars(nuc_acid_changes, dox_rank, sch_rank, vrt_rank, vrt_specific_allele, sch_specific_allele), as.integer) %>%
-  select(position, wt, mut, score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

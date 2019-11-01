@@ -22,7 +22,8 @@ dm_data <- mutate(raw_data, n_mut = str_count(mut, ':') + 1) %>%
   summarise(raw_score = if_else(1 %in% n_mut, mean(median_brightness[n_mut == 1], na.rm = TRUE), # Use value of single mut if available
                                 mean(median_brightness, na.rm = TRUE))) %>%
   ungroup() %>%
-  mutate(score = normalise_score(log2(raw_score / wt_brightness)),
+  mutate(transformed_score = log2(raw_score / wt_brightness),
+         score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut))
 
 # Save output

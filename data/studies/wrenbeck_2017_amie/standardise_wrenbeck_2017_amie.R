@@ -12,7 +12,8 @@ dm_data <- bind_rows(acetamide = read_tsv('data/studies/wrenbeck_2017_amie/raw/a
   select(position = location, mut = mutation, raw_score = normalized_fitness, condition) %>%
   pivot_wider(names_from = condition, values_from = raw_score) %>%
   mutate(raw_score = rowMeans(select(., acetamide, isobutyramide, propionamide), na.rm = TRUE) %>% replace_na(NA),
-         score = normalise_score(raw_score),
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score),
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut))
 

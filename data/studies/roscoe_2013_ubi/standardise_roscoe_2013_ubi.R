@@ -12,10 +12,11 @@ dm_data <- read_xlsx('data/studies/roscoe_2013_ubi/raw/roscoe_2013_ubi_fitness.x
          selection_chr = Apparent,
          sd_chr = `Quantified Synonyms`) %>%
   mutate(raw_score = as.numeric(selection_chr),
-         score =normalise_score(raw_score), 
+         transformed_score = raw_score,
+         score = normalise_score(transformed_score), 
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, raw_score, score, class)
+  select(position, wt, mut, transformed_score, raw_score, score, class)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
