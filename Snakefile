@@ -13,11 +13,19 @@ UNIREF90_DB_PATH = '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019
 FASTA_LINE_LENGTH = 80
 
 configfile: 'snakemake.yaml'
-localrules: all, make_sift_fastas
+localrules: all, all_standardisation, all_sift, make_sift_fastas
 
 rule all:
     input:
         expand('data/studies/{study}/{study}.tsv', study=config['studies']),
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
+
+rule all_standardisation:
+    input:
+        expand('data/studies/{study}/{study}.tsv', study=config['studies'])
+
+rule all_sift:
+    input:
         expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
 
 #### Validate Data ####
