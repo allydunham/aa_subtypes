@@ -9,14 +9,15 @@ meta <- read_yaml('data/studies/araya_2012_yap1/araya_2012_yap1.yaml')
 dm_data <- read_tsv('data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv', na = 'na',
                     col_types = cols(positions=col_character())) %>%
   separate(mutations, str_c('mutant', 1:max(.$mutation.count)), sep = ',', fill = 'right') %>%
-  rename(raw_score = fitness) %>%
+  rename(raw_score = fitness, n_mut = mutation.count) %>%
   mutate(transformed_score = log2(raw_score)) %>%
   pivot_longer(starts_with('mutant'), values_to = 'mutant') %>%
   select(-name) %>%
   drop_na(mutant) %>%
   separate(mutant, into = c('position', 'mut'), sep = -1, convert = TRUE) %>%
   group_by(position, mut) %>%
-  summarise(transformed_score = mean(transformed_score), raw_score = mean(raw_score)) %>% # Average over occurances of a variant?
+  summarise(transformed_score = ifelse(1 %in% n_mut, mean(transformed_score[n_mut == 1], na.rm=TRUE), mean(transformed_score[n_mut == 2], na.rm=TRUE)),
+            raw_score = ifelse(1 %in% n_mut, mean(raw_score[n_mut == 1], na.rm=TRUE), mean(raw_score[n_mut == 2], na.rm=TRUE))) %>%
   ungroup() %>%
   mutate(position = position + 160,
          wt = str_split(meta$seq, '')[[1]][position],
