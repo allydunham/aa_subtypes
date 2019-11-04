@@ -30,7 +30,7 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
     guides(fill = guide_legend(title = 'Variant Class')) +
     scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
     geom_histogram(bins = 30) +
-    labs(title = str_c('Normaliseded score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
+    labs(title = str_c('Normalised score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
   
   # Write output
   if (!dir.exists(str_c('figures/0_data_properties/', study_id))){
