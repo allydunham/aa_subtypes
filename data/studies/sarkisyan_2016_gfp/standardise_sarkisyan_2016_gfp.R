@@ -20,7 +20,7 @@ dm_data <- mutate(raw_data, n_mut = str_count(mut, ':') + 1) %>%
   arrange(position, mut) %>%
   group_by(position, wt, mut) %>%
   summarise(raw_score = if_else(1 %in% n_mut, mean(median_brightness[n_mut == 1], na.rm = TRUE), # Use value of single mut if available
-                                mean(median_brightness, na.rm = TRUE))) %>%
+                                mean(median_brightness[n_mut <= 4], na.rm = TRUE))) %>%
   ungroup() %>%
   mutate(transformed_score = log2(raw_score / wt_brightness),
          score = normalise_score(transformed_score),
