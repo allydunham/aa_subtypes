@@ -104,7 +104,7 @@ rule validate_dorrity:
     script:
         "bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
 
-# Validate Dorrity et al. 2018 (STE12)
+# Validate Araya et al. 2012 (YAP1)
 rule validate_araya:
     input:
         config['input_files']['araya_2012_yap1']
@@ -115,6 +115,16 @@ rule validate_araya:
     script:
         "bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
 
+# Validate Starita et al. 2013 (UBE4B)
+rule validate_starita:
+    input:
+        config['input_files']['starita_2013_ube4b']
+
+    output:
+        "figures/0_data_properties/starita_2013_ube4b/multi_mut_validation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
 
 #### Standardise Data ####
 # Process the raw data from each study
