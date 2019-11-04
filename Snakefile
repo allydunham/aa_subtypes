@@ -29,21 +29,11 @@ rule all_sift:
         expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
 
 #### Validate Data ####
-# Test multiple mutation averaging
-rule validate_multi_muts:
-    input:
-        "data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx",
-        "data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv"
-
-    output:
-        "figures/0_data_properties/averaging_multi_mutants.pdf"
-
-    script:
-        "bin/analysis/0_data_properties/validate_multi_muts.R"
-
 # Validate Melnikov et al. 2014 (APH(3')-II)
 rule validate_melnikov:
-    # Requires Melnikov .aacount files to be in data/studies/melnikov_2014_aph3ii/raw
+    input:
+        config['input_files']['melnikov_2014_aph3ii']
+
     output:
         "figures/0_data_properties/melnikov_2014_aph3ii/initial_library_correlation.pdf",
         "figures/0_data_properties/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
@@ -56,7 +46,7 @@ rule validate_melnikov:
 # Validate Kitzman et al. 2015 (GAL4)
 rule validate_kitzman:
     input:
-        "data/studies/kitzman_2015_gal4/raw/kitzman_2015_gal4_enrichment.xlsx"
+        config['input_files']['kitzman_2015_gal4']
 
     output:
         "figures/0_data_properties/kitzman_2015_gal4/validate_selection_combination.pdf"
@@ -67,7 +57,7 @@ rule validate_kitzman:
 # Validate Giacomelli et al. 2018 (TP53)
 rule validate_giacomelli:
     input:
-        "data/studies/giacomelli_2018_tp53/raw/41588_2018_204_MOESM5_ESM.xlsx"
+        config['input_files']['giacomelli_2018_tp53']
 
     output:
         "figures/0_data_properties/giacomelli_2018_tp53/initial_experiment_cor.pdf",
@@ -80,7 +70,7 @@ rule validate_giacomelli:
 # Validate Heredia et al. 2018
 rule validate_heredia:
     input:
-        "data/studies/heredia_2018_ccr5/raw/GSE100368_enrichment_ratios_CCR5.xlsx"
+       config['input_files']['heredia_2018_ccr5'] + config['input_files']['heredia_2018_cxcr4']
 
     output:
         "figures/0_data_properties/heredia_2018_ccr5/replicate_correlation.pdf",
@@ -94,7 +84,7 @@ rule validate_heredia:
 # Validate Sarkisyan et al. 2016 (GFP)
 rule validate_sarkisyan:
     input:
-        "data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv"
+        config['input_files']['sarkisyan_2016_gfp']
 
     output:
         "figures/0_data_properties/sarkisyan_2016_gfp/multi_mut_validation.pdf"
@@ -105,8 +95,7 @@ rule validate_sarkisyan:
 # Validate Dorrity et al. 2018 (STE12)
 rule validate_dorrity:
     input:
-        "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx",
-        "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd02.xlsx"
+        config['input_files']['dorrity_2018_ste12']
 
     output:
         "figures/0_data_properties/dorrity_2018_ste12/rep_correlation.pdf",
@@ -114,6 +103,18 @@ rule validate_dorrity:
 
     script:
         "bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
+
+# Validate Dorrity et al. 2018 (STE12)
+rule validate_araya:
+    input:
+        config['input_files']['araya_2012_yap1']
+
+    output:
+        "figures/0_data_properties/araya_2012_yap1/multi_mut_validation.pdf"
+
+    script:
+        "bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
+
 
 #### Standardise Data ####
 # Process the raw data from each study
