@@ -1,0 +1,33 @@
+Gene	Function	Species	Studies	Length	Mutated Positions	Variants (Missense)	Coverage (Missense)
+Src	Kinase	H. sapiens	1	536	264	3714	0.74
+YAP1	TF	H. sapiens	1	504	34	542	0.839
+NP	viral	Influenza	1	498	498	9462	1.0
+Ras	GTPase	H. sapiens	1	189	165	3300	1.0
+MAPK1	Kinase	H. sapiens	1	360	359	6810	0.998
+STE12	Transcription Factor	S. cerevisiae	1	688	33	314	0.501
+DBR1	Lauriat Debranching	H. sapiens	1	544	25	352	0.651
+BRCA1	E3 Ligase	H. sapiens	2	1863	529	6975	0.636
+TEM1	Metabolic	E. coli	2	286	286	5465	0.956
+TP53	TF	H. sapiens	1	393	394	7876	1.0
+CP	Viral Coat	Bacteriophage MS2	1	130	129	2461	0.963
+CCR5	GPCR	H. sapiens	1	352	351	6896	0.981
+CXCR4	GPCR	H. sapiens	1	352	351	6996	0.996
+HSP90	Chaperone	S. cerevisiae	3	709	238	4725	0.994
+ADRB2	GPCR	H. sapiens	1	413	412	7800	0.996
+infA	Translation	E. coli	1	72	73	1460	1.001
+GAL4	TF	S. cerevisiae	1	881	64	1260	0.984
+HA	Viral	Influenza	1	566	566	11320	1.0
+PTEN	Phosphatase	H. sapiens	1	403	361	4268	0.6
+TPMT	Methyltransferase	H. sapiens	1	245	241	3828	0.806
+PAB1	RNA Binding	S. cerevisiae	1	577	75	1188	0.834
+APH3II	kinase	E. coli	1	264	264	5280	1.0
+Protein G	Immune	Streptococcus	1	55	55	1045	1.0
+UBI	PTM	S. cerevisiae	2	76	75	1463	0.974
+GFP	Flourescent Protein	A. victoria	1	238	233	1561	0.353
+UBE4B	E3 Ubiquitin Ligase	M. musculus	1	1173	102	1196	0.617
+CBS	Metabolic	H. sapiens	1	551	550	10450	1.0
+CALM1	Regulatory	H. sapiens	1	149	149	2980	1.0
+SUMO1	PTM	H. sapiens	1	101	101	2020	1.0
+TPK1	Enzyme	H. sapiens	1	243	243	4860	1.0
+UBE2I	E2 Conjugase	H. sapiens	1	158	159	3180	1.0
+amiE	Metabolic	P. aeruginosa	1	346	341	6757	0.99

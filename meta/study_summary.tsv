@@ -1,0 +1,40 @@
+Study	Authour	Year	Gene	Function	Species	Experiment	Transform	Filtered	Gene Length	Mutated Positions	Variants (Missense)	Coverage (Missense)	Nonsense	Synonymous
+ahler_2019_src	Ahler et al.	2019	Src	Kinase	H. sapiens	Coupled yeast growth	-x	False	536	264	3714	0.74	True	False
+araya_2012_yap1	Araya et al.	2012	YAP1	TF	H. sapiens	ligand binding	log2(x)	False	504	34	542	0.839	True	False
+ashenberg_2017_np	Ashenberg et al.	2017	NP	viral	Influenza	Complement	None	False	498	498	9462	1.0	False	False
+bandaru_2017_ras	Bandaru et al.	2017	Ras	GTPase	H. sapiens	Coupled growth	x/ln(2)	False	189	165	3300	1.0	False	True
+bolognesi_2019_tdp43	Bolognesi et al.	2019	TDP43	DNA Binding	H. sapiens	Growth	-x/ln(2)	True	414	84	1196	0.749	True	False
+brenan_2016_mapk1	Brenan et al.	2016	MAPK1	Kinase	H. sapiens	Growth	-1 * x	False	360	359	6810	0.998	False	False
+dorrity_2018_ste12	Dorrity et al.	2018	STE12	Transcription Factor	S. cerevisiae			False	688	33	314	0.501	True	False
+findlay_2014_dbr1	Findlay et al.	2014	DBR1	Lauriat Debranching	H. sapiens	Growth	None	False	544	25	352	0.651	True	True
+findlay_2018_brca1	Findlay et al.	2018	BRCA1	E3 Ligase	H. sapiens	Complement	None	False	1863	326	2665	0.337	True	True
+firnberg_2014_tem1	Firnberg et al.	2014	TEM1	Metabolic	E. coli	Coupled Growth	log2(x)	False	286	286	5398	0.944	True	True
+giacomelli_2018_tp53	Giacomelli et al.	2018	TP53	TF	H. sapiens	Complement	-x	False	393	394	7876	1.0	True	True
+hartman_2018_cp	Hatrman et al.	2018	CP	Viral Coat	Bacteriophage MS2	Viral coat assembly	None	False	130	129	2461	0.963	True	True
+heredia_2018_ccr5	Heredia et al.	2018	CCR5	GPCR	H. sapiens			False	352	351	6896	0.981	True	True
+heredia_2018_cxcr4	Heredia et al.	2018	CXCR4	GPCR	H. sapiens			False	352	351	6996	0.996	True	True
+hietpas_2011_hsp90	Heitpas et al.	2011	HSP90	Chaperone	S. cerevisiae	Growth	None	False	709	9	180	1.0	True	True
+jiang_2013_hsp90	Jiang et al.	2013	HSP90	Chaperone	S. cerevisiae	Complement	log2(x)	False	709	9	180	1.0	True	True
+jones_2019_adrb2	Jones et al	2019	ADRB2	GPCR	H. sapiens	Expression of reporter gene	log2(x/2)	False	413	412	7800	0.996	False	False
+kelsic_2016_infa	Kelsic et al.	2016	infA	Translation	E. coli	Growth	VAMP-seq transform	False	72	73	1460	1.001	True	True
+kitzman_2015_gal4	Kitzman et al.	2015	GAL4	TF	S. cerevisiae	Coupled growth	log2(x) and Average of A,B,C at 40h	False	881	64	1260	0.984	True	True
+lee_2018_ha	Lee et al.	2018	HA	Viral	Influenza	Growth	log2(x * 5)	False	566	566	11320	1.0	False	True
+matreyek_2018_pten	Matreyek et al.	2018	PTEN	Phosphatase	H. sapiens	VAMP-seq	Standard VAMP-seq transform	False	403	361	4268	0.6	True	True
+matreyek_2018_tpmt	Matreyek et al.	2018	TPMT	Methyltransferase	H. sapiens	VAMP-seq	Standard VAMP-seq transform	False	245	241	3828	0.806	True	True
+melamed_2013_pab1	Melamed et al.	2013	PAB1	RNA Binding	S. cerevisiae	Growth	None	False	577	75	1188	0.834	True	False
+melnikov_2014_aph3ii	Melnikov et al.	2014	APH3II	kinase	E. coli	Coupled growth	Processed from counts	False	264	264	5280	1.0	False	True
+mishra_2016_hsp90	Mishra et al.	2016	HSP90	Chaperone	S. cerevisiae	Growth	None	False	709	229	4545	0.994	True	True
+olson_2014_proteing	Olson et al.	2014	Protein G	Immune	Streptococcus	Ligand binding	None (Processed from counts)	False	55	55	1045	1.0	False	False
+roscoe_2013_ubi	Roscoe et al.	2013	UBI	PTM	S. cerevisiae	Growth	None	False	76	75	1270	0.839	True	True
+roscoe_2014_ubi	Roscoe & Bolon	2014	UBI	PTM	S. cerevisiae	Reactivity	None	False	76	75	1436	0.958	True	True
+sarkisyan_2016_gfp	Sarkisyan et al.	2016	GFP	Flourescent Protein	A. victoria	Flourescence level	log2(x/F_wt)	False	238	233	1561	0.353	False	False
+starita_2013_ube4b	Starita et al.	2013	UBE4B	E3 Ubiquitin Ligase	M. musculus	Activity	None	False	1173	102	1196	0.617	True	False
+starita_2015_brca1	Starita et al.	2015	BRCA1	E3 Ligase	H. sapiens	Ligand binding (Y2H) and E3 activity	Min of two scores then log2(x)	False	1863	303	4873	0.846	True	True
+steinberg_2016_tem1	Steinberg & Ostermeier	2016	TEM1	Metabolic	E. coli	Concentration of beta-lactam		False	286	286	5460	0.955	False	True
+sun_2018_cbs	Sun et al.	2018	CBS	Metabolic	H. sapiens	Coupled growth	VAMP-seq	False	551	550	10450	1.0	True	False
+wagenaar_2014_braf	Wagenaar et al.	2014	BRAF	Kinase	H. sapiens	Complement	log2(x)	True	766	33	73	0.116	False	False
+weile_2017_calm1	Weile et al.	2017	CALM1	Regulatory	H. sapiens	Complement	VAMP-seq Transform	False	149	149	2980	1.0	False	True
+weile_2017_sumo1	Weile et al.	2017	SUMO1	PTM	H. sapiens	Complement	VAMP-seq Transform	False	101	101	2020	1.0	False	True
+weile_2017_tpk1	Weile et al.	2017	TPK1	Enzyme	H. sapiens	Complement	VAMP-seq Transform	False	243	243	4860	1.0	False	True
+weile_2017_ube2i	Weile et al.	2017	UBE2I	E2 Conjugase	H. sapiens	Complement	VAMP-seq transform	False	158	159	3180	1.0	False	True
+wrenbeck_2017_amie	Wrenbeck et al.	2017	amiE	Metabolic	P. aeruginosa	Coupled growth	None	False	346	341	6757	0.99	True	True
