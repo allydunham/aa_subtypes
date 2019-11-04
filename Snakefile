@@ -152,8 +152,8 @@ rule make_gene_fasta:
             elif not seq == conf['seq']:
                 raise ValueError(f"Two studies on {wildcards.gene} have different sequences")
 
-        with open(output, 'w') as fasta_file:
-            print(f">{wildcards.genee}", file=fasta_file)
+        with open(output[0], 'w') as fasta_file:
+            print(f">{wildcards.gene}", file=fasta_file)
             for i in range(0, len(seq), FASTA_LINE_LENGTH):
                 print(seq[i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
 
