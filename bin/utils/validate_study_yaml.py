@@ -22,11 +22,14 @@ PROJECT_ROOT = '/Users/ally/phd/subtypes'
 DEFAULT_STUDIES = f'{PROJECT_ROOT}/data/studies'
 DEFAULT_FASTA = f'{PROJECT_ROOT}/meta/fasta'
 
-EXPECTED_FIELDS = ('study', 'gene', 'uniprot_id', 'gene_type', 'species', 'seq',
+REQUIRED_FIELDS = ('study', 'gene', 'uniprot_id', 'gene_type', 'species', 'seq',
                    'experiment', 'transform', 'authour', 'year', 'title', 'doi',
-                   'pmid', 'url', 'qc')
+                   'pmid', 'url', 'qc', 'input_files', 'source')
 
-HEADERS = ['Study', 'YAML Exists?', 'ID Correct?', 'Seq Correct?', 'Missing Fields?']
+OPTIONAL_FIELDS = ('notes', 'mavedb_urn', 'strain', 'domain')
+
+HEADERS = ['Study', 'YAML Exists?', 'ID Correct?', 'Seq Correct?',
+           'Missing Fields?', 'Unexpected Fields?']
 
 def import_single_seq_fasta_dir(directory):
     """Import a directory of single sequence fasta files into a dict, keyed by the file names"""
@@ -102,7 +105,9 @@ def check_study(study, root_dir='.', seqs=None):
         output['seq'] = check_yaml_seq(yaml, seqs)
 
     # Check fields
-    output['missing_fields'] = [x for x in EXPECTED_FIELDS if not x in yaml.keys()]
+    output['missing_fields'] = [x for x in REQUIRED_FIELDS if not x in yaml.keys()]
+    output['unexpected_fields'] = [x for x in yaml.keys() if
+                                   not (x in REQUIRED_FIELDS or x in OPTIONAL_FIELDS)]
 
     return output
 
@@ -112,7 +117,7 @@ def print_study_validation_table(studies):
     """
     try:
         print(Style.BRIGHT, Fore.BLUE, sep='', end='')
-        print("{: <25} {: <15} {: <15} {: <15} {: <20}".format(*HEADERS))
+        print("{: <25} {: <15} {: <15} {: <15} {: <20} {: <20}".format(*HEADERS))
         for study, checks in studies.items():
             colours = defaultdict(lambda: Fore.GREEN)
 
@@ -135,12 +140,20 @@ def print_study_validation_table(studies):
                 colours['missing_fields'] = Fore.RED
                 colours['study'] = Fore.RED
 
+            if checks['unexpected_fields'] == []:
+                unexpected_fields = 'None'
+            else:
+                unexpected_fields = ', '.join(checks['unexpected_fields'])
+                colours['unexpected_fields'] = Fore.RED
+                colours['study'] = Fore.RED
+
             output = [f"{colours['study']}{study}",
                       f"{colours['yaml']}{checks['yaml']}",
                       f"{colours['id']}{checks['id']}",
                       f"{colours['seq']}{checks['seq']}",
-                      f"{colours['missing_fields']}{missing_fields}"]
-            print("{: <30} {: <20} {: <20} {: <20} {: <20}".format(*output))
+                      f"{colours['missing_fields']}{missing_fields}",
+                      f"{colours['unexpected_fields']}{unexpected_fields}"]
+            print("{: <30} {: <20} {: <20} {: <20} {: <20} {: <20}".format(*output))
         print(Style.RESET_ALL)
     except:
         print(Style.RESET_ALL)
