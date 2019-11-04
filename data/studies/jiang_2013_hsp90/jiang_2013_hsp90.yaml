@@ -2,7 +2,7 @@ study: 'jiang_2013_hsp90'
 gene: 'HSP90'
 domain: 'Putative substrate binding loop'
 uniprot_id: 'P02829'
-gene_type: 'TF'
+gene_type: 'Chaperone'
 species: 'S. cerevisiae'
 seq: "MASETFEFQAEITQLMSLIINTVYSNKEIFLRELISNASDALDKIRYKSLSDPK\
       QLETEPDLFIRITPKPEQKVLEIRDSGIGMTKAELINNLGTIAKSGTKAFMEAL\

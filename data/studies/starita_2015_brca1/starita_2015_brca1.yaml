@@ -2,7 +2,7 @@ study: 'starita_2015_brca1'
 gene: 'BRCA1'
 domain: 'RING'
 uniprot_id: 'P38398'
-gene_type: 'E3 ligase'
+gene_type: 'E3 Ligase'
 species: 'H. sapiens'
 seq: "MDLSALRVEEVQNVINAMQKILECPICLELIKEPVSTKCDHIFCKFCMLKLLNQKKGPSQ\
       CPLCKNDITKRSLQESTRFSQLVEELLKIICAFQLDTGLEYANSYNFAKKENNSPEHLKD\
