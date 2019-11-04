@@ -61,7 +61,7 @@ get_variant_class <- function(wt, mut){
 ## Normalise Score
 normalise_score <- function(x){
   q <- quantile(x, 0.15, na.rm=TRUE)
-  return(x / -median(x[x <= q], na.rm = TRUE))
+  return(x / -mean(x[x <= q], na.rm = TRUE))
 }
 
 ## Scale VAMP-seq style
