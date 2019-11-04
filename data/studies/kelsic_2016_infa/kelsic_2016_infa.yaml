@@ -13,6 +13,9 @@ title: 'RNA Structural Determinants of Optimal Codons Revealed by MAGE-Seq'
 doi: '10.1016/j.cels.2016.11.004'
 pmid: '28009265'
 url: 'https://www.sciencedirect.com/science/article/pii/S2405471216303684'
+input_files:
+  - 'cels_206_mmc5.csv' 
+source: 'SI'
 qc:
   filter: False
   notes:

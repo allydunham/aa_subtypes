@@ -22,6 +22,9 @@ title: 'Saturation editing of genomic regions by multiplex homology-directed rep
 doi: 'doi:10.1038/nature13695'
 pmid: '25141179'
 url: 'https://www.nature.com/articles/nature13695'
+input_files:
+  - 'findlay_2014_dbr1_exon2_counts.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

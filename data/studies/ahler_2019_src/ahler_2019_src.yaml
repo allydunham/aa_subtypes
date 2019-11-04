@@ -21,6 +21,11 @@ title: 'A Combined Approach Reveals a Regulatory Mechanism Coupling Src’s Kina
 doi: '10.1016/j.molcel.2019.02.003'
 pmid: '30956043'
 url: 'https://www.sciencedirect.com/science/article/pii/S1097276519300930'
+input_files:
+  - 'urn_mavedb_00000041-b-1_scores.csv'
+  - 'urn_mavedb_00000041-a-1_scores.csv'
+source: 'MaveDB'
+mavedb_urn: 'urn_mavedb_00000041'
 qc:
   filter: False
   notes:

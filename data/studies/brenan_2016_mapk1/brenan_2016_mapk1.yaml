@@ -18,6 +18,9 @@ doi: '10.1016/j.celrep.2016.09.061'
 pmid: '27760319'
 url: 'https://www.sciencedirect.com/science/article/pii/S2211124716313171'
 notes: 'Transform by -1 because the selection scheme they used favoured lof > wt > gof.'
+input_files:
+  - 'brenan_2016_erk2.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

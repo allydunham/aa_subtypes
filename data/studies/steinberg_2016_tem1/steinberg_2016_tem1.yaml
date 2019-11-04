@@ -16,6 +16,9 @@ title: 'Shifting Fitness and Epistatic Landscapes Reflect Trade-offs along an Ev
 doi: '10.1016/j.jmb.2016.04.033'
 pmid: '27173379'
 url: 'https://www.sciencedirect.com/science/article/pii/S0022283616301450'
+input_files:
+  - '1-s2.0-S0022283616301450-mmc2.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

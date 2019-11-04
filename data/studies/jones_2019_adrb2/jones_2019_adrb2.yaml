@@ -19,6 +19,9 @@ title: 'Structural and Functional Characterization of G Protein-Coupled Receptor
 doi: 'https://doi.org/10.1101/623108'
 pmid: 
 url: 'https://www.biorxiv.org/content/10.1101/623108v2.full'
+input_files:
+  - 'lib-med.csv' 
+source: 'SI'
 qc:
   filter: False
   notes:

@@ -17,6 +17,9 @@ title: 'Mapping Interaction Sites on Human Chemokine Receptors by Deep Mutationa
 doi: '10.4049/jimmunol.1800343'
 pmid: '29678950'
 url: 'https://www.jimmunol.org/content/200/11/3825'
+input_files:
+  - 'GSE100368_enrichment_ratios_CXCR4.xlsx' 
+source: 'NCBI GEO: GSE100368 - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100368'
 qc:
   filter: False
   notes:

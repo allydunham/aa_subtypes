@@ -21,8 +21,11 @@ title: 'A proactive genotype-to-patient-phenotype map for cystathionine beta-syn
 doi: '10.1101/473983'
 pmid: ''
 url: 'https://www.biorxiv.org/content/10.1101/473983v3'
-mavedb: 'urn:mavedb:00000005-a'
+mavedb_urn: 'urn:mavedb:00000005-a'
 notes: 'Used low B6 dataset as they were similar but it produced stronger effects'
+input_files:
+  - 'urn_mavedb_00000005-a-4_scores.csv' 
+source: 'MaveDB'
 qc:
   filter: False
   notes:

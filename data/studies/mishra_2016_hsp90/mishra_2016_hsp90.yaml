@@ -23,6 +23,9 @@ title: 'Systematic Mutant Analyses Elucidate General and Client-Specific Aspects
 doi: '10.1016/j.celrep.2016.03.046'
 pmid: '27068472'
 url: 'https://www.sciencedirect.com/science/article/pii/S2211124716303175'
+input_files:
+  - 'mishra_2016_hsp90_enrichment.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

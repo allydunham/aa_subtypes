@@ -16,6 +16,9 @@ title: 'A Comprehensive, High-Resolution Map of a Gene’s Fitness Landscape'
 doi: '10.1093/molbev/msu081'
 pmid: '24567513'
 url: 'https://academic.oup.com/mbe/article/31/6/1581/2925654'
+input_files:
+  - 'firnberg_2014_tem1.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

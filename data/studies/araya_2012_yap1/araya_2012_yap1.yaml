@@ -24,6 +24,9 @@ doi: '10.1073/pnas.1209751109'
 pmid: '23035249'
 url: 'http://www.pnas.org/content/109/42/16858'
 notes: 'Positions from paper are offset by 9, so add 160 to reach same start of WW domain in sequence'
+input_files:
+  - 'araya_2012_hYAP65_ww.tsv' 
+source: 'SI'
 qc:
   filter: False
   notes:

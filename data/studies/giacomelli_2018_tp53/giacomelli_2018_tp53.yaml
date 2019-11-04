@@ -24,6 +24,9 @@ notes: "Score is in Z-score format across 3 different conditions:\
         and null p53 background and etoposide to select for WT like.\
         Here I only use p53 NULL, Etoposide because it aligns most\
         directly with our objective of a functional protein"
+input_files:
+  - '41588_2018_204_MOESM5_ESM.xlsx' 
+source: 'SI'
 qc:
   filter: False
   notes:

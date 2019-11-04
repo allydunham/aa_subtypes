@@ -17,6 +17,11 @@ title: 'Single-mutation fitness landscapes for an enzyme on multiple substrates 
 doi: '10.1038/ncomms15695'
 pmid: '28585537'
 url: 'https://www.nature.com/articles/ncomms15695'
+input_files:
+  - 'amiESelectionFitnessData_Acetamide.txt'
+  - 'amiESelectionFitnessData_Isobutyramide.txt'
+  - 'amiESelectionFitnessData_Propionamide.txt'
+source: 'SI'
 qc:
   filter: False
   notes:
