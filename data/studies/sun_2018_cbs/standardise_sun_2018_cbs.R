@@ -5,7 +5,8 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/sun_2018_cbs/sun_2018_cbs.yaml')
-dm_data <- read_mavedb('data/studies/sun_2018_cbs/raw/urn_mavedb_00000005-a-4_scores.csv', score_transform = function(x){log2(x + min(x[x > 0], na.rm = TRUE))})
+dm_data <- read_mavedb('data/studies/sun_2018_cbs/raw/urn_mavedb_00000005-a-4_scores.csv', score_transform = function(x){log2(x + min(x[x > 0], na.rm = TRUE))}) %>%
+  drop_na(position)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
