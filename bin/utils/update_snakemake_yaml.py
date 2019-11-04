@@ -26,6 +26,7 @@ def main(args):
 
     conf['studies'] = []
     conf['genes'] = defaultdict(list)
+    conf['input_files'] = {}
 
     for study in os.listdir(args.studies):
         with open(f'{args.studies}/{study}/{study}.yaml', 'r') as yaml_file:
@@ -33,6 +34,7 @@ def main(args):
 
         conf['studies'].append(meta['study'])
         conf['genes'][sutil.gene_to_filename(meta['gene'])].append(meta['study'])
+        conf['input_files'][meta['study']] = meta['input_files']
 
     conf['genes'] = dict(conf['genes'])
 

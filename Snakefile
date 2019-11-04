@@ -119,7 +119,9 @@ rule validate_dorrity:
 # Process the raw data from each study
 rule standardise_study:
     input:
-        "data/studies/{study}/standardise_{study}.R"
+        "data/studies/{study}/standardise_{study}.R",
+        lambda wildcards: [f'data/studies/{wildcards.study}/raw/{x}' for x in
+                           config['input_files'][wildcards.study]]
 
     output:
         "data/studies/{study}/{study}.tsv",

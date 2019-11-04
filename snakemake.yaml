@@ -33,6 +33,107 @@ genes:
   ube4b: [starita_2013_ube4b]
   ubi: [roscoe_2013_ubi, roscoe_2014_ubi]
   yap1: [araya_2012_yap1]
+input_files:
+  ahler_2019_src: [urn_mavedb_00000041-b-1_scores.csv, urn_mavedb_00000041-a-1_scores.csv]
+  araya_2012_yap1: [araya_2012_hYAP65_ww.tsv]
+  ashenberg_2017_np: [ashenberg_2017_flu_np.csv]
+  bandaru_2017_ras: [elife-27810-supp1-v2.xlsx]
+  bolognesi_2019_tdp43: [41467_2019_12101_MOESM7_ESM.xlsx]
+  brenan_2016_mapk1: [brenan_2016_erk2.xlsx]
+  dorrity_2018_ste12: [pnas.1805882115.sd01.xlsx, pnas.1805882115.sd02.xlsx]
+  findlay_2014_dbr1: [findlay_2014_dbr1_exon2_counts.xlsx]
+  findlay_2018_brca1: [findlay_2018_brca1_ring_brct.xlsx]
+  firnberg_2014_tem1: [firnberg_2014_tem1.xlsx]
+  giacomelli_2018_tp53: [41588_2018_204_MOESM5_ESM.xlsx]
+  hartman_2018_cp: [41467_2018_3783_MOESM4_ESM.xlsx]
+  heredia_2018_ccr5: [GSE100368_enrichment_ratios_CCR5.xlsx]
+  heredia_2018_cxcr4: [GSE100368_enrichment_ratios_CXCR4.xlsx]
+  hietpas_2011_hsp90: [hietpas_2011_pdz_ligands_fitness.csv]
+  jiang_2013_hsp90: [jiang_2013_hsp90.xlsx]
+  jones_2019_adrb2: [lib-med.csv]
+  kelsic_2016_infa: [cels_206_mmc5.csv]
+  kitzman_2015_gal4: [kitzman_2015_gal4_enrichment.xlsx]
+  lee_2018_ha: [lee_2018_influenza_ha.xlsx]
+  matreyek_2018_pten: [PTEN.csv]
+  matreyek_2018_tpmt: [TPMT.csv]
+  melamed_2013_pab1: [melamed_2013_pab1_rrm_enrichment_ratios.xlsx]
+  melnikov_2014_aph3ii: [KKA2_Bkg1.aacounts.txt, KKA2_Bkg2.aacounts.txt, KKA2_S1_Ami116_L1.aacounts.txt,
+    KKA2_S1_Ami116_L1.aadiff.txt, KKA2_S1_Ami116_L1.mutdiff.txt, KKA2_S1_Ami132_L1.aacounts.txt,
+    KKA2_S1_Ami132_L1.aadiff.txt, KKA2_S1_Ami132_L1.mutdiff.txt, KKA2_S1_Ami14_L1.aacounts.txt,
+    KKA2_S1_Ami14_L1.aadiff.txt, KKA2_S1_Ami14_L1.mutdiff.txt, KKA2_S1_Ami18_L1.aacounts.txt,
+    KKA2_S1_Ami18_L1.aadiff.txt, KKA2_S1_Ami18_L1.mutdiff.txt, KKA2_S1_G41811_L1.aacounts.txt,
+    KKA2_S1_G41811_L1.aadiff.txt, KKA2_S1_G41811_L1.mutdiff.txt, KKA2_S1_G41812_L1.aacounts.txt,
+    KKA2_S1_G41812_L1.aadiff.txt, KKA2_S1_G41812_L1.mutdiff.txt, KKA2_S1_G41814_L1.aacounts.txt,
+    KKA2_S1_G41814_L1.aadiff.txt, KKA2_S1_G41814_L1.mutdiff.txt, KKA2_S1_G41818_L1.aacounts.txt,
+    KKA2_S1_G41818_L1.aadiff.txt, KKA2_S1_G41818_L1.mutdiff.txt, KKA2_S1_Kan11_L1.aacounts.txt,
+    KKA2_S1_Kan11_L1.aadiff.txt, KKA2_S1_Kan11_L1.mutdiff.txt, KKA2_S1_Kan12_L1.aacounts.txt,
+    KKA2_S1_Kan12_L1.aadiff.txt, KKA2_S1_Kan12_L1.mutdiff.txt, KKA2_S1_Kan14_L1.aacounts.txt,
+    KKA2_S1_Kan14_L1.aadiff.txt, KKA2_S1_Kan14_L1.mutdiff.txt, KKA2_S1_Kan18_L1.aacounts.txt,
+    KKA2_S1_Kan18_L1.aadiff.txt, KKA2_S1_Kan18_L1.mutdiff.txt, KKA2_S1_Neo11_L1.aacounts.txt,
+    KKA2_S1_Neo11_L1.aadiff.txt, KKA2_S1_Neo11_L1.mutdiff.txt, KKA2_S1_Neo12_L1.aacounts.txt,
+    KKA2_S1_Neo12_L1.aadiff.txt, KKA2_S1_Neo12_L1.mutdiff.txt, KKA2_S1_Neo14_L1.aacounts.txt,
+    KKA2_S1_Neo14_L1.aadiff.txt, KKA2_S1_Neo14_L1.mutdiff.txt, KKA2_S1_Neo18_L1.aacounts.txt,
+    KKA2_S1_Neo18_L1.aadiff.txt, KKA2_S1_Neo18_L1.mutdiff.txt, KKA2_S1_Paro11_L1.aacounts.txt,
+    KKA2_S1_Paro11_L1.aadiff.txt, KKA2_S1_Paro11_L1.mutdiff.txt, KKA2_S1_Paro12_L1.aacounts.txt,
+    KKA2_S1_Paro12_L1.aadiff.txt, KKA2_S1_Paro12_L1.mutdiff.txt, KKA2_S1_Paro14_L1.aacounts.txt,
+    KKA2_S1_Paro14_L1.aadiff.txt, KKA2_S1_Paro14_L1.mutdiff.txt, KKA2_S1_Paro18_L1.aacounts.txt,
+    KKA2_S1_Paro18_L1.aadiff.txt, KKA2_S1_Paro18_L1.mutdiff.txt, KKA2_S1_Ribo11_L1.aacounts.txt,
+    KKA2_S1_Ribo11_L1.aadiff.txt, KKA2_S1_Ribo11_L1.mutdiff.txt, KKA2_S1_Ribo12_L1.aacounts.txt,
+    KKA2_S1_Ribo12_L1.aadiff.txt, KKA2_S1_Ribo12_L1.mutdiff.txt, KKA2_S1_Ribo14_L1.aacounts.txt,
+    KKA2_S1_Ribo14_L1.aadiff.txt, KKA2_S1_Ribo14_L1.mutdiff.txt, KKA2_S1_Ribo18_L1.aacounts.txt,
+    KKA2_S1_Ribo18_L1.aadiff.txt, KKA2_S1_Ribo18_L1.mutdiff.txt, KKA2_S2_Ami116_L2.aacounts.txt,
+    KKA2_S2_Ami116_L2.aadiff.txt, KKA2_S2_Ami116_L2.mutdiff.txt, KKA2_S2_Ami132_L2.aacounts.txt,
+    KKA2_S2_Ami132_L2.aadiff.txt, KKA2_S2_Ami132_L2.mutdiff.txt, KKA2_S2_Ami14_L2.aacounts.txt,
+    KKA2_S2_Ami14_L2.aadiff.txt, KKA2_S2_Ami14_L2.mutdiff.txt, KKA2_S2_Ami18_L2.aacounts.txt,
+    KKA2_S2_Ami18_L2.aadiff.txt, KKA2_S2_Ami18_L2.mutdiff.txt, KKA2_S2_G41811_L2.aacounts.txt,
+    KKA2_S2_G41811_L2.aadiff.txt, KKA2_S2_G41811_L2.mutdiff.txt, KKA2_S2_G41812_L2.aacounts.txt,
+    KKA2_S2_G41812_L2.aadiff.txt, KKA2_S2_G41812_L2.mutdiff.txt, KKA2_S2_G41814_L2.aacounts.txt,
+    KKA2_S2_G41814_L2.aadiff.txt, KKA2_S2_G41814_L2.mutdiff.txt, KKA2_S2_G41818_L2.aacounts.txt,
+    KKA2_S2_G41818_L2.aadiff.txt, KKA2_S2_G41818_L2.mutdiff.txt, KKA2_S2_Kan11_L2.aacounts.txt,
+    KKA2_S2_Kan11_L2.aadiff.txt, KKA2_S2_Kan11_L2.mutdiff.txt, KKA2_S2_Kan12_L2.aacounts.txt,
+    KKA2_S2_Kan12_L2.aadiff.txt, KKA2_S2_Kan12_L2.mutdiff.txt, KKA2_S2_Kan14_L2.aacounts.txt,
+    KKA2_S2_Kan14_L2.aadiff.txt, KKA2_S2_Kan14_L2.mutdiff.txt, KKA2_S2_Kan18_L2.aacounts.txt,
+    KKA2_S2_Kan18_L2.aadiff.txt, KKA2_S2_Kan18_L2.mutdiff.txt, KKA2_S2_Neo11_L2.aacounts.txt,
+    KKA2_S2_Neo11_L2.aadiff.txt, KKA2_S2_Neo11_L2.mutdiff.txt, KKA2_S2_Neo12_L2.aacounts.txt,
+    KKA2_S2_Neo12_L2.aadiff.txt, KKA2_S2_Neo12_L2.mutdiff.txt, KKA2_S2_Neo14_L2.aacounts.txt,
+    KKA2_S2_Neo14_L2.aadiff.txt, KKA2_S2_Neo14_L2.mutdiff.txt, KKA2_S2_Neo18_L2.aacounts.txt,
+    KKA2_S2_Neo18_L2.aadiff.txt, KKA2_S2_Neo18_L2.mutdiff.txt, KKA2_S2_Paro11_L2.aacounts.txt,
+    KKA2_S2_Paro11_L2.aadiff.txt, KKA2_S2_Paro11_L2.mutdiff.txt, KKA2_S2_Paro12_L2.aacounts.txt,
+    KKA2_S2_Paro12_L2.aadiff.txt, KKA2_S2_Paro12_L2.mutdiff.txt, KKA2_S2_Paro14_L2.aacounts.txt,
+    KKA2_S2_Paro14_L2.aadiff.txt, KKA2_S2_Paro14_L2.mutdiff.txt, KKA2_S2_Paro18_L2.aacounts.txt,
+    KKA2_S2_Paro18_L2.aadiff.txt, KKA2_S2_Paro18_L2.mutdiff.txt, KKA2_S2_Ribo11_L2.aacounts.txt,
+    KKA2_S2_Ribo11_L2.aadiff.txt, KKA2_S2_Ribo11_L2.mutdiff.txt, KKA2_S2_Ribo12_L2.aacounts.txt,
+    KKA2_S2_Ribo12_L2.aadiff.txt, KKA2_S2_Ribo12_L2.mutdiff.txt, KKA2_S2_Ribo14_L2.aacounts.txt,
+    KKA2_S2_Ribo14_L2.aadiff.txt, KKA2_S2_Ribo14_L2.mutdiff.txt, KKA2_S2_Ribo18_L2.aacounts.txt,
+    KKA2_S2_Ribo18_L2.aadiff.txt, KKA2_S2_Ribo18_L2.mutdiff.txt, KKA2_S3_Ami11_L1.aacounts.txt,
+    KKA2_S3_Ami11_L1.aadiff.txt, KKA2_S3_Ami11_L1.mutdiff.txt, KKA2_S3_Ami12_L1.aacounts.txt,
+    KKA2_S3_Ami12_L1.aadiff.txt, KKA2_S3_Ami12_L1.mutdiff.txt, KKA2_S3_Ami14_L1.aacounts.txt,
+    KKA2_S3_Ami14_L1.aadiff.txt, KKA2_S3_Ami14_L1.mutdiff.txt, KKA2_S3_Ami18_L1.aacounts.txt,
+    KKA2_S3_Ami18_L1.aadiff.txt, KKA2_S3_Ami18_L1.mutdiff.txt, KKA2_S3_Kan11_L1.aacounts.txt,
+    KKA2_S3_Kan11_L1.aadiff.txt, KKA2_S3_Kan11_L1.mutdiff.txt, KKA2_S3_Kan12_L1.aacounts.txt,
+    KKA2_S3_Kan12_L1.aadiff.txt, KKA2_S3_Kan12_L1.mutdiff.txt, KKA2_S3_Kan14_L1.aacounts.txt,
+    KKA2_S3_Kan14_L1.aadiff.txt, KKA2_S3_Kan14_L1.mutdiff.txt, KKA2_S3_Kan18_L1.aacounts.txt,
+    KKA2_S3_Kan18_L1.aadiff.txt, KKA2_S3_Kan18_L1.mutdiff.txt, KKA2_S4_Ami11_L2.aacounts.txt,
+    KKA2_S4_Ami11_L2.aadiff.txt, KKA2_S4_Ami11_L2.mutdiff.txt, KKA2_S4_Ami12_L2.aacounts.txt,
+    KKA2_S4_Ami12_L2.aadiff.txt, KKA2_S4_Ami12_L2.mutdiff.txt, KKA2_S4_Ami14_L2.aacounts.txt,
+    KKA2_S4_Ami14_L2.aadiff.txt, KKA2_S4_Ami14_L2.mutdiff.txt, KKA2_S4_Ami18_L2.aacounts.txt,
+    KKA2_S4_Ami18_L2.aadiff.txt, KKA2_S4_Ami18_L2.mutdiff.txt]
+  mishra_2016_hsp90: [mishra_2016_hsp90_enrichment.xlsx]
+  olson_2014_proteing: [olson_2014_protein_g_counts.xlsx]
+  roscoe_2013_ubi: [roscoe_2013_ubi_fitness.xlsx]
+  roscoe_2014_ubi: [roscoe_2014_ubi_limiting_E1_reactivity.xlsx]
+  sarkisyan_2016_gfp: [sarkisyan_2016_gfp_AAs.tsv]
+  starita_2013_ube4b: [starita_2013_ube4b_ubox.xlsx]
+  starita_2015_brca1: [starita_2015_brca1_ring.xls]
+  steinberg_2016_tem1: [1-s2.0-S0022283616301450-mmc2.xlsx]
+  sun_2018_cbs: [urn_mavedb_00000005-a-4_scores.csv]
+  wagenaar_2014_braf: [wagenaar_2014_braf.xls]
+  weile_2017_calm1: [weile_2017_calm_score_comp.csv]
+  weile_2017_sumo1: [weile_2017_sumo1_score_comp.csv]
+  weile_2017_tpk1: [weile_2017_tpk1_score_comp.csv]
+  weile_2017_ube2i: [weile_2017_ube2i_score_comp.csv]
+  wrenbeck_2017_amie: [amiESelectionFitnessData_Acetamide.txt, amiESelectionFitnessData_Isobutyramide.txt,
+    amiESelectionFitnessData_Propionamide.txt]
 studies: [araya_2012_yap1, giacomelli_2018_tp53, olson_2014_proteing, kitzman_2015_gal4,
   findlay_2018_brca1, heredia_2018_cxcr4, wagenaar_2014_braf, lee_2018_ha, weile_2017_sumo1,
   ashenberg_2017_np, brenan_2016_mapk1, weile_2017_tpk1, starita_2013_ube4b, weile_2017_ube2i,
