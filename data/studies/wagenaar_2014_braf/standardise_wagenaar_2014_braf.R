@@ -28,7 +28,7 @@ dm_data <- read_xls('data/studies/wagenaar_2014_braf/raw/wagenaar_2014_braf.xls'
   mutate_at(vars(-mut, -individually_tested, -possible_by_single_sub, -ic50_vs_brafV600E), as.numeric)%>%
   mutate(wt = str_split(meta$seq, '')[[1]][position],
          raw_score = median_enrichment,
-         transformed_score = log2(median_enrichment),
+         transformed_score = -log2(median_enrichment),
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
   select(position, wt, mut, score, transformed_score, raw_score, class)

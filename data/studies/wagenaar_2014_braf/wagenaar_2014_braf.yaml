@@ -17,7 +17,7 @@ seq: "MAALSGGGGGGAEPGQALFNGDMEPEAGAGAGAAASSAADPAIPEEVWNIKQMIKLTQEH\
       NRDQIIFMVGRGYLSPDLSKVRSNCPKAMKRLMAECLKKKRDERPLFPQILASIELLARS\
       LPKIHRSASEPSLNRAGFQTEDFSLYACASPKTPIQAGGYGAFPVH" 
 experiment: 'Complement'
-transform: 'log2(x)'
+transform: '-log2(x)'
 authour: 'Wagenaar et al.'
 year: 2014
 title: 'Resistance to vemurafenib resulting from a novel mutation in the BRAFV600E kinase domain'
