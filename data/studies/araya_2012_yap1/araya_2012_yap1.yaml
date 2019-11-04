@@ -15,7 +15,6 @@ seq: "MDPGQQPPPQPAPQGQGQPPSQPPQGQGPPSGPGQPAPAATQAAPQAPPAGHQI\
       TLPSQQNRFPDYLEAIPGTNVDLGTLEGDGMNIEGEELMPSLQEALSSDILNDM\
       ESVLAATKLDKESFLTWL"
 experiment: 'ligand binding'
-multiple_mutations: True
 transform: 'log2(x)'
 authour: 'Araya et al.'
 year: 2012
