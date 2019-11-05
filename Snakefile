@@ -13,12 +13,49 @@ UNIREF90_DB_PATH = '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019
 FASTA_LINE_LENGTH = 80
 
 configfile: 'snakemake.yaml'
-localrules: all, all_standardisation, all_sift, make_sift_fastas
+localrules: all, clean, all_standardisation, all_sift, make_gene_fasta
 
+# Explicitly note all the output here
+# even though some would necessarily cause other bits to generate
 rule all:
     input:
         expand('data/studies/{study}/{study}.tsv', study=config['studies']),
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys())
+        expand('data/sift/{gene}.fa', gene=config['genes'].keys()),
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys()),
+        'meta/study_summary.tsv',
+        'meta/gene_summary.tsv',
+        'meta/overall_summary',
+        "figures/0_data_properties/sift_score_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf",
+        "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf",
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_ccr5/experiment_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf",
+        "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf",
+        "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
+        "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf",
+        "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf",
+        "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
+
+# TODO Protection for files that take a long time to build? (Mainly SIFT for now)
+rule clean:
+    run:
+        std_tsvs = [f'data/studies/{s}/{s}.tsv' for s in config['studies']]
+        for tsv in std_tsvs:
+            if os.path.isfile(tsv):
+                shell(f'rm {tsv}')
+        shell('rm data/sift/*')
+        shell('rm -r figures/0_data_properties/*')
+        shell('rm meta/study_summary.tsv')
+        shell('rm meta/gene_summary.tsv')
+        shell('rm meta/overall_summary')
 
 rule all_standardisation:
     input:
@@ -160,6 +197,18 @@ rule standardise_study:
     shell:
         "Rscript {input} 2> {log}"
 
+rule summarise_studies:
+    input:
+        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
+        expand('data/studies/{study}/{study}.yaml', study=config['studies'])
+
+    output:
+        study='meta/study_summary.tsv',
+        gene='meta/gene_summary.tsv',
+        overall='meta/overall_summary',
+
+    shell:
+        "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
 #### Make Tool Predictions ####
 rule make_gene_fasta:
     input:
