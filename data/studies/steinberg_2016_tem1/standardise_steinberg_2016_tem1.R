@@ -11,7 +11,8 @@ dm_data <- read_xlsx('data/studies/steinberg_2016_tem1/raw/1-s2.0-S0022283616301
   select(position = codon_position, wt = wt_aa, mut = mutant_aa, raw_score = tem1_amp_fitness) %>%
   mutate(transformed_score = log2(raw_score),
          score = normalise_score(transformed_score),
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(score) # Not all measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

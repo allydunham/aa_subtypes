@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Standardise data from Kelsic et al. 2016 (infA)
-
 source('src/config.R')
 source('src/study_standardising.R')
 
@@ -18,7 +17,8 @@ dm_data <- read_csv('data/studies/kelsic_2016_infa/raw/cels_206_mmc5.csv', skip 
   ungroup() %>%
   mutate(score = normalise_score(transformed_score),
          wt = str_split(meta$seq, '')[[1]][position],
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(wt, position) # measured codons for stop codon, which we don't want
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

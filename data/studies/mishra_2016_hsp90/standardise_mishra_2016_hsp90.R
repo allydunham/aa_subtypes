@@ -15,7 +15,8 @@ dm_data <- map(excel_sheets(path), read_mishra_sheet, path = path) %>%
          score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut)) %>%
   select(position, wt, mut, transformed_score, raw_score, score, class) %>%
-  arrange(position, mut)
+  arrange(position, mut) %>%
+  drop_na(score) # Some not measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

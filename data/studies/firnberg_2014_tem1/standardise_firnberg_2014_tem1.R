@@ -18,7 +18,8 @@ dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xls
             transformed_score = mean(log2(raw_score), na.rm = TRUE)) %>% # Average over codons
   ungroup() %>%
   mutate(score = normalise_score(transformed_score), 
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(raw_score) # Some variants not measured in any codon
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

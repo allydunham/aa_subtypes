@@ -16,7 +16,7 @@ dm_data <- mutate(raw_data, n_mut = str_count(mut, ':') + 1) %>%
   pivot_longer(cols = starts_with('mut'), names_to = 'n', names_prefix = 'mut', values_to = 'mut') %>%
   drop_na(mut) %>%
   select(-n, -barcodes, -std) %>%
-  tidyr::extract(mut, into = c('wt', 'position', 'mut'), 'S([A-Z])([0-9]+)([A-Z])') %>%
+  tidyr::extract(mut, into = c('wt', 'position', 'mut'), 'S([A-Z])([0-9]+)([A-Z*])', convert=TRUE, remove=FALSE) %>%
   arrange(position, mut) %>%
   group_by(position, wt, mut) %>%
   summarise(raw_score = if_else(1 %in% n_mut, mean(median_brightness[n_mut == 1], na.rm = TRUE), # Use value of single mut if available

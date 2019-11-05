@@ -15,7 +15,8 @@ dm_data <- bind_rows(acetamide = read_tsv('data/studies/wrenbeck_2017_amie/raw/a
          transformed_score = raw_score,
          score = normalise_score(transformed_score),
          wt = str_split(meta$seq, '')[[1]][position],
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(score) # Some variants not measured in any condition
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

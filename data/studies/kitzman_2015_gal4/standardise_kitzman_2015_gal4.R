@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Standardise data from Kitzman et al. 2015 (GAL4)
-
 source('src/config.R')
 source('src/study_standardising.R')
 
@@ -14,7 +13,8 @@ dm_data <- lapply(excel_sheets(path), read_kitzman_sheet, path = path) %>%
          transformed_score = raw_score,
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  filter(!mut == 'delInFrame')
+  filter(!mut == 'delInFrame') %>%
+  drop_na(score) # Some variants not measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

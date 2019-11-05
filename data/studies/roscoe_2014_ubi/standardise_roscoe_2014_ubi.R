@@ -5,7 +5,6 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml')
-
 dm_data <- read_xlsx('data/studies/roscoe_2014_ubi/raw/roscoe_2014_ubi_limiting_E1_reactivity.xlsx', skip = 3, na = 'NA') %>%
   rename(position = Position,
          mut = `Amino Acid`,
@@ -16,7 +15,8 @@ dm_data <- read_xlsx('data/studies/roscoe_2014_ubi/raw/roscoe_2014_ubi_limiting_
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score), 
          wt = str_split(meta$seq, '')[[1]][position],
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(score) # Not all measured sucessfully
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

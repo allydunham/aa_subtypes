@@ -22,7 +22,8 @@ dm_data <- read_tsv('data/studies/araya_2012_yap1/raw/araya_2012_hYAP65_ww.tsv',
   mutate(position = position + 160,
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut),
-         score = normalise_score(transformed_score))
+         score = normalise_score(transformed_score)) %>%
+  drop_na(score) # Some mutant arent found in seqs with <= 2 variants
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

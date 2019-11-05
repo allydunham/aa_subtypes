@@ -26,7 +26,8 @@ dm_data <- read_xlsx('data/studies/heredia_2018_cxcr4/raw/GSE100368_enrichment_r
          transformed_score = raw_score,
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, transformed_score, raw_score, class)
+  select(position, wt, mut, score, transformed_score, raw_score, class) %>%
+  drop_na(score) # not all measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Standardise data from Roscoe et al. 2013 (Ubi) 
-
 source('src/config.R')
 source('src/study_standardising.R')
 
@@ -16,7 +15,8 @@ dm_data <- read_xlsx('data/studies/roscoe_2013_ubi/raw/roscoe_2013_ubi_fitness.x
          score = normalise_score(transformed_score), 
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, transformed_score, raw_score, score, class)
+  select(position, wt, mut, transformed_score, raw_score, score, class) %>%
+  drop_na(score) # Not all measured sucessfuly
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

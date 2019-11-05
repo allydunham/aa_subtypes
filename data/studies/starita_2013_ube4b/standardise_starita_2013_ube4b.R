@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Standardise data from Starita et al. 2013 (UBE4B)
-
 source('src/config.R')
 source('src/study_standardising.R')
 
@@ -27,7 +26,8 @@ dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubo
          score = normalise_score(transformed_score), 
          position = as.integer(position) + 1072, # tested region starts at +1072 according to Starita (slightly before uniprot UBOX) This does lead to ref seq aligning
          wt = str_split(meta$seq, '')[[1]][position],
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(score) # Not all variants present in seqs with <= 3 variants
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

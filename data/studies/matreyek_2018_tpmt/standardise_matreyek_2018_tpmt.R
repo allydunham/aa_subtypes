@@ -13,7 +13,8 @@ dm_data <- read_csv('data/studies/matreyek_2018_tpmt/raw/TPMT.csv',
   mutate(mut = if_else(mut == 'X', '*', mut),
          class = str_to_title(class),
          transformed_score = transform_vamp_seq(raw_score),
-         score = normalise_score(transformed_score))
+         score = normalise_score(transformed_score)) %>%
+  drop_na(score) # not all measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

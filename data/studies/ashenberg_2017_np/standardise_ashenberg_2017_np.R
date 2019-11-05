@@ -9,7 +9,8 @@ dm_data <- read_csv('data/studies/ashenberg_2017_np/raw/ashenberg_2017_flu_np.cs
   rename(position = site, raw_score = diffsel) %>%
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score),
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(score) # some muts just aren't measured
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

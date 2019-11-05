@@ -32,12 +32,12 @@ dm_data <- full_join(mating_data, invasion_data, by = c('mut', 'nmut')) %>%
 
   # Take value from a single variant if possible, average over multiple mutations otherwise (<=4 gives 97% coverage without using very heavily mutated seqs)
   group_by(position, wt, mut) %>%
-  summarise(raw_score = ifelse(any(nmut == 1), mean(raw_score[nmut == 1], na.rm = TRUE), mean(raw_score[nmut <= 1], na.rm = TRUE))) %>%
+  summarise(raw_score = ifelse(any(nmut == 1), mean(raw_score[nmut == 1], na.rm = TRUE), mean(raw_score[nmut <= 4], na.rm = TRUE))) %>%
   ungroup() %>%
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
-  drop_na(position)
+  drop_na(position, raw_score) # Some muts arent found in seqs with <= 4 variants
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
