@@ -5,7 +5,7 @@ source('src/config.R')
 source('src/study_standardising.R')
 
 #### CCR5 ####
-dir.create('figures/0_data_properties/heredia_2018_ccr5')
+dir.create('figures/0_data_properties/per_study/heredia_2018_ccr5')
 dm_data <- read_xlsx('data/studies/heredia_2018_ccr5/raw/GSE100368_enrichment_ratios_CCR5.xlsx', skip = 7,
                      col_names = c('wt', 'mut', 'reads_l1', 'surface_exp_fitc_l1_r1', 'surface_exp_fitc_l1_r2', 'binding_2d7_l1_r1', 'binding_2d7_l1_r2',
                                    'empty', 'reads_l2', 'surface_exp_alexa_l2_r1', 'surface_exp_alexa_l2_r2', 'binding_gp120_cd4_l2_r1', 'binding_gp120_cd4_l2_r2')) %>%
@@ -25,7 +25,7 @@ p_ccr5_lib_cor <- select(dm_data, -starts_with('reads_')) %>%
   geom_abline(slope = 1, linetype = 'dotted') +
   labs(title = 'Correlation between replicates in Heredia et al. 2018 (CCR5)',
        x = 'Rep 1 ER', y = 'Rep 2 ER')
-ggsave('figures/0_data_properties/heredia_2018_ccr5/replicate_correlation.pdf', p_ccr5_lib_cor, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf', p_ccr5_lib_cor, units = 'cm', width = 20, height = 20)
 
 # Doesn't agree hugely well, but average...
 dm_data <- mutate(dm_data,
@@ -37,7 +37,7 @@ dm_data <- mutate(dm_data,
 
 # Correlation between experiments
 p_ccr5_exp_cor <- ggpairs(dm_data, columns = 4:7)
-ggsave('figures/0_data_properties/heredia_2018_ccr5/experiment_correlation.pdf', p_ccr5_exp_cor, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data_properties/per_study/heredia_2018_ccr5/experiment_correlation.pdf', p_ccr5_exp_cor, units = 'cm', width = 20, height = 20)
 
 # Average surface expression tests, then take worst as they measure different aspects of fitness
 dm_data <- mutate(dm_data,
@@ -48,7 +48,7 @@ dm_data <- mutate(dm_data,
 ########
 
 #### CXCR4 ####
-dir.create('figures/0_data_properties/heredia_2018_cxcr4')
+dir.create('figures/0_data_properties/per_study/heredia_2018_cxcr4')
 dm_data <- read_xlsx('data/studies/heredia_2018_cxcr4/raw/GSE100368_enrichment_ratios_CXCR4.xlsx', skip = 6,
                      col_names = c('wt', 'mut', 'reads',
                                    'surface_exp_fitc_r1', 'surface_exp_fitc_r2',
@@ -70,7 +70,7 @@ p_cxcr4_lib_cor <- select(dm_data, -reads) %>%
   geom_abline(slope = 1, linetype = 'dotted') +
   labs(title = 'Correlation between replicates in Heredia et al. 2018 (CXCR4)',
        x = 'Rep 1 ER', y = 'Rep 2 ER')
-ggsave('figures/0_data_properties/heredia_2018_cxcr4/replicate_correlation.pdf', p_cxcr4_lib_cor, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf', p_cxcr4_lib_cor, units = 'cm', width = 20, height = 20)
 
 # Doesn't agree hugely well, but average...
 dm_data <- mutate(dm_data,
@@ -82,7 +82,7 @@ dm_data <- mutate(dm_data,
 
 # Correlation between experiments
 p_cxcr4_exp_cor <- ggpairs(dm_data, columns = 4:7)
-ggsave('figures/0_data_properties/heredia_2018_cxcr4/experiment_correlation.pdf', p_cxcr4_exp_cor, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf', p_cxcr4_exp_cor, units = 'cm', width = 20, height = 20)
 
 # Average surface expression tests, then take worst as they measure different aspects of fitness
 dm_data <- mutate(dm_data,

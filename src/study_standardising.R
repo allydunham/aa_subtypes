@@ -36,9 +36,9 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
   if (!dir.exists(str_c('figures/0_data_properties/', study_id))){
     dir.create(str_c('figures/0_data_properties/', study_id))
   }
-  ggsave(str_c('figures/0_data_properties/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
-  ggsave(str_c('figures/0_data_properties/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
-  ggsave(str_c('figures/0_data_properties/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
   
   select(dm_data, position, wt, mut, score, transformed_score, raw_score, class) %>%
     drop_na(score) %>%

@@ -4,7 +4,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-dir.create('figures/0_data_properties/dorrity_2018_ste12')
+dir.create('figures/0_data_properties/per_study/dorrity_2018_ste12')
 
 # Import and process data
 meta <- read_yaml('data/studies/dorrity_2018_ste12/dorrity_2018_ste12.yaml')
@@ -26,7 +26,7 @@ dm_data <- full_join(mating_data, invasion_data, by = c('mut', 'nmut'))
 # Averaging reps
 p_paired <- ggpairs(dm_data, columns = c('mating_avg', 'mating_30C_rep1', 'mating_30C_rep2', 'mating_30C_rep3',
                                          'invasion_avg', 'invasion_30C_rep1', 'invasion_30C_rep2', 'invasion_30C_rep3'))
-ggsave('figures/0_data_properties/dorrity_2018_ste12/rep_correlation.pdf', p_paired, units = 'cm', height = 30, width = 30)
+ggsave('figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf', p_paired, units = 'cm', height = 30, width = 30)
 
 # Take worst of two traits, as both are protein functions
 dm_data <- mutate(dm_data, raw_score = pmin(mating_avg, invasion_avg, na.rm = TRUE)) %>%
@@ -66,4 +66,4 @@ p_sing_multi <- ggplot(mut_count_data, aes(x = single_score, y = multi_score)) +
        y = 'ER (Mean Over Multiple Variants)',
        title = 'Accuracy of multi-variant averaging for scoring in Dorrity et al. 2018 (STE12)',
        subtitle = str_c('Fraction of variants with individual measures: ', signif(single_frac, digits = 4)))
-ggsave('figures/0_data_properties/dorrity_2018_ste12/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)
+ggsave('figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)

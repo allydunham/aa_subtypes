@@ -35,10 +35,10 @@ rule validate_melnikov:
         config['input_files']['melnikov_2014_aph3ii']
 
     output:
-        "figures/0_data_properties/melnikov_2014_aph3ii/initial_library_correlation.pdf",
-        "figures/0_data_properties/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
-        "figures/0_data_properties/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
-        "figures/0_data_properties/melnikov_2014_aph3ii/drug_correlation.pdf"
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
+        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
@@ -49,7 +49,7 @@ rule validate_kitzman:
         config['input_files']['kitzman_2015_gal4']
 
     output:
-        "figures/0_data_properties/kitzman_2015_gal4/validate_selection_combination.pdf"
+        "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
@@ -60,9 +60,9 @@ rule validate_giacomelli:
         config['input_files']['giacomelli_2018_tp53']
 
     output:
-        "figures/0_data_properties/giacomelli_2018_tp53/initial_experiment_cor.pdf",
-        "figures/0_data_properties/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
-        "figures/0_data_properties/giacomelli_2018_tp53/conditions.pdf"
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
+        "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
@@ -73,10 +73,10 @@ rule validate_heredia:
        config['input_files']['heredia_2018_ccr5'] + config['input_files']['heredia_2018_cxcr4']
 
     output:
-        "figures/0_data_properties/heredia_2018_ccr5/replicate_correlation.pdf",
-        "figures/0_data_properties/heredia_2018_ccr5/experiment_correlation.pdf",
-        "figures/0_data_properties/heredia_2018_cxcr4/replicate_correlation.pdf",
-        "figures/0_data_properties/heredia_2018_cxcr4/experiment_correlation.pdf"
+        "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_ccr5/experiment_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
+        "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_heredia_2018.R"
@@ -87,7 +87,7 @@ rule validate_sarkisyan:
         config['input_files']['sarkisyan_2016_gfp']
 
     output:
-        "figures/0_data_properties/sarkisyan_2016_gfp/multi_mut_validation.pdf"
+        "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
@@ -98,8 +98,8 @@ rule validate_dorrity:
         config['input_files']['dorrity_2018_ste12']
 
     output:
-        "figures/0_data_properties/dorrity_2018_ste12/rep_correlation.pdf",
-        "figures/0_data_properties/dorrity_2018_ste12/multi_mut_validation.pdf"
+        "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
+        "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
@@ -110,7 +110,7 @@ rule validate_araya:
         config['input_files']['araya_2012_yap1']
 
     output:
-        "figures/0_data_properties/araya_2012_yap1/multi_mut_validation.pdf"
+        "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
@@ -121,7 +121,7 @@ rule validate_starita:
         config['input_files']['starita_2013_ube4b']
 
     output:
-        "figures/0_data_properties/starita_2013_ube4b/multi_mut_validation.pdf"
+        "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
 
     script:
         "bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
@@ -136,9 +136,9 @@ rule standardise_study:
 
     output:
         "data/studies/{study}/{study}.tsv",
-        "figures/0_data_properties/{study}/original_distribution.pdf",
-        "figures/0_data_properties/{study}/transformed_distribution.pdf",
-        "figures/0_data_properties/{study}/normalised_distribution.pdf"
+        "figures/0_data_properties/per_study/{study}/original_distribution.pdf",
+        "figures/0_data_properties/per_study/{study}/transformed_distribution.pdf",
+        "figures/0_data_properties/per_study/{study}/normalised_distribution.pdf"
 
     log:
         "logs/standardise_study/{study}.log"

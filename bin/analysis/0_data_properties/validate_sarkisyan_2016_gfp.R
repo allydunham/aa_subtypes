@@ -3,7 +3,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-dir.create('figures/0_data_properties/sarkisyan_2016_gfp')
+dir.create('figures/0_data_properties/per_study/sarkisyan_2016_gfp')
 
 # Import and process data
 raw_data <- read_tsv('data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv', skip = 1,
@@ -45,4 +45,4 @@ p_sing_multi <- ggplot(mut_count_data, aes(x = single_score, y = multi_score)) +
        y = 'Median Brightness (Mean Over Multiple Variants)',
        title = 'Accuracy of multi-variant averaging for scoring in Sarkisyan et al. 2016 (GFP)',
        subtitle = str_c('Fraction of variants with individual measures: ', single_frac))
-ggsave('figures/0_data_properties/sarkisyan_2016_gfp/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)
+ggsave('figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)
