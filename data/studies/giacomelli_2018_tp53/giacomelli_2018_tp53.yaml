@@ -4,7 +4,7 @@ uniprot_id: 'P04637'
 gene_type: 'TF'
 species: 'H. sapiens'
 seq: "MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP\
-      DEAPRMPEAAPPVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAK\
+      DEAPRMPEAAPRVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAK\
       SVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHE\
       RCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNS\
       SCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACPGRDRRTEEENLRKKGEPHHELP\
@@ -23,7 +23,8 @@ notes: "Score is in Z-score format across 3 different conditions:\
         null p53 background and nutlin3 to select for LOF;
         and null p53 background and etoposide to select for WT like.\
         Here I only use p53 NULL, Etoposide because it aligns most\
-        directly with our objective of a functional protein"
+        directly with our objective of a functional protein.\
+        The WT for this paper differs by P72R from the Uniprot ID."
 input_files:
   - '41588_2018_204_MOESM5_ESM.xlsx' 
 source: 'SI'
