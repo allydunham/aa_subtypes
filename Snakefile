@@ -49,7 +49,7 @@ rule all:
 rule clean:
     run:
         output_files = [f'data/studies/{s}/{s}.tsv' for s in config['studies']]
-        output_files.append('figures/0_data_properties/*')
+        output_files.append('-r figures/0_data_properties/*')
         output_files.append('data/sift/*')
         output_files.append('meta/study_summary.tsv')
         output_files.append('meta/gene_summary.tsv')
