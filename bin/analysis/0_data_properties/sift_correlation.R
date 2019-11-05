@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Calculate the correlation between study scores and SIFT results
-
 source('src/config.R')
 
 sift_dir <- 'data/sift/'
@@ -15,6 +14,7 @@ import_study <- function(d){
   tbl <- read_tsv(str_c(d, '/', study, '.tsv')) %>%
     mutate(study = yaml$study,
            gene = yaml$gene)
+  return(tbl)
 }
 
 # Import sift results
@@ -35,7 +35,7 @@ import_sift <- function(gene){
 
 dms <- lapply(study_dirs, import_study) %>%
   bind_rows()
-  
+
 sift <- sapply(unique(dms$gene), import_sift, simplify = FALSE) %>%
   bind_rows(.id = 'gene') 
 
