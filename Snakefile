@@ -70,7 +70,8 @@ rule all_sift:
 # Validate Melnikov et al. 2014 (APH(3')-II)
 rule validate_melnikov:
     input:
-        config['input_files']['melnikov_2014_aph3ii']
+        [f'data/studies/melnikov_2014_aph3ii/raw/{x}' for
+         x in config['input_files']['melnikov_2014_aph3ii']]
 
     output:
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
@@ -84,7 +85,8 @@ rule validate_melnikov:
 # Validate Kitzman et al. 2015 (GAL4)
 rule validate_kitzman:
     input:
-        config['input_files']['kitzman_2015_gal4']
+        [f'data/studies/kitzman_2015_gal4/raw/{x}' for
+         x in config['input_files']['kitzman_2015_gal4']]
 
     output:
         "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
@@ -95,7 +97,8 @@ rule validate_kitzman:
 # Validate Giacomelli et al. 2018 (TP53)
 rule validate_giacomelli:
     input:
-        config['input_files']['giacomelli_2018_tp53']
+        [f'data/studies/giacomelli_2018_tp53/raw/{x}' for
+         x in config['input_files']['giacomelli_2018_tp53']]
 
     output:
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
@@ -108,7 +111,10 @@ rule validate_giacomelli:
 # Validate Heredia et al. 2018
 rule validate_heredia:
     input:
-       config['input_files']['heredia_2018_ccr5'] + config['input_files']['heredia_2018_cxcr4']
+        [f'data/studies/heredia_2018_ccr5/raw/{x}' for
+         x in config['input_files']['heredia_2018_ccr5']] +
+        [f'data/studies/heredia_2018_cxcr4/raw/{x}' for
+         x in config['input_files']['heredia_2018_cxcr4']]
 
     output:
         "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
@@ -122,7 +128,8 @@ rule validate_heredia:
 # Validate Sarkisyan et al. 2016 (GFP)
 rule validate_sarkisyan:
     input:
-        config['input_files']['sarkisyan_2016_gfp']
+        [f'data/studies/sarkisyan_2016_gfp/raw/{x}' for
+         x in config['input_files']['sarkisyan_2016_gfp']]
 
     output:
         "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
@@ -133,7 +140,8 @@ rule validate_sarkisyan:
 # Validate Dorrity et al. 2018 (STE12)
 rule validate_dorrity:
     input:
-        config['input_files']['dorrity_2018_ste12']
+        [f'data/studies/dorrity_2018_ste12/raw/{x}' for
+         x in config['input_files']['dorrity_2018_ste12']]
 
     output:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
@@ -145,7 +153,8 @@ rule validate_dorrity:
 # Validate Araya et al. 2012 (YAP1)
 rule validate_araya:
     input:
-        config['input_files']['araya_2012_yap1']
+        [f'data/studies/araya_2012_yap1/raw/{x}' for
+         x in config['input_files']['araya_2012_yap1']]
 
     output:
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
@@ -156,7 +165,8 @@ rule validate_araya:
 # Validate Starita et al. 2013 (UBE4B)
 rule validate_starita:
     input:
-        config['input_files']['starita_2013_ube4b']
+        [f'data/studies/starita_2013_ube4b/raw/{x}' for
+         x in config['input_files']['starita_2013_ube4b']]
 
     output:
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
