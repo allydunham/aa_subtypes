@@ -45,17 +45,18 @@ rule all:
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
 
 # TODO Protection for files that take a long time to build? (Mainly SIFT for now)
+# TODO more specific cleaning of sift dir
 rule clean:
     run:
-        std_tsvs = [f'data/studies/{s}/{s}.tsv' for s in config['studies']]
-        for tsv in std_tsvs:
-            if os.path.isfile(tsv):
-                shell(f'rm {tsv}')
-        shell('rm data/sift/*')
-        shell('rm -r figures/0_data_properties/*')
-        shell('rm meta/study_summary.tsv')
-        shell('rm meta/gene_summary.tsv')
-        shell('rm meta/overall_summary')
+        output_files = [f'data/studies/{s}/{s}.tsv' for s in config['studies']]
+        output_files.append('figures/0_data_properties/*')
+        output_files.append('data/sift/*')
+        output_files.append('meta/study_summary.tsv')
+        output_files.append('meta/gene_summary.tsv')
+        output_files.append('meta/overall_summary')
+
+        for i in output_files:
+            shell(f'rm {i} && echo "rm {i}" || true')
 
 rule all_standardisation:
     input:
