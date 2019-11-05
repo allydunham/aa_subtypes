@@ -16,7 +16,8 @@ dm_data <- read_csv('data/studies/weile_2017_ube2i/raw/weile_2017_ube2i_score_co
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
   select(position, wt, mut, score, transformed_score, raw_score, class) %>%
-  arrange(position, mut)
+  arrange(position, mut) %>%
+  filter(!position == 159) # Drop position not in WT protein
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
