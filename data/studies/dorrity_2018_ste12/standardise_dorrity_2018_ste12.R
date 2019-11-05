@@ -36,7 +36,8 @@ dm_data <- full_join(mating_data, invasion_data, by = c('mut', 'nmut')) %>%
   ungroup() %>%
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score),
-         class = get_variant_class(wt, mut))
+         class = get_variant_class(wt, mut)) %>%
+  drop_na(position)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)
