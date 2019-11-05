@@ -33,8 +33,8 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
     labs(title = str_c('Normalised score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
   
   # Write output
-  if (!dir.exists(str_c('figures/0_data_properties/', study_id))){
-    dir.create(str_c('figures/0_data_properties/', study_id))
+  if (!dir.exists(str_c('figures/0_data_properties/per_study/', study_id))){
+    dir.create(str_c('figures/0_data_properties/per_study/', study_id))
   }
   ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
   ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
