@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Standardise data from Jiang et al. 2013 (HSP90)
-
 source('src/config.R')
 source('src/study_standardising.R')
 

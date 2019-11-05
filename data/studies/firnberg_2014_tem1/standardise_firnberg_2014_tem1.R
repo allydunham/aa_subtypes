@@ -16,6 +16,7 @@ dm_data <- read_xlsx('data/studies/firnberg_2014_tem1/raw/firnberg_2014_tem1.xls
   group_by(position, wt, mut) %>%
   summarise(raw_score = mean(raw_score, na.rm = TRUE),
             transformed_score = mean(log2(raw_score), na.rm = TRUE)) %>% # Average over codons
+  ungroup() %>%
   mutate(score = normalise_score(transformed_score), 
          class = get_variant_class(wt, mut))
 

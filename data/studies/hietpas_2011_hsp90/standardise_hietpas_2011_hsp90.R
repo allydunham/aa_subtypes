@@ -10,6 +10,7 @@ dm_data <- read_csv('data/studies/hietpas_2011_hsp90/raw/hietpas_2011_pdz_ligand
   mutate(wt = str_split(meta$seq, '')[[1]][position]) %>%
   group_by(position, wt, mut) %>% # Average over codons
   summarise(raw_score = mean(raw_score)) %>%
+  ungroup() %>%
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut))
