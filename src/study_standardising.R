@@ -40,8 +40,29 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
   ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
   ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
   
+  if (any(is.na(dm_data$position))){
+    warning('NA value in position')
+  }
+  
+  if (any(is.na(dm_data$wt))){
+    warning('NA value in wt')
+  }
+  
+  if (any(is.na(dm_data$mut))){
+    warning('NA value in mut')
+  }
+  
+  if (any(is.na(dm_data$class))){
+    warning('NA value in class')
+  }
+  
+  if (any(is.na(dm_data$score))){
+    warning('NA value in score')
+  }
+  
   select(dm_data, position, wt, mut, score, transformed_score, raw_score, class) %>%
-    drop_na(score) %>%
+    drop_na(position, wt, mut, score, class) %>%
+    filter(!wt == '*') %>%
     write_tsv(str_c('data/studies/', study_id, '/', study_id, '.tsv'))
 }
 
