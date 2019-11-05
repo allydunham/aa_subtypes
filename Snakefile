@@ -18,7 +18,7 @@ localrules: all, all_standardisation, all_sift, make_sift_fastas
 rule all:
     input:
         expand('data/studies/{study}/{study}.tsv', study=config['studies']),
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys())
 
 rule all_standardisation:
     input:
@@ -26,7 +26,7 @@ rule all_standardisation:
 
 rule all_sift:
     input:
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'])
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys())
 
 #### Validate Data ####
 # Validate Melnikov et al. 2014 (APH(3')-II)
@@ -125,6 +125,20 @@ rule validate_starita:
 
     script:
         "bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
+
+# Check correlation with SIFT
+rule sift_correlation:
+    input:
+        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
+        expand('data/studies/{study}/{study}.yaml', study=config['studies']),
+        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys()),
+        expand('data/sift/{gene}.fa', gene=config['genes'].keys())
+
+    output:
+        'figures/0_data_properties/sift_score_correlation.pdf'
+
+    script:
+        'bin/analysis/0_data_properties/sift_correlation.R'
 
 #### Standardise Data ####
 # Process the raw data from each study
