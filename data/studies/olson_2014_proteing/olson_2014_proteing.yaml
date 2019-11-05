@@ -1,9 +1,10 @@
 study: 'olson_2014_proteing' 
 gene: 'Protein G'
+domain: 'GB1'
 uniprot_id: 'P19909'
 gene_type: 'Immune'
 species: 'Streptococcus'
-seq: "QYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE"
+seq: "MQYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE"
 experiment: 'Ligand binding'
 transform: 'None (Processed from counts)'
 authour: 'Olson et al.'
@@ -12,7 +13,8 @@ title: 'A Comprehensive Biophysical Description of Pairwise Epistasis throughout
 doi: '10.1016/j.cub.2014.09.072'
 pmid: '25455030'
 url: 'https://www.sciencedirect.com/science/article/pii/S0960982214012688'
-notes: 'Uniprot ID is for the Protein G precurssor which has a slightly different sequence'
+notes: "Uniprot ID is for the Protein G precurssor which has a slightly different sequence.\
+        The sequence given here is just for the GB1 domain, as given in the paper."
 input_files:
   - 'olson_2014_protein_g_counts.xlsx'
 source: 'SI'
