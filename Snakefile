@@ -79,8 +79,8 @@ rule validate_melnikov:
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
 
 # Validate Kitzman et al. 2015 (GAL4)
 rule validate_kitzman:
@@ -91,8 +91,8 @@ rule validate_kitzman:
     output:
         "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
 
 # Validate Giacomelli et al. 2018 (TP53)
 rule validate_giacomelli:
@@ -105,8 +105,8 @@ rule validate_giacomelli:
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
 
 # Validate Heredia et al. 2018
 rule validate_heredia:
@@ -122,8 +122,8 @@ rule validate_heredia:
         "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
         "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_heredia_2018.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_heredia_2018.R"
 
 # Validate Sarkisyan et al. 2016 (GFP)
 rule validate_sarkisyan:
@@ -134,8 +134,8 @@ rule validate_sarkisyan:
     output:
         "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
 
 # Validate Dorrity et al. 2018 (STE12)
 rule validate_dorrity:
@@ -147,8 +147,8 @@ rule validate_dorrity:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
         "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
 
 # Validate Araya et al. 2012 (YAP1)
 rule validate_araya:
@@ -159,8 +159,8 @@ rule validate_araya:
     output:
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
 
 # Validate Starita et al. 2013 (UBE4B)
 rule validate_starita:
@@ -171,8 +171,8 @@ rule validate_starita:
     output:
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
 
-    script:
-        "bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
+    shell:
+        "Rscript bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
 
 # Check correlation with SIFT
 rule sift_correlation:
@@ -185,8 +185,8 @@ rule sift_correlation:
     output:
         'figures/0_data_properties/sift_score_correlation.pdf'
 
-    script:
-        'bin/analysis/0_data_properties/sift_correlation.R'
+    shell:
+        "Rscript bin/analysis/0_data_properties/sift_correlation.R"
 
 #### Standardise Data ####
 # Process the raw data from each study
