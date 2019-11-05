@@ -1,5 +1,7 @@
 #!/usr/bin/env Rscript
 # Script to validate the workflow used for Giacomelli et al. 2018 (TP53)
+source('src/config.R')
+source('src/study_standardising.R')
 
 dir.create('figures/0_data_properties/per_study/giacomelli_2018_tp53')
 
