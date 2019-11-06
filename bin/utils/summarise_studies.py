@@ -98,6 +98,8 @@ def main(args):
         print('Summary statistics for Subtypes project', file=summary_file)
         print('Total Studies:', study_data.shape[0], file=summary_file)
         print('Unfiltered Studies:', sum(~study_data['Filtered']), file=summary_file)
+        print('Species:', gene_df.Species.nunique(),
+              f"({', '.join(set(gene_df.Species))})", file=summary_file)
         print('Genes:', gene_df.shape[0], file=summary_file)
         print('Positions:', sum(gene_df['Mutated Positions']), file=summary_file)
         print('Missense Variants:', sum(gene_df['Variants (Missense)']), file=summary_file)

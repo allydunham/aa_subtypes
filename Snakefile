@@ -220,6 +220,7 @@ rule summarise_studies:
 
     shell:
         "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
+
 #### Make Tool Predictions ####
 rule make_gene_fasta:
     input:
