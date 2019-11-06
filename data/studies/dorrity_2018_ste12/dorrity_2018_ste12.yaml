@@ -16,7 +16,7 @@ seq: "MKVQITNSRTEEILKVQANNENDEVSKATPGEVEESLRLIGDLKFFLATAPVNWQENQII\
       QSSNSMQWNTAVSPYSSRAPSTTAKNYPPSTFYSQNINQYPRRRTVGMKSSQGNVPTGNK\
       QSVGKSAKISKPLHIKTSAYQKQYKINLETKARPSAGDEDSAHPDKNKEISMPTPDSNTL\
       VVQSEEGGAHSLEVDTNRRSDKNLPDAT"
-experiment: 'Mating efficiency, measured by proxy growth through plasmid count'
+experiment: 'Mating and invasion efficiency, measured by proxy growth through plasmid count'
 transform: 'None'
 authour: 'Dorrity et al.'
 year: 2018
@@ -24,6 +24,8 @@ title: 'Preferences in a trait decision determined by transcription factor varia
 doi: '10.1073/pnas.1805882115'
 pmid: '30068600'
 url: 'https://www.pnas.org/content/115/34/E7997'
+notes: "Use worst of two scores as their effects tend to be position exclusive - one \
+        domain governs invasion and one mating function"
 input_files:
   - 'pnas.1805882115.sd01.xlsx'
   - 'pnas.1805882115.sd02.xlsx'
