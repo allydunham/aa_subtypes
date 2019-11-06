@@ -8,12 +8,16 @@ seq: "MASNFTQFVLVDNGGTGDVTVAPSNFANGVAEWISSNSRSQAYKVTCSVRQSSAQNRKYT\
       SAIAANSGIY"
 experiment: 'Viral coat assembly'
 transform: '(x - mean(x_wt))/log10(2)' 
-authour: 'Hatrman et al.'
+authour: 'Hartman et al.'
 year: 2018
 title: 'Quantitative characterization of all single amino acid variants of a viral capsid-based drug delivery vehicle'
 doi: '10.1038/s41467-018-03783-y'
 pmid: '29643335'
 url: 'https://www.nature.com/articles/s41467-018-03783-y'
+notes: "In their method they arbilarily set variants with 0 reads to a certain score, \
+        but this is much lower than the rest of the scale and skews everything. Here \
+        we set it (again rather arbitarily, but less so than them) to just below the \
+        lowest measured score (-2.5)"
 input_files:
   - '41467_2018_3783_MOESM4_ESM.xlsx' 
 source: 'SI'

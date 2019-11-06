@@ -12,6 +12,7 @@ dm_data <- read_xlsx('data/studies/hartman_2018_cp/raw/41467_2018_3783_MOESM4_ES
   mutate(position = position + 1,
          wt = str_split(meta$seq, '')[[1]][position],
          class = get_variant_class(wt, mut),
+         raw_score = ifelse(raw_score == -4, -2.5, raw_score), # Set nulls to a value closer to rest of scale (they already set this arbitarily)
          transformed_score = raw_score/log10(2), # Transform base
          transformed_score = transformed_score - mean(transformed_score[class == 'Synonymous'], na.rm=TRUE), # 'divide' (in log domain) by WT scores
          score = normalise_score(transformed_score))
