@@ -4,7 +4,7 @@ uniprot_id: 'P42212'
 gene_type: 'Flourescent Protein'
 species: 'A. victoria'
 seq: "MSKGEELFTGVVPILVELDGDVNGHKFSVSGEGEGDATYGKLTLKFICTTGKLPVPWPTL\
-      VTTFSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLV\
+      VTTLSYGVQCFSRYPDHMKQHDFFKSAMPEGYVQERTIFFKDDGNYKTRAEVKFEGDTLV\
       NRIELKGIDFKEDGNILGHKLEYNYNSHNVYIMADKQKNGIKVNFKIRHNIEDGSVQLAD\
       HYQQNTPIGDGPVLLPDNHYLSTQSALSKDPNEKRDHMVLLEFVTAAGITHGMDELYK" 
 experiment: 'Flourescence level'
@@ -15,6 +15,7 @@ title: 'Local fitness landscape of the green fluorescent protein'
 doi: '10.1038/nature17995'
 pmid: '27193686'
 url: 'https://www.nature.com/articles/nature17995'
+notes: "Used a GFP with F64L, which is reflected in the sequence we use"
 input_files:
   - 'sarkisyan_2016_gfp_AAs.tsv' 
 source: 'SI'
