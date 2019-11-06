@@ -2,12 +2,17 @@
 # Utility functions for Subtypes project
 
 # Function to generate a pretty study name from the id using YAML config data
-format_study <- function(x, max_width=60, study_dir='data/studies'){
+format_study <- function(x, max_width=60, study_dir='data/studies', mark_filtered=FALSE){
   yaml <- read_yaml(str_c(study_dir, '/', x, '/', x, '.yaml'))
   
-  str_c(yaml$authour, ' ', yaml$year, ' (', yaml$gene, ')') %>%
-    str_wrap(width = max_width) %>%
-    return()
+  study <- str_c(yaml$authour, ' ', yaml$year, ' (', yaml$gene, ')') %>%
+    str_wrap(width = max_width)
+  
+  if (mark_filtered & yaml$qc$filter){
+    study <- str_c(study, '*')
+  }
+  
+  return(study)
 }
 
 # Consistent filename from gene
