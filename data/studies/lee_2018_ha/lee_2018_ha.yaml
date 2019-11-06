@@ -14,7 +14,7 @@ seq: "MKTIIALSYILCLVFAQKLPGNDNSTATLCLGHHAVPNGTIVKTITNDQIEVTNATELVQSSSTGEICDS\
       NACIGSIRNGTYDHDVYRDEALNNRFQIKGVELKSGYKDWILWISFAISCFLLCVALLGFIMWACQKGNI\
       RCNICI" 
 experiment: 'Growth'
-transform: 'log2(x / x_wt)'
+transform: 'log2(x_mut_i / x_wt_i)'
 authour: 'Lee et al.'
 year: 2018
 title: 'Deep mutational scanning of hemagglutinin helps predict evolutionary fates of human H3N2 influenza variants'
