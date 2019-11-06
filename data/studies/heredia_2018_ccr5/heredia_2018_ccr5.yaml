@@ -19,7 +19,8 @@ pmid: '29678950'
 url: 'https://www.jimmunol.org/content/200/11/3825'
 notes: "Manually edited the raw XLSX file, moving Y14 in column 1 down one row to its \
         proper place as it had been eroneously offset to be in the last row of the 13th \
-        AA data"
+        AA data. Use mean of antibody binding experiment scores as method also incorporated\
+        surface expression."
 input_files:
   - 'GSE100368_enrichment_ratios_CCR5.xlsx' 
 source: 'NCBI GEO: GSE100368 - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE100368'

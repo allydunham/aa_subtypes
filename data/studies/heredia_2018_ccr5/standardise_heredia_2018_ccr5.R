@@ -13,15 +13,12 @@ dm_data <- read_xlsx('data/studies/heredia_2018_ccr5/raw/GSE100368_enrichment_ra
   mutate(wt = rep(wt[!is.na(wt)], each = 21)) %>%
   tidyr::extract(wt, into = c('wt', 'position'), '([A-Z])([0-9]+)', convert = TRUE) %>%
   
-  # Average replicates
-  mutate(surface_exp_fitc_l1 = rowMeans(select(., surface_exp_fitc_l1_r1, surface_exp_fitc_l1_r2), na.rm = TRUE) %>% replace_na(NA),
-         binding_2d7_l1 = rowMeans(select(., binding_2d7_l1_r1, binding_2d7_l1_r2), na.rm = TRUE) %>% replace_na(NA),
-         surface_exp_alexa_l2 = rowMeans(select(., surface_exp_alexa_l2_r1, surface_exp_alexa_l2_r2), na.rm = TRUE) %>% replace_na(NA),
+  # Average replicates for binding (which also incorporate surface expression)
+  mutate(binding_2d7_l1 = rowMeans(select(., binding_2d7_l1_r1, binding_2d7_l1_r2), na.rm = TRUE) %>% replace_na(NA),
          binding_gp120_cd4_l2 = rowMeans(select(., binding_gp120_cd4_l2_r1, binding_gp120_cd4_l2_r2), na.rm = TRUE) %>% replace_na(NA)) %>%
   
-  # Average surface expression score and take worst of three measured phenotypes
-  mutate(surface_exp = rowMeans(select(., surface_exp_fitc_l1, surface_exp_alexa_l2), na.rm = TRUE) %>% replace_na(NA),
-         raw_score = pmin(binding_2d7_l1, surface_exp, binding_gp120_cd4_l2),
+  # Average binding scores for two conditions (0.61 correlation)
+  mutate(raw_score = rowMeans(select(., binding_2d7_l1, binding_gp120_cd4_l2), na.rm = TRUE) %>% replace_na(NA),
          transformed_score = raw_score,
          score = normalise_score(transformed_score),
          class = get_variant_class(wt, mut)) %>%
