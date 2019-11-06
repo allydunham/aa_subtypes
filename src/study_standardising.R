@@ -16,19 +16,19 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
   
   p_orig <- ggplot(dm_data, aes(x = raw_score, fill = class)) +
     guides(fill = guide_legend(title = 'Variant Class')) +
-    scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
+    scale_fill_manual(values = MUT_CLASS_COLOURS) +
     geom_histogram(bins = 30) +
     labs(title = str_c('Original score distribution for ', study_name), x = 'Raw Score', y = 'Count')
 
   p_trans <- ggplot(dm_data, aes(x = transformed_score, fill = class)) +
     guides(fill = guide_legend(title = 'Variant Class')) +
-    scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
+    scale_fill_manual(values = MUT_CLASS_COLOURS) +
     geom_histogram(bins = 30) +
     labs(title = str_c('Transformed score distribution for ', study_name), x = 'Transformed Score', y = 'Count')
   
   p_norm <- ggplot(dm_data, aes(x = score, fill = class)) +
     guides(fill = guide_legend(title = 'Variant Class')) +
-    scale_fill_manual(values = c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')) +
+    scale_fill_manual(values = MUT_CLASS_COLOURS) +
     geom_histogram(bins = 30) +
     labs(title = str_c('Normalised score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
   

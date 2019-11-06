@@ -21,7 +21,25 @@ library(tblhelpr)
 # Source custom functions
 source('src/subtypes_utils.R')
 
-#### Project config ####
+# Generic ggplot theme - clean with centered title by default
+theme_set(theme_pubclean() + theme(legend.position = 'right',
+                                   plot.title = element_text(hjust = 0.5),
+                                   plot.subtitle = element_text(hjust = 0.5),
+                                   strip.background = element_blank()))
+
+#### Colour Schemes ####
+MUT_CLASS_COLOURS <- c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')
+
+## AA colours, based roughly on groups
+AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
+                F='gold', W='yellow3', Y='khaki3',
+                N='cadetblue1', C='cornflowerblue', Q='cyan', S='blue', T='darkslateblue',
+                R='green', H='green4', K='seagreen1',
+                D='purple', E='pink',
+                G='antiquewhite2', P='black', X='grey')
+########
+
+#### Biological Constants ####
 # Categories of secondary structure
 SS_REDUCED_HASH <- c(C='None', S='Turn', H='Helix', T='Turn', E='Strand', G='Helix', B='Strand', I='Helix')
 
@@ -37,16 +55,6 @@ AA_REDUCED_CLASSES <- list(Aliphatic=c('A', 'I', 'L', 'M', 'V'),
 AA_REDUCED_HASH <- structure(rep(names(AA_REDUCED_CLASSES), times=sapply(AA_REDUCED_CLASSES, length)),
                              names=unlist(AA_REDUCED_CLASSES))
 
-## AA colours, based roughly on groups
-AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
-                F='gold', W='yellow3', Y='khaki3',
-                N='cadetblue1', C='cornflowerblue', Q='cyan', S='blue', T='darkslateblue',
-                R='green', H='green4', K='seagreen1',
-                D='purple', E='pink',
-                G='antiquewhite2', P='black', X='grey')
+########
 
-# Generic ggplot theme - clean with centered title by default
-theme_set(theme_pubclean() + theme(legend.position = 'right',
-                                   plot.title = element_text(hjust = 0.5),
-                                   plot.subtitle = element_text(hjust = 0.5),
-                                   strip.background = element_blank()))
+
