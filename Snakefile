@@ -247,7 +247,9 @@ rule make_gene_fasta:
 
 rule sift4g:
     input:
-        fa = "data/sift/{gene}.fa",
+        # .fa files really shouldn't change much even when .yaml's do -> sift results wont either
+        # force re-run if neccessary by deleting relevant .fa
+        fa = ancient("data/sift/{gene}.fa"),
         db = UNIREF90_DB_PATH
 
     output:
