@@ -5,6 +5,3 @@ fasta/**
 graveyard/README.md
 graveyard/*/*.yaml
 graveyard/*/*.R
-gene_summary.tsv
-study_summary.tsv
-overall_summary

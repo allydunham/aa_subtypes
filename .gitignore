@@ -9,3 +9,4 @@
 !/data/graveyard/*/*.R
 !/data/graveyard/*/*.yaml
 /figures/**
+/meta/**
