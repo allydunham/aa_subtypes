@@ -37,13 +37,15 @@ seq: "MDLSALRVEEVQNVINAMQKILECPICLELIKEPVSTKCDHIFCKFCMLKLLNQKKGPSQ\
       GTGVHPIVVVQPDAWTEDNGFHAIGQMCEAPVVTREWVLDSVALYQCQELDTYLIPQIPH\
       SHY" 
 experiment: 'Ligand binding (Y2H) and E3 activity'
-transform: 'Min of two scores then log2(x)'
+transform: 'log2(x_e3)'
 authour: 'Starita et al.'
 year: 2015
 title: 'Massively Parallel Functional Analysis of BRCA1 RING Domain Variants'
 doi: '10.1534/genetics.115.175802'
 pmid: '25823446'
 url: 'http://www.genetics.org/content/200/2/413'
+notes: "Use E3 score as it is more related to general function and empirically seems to \
+        find all the negative effects of the BARD1 binding assay and more."
 input_files:
   - 'starita_2015_brca1_ring.xls' 
 source: 'SI'

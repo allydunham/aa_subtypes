@@ -8,10 +8,13 @@ meta <- read_yaml('data/studies/starita_2015_brca1/starita_2015_brca1.yaml')
 dm_data <- read_xls('data/studies/starita_2015_brca1/raw/starita_2015_brca1_ring.xls', na = 'NA') %>%
   rename_all(tolower) %>%
   rename(position = pos) %>%
-  mutate(wt = str_split(meta$seq, '')[[1]][position], # Ref seq given by study has a mysterious, undocumented R at pos 175 where normal refs have K, using K here since the change is not explained in the paper and appears erroneous
+  # Ref seq given by study has a mysterious, undocumented R at pos 175 where normal refs have K
+  # using K here since the change is not explained in the paper and appears erroneous
+  mutate(wt = str_split(meta$seq, '')[[1]][position], 
          class = get_variant_class(wt, mut)) %>%
   filter(!variant_id == 'NA-NA') %>%
-  mutate(raw_score = pmin(e3_score, y2h_score, na.rm = TRUE),
+  # Use E3 score - this is more general funcition based and empirically it seems to find most of the same negative effects as the BARD1 binding assay
+  mutate(raw_score = e3_score, 
          transformed_score = transform_vamp_seq(raw_score),
          score = normalise_score(transformed_score)) %>%
   drop_na(score) # Not all measured
