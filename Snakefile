@@ -223,8 +223,11 @@ rule summarise_studies:
 
 #### Make Tool Predictions ####
 rule make_gene_fasta:
+    # seq really shouldn't change much even when .yaml's do -> sift results wont either
+    # force re-run if neccessary by deleting relevant .fa
     input:
-        lambda wildcards: [f'data/studies/{i}/{i}.yaml' for i in config['genes'][wildcards.gene]]
+        lambda wildcards: [ancient(f'data/studies/{i}/{i}.yaml') for i
+                           in config['genes'][wildcards.gene]]
 
     output:
         "data/sift/{gene}.fa"
@@ -247,9 +250,7 @@ rule make_gene_fasta:
 
 rule sift4g:
     input:
-        # .fa files really shouldn't change much even when .yaml's do -> sift results wont either
-        # force re-run if neccessary by deleting relevant .fa
-        fa = ancient("data/sift/{gene}.fa"),
+        fa = "data/sift/{gene}.fa",
         db = UNIREF90_DB_PATH
 
     output:
