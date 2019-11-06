@@ -24,5 +24,8 @@ input_files:
   - 'ashenberg_2017_flu_np.csv' 
 source: 'SI'
 qc:
-  filter: False
-  notes:
+  filter: True 
+  notes: "Only report relative selection when grown in cell with MxA and\
+          without, effectively normalising for most selective effects.\
+          Consequently the score doesn't align with full fitness (and \
+          wasn't meant to) as shown by no correlation with SIFT scores."
