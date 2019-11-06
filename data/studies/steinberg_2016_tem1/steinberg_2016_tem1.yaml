@@ -9,7 +9,7 @@ seq: "MSIQHFRVALIPFFAAFCLPVFAHPETLVKVKDAEDQLGARVGYIELDLNSGKILESFRP\
       PAAMATTLRKLLTGELLTLASRQQLIDWMEADKVAGPLLRSALPAGWFIADKSGAGERGS\
       RGIIAALGPDGKPSRIVVIYTTGSQATMDERNRQIAEIGASLIKHW"
 experiment: 'Concentration of beta-lactam'
-transform: 
+transform: 'log2(x)' 
 authour: 'Steinberg & Ostermeier'
 year: 2016
 title: 'Shifting Fitness and Epistatic Landscapes Reflect Trade-offs along an Evolutionary Pathway'

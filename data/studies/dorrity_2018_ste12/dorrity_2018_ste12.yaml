@@ -16,8 +16,8 @@ seq: "MKVQITNSRTEEILKVQANNENDEVSKATPGEVEESLRLIGDLKFFLATAPVNWQENQII\
       QSSNSMQWNTAVSPYSSRAPSTTAKNYPPSTFYSQNINQYPRRRTVGMKSSQGNVPTGNK\
       QSVGKSAKISKPLHIKTSAYQKQYKINLETKARPSAGDEDSAHPDKNKEISMPTPDSNTL\
       VVQSEEGGAHSLEVDTNRRSDKNLPDAT"
-experiment: 
-transform: 
+experiment: 'Mating efficiency, measured by proxy growth through plasmid count'
+transform: 'None'
 authour: 'Dorrity et al.'
 year: 2018
 title: 'Preferences in a trait decision determined by transcription factor variants'

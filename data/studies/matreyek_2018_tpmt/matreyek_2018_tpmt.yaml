@@ -9,7 +9,7 @@ seq: "MDGTRTSLDIEEYSDTEVQKNQVLTLEEWQDKWVNGKTAFHQEQGHQLLKKHLD\
       RKCYADTMFSLLGKKFQYLLCVLSYDPTKHPGPPFYVPHAEIERLFGKICNIRC\
       LEKVDAFEERHKSWGIDCLFEKLYLLTEK"
 experiment: 'VAMP-seq'
-transform: "Standard VAMP-seq transform"
+transform: "VAMP-seq"
 authour: 'Matreyek et al.'
 year: 2018
 title: 'Multiplex assessment of protein variant abundance by massively parallel sequencing'

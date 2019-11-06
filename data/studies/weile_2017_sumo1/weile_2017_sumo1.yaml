@@ -6,7 +6,7 @@ species: 'H. sapiens'
 seq: "MSDQEAKPSTEDLGDKKEGEYIKLKVIGQDSSEIHFKVKMTTHLKKLKESYCQRQGVPMN\
       SLRFLFEGQRIADNHTPKELGMEEEDVIEVYQEQTGGHSTV"
 experiment: 'Complement'
-transform: 'VAMP-seq Transform'
+transform: 'VAMP-seq'
 authour: 'Weile et al.'
 year: 2017
 title: 'A framework for exhaustively mapping functional missense variants'

@@ -19,13 +19,14 @@ seq: "MKLLSSIEQACDICRLKKLKCSKEKPKCAKCLKNNWECRYSPKTKRSPLTRAHLTEVESR\
       LSFTFTNSSNGPNLITTQTNSQALSQPIASSNVHDNFMNNEITASKIDDGNNSKPLSPGW\
       TDQTAYNAFGITTGMFNTTTMDDVYNYLFDDEDTPPNPKKE" 
 experiment: 'Coupled growth'
-transform: 'log2(x) and Average of A,B,C at 40h'
+transform: 'log2(x)'
 authour: 'Kitzman et al.'
 year: 2015
 title: 'Massively parallel single amino-acid mutagenesis'
 doi: '10.1038/nmeth.3223'
 pmid: '25559584'
 url: 'https://www.nature.com/articles/nmeth.3223'
+notes: "Average of A,B,C at 40h, which was the only shared timepoint"
 input_files:
   - 'kitzman_2015_gal4_enrichment.xlsx' 
 source: 'SI'

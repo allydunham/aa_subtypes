@@ -9,7 +9,7 @@ seq: "MIEQDGLHAGSPAAWVERLFGYDWAQQTIGCSDAAVFRLSAQGRPVLFVKTDLSGALNEL\
       GEDLVVTHGDACLPNIMVENGRFSGFIDCGRLGVADRYQDIALATRDIAEELGGEWADRF\
       LVLYGIAAPDSQRIAFYRLLDEFF" 
 experiment: 'Coupled growth'
-transform: 'Processed from counts' 
+transform: 'None (processed from counts)' 
 authour: 'Melnikov et al.'
 year: 2014
 title: 'Comprehensive mutational scanning of a kinase in vivo reveals substrate-dependent fitness landscapes'

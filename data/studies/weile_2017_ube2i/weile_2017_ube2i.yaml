@@ -7,7 +7,7 @@ seq: "MSGIALSRLAQERKAWRKDHPFGFVAVPTKNPDGTMNLMNWECAIPGKKGTPWEGGLFKL\
       RMLFKDDYPSSPPKCKFEPPLFHPNVYPSGTVCLSILEEDKDWRPAITIKQILLGIQELL\
       NEPNIQDPAQAEAYTIYCQNRVEYEKRVRAQAKKFAPS" 
 experiment: 'Complement'
-transform: 'VAMP-seq transform'
+transform: 'VAMP-seq'
 authour: 'Weile et al.'
 year: 2017
 title: 'A framework for exhaustively mapping functional missense variants'

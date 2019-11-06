@@ -9,8 +9,8 @@ seq: "MDYQVSSPIYDINYYTSEPCQKINVKQIAARLLPPLYSLVFIFGFVGNMLVILILINCKR\
       HFPYSQYQFWKNFQTLKIVILGLVLPLLVMVICYSGILKTLLRCRNEKKRHRAVRLIFTI\
       MIVYFLFWAPYNIVLLLNTFQEFFGLNNCSSSNRLDQAMQVTETLGMTHCCINPIIYAFV\
       GEKFRNYLLVFFQKHIAKRFCKCCSIFQQEAPERASSVYTRSTGEQEISVGL" 
-experiment:
-transform:
+experiment: 'Surface expression and HIV-1 blocking antibody 2D7 affinity via FACS'
+transform: 'None'
 authour: 'Heredia et al.'
 year: 2018
 title: 'Mapping Interaction Sites on Human Chemokine Receptors by Deep Mutational Scanning'

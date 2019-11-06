@@ -6,7 +6,7 @@ species: 'E. coli'
 seq: "MAKEDNIEMQGTVLETLPNTMFRVELENGHVVTAHISGKMRKNYIRILTGDKVTVELTPY\
       DLSKGRIVFRSR" 
 experiment: 'Growth'
-transform: 'VAMP-seq transform'
+transform: 'VAMP-seq'
 authour: 'Kelsic et al.'
 year: 2016
 title: 'RNA Structural Determinants of Optimal Codons Revealed by MAGE-Seq'
