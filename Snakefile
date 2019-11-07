@@ -183,7 +183,8 @@ rule sift_correlation:
         expand('data/sift/{gene}.fa', gene=config['genes'].keys())
 
     output:
-        'figures/0_data_properties/sift_score_correlation.pdf'
+        'figures/0_data_properties/sift_score_correlation.pdf',
+        'figures/0_data_properties/sift_score_density.pdf'
 
     shell:
         "Rscript bin/analysis/0_data_properties/sift_correlation.R"
@@ -206,6 +207,19 @@ rule gene_repeats:
 
     shell:
         "Rscript bin/analysis/0_data_properties/gene_repeats.R"
+
+# Summary plots of coverage/completeness
+rule data_summary_plots:
+    input:
+        'meta/study_summary.tsv',
+        'meta/gene_summary.tsv'
+
+    output:
+        'figures/0_data_properties/study_variants_summary.pdf',
+        'figures/0_data_properties/gene_variants_summary.pdf'
+
+    shell:
+        'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
 
 #### Standardise Data ####
 # Process the raw data from each study
