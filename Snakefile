@@ -43,6 +43,15 @@ rule all:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf",
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf",
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
+        'figures/0_data_properties/sift_score_correlation.pdf',
+        'figures/0_data_properties/sift_score_density.pdf',
+        'figures/0_data_properties/study_variants_summary.pdf',
+        'figures/0_data_properties/gene_variants_summary.pdf',
+        "figures/0_data_properties/gene_repeats/brca1.pdf",
+        "figures/0_data_properties/gene_repeats/hsp90.pdf",
+        "figures/0_data_properties/gene_repeats/tem1.pdf",
+        "figures/0_data_properties/gene_repeats/ubi.pdf"
+
 
 # TODO Protection for files that take a long time to build? (Mainly SIFT for now)
 # TODO more specific cleaning of sift dir
@@ -203,7 +212,8 @@ rule gene_repeats:
     output:
         "figures/0_data_properties/gene_repeats/brca1.pdf",
         "figures/0_data_properties/gene_repeats/hsp90.pdf",
-        "figures/0_data_properties/gene_repeats/tem1.pdf"
+        "figures/0_data_properties/gene_repeats/tem1.pdf",
+        "figures/0_data_properties/gene_repeats/ubi.pdf"
 
     shell:
         "Rscript bin/analysis/0_data_properties/gene_repeats.R"
