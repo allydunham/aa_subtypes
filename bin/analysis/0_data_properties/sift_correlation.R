@@ -66,3 +66,11 @@ p_sift_cor <- ggplot(sift_correlations, aes(x = study_pretty, y = estimate, fill
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
                                    colour = filtered[unique(sift_correlations$study_pretty)]))
 ggsave('figures/0_data_properties/sift_score_correlation.pdf', p_sift_cor, width = 20, height = 20, units = 'cm')
+
+p_sift_density <- ggplot(dms, aes(x = score, y = jitter(log10_sift, 0.1), colour = class)) +
+  facet_wrap(~study, labeller = as_labeller(sapply(unique(dms$study), format_study)), ncol = 6, scales = 'free_x') +
+  geom_density2d(data = filter(dms, class == 'Missense')) +
+  geom_point(data = filter(dms, !class == 'Missense')) +
+  scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  labs(x = 'Score', y = 'log10(SIFT)')
+ggsave('figures/0_data_properties/sift_score_density.pdf', p_sift_density, width = 35, height = 35, units = 'cm')
