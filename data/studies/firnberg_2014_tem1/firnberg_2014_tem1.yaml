@@ -20,5 +20,5 @@ input_files:
   - 'firnberg_2014_tem1.xlsx' 
 source: 'SI'
 qc:
-  filter: False
-  notes:
+  filter: True 
+  notes: "Essentially identical to steinberg_2016_tem1, but with slightly fewer variants"
