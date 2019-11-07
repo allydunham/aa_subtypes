@@ -20,5 +20,5 @@ input_files:
   - 'sarkisyan_2016_gfp_AAs.tsv' 
 source: 'SI'
 qc:
-  filter: False
-  notes:
+  filter: True 
+  notes: "Low coverage"

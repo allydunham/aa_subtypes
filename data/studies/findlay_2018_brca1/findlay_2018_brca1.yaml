@@ -49,5 +49,5 @@ input_files:
   - 'findlay_2018_brca1_ring_brct.xlsx' 
 source: 'SI'
 qc:
-  filter: False
-  notes:
+  filter: True 
+  notes: "Low coverage (only made single nucleotide substitutions)"
