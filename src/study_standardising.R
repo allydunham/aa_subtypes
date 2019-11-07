@@ -6,6 +6,20 @@ source('src/config.R')
 AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
 AA_THREE_2_ONE['Ter'] <- '*'
 
+# Import a study TSV
+import_study <- function(d, fields = NULL){
+  study <- str_split(d, '/')[[1]]
+  study <- study[length(study)]
+  yaml = read_yaml(str_c(d, '/', study, '.yaml'))
+  
+  tbl <- read_tsv(str_c(d, '/', study, '.tsv'))
+  for (f in c('study', fields)){
+    tbl <- mutate(tbl, !!f := yaml[[f]])
+  }
+  
+  return(tbl)
+}
+
 ## general study data saving function
 # dm_data = tibble with columns position, wt, mut, score, transformed_score, raw_score, class
 # study_id = authour_year_gene style standard study id
