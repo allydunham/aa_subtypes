@@ -51,11 +51,12 @@ study_coverage <- group_by(studies, study, position, wt) %>%
 
 p_coverage <- ggplot(study_coverage, aes(x = position, y = coverage, fill = wt)) +
   facet_wrap(~study, labeller = as_labeller(sapply(unique(study_coverage$study), format_study, mark_filtered=TRUE)),
-             scales = 'free_x') +
+             scales = 'free_x', nrow = 5) +
   geom_col() +
   lims(y = c(0, 1)) +
-  scale_fill_manual(values = AA_COLOURS)
-ggsave('figures/0_data_properties/position_covarge.pdf', p_coverage, units = 'cm', width = 30, height = 30)
+  scale_fill_manual(values = AA_COLOURS) +
+  theme(legend.position = 'bottom')
+ggsave('figures/0_data_properties/position_coverage.pdf', p_coverage, units = 'cm', width = 50, height = 30)
 
 ########
 
