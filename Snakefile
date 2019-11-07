@@ -42,7 +42,7 @@ rule all:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
         "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf",
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf",
-        "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
+        "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf",
         'figures/0_data_properties/sift_score_correlation.pdf',
         'figures/0_data_properties/sift_score_density.pdf',
         'figures/0_data_properties/study_variants_summary.pdf',
@@ -50,7 +50,8 @@ rule all:
         "figures/0_data_properties/gene_repeats/brca1.pdf",
         "figures/0_data_properties/gene_repeats/hsp90.pdf",
         "figures/0_data_properties/gene_repeats/tem1.pdf",
-        "figures/0_data_properties/gene_repeats/ubi.pdf"
+        "figures/0_data_properties/gene_repeats/ubi.pdf",
+        'figures/0_data_properties/position_coverage.pdf'
 
 
 # TODO Protection for files that take a long time to build? (Mainly SIFT for now)
@@ -222,11 +223,13 @@ rule gene_repeats:
 rule data_summary_plots:
     input:
         'meta/study_summary.tsv',
-        'meta/gene_summary.tsv'
+        'meta/gene_summary.tsv',
+        expand('data/studies/{study}/{study}.{ext}', study=config['studies'], ext=['yaml', 'tsv'])
 
     output:
         'figures/0_data_properties/study_variants_summary.pdf',
-        'figures/0_data_properties/gene_variants_summary.pdf'
+        'figures/0_data_properties/gene_variants_summary.pdf',
+        'figures/0_data_properties/position_coverage.pdf'
 
     shell:
         'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
@@ -253,8 +256,7 @@ rule standardise_study:
 
 rule summarise_studies:
     input:
-        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
-        expand('data/studies/{study}/{study}.yaml', study=config['studies'])
+        expand('data/studies/{study}/{study}.{ext}', study=config['studies'], ext=['yaml', 'tsv'])
 
     output:
         study='meta/study_summary.tsv',
