@@ -26,8 +26,9 @@ def main(args):
         # calculate study data
         variants = pd.read_csv(f'{study_dir}/{study}.tsv', sep='\t')
         positions = variants.position.nunique()
-        total = variants[~(variants.mut == '*')].shape[0]
-        coverage = round(variants[variants['class'] == 'Missense'].shape[0]/(positions*19), 3)
+        completeness = round(positions/len(meta['seq']), 3)
+        total = variants[variants['class'] == 'Missense'].shape[0]
+        coverage = round(total/(positions*19), 3)
         nonsense = 'Nonsense' in variants['class'].values
         synonymous = 'Synonymous' in variants['class'].values
 
@@ -42,6 +43,7 @@ def main(args):
         study_data['Filtered'].append(meta['qc']['filter'])
         study_data['Gene Length'].append(len(meta['seq']))
         study_data['Mutated Positions'].append(positions)
+        study_data['Completeness (Missense)'].append(completeness)
         study_data['Variants (Missense)'].append(total)
         study_data['Coverage (Missense)'].append(coverage)
         study_data['Nonsense'].append(nonsense)
@@ -79,6 +81,7 @@ def main(args):
     for gene, data in gene_data.items():
         positions = data['df'].position.nunique()
         variants = data['df'][~(data['df'].mut == '*')].shape[0]
+        completeness = round(positions / data['length'], 3)
         coverage = round(data['df'][data['df']['class'] == 'Missense'].shape[0]/(positions*19), 3)
 
         gene_df['Gene'].append(gene)
@@ -87,6 +90,7 @@ def main(args):
         gene_df['Studies'].append(data['studies'])
         gene_df['Length'].append(data['length'])
         gene_df['Mutated Positions'].append(positions)
+        gene_df['Completeness (Missense)'].append(completeness)
         gene_df['Variants (Missense)'].append(variants)
         gene_df['Coverage (Missense)'].append(coverage)
 
@@ -103,6 +107,9 @@ def main(args):
         print('Genes:', gene_df.shape[0], file=summary_file)
         print('Positions:', sum(gene_df['Mutated Positions']), file=summary_file)
         print('Missense Variants:', sum(gene_df['Variants (Missense)']), file=summary_file)
+        print('Average Completeness:',
+              sum(gene_df['Completeness (Missense)'])/gene_df.shape[0],
+              file=summary_file)
         print('Average Coverage:',
               sum(gene_df['Coverage (Missense)'])/gene_df.shape[0],
               file=summary_file)
