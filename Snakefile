@@ -188,6 +188,25 @@ rule sift_correlation:
     shell:
         "Rscript bin/analysis/0_data_properties/sift_correlation.R"
 
+# Analyse cases with multiple studies of the same gene
+rule gene_repeats:
+    input:
+        expand('data/studies/{study}/{study}.{ext}',
+               ext=['yaml', 'tsv'],
+               study=['findlay_2018_brca1', 'starita_2015_brca1',
+                      'hietpas_2011_hsp90', 'jiang_2013_hsp90',
+                      'mishra_2016_hsp90', 'firnberg_2014_tem1',
+                      'steinberg_2016_tem1', 'roscoe_2013_ubi',
+                      'roscoe_2014_ubi'])
+
+    output:
+        "figures/0_data_properties/gene_repeats/brca1.pdf",
+        "figures/0_data_properties/gene_repeats/hsp90.pdf",
+        "figures/0_data_properties/gene_repeats/tem1.pdf"
+
+    shell:
+        "Rscript bin/analysis/0_data_properties/gene_repeats.R"
+
 #### Standardise Data ####
 # Process the raw data from each study
 rule standardise_study:
