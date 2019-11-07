@@ -31,7 +31,7 @@ p_brca <- ggplot(brca1_studys, aes(x=findlay_2018_brca1, y=starita_2015_brca1, c
   coord_equal() +
   labs(x = 'Findlay et al. 2018', y = 'Starita et al. 2015', title = 'Scores in BRCA1 from two studies') +
   guides(colour = guide_legend(title = 'Variant Type'))
-ggsave('figures/0_data_properties/gene_repeats/brca1.pdf', p_brca, units = 'cm', width = 10, height = 15)
+ggsave('figures/0_data_properties/gene_repeats/brca1.pdf', p_brca, units = 'cm', width = 15, height = 17)
 
 #### HSP90 ####
 hsp90_studys <- sapply(c('data/studies/hietpas_2011_hsp90', 'data/studies/jiang_2013_hsp90', 'data/studies/mishra_2016_hsp90'),
@@ -48,7 +48,8 @@ p_hsp90 <- ggplot(hsp90_studys, aes(x=hietpas_2011_hsp90, y=jiang_2013_hsp90, co
   geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
   scale_colour_manual(values = MUT_CLASS_COLOURS) +
   coord_equal() +
-  labs(x = 'Hietpas et al. 2011', y = 'Jiang et al. 2015', title = 'Scores in HSP90 from two studies') +
+  labs(x = 'Hietpas et al. 2011', y = 'Jiang et al. 2013', title = 'Scores in HSP90 from two studies',
+       subtitle = 'Both from the Bolon Lab') +
   guides(colour = guide_legend(title = 'Variant Type'))
 ggsave('figures/0_data_properties/gene_repeats/hsp90.pdf', p_hsp90, units = 'cm', width = 10, height = 10)
 ########
