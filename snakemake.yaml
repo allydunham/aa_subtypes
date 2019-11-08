@@ -2,7 +2,7 @@ foldx:
   variants_per_run: 570
 
 sift:
-  UNIREF90_DB_PATH: '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
+  uniref90_fa_path: '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
 
 misc:
   fasta_line_length: 80
