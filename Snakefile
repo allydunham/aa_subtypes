@@ -17,7 +17,7 @@ yaml = YAML(typ='safe')
 
 # Hash of study IDs to their config
 STUDIES = {}
-for study in config['studies']:
+for study in os.listdir('data/studies'):
     with open(f'data/studies/{study}/{study}.yaml') as yaml_file:
         STUDIES[study] = yaml.load(yaml_file)
 
@@ -305,7 +305,7 @@ rule make_gene_fasta:
 rule sift4g:
     input:
         fa = "data/sift/{gene}.fa",
-        db = UNIREF90_DB_PATH
+        db = config['sift']['uniref90_fa_path']
 
     output:
         "data/sift/{gene}.SIFTprediction"
@@ -324,7 +324,7 @@ def get_foldx_split_n(gene):
     """
     Calculate how many parralel FoldX runs are needed
     """
-    seqs = [conf['seq'] for conf in GENES[gene]]
+    seqs = [STUDIES[study]['seq'] for study in GENES[gene]]
 
     if not all([x == seqs[0] for x in seqs[1:]]):
         raise ValueError(f'Sequences for studies of {gene} are not identical')
@@ -343,16 +343,16 @@ rule foldx_variants:
     run:
         raise NotImplementedError('Add method for FoldX subs!')
 
-rule foldx_split:
-    input:
-        "data/foldx/{gene}/individual_list"
+for gene in GENES.keys():
+	rule:
+		input:
+			f"data/foldx/{gene}/individual_list"
 
-    output:
-		expand('data/foldx/{gene}/{n}', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene)))
+		output:
+			[f"data/foldx/{gene}/individual_list_{n}" for n in range(get_foldx_split_n(gene))]
 
-    run:
-        raise NotImplementedError('Add method for FoldX splitting!')
+		run:
+			raise NotImplementedError('Add method for FoldX splitting!')
 
 rule foldx_repair:
     input:
@@ -367,7 +367,7 @@ rule foldx_repair:
 
 rule foldx_model:
     input:
-        pdb="data/foldx/{gene}/{gene}_Repair.pdb"
+        pdb="data/foldx/{gene}/{gene}_Repair.pdb",
         muts="data/foldx/{gene}/individual_list_{n}"
 
     output:
@@ -381,14 +381,9 @@ rule foldx_model:
 
 rule foldx_combine:
     input:
-        expand('data/foldx/{gene}/Average_{gene}_{n}_BM.fxout', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene))),
-		expand('data/foldx/{gene}/Dif_{gene}_{n}_BM.fxout', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene))),
-		expand('data/foldx/{gene}/Raw_{gene}_{n}_BM.fxout', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene))),
-		expand('data/foldx/{gene}/Pdblist_{gene}_{n}_BM.fxout', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene)))
+        expand('data/foldx/{gene}/{fi}_{gene}_{n}_BM.fxout', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene)),
+			   fi=('Average', 'Dif', 'Raw', 'PdbList'))
 
     output:
         "data/foldx/{gene}/average_{gene}.fxout",
