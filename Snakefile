@@ -3,25 +3,36 @@
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
 import os
+import math
+from collections import defaultdict
 from Bio import SeqIO
 from ruamel.yaml import YAML
-
 import subtypes_utils as sutil
 
-yaml = YAML(typ='safe')
-UNIREF90_DB_PATH = '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
-FASTA_LINE_LENGTH = 80
-
 configfile: 'snakemake.yaml'
-localrules: all, clean, all_standardisation, all_sift, make_gene_fasta
+localrules: all, clean, all_standardisation, all_sift, make_gene_fasta,
+    foldx_variants, foldx_split, foldx_combine
+
+yaml = YAML(typ='safe')
+
+# Hash of study IDs to their config
+STUDIES = {}
+for study in config['studies']:
+    with open(f'data/studies/{study}/{study}.yaml') as yaml_file:
+        STUDIES[study] = yaml.load(yaml_file)
+
+# Hash linking genes to studies
+GENES = defaultdict(list)
+for study, conf in STUDIES.items():
+    GENES[conf['gene']].append(study)
 
 # Explicitly note all the output here
 # even though some would necessarily cause other bits to generate
 rule all:
     input:
-        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
-        expand('data/sift/{gene}.fa', gene=config['genes'].keys()),
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys()),
+        expand('data/studies/{study}/{study}.tsv', study=STUDIES.keys()),
+        expand('data/sift/{gene}.fa', gene=GENES.keys()),
+        expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys()),
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
         'meta/overall_summary',
@@ -58,7 +69,7 @@ rule all:
 # TODO more specific cleaning of sift dir
 rule clean:
     run:
-        output_files = [f'data/studies/{s}/{s}.tsv' for s in config['studies']]
+        output_files = [f'data/studies/{s}/{s}.tsv' for s in STUDIES.keys()]
         output_files.append('-r figures/0_data_properties/*')
         output_files.append('data/sift/*')
         output_files.append('meta/study_summary.tsv')
@@ -70,18 +81,18 @@ rule clean:
 
 rule all_standardisation:
     input:
-        expand('data/studies/{study}/{study}.tsv', study=config['studies'])
+        expand('data/studies/{study}/{study}.tsv', study=STUDIES.keys())
 
 rule all_sift:
     input:
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys())
+        expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())
 
 #### Validate Data ####
 # Validate Melnikov et al. 2014 (APH(3')-II)
 rule validate_melnikov:
     input:
         [f'data/studies/melnikov_2014_aph3ii/raw/{x}' for
-         x in config['input_files']['melnikov_2014_aph3ii']]
+         x in STUDIES['melnikov_2014_aph3ii']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
@@ -96,7 +107,7 @@ rule validate_melnikov:
 rule validate_kitzman:
     input:
         [f'data/studies/kitzman_2015_gal4/raw/{x}' for
-         x in config['input_files']['kitzman_2015_gal4']]
+         x in STUDIES['kitzman_2015_gal4']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
@@ -108,7 +119,7 @@ rule validate_kitzman:
 rule validate_giacomelli:
     input:
         [f'data/studies/giacomelli_2018_tp53/raw/{x}' for
-         x in config['input_files']['giacomelli_2018_tp53']]
+         x in STUDIES['giacomelli_2018_tp53']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
@@ -122,9 +133,9 @@ rule validate_giacomelli:
 rule validate_heredia:
     input:
         [f'data/studies/heredia_2018_ccr5/raw/{x}' for
-         x in config['input_files']['heredia_2018_ccr5']] +
+         x in STUDIES['heredia_2018_ccr5']['input_files']] +
         [f'data/studies/heredia_2018_cxcr4/raw/{x}' for
-         x in config['input_files']['heredia_2018_cxcr4']]
+         x in STUDIES['heredia_2018_cxcr4']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
@@ -139,7 +150,7 @@ rule validate_heredia:
 rule validate_sarkisyan:
     input:
         [f'data/studies/sarkisyan_2016_gfp/raw/{x}' for
-         x in config['input_files']['sarkisyan_2016_gfp']]
+         x in STUDIES['sarkisyan_2016_gfp']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
@@ -151,7 +162,7 @@ rule validate_sarkisyan:
 rule validate_dorrity:
     input:
         [f'data/studies/dorrity_2018_ste12/raw/{x}' for
-         x in config['input_files']['dorrity_2018_ste12']]
+         x in STUDIES['dorrity_2018_ste12']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
@@ -164,7 +175,7 @@ rule validate_dorrity:
 rule validate_araya:
     input:
         [f'data/studies/araya_2012_yap1/raw/{x}' for
-         x in config['input_files']['araya_2012_yap1']]
+         x in STUDIES['araya_2012_yap1']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
@@ -176,7 +187,7 @@ rule validate_araya:
 rule validate_starita:
     input:
         [f'data/studies/starita_2013_ube4b/raw/{x}' for
-         x in config['input_files']['starita_2013_ube4b']]
+         x in STUDIES['starita_2013_ube4b']['input_files']]
 
     output:
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
@@ -187,10 +198,8 @@ rule validate_starita:
 # Check correlation with SIFT
 rule sift_correlation:
     input:
-        expand('data/studies/{study}/{study}.tsv', study=config['studies']),
-        expand('data/studies/{study}/{study}.yaml', study=config['studies']),
-        expand('data/sift/{gene}.SIFTprediction', gene=config['genes'].keys()),
-        expand('data/sift/{gene}.fa', gene=config['genes'].keys())
+        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv')),
+        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction'))
 
     output:
         'figures/0_data_properties/sift_score_correlation.pdf',
@@ -224,7 +233,7 @@ rule data_summary_plots:
     input:
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
-        expand('data/studies/{study}/{study}.{ext}', study=config['studies'], ext=['yaml', 'tsv'])
+        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
 
     output:
         'figures/0_data_properties/study_variants_summary.pdf',
@@ -240,7 +249,7 @@ rule standardise_study:
     input:
         "data/studies/{study}/standardise_{study}.R",
         lambda wildcards: [f'data/studies/{wildcards.study}/raw/{x}' for x in
-                           config['input_files'][wildcards.study]]
+                           STUDIES[wildcards.study]['input_files']]
 
     output:
         "data/studies/{study}/{study}.tsv",
@@ -256,7 +265,7 @@ rule standardise_study:
 
 rule summarise_studies:
     input:
-        expand('data/studies/{study}/{study}.{ext}', study=config['studies'], ext=['yaml', 'tsv'])
+        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
 
     output:
         study='meta/study_summary.tsv',
@@ -266,13 +275,13 @@ rule summarise_studies:
     shell:
         "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
 
-#### Make Tool Predictions ####
+#### SIFT4G Predictions ####
 rule make_gene_fasta:
     # seq really shouldn't change much even when .yaml's do -> sift results wont either
     # force re-run if neccessary by deleting relevant .fa
     input:
         lambda wildcards: [ancient(f'data/studies/{i}/{i}.yaml') for i
-                           in config['genes'][wildcards.gene]]
+                           in GENES[wildcards.gene]]
 
     output:
         "data/sift/{gene}.fa"
@@ -310,7 +319,82 @@ rule sift4g:
     shell:
         "sift4g -q {input.fa} -d {input.db} --out data/sift 2> {log}"
 
-# Make all FoldX for study genes
-# TODO
+#### FoldX5 Predictions ####
+def get_foldx_split_n(gene):
+    """
+    Calculate how many parralel FoldX runs are needed
+    """
+    seqs = [conf['seq'] for conf in GENES[gene]]
 
-# Plots
+    if not all([x == seqs[0] for x in seqs[1:]]):
+        raise ValueError(f'Sequences for studies of {gene} are not identical')
+
+	return math.ceil(len(seqs[0]) * 19 / config['foldx']['variants_per_run'])
+
+# TODO how to split and combine
+rule foldx_variants:
+    input:
+        lambda wildcards: [ancient(f'data/studies/{i}/{i}.yaml') for i
+                           in GENES[wildcards.gene]]
+
+    output:
+        "data/foldx/{gene}/individual_list"
+
+    run:
+        raise NotImplementedError('Add method for FoldX subs!')
+
+rule foldx_split:
+    input:
+        "data/foldx/{gene}/individual_list"
+
+    output:
+		expand('data/foldx/{gene}/{n}', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene)))
+
+    run:
+        raise NotImplementedError('Add method for FoldX splitting!')
+
+rule foldx_repair:
+    input:
+        pdb="data/foldx/{gene}/{gene}.pdb"
+
+    output:
+        "data/foldx/{gene}/{gene}_Repair.pdb",
+        "data/foldx/{gene}/{gene}_Repair.fxout"
+
+    shell:
+        "foldx --command=RepairPDB --pdb={input.pdb}"
+
+rule foldx_model:
+    input:
+        pdb="data/foldx/{gene}/{gene}_Repair.pdb"
+        muts="data/foldx/{gene}/individual_list_{n}"
+
+    output:
+        temp("data/foldx/{gene}/Average_{gene}_{n}_BM.fxout"),
+        temp("data/foldx/{gene}/Dif_{gene}_{n}_BM.fxout"),
+        temp("data/foldx/{gene}/Raw_{gene}_{n}_BM.fxout"),
+        temp("data/foldx/{gene}/PdbList_{gene}_{n}_BM.fxout")
+
+    shell:
+        'FoldX --command=BuildModel --pdb={input.pdb} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}"'
+
+rule foldx_combine:
+    input:
+        expand('data/foldx/{gene}/Average_{gene}_{n}_BM.fxout', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene))),
+		expand('data/foldx/{gene}/Dif_{gene}_{n}_BM.fxout', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene))),
+		expand('data/foldx/{gene}/Raw_{gene}_{n}_BM.fxout', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene))),
+		expand('data/foldx/{gene}/Pdblist_{gene}_{n}_BM.fxout', gene=wildcards.gene,
+			   n=range(get_foldx_split_n(wildcards.gene)))
+
+    output:
+        "data/foldx/{gene}/average_{gene}.fxout",
+        "data/foldx/{gene}/dif_{gene}.fxout",
+        "data/foldx/{gene}/raw_{gene}.fxout",
+        "data/foldx/{gene}/pdblist_{gene}.fxout"
+
+    run:
+        raise NotImplementedError('Add method for FoldX combining!')
