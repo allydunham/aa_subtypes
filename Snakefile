@@ -30,6 +30,10 @@ GENES = defaultdict(list)
 for study, conf in STUDIES.items():
     GENES[sutil.gene_to_filename(conf['gene'])].append(study)
 
+# TODO Better logging
+# TODO Better all rules
+# TODO Split Snakefile up
+
 # Explicitly note all the output here
 # even though some would necessarily cause other bits to generate
 rule all:
@@ -85,6 +89,8 @@ rule clean:
         output_files.append('meta/study_summary.tsv')
         output_files.append('meta/gene_summary.tsv')
         output_files.append('meta/overall_summary')
+        output_files.append([f"data/foldx/{g}/{g}_Repair.pdb" for g in GENES.keys()])
+        output_files.extend([f"data/foldx/{g}/*.fxout" for g in GENES.keys()])
 
         for i in output_files:
             shell(f'rm {i} && echo "rm {i}" || true')
@@ -400,7 +406,7 @@ rule foldx_model:
         "data/foldx/{gene}/processing/PdbList_{gene}_{n}_BM.fxout"
 
     log:
-        "logs/foldx_model/{gene}.log"
+        "logs/foldx_model/{gene}_{n}.log"
 
     shell:
         'FoldX --command=BuildModel --pdb={wildcards.gene}_Repair.pdb --pdb-dir=data/foldx/{wildcards.gene} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false &> {log}'
