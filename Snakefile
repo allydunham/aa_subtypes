@@ -382,8 +382,11 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.pdb",
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
+    log:
+        "logs/foldx_repair/{gene}.log"
+
     shell:
-        "foldx --command=RepairPDB --pdb={input.pdb} --clean-mode=3"
+        "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/foldx/{wildcards.gene} --clean-mode=3 &> {log}"
 
 rule foldx_model:
     input:
@@ -396,8 +399,11 @@ rule foldx_model:
         "data/foldx/{gene}/processing/Raw_{gene}_{n}_BM.fxout",
         "data/foldx/{gene}/processing/PdbList_{gene}_{n}_BM.fxout"
 
+    log:
+        "logs/foldx_model/{gene}.log"
+
     shell:
-        'FoldX --command=BuildModel --pdb={input.pdb} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false'
+        'FoldX --command=BuildModel --pdb={wildcards.gene}_Repair.pdb --pdb-dir=data/foldx/{wildcards.gene} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false &> {log}'
 
 def get_foldx_split_files(wildcards):
     """
