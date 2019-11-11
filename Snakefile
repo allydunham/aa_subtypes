@@ -6,6 +6,8 @@ import os
 import math
 from collections import defaultdict
 from Bio import SeqIO
+from Bio.PDB import PDBParser
+from Bio.SeqUtils import seq1
 from ruamel.yaml import YAML
 import subtypes_utils as sutil
 
@@ -14,6 +16,8 @@ localrules: all, clean, all_standardisation, all_sift, make_gene_fasta,
     foldx_variants, foldx_split, foldx_combine
 
 yaml = YAML(typ='safe')
+
+AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
 # Hash of study IDs to their config
 STUDIES = {}
@@ -24,7 +28,7 @@ for study in os.listdir('data/studies'):
 # Hash linking genes to studies
 GENES = defaultdict(list)
 for study, conf in STUDIES.items():
-    GENES[conf['gene']].append(study)
+    GENES[sutil.gene_to_filename(conf['gene'])].append(study)
 
 # Explicitly note all the output here
 # even though some would necessarily cause other bits to generate
@@ -33,6 +37,12 @@ rule all:
         expand('data/studies/{study}/{study}.tsv', study=STUDIES.keys()),
         expand('data/sift/{gene}.fa', gene=GENES.keys()),
         expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys()),
+        expand("data/foldx/{gene}/{gene}_Repair.pdb", gene=GENES.keys()),
+        expand("data/foldx/{gene}/individual_list", gene=GENES.keys()),
+        expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/pdblist_{gene}.fxout", gene=GENES.keys()),
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
         'meta/overall_summary',
@@ -86,6 +96,13 @@ rule all_standardisation:
 rule all_sift:
     input:
         expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())
+
+rule all_foldx:
+    input:
+        expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/pdblist_{gene}.fxout", gene=GENES.keys())
 
 #### Validate Data ####
 # Validate Melnikov et al. 2014 (APH(3')-II)
@@ -320,39 +337,42 @@ rule sift4g:
         "sift4g -q {input.fa} -d {input.db} --out data/sift 2> {log}"
 
 #### FoldX5 Predictions ####
-def get_foldx_split_n(gene):
-    """
-    Calculate how many parralel FoldX runs are needed
-    """
-    seqs = [STUDIES[study]['seq'] for study in GENES[gene]]
-
-    if not all([x == seqs[0] for x in seqs[1:]]):
-        raise ValueError(f'Sequences for studies of {gene} are not identical')
-
-	return math.ceil(len(seqs[0]) * 19 / config['foldx']['variants_per_run'])
-
-# TODO how to split and combine
 rule foldx_variants:
     input:
-        lambda wildcards: [ancient(f'data/studies/{i}/{i}.yaml') for i
-                           in GENES[wildcards.gene]]
+        pdb="data/foldx/{gene}/{gene}.pdb"
 
     output:
-        "data/foldx/{gene}/individual_list"
+        muts="data/foldx/{gene}/individual_list"
 
     run:
-        raise NotImplementedError('Add method for FoldX subs!')
+        parser = PDBParser()
+        structure = parser.get_structure(f'{wildcards.gene}', input.pdb)
+        chain = structure[0]['A']
 
-for gene in GENES.keys():
-	rule:
-		input:
-			f"data/foldx/{gene}/individual_list"
+        variants = []
+        for residue in chain:
+            position = residue.id[1]
+            aa = seq1(residue.get_resname())
+            variants.extend([f'{aa}A{position}{x}' for x in AA_ALPHABET if not x == aa])
 
-		output:
-			[f"data/foldx/{gene}/individual_list_{n}" for n in range(get_foldx_split_n(gene))]
+        with open(output.muts, 'w') as outfile:
+            print(*variants, sep=';\n', end=';\n', file=outfile)
 
-		run:
-			raise NotImplementedError('Add method for FoldX splitting!')
+checkpoint foldx_split:
+    input:
+        "data/foldx/{gene}/individual_list"
+
+    output:
+        directory("data/foldx/{gene}/processing")
+
+    params:
+        n_lines = config['foldx']['variants_per_run']
+
+    shell:
+        """
+        mkdir "data/foldx/{wildcards.gene}/processing"
+        split -l {params.n_lines} data/foldx/{wildcards.gene}/individual_list data/foldx/{wildcards.gene}/processing/individual_list_
+        """
 
 rule foldx_repair:
     input:
@@ -363,33 +383,40 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
     shell:
-        "foldx --command=RepairPDB --pdb={input.pdb}"
+        "foldx --command=RepairPDB --pdb={input.pdb} --clean-mode=3"
 
 rule foldx_model:
     input:
         pdb="data/foldx/{gene}/{gene}_Repair.pdb",
-        muts="data/foldx/{gene}/individual_list_{n}"
+        muts="data/foldx/{gene}/processing/individual_list_{n}"
 
     output:
-        temp("data/foldx/{gene}/Average_{gene}_{n}_BM.fxout"),
-        temp("data/foldx/{gene}/Dif_{gene}_{n}_BM.fxout"),
-        temp("data/foldx/{gene}/Raw_{gene}_{n}_BM.fxout"),
-        temp("data/foldx/{gene}/PdbList_{gene}_{n}_BM.fxout")
+        "data/foldx/{gene}/processing/Average_{gene}_{n}_BM.fxout",
+        "data/foldx/{gene}/processing/Dif_{gene}_{n}_BM.fxout",
+        "data/foldx/{gene}/processing/Raw_{gene}_{n}_BM.fxout",
+        "data/foldx/{gene}/processing/PdbList_{gene}_{n}_BM.fxout"
 
     shell:
-        'FoldX --command=BuildModel --pdb={input.pdb} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}"'
+        'FoldX --command=BuildModel --pdb={input.pdb} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false'
+
+def get_foldx_split_files(wildcards):
+    """
+    Retrieve the split FoldX jobs
+    """
+    checkpoint_outdir = checkpoints.foldx_split.get(gene=wildcards.gene).output[0]
+    return expand('data/foldx/{wildcards.gene}/processing/{fi}_{gene}_{n}_BM.fxout',
+                   n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}").n),
+                   fi=('Average', 'Dif', 'Raw', 'PdbList'))
 
 rule foldx_combine:
     input:
-        expand('data/foldx/{gene}/{fi}_{gene}_{n}_BM.fxout', gene=wildcards.gene,
-			   n=range(get_foldx_split_n(wildcards.gene)),
-			   fi=('Average', 'Dif', 'Raw', 'PdbList'))
+        get_foldx_split_files
 
     output:
-        "data/foldx/{gene}/average_{gene}.fxout",
-        "data/foldx/{gene}/dif_{gene}.fxout",
-        "data/foldx/{gene}/raw_{gene}.fxout",
-        "data/foldx/{gene}/pdblist_{gene}.fxout"
+        touch("data/foldx/{gene}/average_{gene}.fxout"),
+        touch("data/foldx/{gene}/dif_{gene}.fxout"),
+        touch("data/foldx/{gene}/raw_{gene}.fxout"),
+        touch("data/foldx/{gene}/pdblist_{gene}.fxout")
 
     run:
-        raise NotImplementedError('Add method for FoldX combining!')
+        print('Add method for FoldX combining!')
