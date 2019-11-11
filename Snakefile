@@ -405,7 +405,7 @@ def get_foldx_split_files(wildcards):
     """
     checkpoint_outdir = checkpoints.foldx_split.get(gene=wildcards.gene).output[0]
     return expand('data/foldx/{wildcards.gene}/processing/{fi}_{gene}_{n}_BM.fxout',
-                   n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}").n),
+                   n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}")).n,
                    fi=('Average', 'Dif', 'Raw', 'PdbList'))
 
 rule foldx_combine:
