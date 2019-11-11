@@ -388,6 +388,9 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.pdb",
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
+    resources:
+        mem_mb = 4000
+
     log:
         "logs/foldx_repair/{gene}.log"
 
@@ -404,6 +407,9 @@ rule foldx_model:
         "data/foldx/{gene}/processing/Dif_{gene}_{n}_BM.fxout",
         "data/foldx/{gene}/processing/Raw_{gene}_{n}_BM.fxout",
         "data/foldx/{gene}/processing/PdbList_{gene}_{n}_BM.fxout"
+
+    resources:
+        mem_mb = 4000
 
     log:
         "logs/foldx_model/{gene}_{n}.log"
