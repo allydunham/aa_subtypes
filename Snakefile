@@ -392,7 +392,7 @@ rule foldx_repair:
         "logs/foldx_repair/{gene}.log"
 
     shell:
-        "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/foldx/{wildcards.gene} --clean-mode=3 &> {log}"
+        "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/foldx/{wildcards.gene} --clean-mode=3 --output-dir=data/foldx/{wildcards.gene} &> {log}"
 
 rule foldx_model:
     input:
