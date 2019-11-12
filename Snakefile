@@ -403,10 +403,10 @@ rule foldx_model:
         muts="data/foldx/{gene}/processing/individual_list_{n}"
 
     output:
-        "data/foldx/{gene}/processing/Average_{gene}_{n}_BM.fxout",
-        "data/foldx/{gene}/processing/Dif_{gene}_{n}_BM.fxout",
-        "data/foldx/{gene}/processing/Raw_{gene}_{n}_BM.fxout",
-        "data/foldx/{gene}/processing/PdbList_{gene}_{n}_BM.fxout"
+        "data/foldx/{gene}/processing/Average_{n}_{gene}_BM.fxout",
+        "data/foldx/{gene}/processing/Dif_{n}_{gene}_BM.fxout",
+        "data/foldx/{gene}/processing/Raw_{n}_{gene}_BM.fxout",
+        "data/foldx/{gene}/processing/PdbList_{n}_{gene}_BM.fxout"
 
     resources:
         mem_mb = 4000
@@ -415,14 +415,14 @@ rule foldx_model:
         "logs/foldx_model/{gene}_{n}.log"
 
     shell:
-        'foldx --command=BuildModel --pdb={wildcards.gene}_Repair.pdb --pdb-dir=data/foldx/{wildcards.gene} --mutant-file={input.muts} --output-file="{wildcards.gene}_{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false &> {log}'
+        'foldx --command=BuildModel --pdb={wildcards.gene}_Repair.pdb --pdb-dir=data/foldx/{wildcards.gene} --mutant-file={input.muts} --output-file="{wildcards.n}" --output-dir=data/foldx/{wildcards.gene}/processing --numberOfRuns=3 --clean-mode=3 --out-pdb=false &> {log}'
 
 def get_foldx_split_files(wildcards):
     """
     Retrieve the split FoldX jobs
     """
     checkpoint_outdir = checkpoints.foldx_split.get(gene=wildcards.gene).output[0]
-    return expand('data/foldx/{gene}/processing/{fi}_{gene}_{n}_BM.fxout',
+    return expand('data/foldx/{gene}/processing/{fi}_{n}_{gene}_BM.fxout',
                    gene=wildcards.gene,
                    n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}")).n,
                    fi=('Average', 'Dif', 'Raw', 'PdbList'))

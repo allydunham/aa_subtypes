@@ -1,5 +1,5 @@
 foldx:
-  variants_per_run: 570
+  variants_per_run: 300
 
 sift:
   uniref90_fa_path: '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
