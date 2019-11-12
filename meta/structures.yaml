@@ -1,0 +1,133 @@
+# Each structure is sourced from Swiss Model, based on the uniprot ID of the gene
+# Fields:
+# type: what kind of model it is
+# id: id of the model or PDB id
+# sections: data for each chain section to process
+#    chain: chain to process
+#    offset: offset to add to match PDB and Uniprot coords
+#    region (optional) - which part of the PDB is valid, inclusive
+adrb2:
+  type: 'model'
+  id: '6e67.2.A'
+  sections: [{chain: 'A', offset: 0}]
+amie:
+  type: 'x-ray'
+  id: '2uxy'
+  sections: [{chain: 'A', offset: 0}]
+aph3ii:
+  type: 'model'
+  id: '3r87.2.A'
+  sections: [{chain: 'A', offset: 0}]
+brca1:
+  type: 'x-raw'
+  id: '4igk'
+  sections: [{chain: 'A', offset: 1645}]
+calm1:
+  type: 'x-ray'
+  id: '3wfn'
+  sections: [{chain: 'A', offset: -6}]
+cbs:
+  type: 'x-ray'
+  id: '4l0d'
+  sections: [{chain: 'A', offset: 0, region: [41, 515]}]
+ccr5:
+  type: 'cryo-EM'
+  id: '6met'
+  sections: [{chain: 'C', offset: 0}]
+cp:
+  type: 'x-ray'
+  id: '4zor'
+  sections: [{chain: 'A', offset: 1}]
+cxcr4:
+  type: 'x-ray'
+  id: '3odu'
+  sections: [{chain: 'A', offset: -10}]
+dbr1:
+  type: 'model'
+  id: '4peg.1.A'
+  sections: [{chain: 'A', offset: 0}]
+gal4:
+  type: 'x-ray'
+  id: '3coq'
+  sections: [{chain: 'C', offset: 7}]
+ha:
+  type: 'x-ray'
+  id: '3hmg'
+  sections: [{chain: 'A', offset: 16, region: [1, 328]}, {chain: 'B', offset: -345, region: [1, 175]}]
+hsp90:
+  type: 'x-ray'
+  id: '2cg9'
+  sections: [{chain: 'A', offset: 0}]
+infa:
+  type: 'cryo-EM'
+  id: '1zo1'
+  sections: [{chain: 'C', offset: 1}]
+mapk1:
+  type: 'x-ray'
+  id: '3sa0'
+  sections: [{chain: 'A', offset: 0}]
+np:
+  type: 'model'
+  id: '2q06.2.A'
+  sections: [{chain: 'A', offset: 0}]
+pab1:
+  type: 'cryo-EM'
+  id: '6r5k'
+  sections: [{chain: 'B', offset: -4}]
+proteing:
+  type: 'model'
+  id: '1pgx.1.A'
+  sections: [{chain: 'A', offset: 0}]
+pten:
+  type: 'x-ray'
+  id: '1d5r'
+  sections: [{chain: 'A', offset: 6, region: [8, 260]}, {chain: 'A', offset: 29, region: [281, 322]}]
+ras:
+  type: 'x-ray'
+  id: '6q21'
+  sections: [{chain: 'A', offset: 0}]
+src:
+  type: 'x-ray'
+  id: '1fmk'
+  sections: [{chain: 'A', offset: 84}]
+ste12:
+  type: 'model'
+  id: '6dmp.1.A'
+  sections: [{chain: 'A', offset: 0}]
+sumo1:
+  type: 'Solution NMR'
+  id: '2n1a'
+  sections: [{chain: 'A', offset: -2, region: [3, 103]}]
+tem1:
+  type: 'x-ray'
+  id: '1m40'
+  sections: [{chain: 'A', offset: 23}]
+tpk1:
+  type: 'model'
+  id: '2f17.1.A'
+  sections: [{chain: 'A', offset: 0}]
+tp53:
+  type: 'x-ray'
+  id: '3q05'
+  sections: [{chain: 'A', offset: 93, region: [1, 198]}, {chain: 'A', offset: 122, region: [200, 234]}]
+tpmt:
+  type: 'x-ray'
+  id: '2bzg'
+  sections: [{chain: 'A', offset: 13}]
+ube2i:
+  type: 'x-ray'
+  id: '2pe6'
+  sections: [{chain: 'A', offset: -3}]
+ube4b:
+  type: 'model'
+  id: '3m62.1.A'
+  sections: [{chain: 'A', offset: 0}]
+ubi:
+  type: 'model'
+  id: '5b83.1.A'
+  sections: [{chain: 'A', offset: 0}]
+yap1:
+  type: 'model'
+  id: '6jk1.1.A'
+  sections: [{chain: 'A', offset: 0}]
+
