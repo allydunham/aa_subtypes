@@ -369,7 +369,7 @@ checkpoint foldx_split:
         "data/foldx/{gene}/individual_list"
 
     output:
-        directory("data/foldx/{gene}/processing")
+        temp(directory("data/foldx/{gene}/processing"))
 
     params:
         n_lines = config['foldx']['variants_per_run']
@@ -403,10 +403,10 @@ rule foldx_model:
         muts="data/foldx/{gene}/processing/individual_list_{n}"
 
     output:
-        "data/foldx/{gene}/processing/Average_{n}_{gene}_Repair.fxout",
-        "data/foldx/{gene}/processing/Dif_{n}_{gene}_Repair.fxout",
-        "data/foldx/{gene}/processing/Raw_{n}_{gene}_Repair.fxout",
-        "data/foldx/{gene}/processing/PdbList_{n}_{gene}_Repair.fxout"
+        temp("data/foldx/{gene}/processing/Average_{n}_{gene}_Repair.fxout"),
+        temp("data/foldx/{gene}/processing/Dif_{n}_{gene}_Repair.fxout"),
+        temp("data/foldx/{gene}/processing/Raw_{n}_{gene}_Repair.fxout"),
+        temp("data/foldx/{gene}/processing/PdbList_{n}_{gene}_Repair.fxout")
 
     resources:
         mem_mb = 4000
