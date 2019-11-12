@@ -17,7 +17,6 @@ def main(args):
         frame = pd.read_csv(df_path, sep='\t', skiprows=8)
         frame = frame.rename(lambda x: x.lower().replace(' ', '_'), axis='columns')
 
-
         with open(variant_path, 'r') as variant_file:
             variants = [x.rstrip(';\n') for x in variant_file.readlines()]
 
