@@ -359,6 +359,9 @@ rule foldx_variants:
         for section in STRUCTURES[wildcards.gene]['sections']:
             filter_region = 'region' in section
             for residue in structure[0][section['chain']]:
+                if not residue.id[0] == ' ':
+                    continue # Filter HETATMs
+
                 position = int(residue.id[1])
                 aa = seq1(residue.get_resname())
 
@@ -398,7 +401,7 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
     resources:
-        mem_mb = 4000
+        mem_mb = lambda w: 20000 if w.gene == 'cp' else 4000
 
     log:
         "logs/foldx_repair/{gene}.log"
@@ -418,7 +421,7 @@ rule foldx_model:
         temp("data/foldx/{gene}/processing/PdbList_{n}_{gene}_Repair.fxout")
 
     resources:
-        mem_mb = 4000
+        mem_mb = lambda w: 20000 if w.gene == 'cp' else 4000
 
     log:
         "logs/foldx_model/{gene}_{n}.log"
