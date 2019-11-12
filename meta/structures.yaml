@@ -130,4 +130,7 @@ yap1:
   type: 'model'
   id: '6jk1.1.A'
   sections: [{chain: 'A', offset: 0}]
-
+braf:
+  type: 'x-ray'
+  id: '4e26'
+  sections: [{chain: 'A', offset: 419, region: [29, 304]}]
