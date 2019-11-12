@@ -138,3 +138,7 @@ gfp:
   type: 'x-ray'
   id: '5dtx'
   sections: [{chain: 'A', offset: -10}]
+tdp43:
+  type: 'x-ray'
+  id: '5mdi'
+  sections: [{chain: 'A', offset: 95, region: [7, 174]}]
