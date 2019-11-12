@@ -30,6 +30,9 @@ GENES = defaultdict(list)
 for study, conf in STUDIES.items():
     GENES[sutil.gene_to_filename(conf['gene'])].append(study)
 
+with open('meta/structures.yaml', 'r') as yaml_file:
+    STRUCTURES = yaml.load(yaml_file)
+
 # TODO Better logging
 # TODO Better all rules
 # TODO Split Snakefile up
@@ -351,13 +354,21 @@ rule foldx_variants:
     run:
         parser = PDBParser()
         structure = parser.get_structure(f'{wildcards.gene}', input.pdb)
-        chain = structure[0]['A']
 
         variants = []
-        for residue in chain:
-            position = residue.id[1]
-            aa = seq1(residue.get_resname())
-            variants.extend([f'{aa}A{position}{x}' for x in AA_ALPHABET if not x == aa])
+        for section in STRUCTURES[wildcards.gene]['sections']:
+            filter_region = 'region' in section
+            for residue in structure[0][section['chain']]:
+                position = int(residue.id[1])
+                aa = seq1(residue.get_resname())
+
+                if (filter_region and
+                    (position > section['region'][1] or
+                     position < section['region'][0])):
+                    continue
+
+                variants.extend([f"{aa}{section['chain']}{position}{x}" for
+                                 x in AA_ALPHABET if not x == aa])
 
         with open(output.muts, 'w') as outfile:
             print(*variants, sep=';\n', end=';\n', file=outfile)
