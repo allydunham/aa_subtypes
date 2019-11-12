@@ -422,10 +422,13 @@ def get_foldx_split_files(wildcards):
     Retrieve the split FoldX jobs
     """
     checkpoint_outdir = checkpoints.foldx_split.get(gene=wildcards.gene).output[0]
-    return expand('data/foldx/{gene}/processing/{fi}_{n}_{gene}_Repair.fxout',
-                   gene=wildcards.gene,
-                   n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}")).n,
-                   fi=('Average', 'Dif', 'Raw', 'PdbList'))
+    return [expand('data/foldx/{gene}/processing/{fi}_{n}_{gene}_Repair.fxout',
+                    gene=wildcards.gene,
+                    n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}")).n,
+                    fi=('Average', 'Dif', 'Raw')),
+            expand('data/foldx/{gene}/processing/individual_list_{n}',
+                    gene=wildcards.gene,
+                    n=glob_wildcards(os.path.join(checkpoint_outdir, "individual_list_{n}")).n)]
 
 rule foldx_combine:
     input:
