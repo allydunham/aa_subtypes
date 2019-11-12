@@ -13,7 +13,7 @@ import subtypes_utils as sutil
 
 configfile: 'snakemake.yaml'
 localrules: all, clean, all_standardisation, all_sift, make_gene_fasta,
-    foldx_variants, foldx_split, foldx_combine
+    foldx_variants, foldx_split
 
 yaml = YAML(typ='safe')
 
