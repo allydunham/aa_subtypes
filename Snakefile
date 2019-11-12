@@ -432,10 +432,15 @@ rule foldx_combine:
         get_foldx_split_files
 
     output:
-        touch("data/foldx/{gene}/average_{gene}.fxout"),
-        touch("data/foldx/{gene}/dif_{gene}.fxout"),
-        touch("data/foldx/{gene}/raw_{gene}.fxout"),
-        touch("data/foldx/{gene}/pdblist_{gene}.fxout")
+        "data/foldx/{gene}/average_{gene}.fxout",
+        "data/foldx/{gene}/dif_{gene}.fxout",
+        "data/foldx/{gene}/raw_{gene}.fxout"
 
-    run:
-        print('Add method for FoldX combining!')
+    shell:
+        """
+        python bin/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Average_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* > data/foldx/{wildcards.gene}/average_{wildcards.gene}.fxout
+
+        python bin/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Dif_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* > data/foldx/{wildcards.gene}/dif_{wildcards.gene}.fxout
+
+        python bin/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Raw_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* > data/foldx/{wildcards.gene}/Raw_{wildcards.gene}.fxout
+        """
