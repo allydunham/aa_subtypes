@@ -46,7 +46,6 @@ rule all:
         expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
         expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
         expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys()),
-        expand("data/foldx/{gene}/pdblist_{gene}.fxout", gene=GENES.keys()),
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
         'meta/overall_summary',
@@ -107,8 +106,7 @@ rule all_foldx:
     input:
         expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
         expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
-        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys()),
-        expand("data/foldx/{gene}/pdblist_{gene}.fxout", gene=GENES.keys())
+        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys())
 
 #### Validate Data ####
 # Validate Melnikov et al. 2014 (APH(3')-II)
