@@ -69,6 +69,7 @@ def main(args):
         elif not meta['qc']['filter']:
             gene_data[gene] = {'df': variants[['position', 'wt', 'mut', 'class']],
                                'studies': 1, 'length': len(meta['seq']),
+                               'uniprot_id': meta['uniprot_id'],
                                'function': meta['gene_type'],
                                'species': meta['species']}
 
@@ -85,6 +86,7 @@ def main(args):
         coverage = round(data['df'][data['df']['class'] == 'Missense'].shape[0]/(positions*19), 3)
 
         gene_df['Gene'].append(gene)
+        gene_df['Uniprot ID'].append(data['uniprot_id'])
         gene_df['Function'].append(data['function'])
         gene_df['Species'].append(data['species'])
         gene_df['Studies'].append(data['studies'])
