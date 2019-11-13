@@ -346,7 +346,8 @@ rule sift4g:
 #### FoldX5 Predictions ####
 rule foldx_variants:
     input:
-        pdb="data/foldx/{gene}/{gene}.pdb"
+        pdb="data/foldx/{gene}/{gene}.pdb",
+        structures=ancient("meta/structures.yaml") # Imported generally
 
     output:
         muts="data/foldx/{gene}/individual_list"
@@ -401,7 +402,7 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
     resources:
-        mem_mb = lambda w: 20000 if w.gene == 'cp' else 4000
+        mem_mb = 4000
 
     log:
         "logs/foldx_repair/{gene}.log"
@@ -421,7 +422,7 @@ rule foldx_model:
         temp("data/foldx/{gene}/processing/PdbList_{n}_{gene}_Repair.fxout")
 
     resources:
-        mem_mb = lambda w: 20000 if w.gene == 'cp' else 4000
+        mem_mb = 4000
 
     log:
         "logs/foldx_model/{gene}_{n}.log"

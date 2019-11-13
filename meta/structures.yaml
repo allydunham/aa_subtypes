@@ -36,7 +36,7 @@ ccr5:
   sections: [{chain: 'C', offset: 0}]
 cp:
   type: 'x-ray'
-  id: '4zor'
+  id: '1msc'
   sections: [{chain: 'A', offset: 1}]
 cxcr4:
   type: 'x-ray'
