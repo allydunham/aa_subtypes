@@ -116,8 +116,8 @@ tpmt:
   sections: [{chain: 'A', offset: 13}]
 ube2i:
   type: 'x-ray'
-  id: '1u9a'
-  sections: [{chain: 'A', offset: -2}]
+  id: '2pe6'
+  sections: [{chain: 'A', offset: -3}]
 ube4b:
   type: 'model'
   id: '3m62.1.A'
