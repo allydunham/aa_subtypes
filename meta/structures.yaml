@@ -29,7 +29,7 @@ calm1:
 cbs:
   type: 'x-ray'
   id: '4l0d'
-  sections: [{chain: 'A', offset: 0, region: [41, 515]}]
+  sections: [{chain: 'B', offset: 0, region: [41, 515]}]
 ccr5:
   type: 'cryo-EM'
   id: '6met'
