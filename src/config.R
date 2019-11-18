@@ -16,7 +16,7 @@ library(yaml)
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)
-#library(plotlistr)
+library(plotlistr)
 
 # Source custom functions
 source('src/subtypes_utils.R')
