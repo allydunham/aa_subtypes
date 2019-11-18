@@ -168,4 +168,4 @@ rule combine_dms_data:
         'data/combined_mutational_scans.tsv'
 
     shell:
-        f"Rscript bin/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in STUDIES.keys()])}"
+        f"Rscript bin/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s,v in STUDIES.items() if not v['qc']['filter']])}"
