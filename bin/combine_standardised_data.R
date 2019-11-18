@@ -7,7 +7,10 @@ source('src/study_standardising.R')
 study_dirs <- commandArgs(trailingOnly = TRUE)
 
 dms <- sapply(study_dirs, import_study, fields = c('gene'), simplify = FALSE) %>%
-  bind_rows()
+  bind_rows() %>%
+  group_by(study, gene, position, wt) %>%
+  filter(sum(!mut == wt) >= 15) %>% # Only keep positions with a maximum of 4 missing scores
+  ungroup()
 
 # Import Sift results
 sift <- sapply(unique(dms$gene), import_sift, simplify = FALSE) %>%
@@ -17,8 +20,18 @@ sift <- sapply(unique(dms$gene), import_sift, simplify = FALSE) %>%
 foldx <- sapply(unique(dms$gene), import_foldx, simplify = FALSE) %>%
   bind_rows(.id = 'gene')
 
+# Filter incomplete positions and impute
+imputed_dms <- select(dms, -transformed_score, -raw_score) %>%
+  pivot_wider(id_cols = c(study, position, wt, mut), names_from = mut, values_from = score) %>%
+  pivot_longer(c(-study, -position, -wt), names_to = 'mut', values_to = 'score') %>%
+  group_by(wt, mut) %>%
+  mutate(score = ifelse(is.na(score), ifelse(wt == mut, 0, median(score, na.rm = TRUE)), score)) %>%
+  ungroup()
+
 # Combine data
-dms <- left_join(dms, sift, by = c('gene', 'position', 'wt', 'mut')) %>%
+dms <- rename(imputed_dms, imputed_score=score) %>%
+  left_join(dms, by = c('study', 'position', 'wt', 'mut')) %>%
+  left_join(sift, by = c('gene', 'position', 'wt', 'mut')) %>%
   left_join(foldx, by = c('gene', 'position', 'wt', 'mut'))
 
 # Write combined data
