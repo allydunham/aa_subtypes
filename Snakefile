@@ -461,3 +461,16 @@ rule foldx_combine:
 
         python bin/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Raw_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* --type=raw > data/foldx/{wildcards.gene}/raw_{wildcards.gene}.fxout
         """
+
+#### Combine data ####
+rule combine_dms_data:
+    input:
+        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
+        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTPrediction')),
+        expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys())
+
+    output:
+        'data/combined_mutational_scans.tsv'
+
+    shell:
+        f"Rscript bin/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in STUDIES.keys()])}"
