@@ -20,6 +20,30 @@ import_study <- function(d, fields = NULL){
   return(tbl)
 }
 
+# Import sift results
+# Expects sift results to be in sift_dir with both gene.fa and gene.SIFTPrediction available
+import_sift <- function(gene, sift_dir='data/sift'){
+  gene <- gene_to_filename(gene)
+  fa <- as.character(readAAStringSet(str_c(sift_dir, '/', gene, '.fa'), format = 'fasta')[[1]])
+  sift <- read_table(str_c(sift_dir, '/', gene, '.SIFTprediction'), skip = 5, comment = '//',
+                     col_names = c('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+                                   'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T',
+                                   'V', 'W', 'X', 'Y', 'Z', '*', '-'),
+                     col_types = cols(.default = col_double())) %>%
+    pivot_longer(everything(), names_to = 'mut', values_to = 'sift') %>%
+    mutate(position = rep(1:nchar(fa), each = 25),
+           wt = str_split(fa, '')[[1]][position],
+           log10_sift = log10(sift + 0.00005)) # SIFT goes to 4dp so 0.00005 is smaller than everything else
+  return(sift)
+}
+
+# Import FoldX results
+# Expects foldx results to be in {foldx_dir}/{gene} folders, each with the processed FoldX results (see foldx_combine.py)
+import_foldx <- function(gene, foldx_dir='data/foldx'){
+  gene <- gene_to_filename(gene)
+  read_tsv(str_c(foldx_dir, '/', gene, '/', 'average_', gene, '.fxout'))
+}
+
 ## general study data saving function
 # dm_data = tibble with columns position, wt, mut, score, transformed_score, raw_score, class
 # study_id = authour_year_gene style standard study id

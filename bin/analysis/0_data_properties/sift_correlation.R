@@ -6,22 +6,6 @@ source('src/study_standardising.R')
 sift_dir <- 'data/sift/'
 study_dirs <- dir('data/studies', full.names = TRUE)
 
-# Import sift results
-import_sift <- function(gene){
-  gene <- gene_to_filename(gene)
-  fa <- as.character(readAAStringSet(str_c(sift_dir, '/', gene, '.fa'), format = 'fasta')[[1]])
-  sift <- read_table(str_c(sift_dir, '/', gene, '.SIFTprediction'), skip = 5, comment = '//',
-                     col_names = c('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                                   'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T',
-                                   'V', 'W', 'X', 'Y', 'Z', '*', '-'),
-                     col_types = cols(.default = col_double())) %>%
-    pivot_longer(everything(), names_to = 'mut', values_to = 'sift') %>%
-    mutate(position = rep(1:nchar(fa), each = 25),
-           wt = str_split(fa, '')[[1]][position],
-           log10_sift = log10(sift + 0.00005)) # SIFT goes to 4dp so 0.00005 is smaller than everything else
-  return(sift)
-}
-
 dms <- lapply(study_dirs, import_study, fields = c('gene')) %>%
   bind_rows()
 
