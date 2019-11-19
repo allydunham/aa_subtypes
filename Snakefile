@@ -1,6 +1,12 @@
 """
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
+# General todo list for pipeline
+# TODO Better logging
+# TODO Better all rules
+# TODO rename 1_dimensionality_reduction?
+# TODO add automated download of some of the input data?
+
 import os
 import math
 from collections import defaultdict
@@ -35,13 +41,11 @@ with open('meta/structures.yaml', 'r') as yaml_file:
 
 AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
-# TODO Better logging
-# TODO Better all rules
-
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
 include: 'bin/pipeline/sift.smk'
 include: 'bin/pipeline/foldx.smk'
+include: 'bin/pipeline/analysis.smk'
 
 #### Global rules ####
 # TODO - group up plots into lists?
