@@ -46,7 +46,7 @@ import_foldx <- function(path, sections=NULL){
   
   # Adjust offset of each PDB section based on config
   if (!is.null(sections)){
-    fx <- mutate(fx, in_sec = FALSE)
+    fx <- mutate(fx, offset_position = -1)
     for (section in sections){
       if (is.null(section$region)){
         region <- c(0, Inf)
@@ -54,17 +54,14 @@ import_foldx <- function(path, sections=NULL){
         region <- section$region
       }
       
-      fx <- mutate(fx,
-                   in_sec = if_else(chain == section$chain & position >= region[1] & position <= region[2],
-                                    TRUE,
-                                    in_sec),
-                   position = if_else(chain == section$chain & position >= region[1] & position <= region[2],
-                                      position + section$offset,
-                                      position))
+      fx <- mutate(fx, offset_position = if_else(chain == section$chain & position >= region[1] & position <= region[2],
+                                                 position + section$offset,
+                                                 offset_position))
       
     }
-    fx <- filter(fx, in_sec) %>% # drop positions not in the identified sections (shouldn't drop anything other than when FoldX was run before sections finalised)
-      select(-in_sec)
+    fx <- filter(fx, offset_position > 0) %>% # drop positions not in the identified sections (shouldn't drop anything other than when FoldX was run before sections finalised)
+      mutate(position = offset_position) %>%
+      select(-offset_position)
   }
   return(fx)
 }

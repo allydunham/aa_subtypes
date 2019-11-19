@@ -27,8 +27,15 @@ import_fx_gene <- function(x){
 foldx <- sapply(unique(dms$gene), import_fx_gene, simplify = FALSE) %>%
   bind_rows(.id = 'gene')
 
+# Import backbone angles
+angles <- sapply(unique(dms$gene),
+                 function(gene){read_tsv(str_c('data/backbone_angles/', gene_to_filename(gene), '.tsv'), comment = '#')},
+                 simplify = FALSE) %>%
+  bind_rows(.id = 'gene') %>%
+  select(gene, wt=aa, position, phi, psi)
+
 # Filter incomplete positions and impute
-imputed_dms <- select(dms, -transformed_score, -raw_score) %>%
+imputed_dms <- select(dms, -transformed_score, -raw_score, -class) %>%
   pivot_wider(id_cols = c(study, gene, position, wt, mut), names_from = mut, values_from = score) %>%
   pivot_longer(c(-study, -position, -wt, -gene), names_to = 'mut', values_to = 'score') %>%
   group_by(wt, mut) %>%
@@ -40,6 +47,7 @@ dms <- rename(imputed_dms, imputed_score=score) %>%
   left_join(dms, by = c('study', 'position', 'wt', 'mut', 'gene')) %>%
   left_join(sift, by = c('gene', 'position', 'wt', 'mut')) %>%
   left_join(foldx, by = c('gene', 'position', 'wt', 'mut')) %>%
+  left_join(angles, by = c('gene', 'position', 'wt')) %>%
   mutate(class = get_variant_class(wt, mut)) %>%
   arrange(study, position, wt, mut)
 
