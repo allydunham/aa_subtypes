@@ -25,7 +25,7 @@ brca1:
 calm1:
   type: 'x-ray'
   id: '3wfn'
-  sections: [{chain: 'A', offset: -6}]
+  sections: [{chain: 'A', offset: -6, region: [7, 155]}]
 cbs:
   type: 'x-ray'
   id: '4l0d'

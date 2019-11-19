@@ -162,10 +162,26 @@ rule combine_dms_data:
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
         expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTPrediction')),
-        expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys())
+        expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
+        expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys())
 
     output:
         'data/combined_mutational_scans.tsv'
 
     shell:
         f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s,v in STUDIES.items() if not v['qc']['filter']])}"
+
+#### Misc Property calculations ####
+rule calculate_backbone_angles:
+    input:
+        pdb="data/foldx/{gene}/{gene}_Repair.pdb",
+        yaml="meta/structures.yaml"
+
+    output:
+        "data/backbone_angles/{gene}.tsv"
+
+    log:
+        "logs/calculate_backbone_angles/{gene}.log"
+
+    shell:
+        "python bin/data_processing/get_backbone_angles.py --yaml {input.yaml} {input.pdb} > {output} 2> {log}"
