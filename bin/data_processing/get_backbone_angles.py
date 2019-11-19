@@ -16,9 +16,10 @@ from Bio.SeqUtils import seq1
 from ruamel.yaml import YAML
 
 RAD_FACTOR = 180/pi
+HEADER = 'chain\tpdb_position\taa\tposition\tphi\tpsi'
 
 def write_backbone_angles(chain, region=None, offset=0,
-                          outfile=sys.stdout):
+                          outfile=sys.stdout, header=False):
     """
     Write Psi/Phi angles from a pdb file
     """
@@ -28,7 +29,9 @@ def write_backbone_angles(chain, region=None, offset=0,
     polypeptide_builder = PPBuilder()
     polypeptides = polypeptide_builder.build_peptides(chain)
 
-    print('chain', 'pdb_position', 'aa', 'position', 'phi', 'psi', sep='\t', file=outfile)
+    if header:
+        print(HEADER, file=outfile)
+
     for peptide in polypeptides:
         angles = peptide.get_phi_psi_list()
         for residue, (phi, psi) in zip(peptide, angles):
@@ -62,6 +65,7 @@ def main(args):
 
     if sections is None:
         print(f'# Backbone angles for {args.pdb}', file=sys.stdout)
+        print(HEADER, file=sys.stdout)
         for chain in structure[0]:
             write_backbone_angles(chain)
     else:
@@ -71,6 +75,7 @@ def main(args):
             print(f'# Chain={section["chain"]}, Offset={section["offset"]}, Region={region}',
                   file=sys.stdout)
 
+        print(HEADER, file=sys.stdout)
         for section in sections:
             region = section['region'] if 'region' in section else None
             write_backbone_angles(structure[0][section['chain']],
