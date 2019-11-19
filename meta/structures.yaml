@@ -41,7 +41,7 @@ cp:
 cxcr4:
   type: 'x-ray'
   id: '3odu'
-  sections: [{chain: 'A', offset: -10}]
+  sections: [{chain: 'A', offset: -10, region: [37, 239]}, {chain: 'A', offset: -174, region: [404, 493]}]
 dbr1:
   type: 'model'
   id: '4peg.1.A'
@@ -53,7 +53,7 @@ gal4:
 ha:
   type: 'x-ray'
   id: '3hmg'
-  sections: [{chain: 'A', offset: 16, region: [1, 328]}, {chain: 'B', offset: -345, region: [1, 175]}]
+  sections: [{chain: 'A', offset: 16, region: [1, 328]}, {chain: 'B', offset: 345, region: [1, 175]}]
 hsp90:
   type: 'x-ray'
   id: '2cg9'
@@ -137,8 +137,8 @@ braf:
 gfp:
   type: 'x-ray'
   id: '5dtx'
-  sections: [{chain: 'A', offset: -10}]
+  sections: [{chain: 'A', offset: -10, region: [11, 75]}]
 tdp43:
   type: 'x-ray'
   id: '5mdi'
-  sections: [{chain: 'A', offset: 95, region: [7, 174]}]
+  sections: [{chain: 'A', offset: -22, region: [23, 101]}]

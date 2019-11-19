@@ -4,6 +4,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
+# study_dirs <- dir('data/studies', full.names = TRUE) # For interactive use
 study_dirs <- commandArgs(trailingOnly = TRUE)
 
 dms <- sapply(study_dirs, import_study, fields = c('gene'), simplify = FALSE) %>%
@@ -17,7 +18,13 @@ sift <- sapply(unique(dms$gene), import_sift, simplify = FALSE) %>%
   bind_rows(.id = 'gene') 
 
 # Import FoldX results
-foldx <- sapply(unique(dms$gene), import_foldx, simplify = FALSE) %>%
+structure_config <- read_yaml('meta/structures.yaml')
+import_fx_gene <- function(x){
+  x <- gene_to_filename(x)
+  import_foldx(str_c('data/foldx/', x, '/', 'average_', x, '.fxout'),
+               structure_config[[x]]$sections)
+}
+foldx <- sapply(unique(dms$gene), import_fx_gene, simplify = FALSE) %>%
   bind_rows(.id = 'gene')
 
 # Filter incomplete positions and impute

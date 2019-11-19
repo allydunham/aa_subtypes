@@ -20,7 +20,7 @@ import_study <- function(d, fields = NULL){
   return(tbl)
 }
 
-# Import sift results
+# Import sift results from all variant SIFT output
 # Expects sift results to be in sift_dir with both gene.fa and gene.SIFTPrediction available
 import_sift <- function(gene, sift_dir='data/sift'){
   gene <- gene_to_filename(gene)
@@ -39,9 +39,34 @@ import_sift <- function(gene, sift_dir='data/sift'){
 
 # Import FoldX results
 # Expects foldx results to be in {foldx_dir}/{gene} folders, each with the processed FoldX results (see foldx_combine.py)
-import_foldx <- function(gene, foldx_dir='data/foldx'){
-  gene <- gene_to_filename(gene)
-  read_tsv(str_c(foldx_dir, '/', gene, '/', 'average_', gene, '.fxout'))
+# sections should be a list of lists defining regions of the PDB that have been mutated, with a chain, an offset relative to 
+# Uniprot sequence and optionally the region of the chain it applies to (see meta/structures.yaml for the expected structure)
+import_foldx <- function(path, sections=NULL){
+  fx <- read_tsv(path)
+  
+  # Adjust offset of each PDB section based on config
+  if (!is.null(sections)){
+    fx <- mutate(fx, in_sec = FALSE)
+    for (section in sections){
+      if (is.null(section$region)){
+        region <- c(0, Inf)
+      } else {
+        region <- section$region
+      }
+      
+      fx <- mutate(fx,
+                   in_sec = if_else(chain == section$chain & position >= region[1] & position <= region[2],
+                                    TRUE,
+                                    in_sec),
+                   position = if_else(chain == section$chain & position >= region[1] & position <= region[2],
+                                      position + section$offset,
+                                      position))
+      
+    }
+    fx <- filter(fx, in_sec) %>% # drop positions not in the identified sections (shouldn't drop anything other than when FoldX was run before sections finalised)
+      select(-in_sec)
+  }
+  return(fx)
 }
 
 ## general study data saving function
