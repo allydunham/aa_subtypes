@@ -23,13 +23,13 @@ def main(args):
         if args.type == 'average':
             frame = frame.drop('pdb', axis='columns')
             frame['variant'] = variants
-            col_order = ['position', 'wt', 'mut'] + frame.columns.tolist()[:-1]
+            col_order = ['chain', 'position', 'wt', 'mut'] + frame.columns.tolist()[:-1]
 
         elif args.type == 'dif':
             n_reps = get_fx_reps(frame.pdb.values)
             frame = frame.drop('pdb', axis='columns')
             frame['variant'] = repeat(variants, n_reps)
-            col_order = ['position', 'wt', 'mut'] + frame.columns.tolist()[:-1]
+            col_order = ['chain', 'position', 'wt', 'mut'] + frame.columns.tolist()[:-1]
 
         elif args.type == 'raw':
             n_reps = get_fx_reps(frame.pdb.values)
@@ -37,9 +37,9 @@ def main(args):
             frame['variant'] = repeat(variants, 2*n_reps)
             frame['source'] = tile(['mut']*n_reps + ['wt']*n_reps, frame.shape[0]//(2*n_reps))
             frame['rep'] = tile(arange(0, n_reps), frame.shape[0]//n_reps)
-            col_order = ['source', 'rep', 'position', 'wt', 'mut'] + frame.columns.tolist()[:-3]
+            col_order = ['source', 'rep', 'chain', 'position', 'wt', 'mut'] + frame.columns.tolist()[:-3]
 
-        regex = r"(?P<wt>[A-Z]).(?P<position>[0-9]+)(?P<mut>[A-Z])"
+        regex = r"(?P<wt>[A-Z])(?P<chain>.)(?P<position>[0-9]+)(?P<mut>[A-Z])"
         frame = pd.concat((frame, frame.variant.str.extract(regex)), axis=1)
         frame = frame.drop('variant', axis='columns')
         frame = frame[col_order]
