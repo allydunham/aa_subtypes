@@ -10,11 +10,11 @@ rule principle_component_analysis:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'figures/1_dimensionality_reduction/pc1_vs_mean_score.pdf',
-        'figures/1_dimensionality_reduction/foldx_pc_cor.pdf'
+        'figures/1_landscape_properties/pc1_vs_mean_score.pdf',
+        'figures/1_landscape_properties/foldx_pc_cor.pdf'
 
     shell:
-        'Rscript bin/analysis/1_dimensionality_reduction/principle_component_analysis.R'
+        'Rscript bin/analysis/1_landscape_properties/principle_component_analysis.R'
 
 #### Clustering ####
 rule kmeans_clustering:

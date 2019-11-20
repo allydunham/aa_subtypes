@@ -51,32 +51,38 @@ include: 'bin/pipeline/analysis.smk'
 # TODO - group up plots into lists?
 rule all:
     input:
-        "data/combined_mutational_scans.tsv" # Covers all standardisation, SIFT and FoldX
-        "meta/study_summary.tsv",
-        "meta/gene_summary.tsv",
-        "meta/overall_summary",
+        'data/combined_mutational_scans.tsv' # Covers all standardisation, SIFT and FoldX
+        'meta/study_summary.tsv',
+        'meta/gene_summary.tsv',
+        'meta/overall_summary',
         VALIDATION_PLOTS,
         'figures/0_data_properties/study_variants_summary.pdf',
         'figures/0_data_properties/gene_variants_summary.pdf',
-        'figures/0_data_properties/position_coverage.pdf'
+        'figures/0_data_properties/position_coverage.pdf',
+        'data/clusterings/kmeans_3.tsv'
 
 # Only remove rapidly generated results
+def quick_clean_files():
+    output_files = [f'data/studies/{s}/{s}.tsv' for s in STUDIES.keys()]
+    output_files.append('-r figures/0_data_properties/*')
+    output_files.append('-r figures/1_landscape_properties/*')
+    output_files.append('-r figures/2_clustering/*')
+    output_files.append('meta/study_summary.tsv')
+    output_files.append('meta/gene_summary.tsv')
+    output_files.append('meta/overall_summary')
+    output_files.append('data/combined_mutational_scans.tsv')
+    output_files.append('data/clustering/*')
+    return output_files
+
 rule quick_clean:
     run:
-        output_files = [f'data/studies/{s}/{s}.tsv' for s in STUDIES.keys()]
-        output_files.append('-r figures/0_data_properties/*')
-        output_files.append('meta/study_summary.tsv')
-        output_files.append('meta/gene_summary.tsv')
-        output_files.append('meta/overall_summary')
-        output_files.append('data/combined_mutational_scans.tsv')
-
-        for i in output_files:
+        for i in quick_clean_files():
             shell(f'rm {i} && echo "rm {i}" || true')
 
 # Same as clean, but also remove slower to genreate Sift & FoldX results
 rule full_clean:
     run:
-        output_files = [f'data/studies/{s}/{s}.tsv' for s in STUDIES.keys()]
+        output_files = quick_clean_files()
 
         # SIFT results
         output_files.extend([f'data/sift/{g}.fa' for g in GENES.keys()])
@@ -87,13 +93,6 @@ rule full_clean:
         output_files.extend([f"data/foldx/{g}/individual_list" for g in GENES.keys()])
         output_files.extend([f"data/foldx/{g}/*.fxout" for g in GENES.keys()])
         output_files.extend([f"-r data/foldx/{g}/processing" for g in GENES.keys()])
-
-        # Other results
-        output_files.append('-r figures/0_data_properties/*')
-        output_files.append('meta/study_summary.tsv')
-        output_files.append('meta/gene_summary.tsv')
-        output_files.append('meta/overall_summary')
-        output_files.append('data/combined_mutational_scans.tsv')
 
         for i in output_files:
             shell(f'rm {i} && echo "rm {i}" || true')
