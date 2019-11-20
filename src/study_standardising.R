@@ -6,6 +6,7 @@ source('src/config.R')
 AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
 AA_THREE_2_ONE['Ter'] <- '*'
 
+#### Importing Standardised Data ####
 # Import a study TSV
 import_study <- function(d, fields = NULL){
   study <- str_split(d, '/')[[1]]
@@ -66,6 +67,44 @@ import_foldx <- function(path, sections=NULL){
   return(fx)
 }
 
+# Import naccess results
+import_naccess <- function(filepath, sections=NULL){
+  fi <- read_lines(filepath)
+  fi <- grep('^REM', fi, invert = TRUE, value = TRUE)
+  
+  # Select table lines and read
+  tbl_str <- str_replace(grep('^RES', fi, value = TRUE),'RES ', '')
+  str_sub(tbl_str, 6, 5) <- ' ' # hack inserting space between chain and position in 4digit positions, which naccess doesn't do 
+  acc <- read_table2(tbl_str, col_names = c('wt', 'chain', 'position', 'all_atom_abs', 'all_atom_rel',
+                                            'side_chain_abs', 'side_chain_rel', 'backbone_abs', 'backbone_rel',
+                                            'non_polar_abs', 'non_polar_rel', 'polar_abs', 'polar_rel')) %>%
+    mutate(wt = structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)[str_to_title(wt)])
+  
+  # Adjust offset of each PDB section based on config
+  if (!is.null(sections)){
+    acc <- mutate(acc, offset_position = -1)
+    for (section in sections){
+      if (is.null(section$region)){
+        region <- c(0, Inf)
+      } else {
+        region <- section$region
+      }
+      
+      acc <- mutate(acc, offset_position = if_else(chain == section$chain & position >= region[1] & position <= region[2],
+                                                   position + section$offset,
+                                                   offset_position))
+      
+    }
+    acc <- filter(acc, offset_position > 0) %>%
+      mutate(position = offset_position) %>%
+      select(-offset_position)
+  }
+  
+  return(acc)
+}
+########
+
+#### General Standardisation ####
 ## general study data saving function
 # dm_data = tibble with columns position, wt, mut, score, transformed_score, raw_score, class
 # study_id = authour_year_gene style standard study id
@@ -198,6 +237,7 @@ muts_from_seq <- function(mut_seq, wt_seq){
   pos <- which(!mut_seq == wt_seq)
   return(str_c(wt_seq[pos], pos, mut_seq[pos], collapse = ','))
 }
+########
 
 #### Functions for Melnikov et al. 2014 (APH(3')-II) ####
 # Read aa count tables from melnikov et al. 2014

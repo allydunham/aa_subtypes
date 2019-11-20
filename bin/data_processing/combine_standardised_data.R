@@ -34,6 +34,16 @@ angles <- sapply(unique(dms$gene),
   bind_rows(.id = 'gene') %>%
   select(gene, wt=aa, position, phi, psi)
 
+# Import naccess data
+import_nacc_gene <- function(x){
+  x <- gene_to_filename(x)
+  import_naccess(str_c('data/surface_accessibility/', x, '.rsa'),
+                 structure_config[[x]]$sections)
+}
+surface_accessibility <- sapply(unique(dms$gene), import_nacc_gene, simplify = FALSE) %>%
+  bind_rows(.id = 'gene') %>%
+  select(-chain)
+
 # Filter incomplete positions and impute
 imputed_dms <- select(dms, -transformed_score, -raw_score, -class) %>%
   pivot_wider(id_cols = c(study, gene, position, wt, mut), names_from = mut, values_from = score) %>%
@@ -48,6 +58,7 @@ dms <- rename(imputed_dms, imputed_score=score) %>%
   left_join(sift, by = c('gene', 'position', 'wt', 'mut')) %>%
   left_join(foldx, by = c('gene', 'position', 'wt', 'mut')) %>%
   left_join(angles, by = c('gene', 'position', 'wt')) %>%
+  left_join(surface_accessibility, by = c('gene', 'position', 'wt')) %>%
   mutate(class = get_variant_class(wt, mut)) %>%
   arrange(study, position, wt, mut)
 
