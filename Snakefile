@@ -24,7 +24,8 @@ import subtypes_utils as sutil
 configfile: 'snakemake.yaml'
 localrules:
     all, quick_clean, full_clean, standardise_all_studies, all_sift_predictions,
-    make_gene_fasta, all_foldx_predictions, foldx_variants, foldx_split
+    make_gene_fasta, all_foldx_predictions, foldx_variants, foldx_split,
+    filter_pdb, naccess
 
 # Hash of study IDs to their config
 STUDIES = {}
