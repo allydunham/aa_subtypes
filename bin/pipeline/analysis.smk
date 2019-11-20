@@ -11,6 +11,10 @@ rule principle_component_analysis:
 
     output:
         'figures/1_landscape_properties/pc1_vs_mean_score.pdf',
+        'figures/1_landscape_properties/pc1_pc2_mean_score.pdf',
+        'figures/1_landscape_properties/pc2_pc4_surface_accessibility.pdf',
+        'figures/1_landscape_properties/pc2_vs_surface_accessibility.pdf',
+        'figures/1_landscape_properties/pc2_vs_hydrophobicity.pdf',
         'figures/1_landscape_properties/foldx_pc_cor.pdf'
 
     shell:
