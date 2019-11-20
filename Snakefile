@@ -121,7 +121,7 @@ rule validate_data:
         VALIDATION_PLOTS
 
 #### Summarise dataset ####
-rule summarise_dataset:
+rule summarise_study_set:
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
 
@@ -133,7 +133,7 @@ rule summarise_dataset:
     shell:
         "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
 
-rule data_summary_plots:
+rule study_summary_plots:
     input:
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
@@ -146,6 +146,17 @@ rule data_summary_plots:
 
     shell:
         'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
+
+rule summarise_standardised_data:
+    input:
+        'data/combined_mutational_scans.tsv'
+
+    output:
+        ''
+
+    shell:
+        'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R'
+
 
 #### Combine Deep Mutational Scans ####
 rule standardise_study:
@@ -221,8 +232,9 @@ rule naccess:
 
     shell:
         """
-        naccess {input}
-        mv {wildcards.gene}.log {log}
+        naccess {input} &> {log}
+        cat {wildcards.gene}.log >> {log}
+        rm {wildcards.gene}.log
         mv {wildcards.gene}.asa {output.asa}
         mv {wildcards.gene}.rsa {output.rsa}
         """
