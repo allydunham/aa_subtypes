@@ -168,7 +168,7 @@ rule standardise_study:
 rule combine_dms_data:
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
-        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTPrediction')),
+        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction')),
         expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
         expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys()),
         expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys())
