@@ -36,7 +36,7 @@ def write_backbone_angles(chain, region=None, offset=0,
         angles = peptide.get_phi_psi_list()
         for residue, (phi, psi) in zip(peptide, angles):
             position = residue.get_id()[1]
-            if position >= region[0] and position <= region[1]:
+            if region[0] <= position <= region[1]:
                 print(chain.id, position,
                       seq1(residue.get_resname()),
                       position + offset,
