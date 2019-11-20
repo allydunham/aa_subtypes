@@ -53,7 +53,7 @@ include: 'bin/pipeline/analysis.smk'
 # TODO - group up plots into lists?
 rule all:
     input:
-        'data/combined_mutational_scans.tsv' # Covers all standardisation, SIFT and FoldX
+        'data/combined_mutational_scans.tsv', # Covers all standardisation, SIFT and FoldX
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
         'meta/overall_summary',
