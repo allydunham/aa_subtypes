@@ -4,9 +4,11 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # General todo list for pipeline
 # TODO Better logging
 # TODO Better all rules
-# TODO rename 1_dimensionality_reduction?
 # TODO add automated download of some of the input data?
 # TODO add docstrings to rules
+# TODO clean up master pdb file locations?
+# TODO general clean up overhaul/check all in order
+# TODO rule to setup logging directories?
 
 import os
 import math
@@ -168,7 +170,8 @@ rule combine_dms_data:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
         expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTPrediction')),
         expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
-        expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys())
+        expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys()),
+        expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys())
 
     output:
         'data/combined_mutational_scans.tsv'
