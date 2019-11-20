@@ -9,6 +9,7 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO clean up master pdb file locations?
 # TODO general clean up overhaul/check all in order
 # TODO rule to setup logging directories?
+# TODO Change to only unfiltered gene input in combine_dms_data
 
 import os
 import math

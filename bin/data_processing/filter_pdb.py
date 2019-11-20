@@ -17,6 +17,10 @@ class SectionSelecter(Select):
     def __init__(self, sections):
         self.sections = sections
 
+        for section in self.sections:
+            if not 'region' in section:
+                section['region'] = [0, float('inf')]
+
     def accept_residue(self, residue):
         if self.sections is None:
             return 1
