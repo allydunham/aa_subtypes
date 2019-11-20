@@ -6,6 +6,7 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO Better all rules
 # TODO rename 1_dimensionality_reduction?
 # TODO add automated download of some of the input data?
+# TODO add docstrings to rules
 
 import os
 import math
@@ -188,3 +189,35 @@ rule calculate_backbone_angles:
 
     shell:
         "python bin/data_processing/get_backbone_angles.py --yaml {input.yaml} {input.pdb} > {output} 2> {log}"
+
+rule filter_pdb:
+    input:
+        'data/foldx/{gene}/{gene}_Repair.pdb'
+
+    output:
+        'data/surface_accessibility/{gene}.pdb'
+
+    log:
+        'logs/filter_pdb/{gene}.log'
+
+    shell:
+        'python bin/data_processing/filter_pdb.py --yaml meta/structures.yaml {input} > {output} 2> {log}'
+
+rule naccess:
+    input:
+        rules.filter_pdb.output
+
+    output:
+        asa='data/surface_accessibility/{gene}.asa',
+        rsa='data/surface_accessibility/{gene}.rsa'
+
+    log:
+        'logs/naccess/{gene}.log'
+
+    shell:
+        """
+        naccess {input}
+        mv {wildcards.gene}.log {log}
+        mv {wildcards.gene}.asa {output.asa}
+        mv {wildcards.gene}.rsa {output.rsa}
+        """
