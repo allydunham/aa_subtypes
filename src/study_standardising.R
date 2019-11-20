@@ -102,6 +102,33 @@ import_naccess <- function(filepath, sections=NULL){
   
   return(acc)
 }
+
+# Import chemical environment profiles
+import_chem_env <- function(filepath, sections=NULL){
+  profs <- read_tsv(filepath)
+  
+  # Adjust offset of each PDB section based on config
+  if (!is.null(sections)){
+    profs <- mutate(profs, offset_position = -1)
+    for (section in sections){
+      if (is.null(section$region)){
+        region <- c(0, Inf)
+      } else {
+        region <- section$region
+      }
+      
+      profs <- mutate(profs, offset_position = if_else(chain == section$chain & position >= region[1] & position <= region[2],
+                                                       position + section$offset,
+                                                       offset_position))
+      
+    }
+    profs <- filter(profs, offset_position > 0) %>%
+      mutate(position = offset_position) %>%
+      select(-offset_position)
+  }
+  
+  return(profs)
+}
 ########
 
 #### General Standardisation ####

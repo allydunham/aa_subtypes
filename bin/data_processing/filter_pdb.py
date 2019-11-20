@@ -14,14 +14,18 @@ class SectionSelecter(Select):
     """
     Selecter based on section input in the sytle of meta/structures.yaml
     """
-    def __init__(self, sections):
+    def __init__(self, sections, drop_hetero=False):
         self.sections = sections
+        self.drop_hetero = drop_hetero
 
         for section in self.sections:
             if not 'region' in section:
                 section['region'] = [0, float('inf')]
 
     def accept_residue(self, residue):
+        if self.drop_hetero and not residue.id[0] == ' ':
+            return 0
+
         if self.sections is None:
             return 1
 

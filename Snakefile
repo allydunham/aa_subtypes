@@ -10,6 +10,7 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO general clean up overhaul/check all in order
 # TODO rule to setup logging directories?
 # TODO Change to only unfiltered gene input in combine_dms_data
+# TODO Split out structures.yaml section validation from get_* scripts to utils
 
 import os
 import math
@@ -152,7 +153,8 @@ rule summarise_standardised_data:
         'data/combined_mutational_scans.tsv'
 
     output:
-        ''
+        'figures/0_data_properties/standardised_distributions.pdf',
+        'figures/0_data_properties/position_data_summary.pdf'
 
     shell:
         'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R'
@@ -183,7 +185,9 @@ rule combine_dms_data:
         expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction')),
         expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
         expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys()),
-        expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys())
+        expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys()),
+        expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=GENES.keys()),
+        'meta/residue_hydrophobicity.tsv'
 
     output:
         'data/combined_mutational_scans.tsv'
@@ -221,7 +225,7 @@ rule filter_pdb:
 
 rule naccess:
     input:
-        rules.filter_pdb.output
+        'data/surface_accessibility/{gene}.pdb'
 
     output:
         asa='data/surface_accessibility/{gene}.asa',
@@ -238,3 +242,31 @@ rule naccess:
         mv {wildcards.gene}.asa {output.asa}
         mv {wildcards.gene}.rsa {output.rsa}
         """
+
+rule k_nearest_profile:
+    input:
+        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
+        yaml='meta/structures.yaml'
+
+    output:
+        'data/chemical_environment/{gene}_{k}_nearest.tsv'
+
+    log:
+        'logs/k_nearest_profile/{gene}_{k}.log'
+
+    shell:
+        'python bin/data_processing/get_chem_env_profiles.py --k_nearest {wildcards.k} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
+
+rule within_a_profile:
+    input:
+        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
+        yaml='meta/structures.yaml'
+
+    output:
+        'data/chemical_environment/{gene}_within_{a}.tsv'
+
+    log:
+        'logs/within_a_profile/{gene}_{a}.log'
+
+    shell:
+        'python bin/data_processing/get_chem_env_profiles.py --angstroms {wildcards.a} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
