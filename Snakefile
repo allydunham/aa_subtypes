@@ -65,8 +65,12 @@ rule all:
         'figures/0_data_properties/study_variants_summary.pdf',
         'figures/0_data_properties/gene_variants_summary.pdf',
         'figures/0_data_properties/position_coverage.pdf',
-        'data/clusterings/kmeans_profile_3.tsv',
-        'data/clusterings/kmeans_pca_3.tsv'
+        'data/clusterings/kmeans_profile_k_4_min_5.tsv',
+        'data/clusterings/kmeans_pca_k_4_min_5.tsv',
+        'data/clusterings/hclust_profile_h_17_min_5_distance_manhattan.tsv',
+        'data/clusterings/hclust_pca_h_17_min_5_distance_manhattan.tsv',
+        'data/clusterings/hdbscan_profile_min_7_distance_euclidean.tsv',
+        'data/clusterings/hdbscan_pca_min_7_distance_euclidean.tsv'
 
 # Only remove rapidly generated results
 def quick_clean_files():

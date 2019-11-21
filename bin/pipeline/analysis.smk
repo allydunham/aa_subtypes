@@ -28,39 +28,39 @@ rule kmeans_clustering:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'data/clusterings/kmeans_{mode}_{n}.tsv',
-        [f'figures/2_clustering/kmeans_{{mode}}_{{n}}/{x}' for x in cluster_plots]
+        'data/clusterings/kmeans_{mode}_k_{k}_min_{min}.tsv',
+        [f'figures/2_clustering/kmeans_{{mode}}_k_{{k}}_min_{{min}}/{x}' for x in cluster_plots]
 
     log:
-        'logs/kmeans_clustering/{mode}_{n}.log'
+        'logs/kmeans_clustering/{mode}_k_{k}_min_{min}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/kmeans_clustering.R --ncluster {wildcards.n} --mode {wildcards.mode} &> {log}'
+        'Rscript bin/analysis/2_clustering/kmeans_clustering.R --ncluster {wildcards.k} --min_size {wildcards.min} --mode {wildcards.mode} &> {log}'
 
 rule hclust_clustering:
     input:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'data/clusterings/hclust_{mode}_h_{h}_min_{min}.tsv',
-        [f'figures/2_clustering/hclust_{{mode}}_h_{{h}}_min_{{min}}/{x}' for x in cluster_plots]
+        'data/clusterings/hclust_{mode}_h_{h}_min_{min}_distance_{distance}.tsv',
+        [f'figures/2_clustering/hclust_{{mode}}_h_{{h}}_min_{{min}}_distance_{{distance}}/{x}' for x in cluster_plots]
 
     log:
-        'logs/hclust_clustering/{mode}_h_{h}_min_{min}.log'
+        'logs/hclust_clustering/{mode}_h_{h}_min_{min}_distance_{distance}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/hclust_clustering.R --height {wildcards.h} --min_size {wildcards.min} --mode {wildcards.mode} &> {log}'
+        'Rscript bin/analysis/2_clustering/hclust_clustering.R --height {wildcards.h} --min_size {wildcards.min} --distance {wildcards.distance} --mode {wildcards.mode} &> {log}'
 
 rule hdbscan_clustering:
     input:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'data/clusterings/hdbscan_{mode}_{n}.tsv',
-        [f'figures/2_clustering/hdbscan_{{mode}}_{{n}}/{x}' for x in cluster_plots]
+        'data/clusterings/hdbscan_{mode}_min_{min}_distance_{distance}.tsv',
+        [f'figures/2_clustering/hdbscan_{{mode}}_min_{{min}}_distance_{{distance}}/{x}' for x in cluster_plots]
 
     log:
-        'logs/hdbscan_clustering/{mode}_{n}.log'
+        'logs/hdbscan_clustering/{mode}_min_{min}_distance_{distance}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/hdbscan_clustering.R --min_size {wildcards.n} --mode {wildcards.mode} &> {log}'
+        'Rscript bin/analysis/2_clustering/hdbscan_clustering.R --min_size {wildcards.min} --mode {wildcards.mode} --distance {wildcards.distance} &> {log}'

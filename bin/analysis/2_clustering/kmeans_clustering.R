@@ -5,6 +5,7 @@
 library(argparser)
 parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
 parser <- add_argument(parser, arg = '--ncluster', help = 'Number of clusters to split each AA into', default = 3)
+parser <- add_argument(parser, arg = '--min_size', help = 'Minimum cluster size to consider', default = 5)
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
 args <- parse_args(parser)
 
@@ -14,7 +15,7 @@ if (!args$mode %in% c('profile', 'pca')){
 
 source('src/config.R')
 source('src/clustering.R')
-root_name <- str_c('kmeans', args$mode, args$ncluster, sep = '_')
+root_name <- str_c('kmeans', args$mode, 'k', args$ncluster, 'min', args$min_size, sep = '_')
 root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)
 dir.create('data/clusterings')
@@ -33,7 +34,7 @@ if (args$mode == 'profile'){
 }
 
 kmeans_cluster <- group_by(dms_wide, wt) %>%
-  group_map(~make_kmeans_clusters(., !!cols, n = args$ncluster, nstart=5), keep = TRUE)
+  group_map(~make_kmeans_clusters(., !!cols, n = args$ncluster, min_size = args$min_size, nstart=5), keep = TRUE)
 
 dms_wide <- map_dfr(kmeans_cluster, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%

@@ -2,14 +2,21 @@
 # Functions for AA subtypes clustering
 
 #### k-means ####
-make_kmeans_clusters <- function(tbl, cols, n=3, ...){
+make_kmeans_clusters <- function(tbl, cols, n=3, min_size=1, ...){
   cols <- enquo(cols)
   
   mat <- tibble_to_matrix(tbl, !!cols)
   
   km <- kmeans(mat, centers = n, ...)
   
-  return(list(tbl=mutate(tbl, cluster = km$cluster) %>% select(cluster, everything()),
+  tbl <- mutate(tbl, cluster = km$cluster) %>%
+    group_by(cluster) %>%
+    mutate(flag = n() < min_size) %>%
+    ungroup() %>%
+    mutate(cluster = as.character(ifelse(flag, '?', cluster))) %>%
+    select(-flag, cluster, everything())
+  
+  return(list(tbl=tbl,
               kmeans=km))
 }
 ########
@@ -27,7 +34,7 @@ make_hclust_clusters <- function(tbl, cols, h, min_size = 1, dist_method = 'eucl
     mutate(flag = n() < min_size) %>%
     ungroup() %>%
     mutate(cluster = as.character(ifelse(flag, '?', cluster))) %>%
-    select(-flag)
+    select(-flag, cluster, everything())
   
   return(list(tbl = tbl,
               hclust = hc))
@@ -43,7 +50,7 @@ make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=1
   dis <- dist(mat, method = dist_method)
   hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
   
-  return(list(tbl = mutate(tbl, cluster = hdb$cluster),
+  return(list(tbl = mutate(tbl, cluster = hdb$cluster) %>% select(cluster, everything()),
               hdbscan = hdb))
 }
 ########
