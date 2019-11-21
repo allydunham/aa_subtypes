@@ -11,3 +11,4 @@
 /figures/**
 /meta/*
 !/meta/fasta/
+/docs/dataset_ideas.md
