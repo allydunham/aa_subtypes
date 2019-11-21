@@ -26,14 +26,14 @@ rule kmeans_clustering:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'data/clusterings/kmeans_{n}.tsv',
-        'figures/2_clustering/kmeans_{n}/ramachanran_angles.pdf',
-        'figures/2_clustering/kmeans_{n}/cluster_sizes.pdf',
-        'figures/2_clustering/kmeans_{n}/mean_profiles.pdf',
-        'figures/2_clustering/kmeans_{n}/profile_correlation.pdf'
+        'data/clusterings/kmeans_{mode}_{n}.tsv',
+        'figures/2_clustering/kmeans_{mode}_{n}/ramachanran_angles.pdf',
+        'figures/2_clustering/kmeans_{mode}_{n}/cluster_sizes.pdf',
+        'figures/2_clustering/kmeans_{mode}_{n}/mean_profiles.pdf',
+        'figures/2_clustering/kmeans_{mode}_{n}/profile_correlation.pdf'
 
     log:
-        'logs/kmeans_clustering/{n}.log'
+        'logs/kmeans_clustering/{mode}_{n}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/kmeans_clustering.R --ncluster {wildcards.n} &> {log}'
+        'Rscript bin/analysis/2_clustering/kmeans_clustering.R --ncluster {wildcards.n} --mode {wildcards.mode} &> {log}'
