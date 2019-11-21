@@ -65,7 +65,8 @@ rule all:
         'figures/0_data_properties/study_variants_summary.pdf',
         'figures/0_data_properties/gene_variants_summary.pdf',
         'figures/0_data_properties/position_coverage.pdf',
-        'data/clusterings/kmeans_3.tsv'
+        'data/clusterings/kmeans_profile_3.tsv',
+        'data/clusterings/kmeans_pca_3.tsv'
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -78,6 +79,7 @@ def quick_clean_files():
     output_files.append('meta/overall_summary')
     output_files.append('data/combined_mutational_scans.tsv')
     output_files.append('data/clustering/*')
+    output_files.append('logs/*/*')
     return output_files
 
 rule quick_clean:
