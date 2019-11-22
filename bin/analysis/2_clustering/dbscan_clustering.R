@@ -40,7 +40,7 @@ dbscan_cluster <- group_by(dms_wide, wt) %>%
   group_map(~make_dbscan_clusters(., !!cols, minPts = args$minPts, eps = args$eps, dist_method = args$distance), keep = TRUE)
 
 dms_wide <- map_dfr(dbscan_cluster, .f = ~ .$tbl) %>%
-  mutate(cluster = str_c(wt, ifelse(cluster == 0, '?', cluster))) %>%
+  mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
 
 ### Analyse clusters and save results ###

@@ -10,15 +10,15 @@ make_kmeans_clusters <- function(tbl, cols, n=3, min_size=1, ...){
   km <- kmeans(mat, centers = n, ...)
   
   tbl <- mutate(tbl, cluster = km$cluster) %>%
-    group_by(cluster) %>%
-    mutate(flag = n() < min_size) %>%
-    ungroup() %>%
-    mutate(cluster = as.character(ifelse(flag, '?', cluster))) %>%
-    select(cluster, everything()) %>%
-    select(-flag)
+    select(cluster, everything())
   
-  return(list(tbl=tbl,
-              kmeans=km))
+  small_clusters <- count(tbl, cluster) %>%
+    filter(n < min_size) %>%
+    pull(cluster)
+  
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- NA
+  
+  return(list(tbl=tbl, kmeans=km))
 }
 ########
 
@@ -38,15 +38,15 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
   clus <- cutree(hc, h = h, k = k)
   
   tbl <- mutate(tbl, cluster = clus) %>%
-    group_by(cluster) %>%
-    mutate(flag = n() < min_size) %>%
-    ungroup() %>%
-    mutate(cluster = as.character(ifelse(flag, '?', cluster))) %>%
-    select(cluster, everything()) %>%
-    select(-flag)
+    select(cluster, everything())
   
-  return(list(tbl = tbl,
-              hclust = hc))
+  small_clusters <- count(tbl, cluster) %>%
+    filter(n < min_size) %>%
+    pull(cluster)
+  
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- NA
+  
+  return(list(tbl = tbl, hclust = hc))
 }
 
 ########
@@ -59,12 +59,15 @@ make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=1
   dis <- dist(mat, method = dist_method)
   hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
   
-  return(list(tbl = mutate(tbl, cluster = hdb$cluster) %>% select(cluster, everything()),
-              hdbscan = hdb))
+  tbl <- mutate(tbl, cluster = hdb$cluster) %>% 
+    select(cluster, everything()) %>%
+    mutate(cluster = na_if(cluster, 0))
+  
+  return(list(tbl = tbl, hdbscan = hdb))
 }
 ########
 
-#### hdbscan clustering ####
+#### dbscan clustering ####
 make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minPts=5, ...){
   cols <- enquo(cols)
   
@@ -72,8 +75,11 @@ make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minP
   dis <- dist(mat, method = dist_method)
   db <- dbscan(dis, eps=eps, minPts = minPts, ...)
   
-  return(list(tbl = mutate(tbl, cluster = db$cluster) %>% select(cluster, everything()),
-              hdbscan = db))
+  tbl <- mutate(tbl, cluster = db$cluster) %>% 
+    select(cluster, everything()) %>% 
+    mutate(cluster = na_if(cluster, 0))
+  
+  return(list(tbl = tbl, hdbscan = db))
 }
 ########
 
@@ -102,7 +108,7 @@ plot_tsne_clusters <- function(tbl){
     ggplot(aes(x=tSNE1, y=tSNE2, colour=cluster_sym)) +
     geom_point() +
     facet_wrap(~wt) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3') +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', ) +
     guides(colour = guide_legend(title = 'Cluster', ))
 }
 
@@ -159,6 +165,7 @@ plot_cluster_profiles <- function(tbl, cols){
 cluster_profile_correlation <- function(tbl, cols){
   cols <- enquo(cols)
   cluster_mean_profiles(tbl, !!cols) %>%
+    drop_na(cluster) %>%
     transpose_tibble(cluster, id_col = 'aa') %>%
     tibble_correlation(x=-aa) %>%
     rename(cluster1 = cat1, cluster2 = cat2) %>%

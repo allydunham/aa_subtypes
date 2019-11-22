@@ -39,7 +39,7 @@ hdbscan_cluster <- group_by(dms_wide, wt) %>%
   group_map(~make_hdbscan_clusters(., !!cols, minPts = args$min_size, dist_method = args$distance), keep = TRUE)
 
 dms_wide <- map_dfr(hdbscan_cluster, .f = ~ .$tbl) %>%
-  mutate(cluster = str_c(wt, ifelse(cluster == 0, '?', cluster))) %>%
+  mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
 
 ### Analyse clusters and save results ###
