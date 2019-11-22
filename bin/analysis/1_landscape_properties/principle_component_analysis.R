@@ -6,13 +6,7 @@ source('src/dimensionality_reduction.R')
 
 dir.create('figures/1_landscape_properties')
 plots <- list()
-
-#### Import Data ####
-dms <- read_tsv('data/combined_mutational_scans.tsv')
-dms_wide <- make_dms_wide(dms)
-pca <- tibble_pca(dms_wide, A:Y)
-dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
-########
+dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 #### Plot PCs vs factors ####
 # PC1 vs significance
