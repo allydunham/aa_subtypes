@@ -108,8 +108,8 @@ plot_tsne_clusters <- function(tbl){
     ggplot(aes(x=tSNE1, y=tSNE2, colour=cluster_sym)) +
     geom_point() +
     facet_wrap(~wt) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', ) +
-    guides(colour = guide_legend(title = 'Cluster', ))
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
+    guides(colour = guide_legend(title = 'Cluster'))
 }
 
 plot_ramachandran_angles <- function(tbl){
