@@ -3,7 +3,7 @@
 
 source('src/config.R')
 
-dms <- read_tsv('data/combined_mutational_scans.tsv')
+dms <- read_tsv('data/long_combined_mutational_scans.tsv')
 
 p_score_dist <- ggplot(dms, aes(x=imputed_score, fill=ifelse(!is.na(score), 'Experiment', 'Imputed'))) +
   facet_wrap(~study, ncol = 4, labeller = as_labeller(sapply(unique(dms$study), format_study, max_width = 28)), scales = 'free') +

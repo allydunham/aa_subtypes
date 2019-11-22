@@ -6,6 +6,30 @@ source('src/config.R')
 AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
 AA_THREE_2_ONE['Ter'] <- '*'
 
+# Transform standardised data table to wide format
+make_dms_wide <- function(dms){
+  foldx_averages <- select(dms, study, position, wt, total_energy:entropy_complex) %>%
+    select(-sloop_entropy, -mloop_entropy, -entropy_complex, -water_bridge) %>% # Drop terms that are unused in our structures
+    drop_na(total_energy) %>%
+    group_by(study, position, wt) %>%
+    summarise_all(mean, na.rm=TRUE)
+  
+  position_constants <- select(dms, study, position, wt, phi:hydrophobicity) %>%
+    distinct()
+  
+  dms_wide <- filter(dms, mut %in% Biostrings::AA_STANDARD) %>%
+    select(study, gene, position, wt, mut, imputed_score, log10_sift) %>%
+    pivot_wider(names_from = mut, values_from = c(imputed_score, log10_sift)) %>%
+    rename_at(vars(starts_with('imputed_score_')), ~str_sub(., start=-1))
+  
+  mutate(dms_wide,
+         mean_score = rowMeans(select(dms_wide, A:Y)),
+         mean_sift = rowMeans(select(dms_wide, log10_sift_A:log10_sift_Y))) %>%
+    left_join(foldx_averages, by = c('study', 'position', 'wt')) %>%
+    left_join(position_constants, by = c('study', 'position', 'wt'))
+  
+}
+
 #### Importing Standardised Data ####
 # Import a study TSV
 import_study <- function(d, fields = NULL){

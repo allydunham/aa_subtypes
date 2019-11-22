@@ -20,11 +20,7 @@ root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)
 dir.create('data/clusterings')
 
-### Import data ###
-dms <- read_tsv('data/combined_mutational_scans.tsv')
-dms_wide <- make_dms_wide(dms)
-pca <- tibble_pca(dms_wide, A:Y)
-dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
+dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Create Clusters ###
 if (args$mode == 'profile'){

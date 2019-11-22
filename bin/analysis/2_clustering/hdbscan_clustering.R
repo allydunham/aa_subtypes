@@ -6,7 +6,7 @@ library(argparser)
 parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
 parser <- add_argument(parser, arg = '--min_size', help = 'Minimum allowed cluster size', default = 10)
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
-parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'euclidean')
+parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
 args <- parse_args(parser)
 
 if (!args$mode %in% c('profile', 'pca')){
@@ -26,11 +26,7 @@ root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)
 dir.create('data/clusterings')
 
-### Import data ###
-dms <- read_tsv('data/combined_mutational_scans.tsv')
-dms_wide <- make_dms_wide(dms)
-pca <- tibble_pca(dms_wide, A:Y)
-dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
+dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Create Clusters ###
 if (args$mode == 'profile'){

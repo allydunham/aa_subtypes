@@ -78,5 +78,12 @@ dms <- rename(imputed_dms, imputed_score=score) %>%
   mutate(class = get_variant_class(wt, mut)) %>%
   arrange(study, position, wt, mut)
 
+dms_wide <- make_dms_wide(dms)
+pca <- tibble_pca(dms_wide, A:Y)
+dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
+tsne <- tibble_tsne(dms_wide, A:Y)
+dms_wide <- tsne$tbl
+
 # Write combined data
-write_tsv(dms, 'data/combined_mutational_scans.tsv')
+write_tsv(dms, 'data/long_combined_mutational_scans.tsv')
+write_tsv(dms_wide, 'data/combined_mutational_scans.tsv')
