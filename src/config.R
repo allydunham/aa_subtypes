@@ -25,7 +25,8 @@ source('src/subtypes_utils.R')
 theme_set(theme_pubclean() + theme(legend.position = 'right',
                                    plot.title = element_text(hjust = 0.5),
                                    plot.subtitle = element_text(hjust = 0.5),
-                                   strip.background = element_blank()))
+                                   strip.background = element_blank(),
+                                   legend.key = element_blank()))
 
 #### Colour Schemes ####
 MUT_CLASS_COLOURS <- c(Missense='cornflowerblue', Nonsense='firebrick2', Synonymous='green2')
