@@ -49,8 +49,10 @@ AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
+include: 'bin/pipeline/standardisation.smk'
 include: 'bin/pipeline/sift.smk'
 include: 'bin/pipeline/foldx.smk'
+include: 'bin/pipeline/structure_statistics.smk'
 include: 'bin/pipeline/analysis.smk'
 
 #### Global rules ####
@@ -58,19 +60,23 @@ include: 'bin/pipeline/analysis.smk'
 rule all:
     input:
         'data/combined_mutational_scans.tsv', # Covers all standardisation, SIFT and FoldX
-        'meta/study_summary.tsv',
-        'meta/gene_summary.tsv',
-        'meta/overall_summary',
+        'data/long_combined_mutational_scans.tsv',
+        rules.summarise_study_set.output,
         VALIDATION_PLOTS,
-        'figures/0_data_properties/study_variants_summary.pdf',
-        'figures/0_data_properties/gene_variants_summary.pdf',
-        'figures/0_data_properties/position_coverage.pdf',
+        rules.study_summary_plots.output,
+        rules.summarise_standardised_data.output,
+        rules.principle_component_analysis.output,
+        rules.tsne_analysis.output,
         'data/clusterings/kmeans_profile_k_4_min_5.tsv',
         'data/clusterings/kmeans_pca_k_4_min_5.tsv',
-        'data/clusterings/hclust_profile_h_17_min_5_distance_manhattan.tsv',
-        'data/clusterings/hclust_pca_h_17_min_5_distance_manhattan.tsv',
-        'data/clusterings/hdbscan_profile_min_7_distance_euclidean.tsv',
-        'data/clusterings/hdbscan_pca_min_7_distance_euclidean.tsv'
+        'data/clusterings/hclust_profile_height_17_min_5_distance_manhattan.tsv',
+        'data/clusterings/hclust_pca_height_6_min_5_distance_manhattan.tsv',
+        'data/clusterings/hclust_profile_number_5_min_5_distance_manhattan.tsv',
+        'data/clusterings/hclust_pca_number_5_min_5_distance_manhattan.tsv',
+        'data/clusterings/hdbscan_profile_min_6_distance_manhattan.tsv',
+        'data/clusterings/hdbscan_pca_min_5_distance_manhattan.tsv',
+        'data/clusterings/dbscan_profile_min_5_eps_4_distance_manhattan.tsv',
+        'data/clusterings/dbscan_pca_min_5_eps_4_distance_manhattan.tsv'
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -126,153 +132,3 @@ rule all_foldx_predictions:
 rule validate_data:
     input:
         VALIDATION_PLOTS
-
-#### Summarise dataset ####
-rule summarise_study_set:
-    input:
-        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
-
-    output:
-        study='meta/study_summary.tsv',
-        gene='meta/gene_summary.tsv',
-        overall='meta/overall_summary',
-
-    shell:
-        "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
-
-rule study_summary_plots:
-    input:
-        'meta/study_summary.tsv',
-        'meta/gene_summary.tsv',
-        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
-
-    output:
-        'figures/0_data_properties/study_variants_summary.pdf',
-        'figures/0_data_properties/gene_variants_summary.pdf',
-        'figures/0_data_properties/position_coverage.pdf'
-
-    shell:
-        'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
-
-rule summarise_standardised_data:
-    input:
-        'data/combined_mutational_scans.tsv'
-
-    output:
-        'figures/0_data_properties/standardised_distributions.pdf',
-        'figures/0_data_properties/position_data_summary.pdf'
-
-    shell:
-        'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R'
-
-
-#### Combine Deep Mutational Scans ####
-rule standardise_study:
-    input:
-        "data/studies/{study}/standardise_{study}.R",
-        lambda wildcards: [f'data/studies/{wildcards.study}/raw/{x}' for x in
-                           STUDIES[wildcards.study]['input_files']]
-
-    output:
-        "data/studies/{study}/{study}.tsv",
-        "figures/0_data_properties/per_study/{study}/original_distribution.pdf",
-        "figures/0_data_properties/per_study/{study}/transformed_distribution.pdf",
-        "figures/0_data_properties/per_study/{study}/normalised_distribution.pdf"
-
-    log:
-        "logs/standardise_study/{study}.log"
-
-    shell:
-        "Rscript {input} 2> {log}"
-
-rule combine_dms_data:
-    input:
-        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
-        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction')),
-        expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
-        expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys()),
-        expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys()),
-        expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=GENES.keys()),
-        'meta/residue_hydrophobicity.tsv'
-
-    output:
-        'data/combined_mutational_scans.tsv'
-
-    shell:
-        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s,v in STUDIES.items() if not v['qc']['filter']])}"
-
-#### Misc Property calculations ####
-rule calculate_backbone_angles:
-    input:
-        pdb="data/foldx/{gene}/{gene}_Repair.pdb",
-        yaml="meta/structures.yaml"
-
-    output:
-        "data/backbone_angles/{gene}.tsv"
-
-    log:
-        "logs/calculate_backbone_angles/{gene}.log"
-
-    shell:
-        "python bin/data_processing/get_backbone_angles.py --yaml {input.yaml} {input.pdb} > {output} 2> {log}"
-
-rule filter_pdb:
-    input:
-        'data/foldx/{gene}/{gene}_Repair.pdb'
-
-    output:
-        'data/surface_accessibility/{gene}.pdb'
-
-    log:
-        'logs/filter_pdb/{gene}.log'
-
-    shell:
-        'python bin/data_processing/filter_pdb.py --yaml meta/structures.yaml {input} > {output} 2> {log}'
-
-rule naccess:
-    input:
-        'data/surface_accessibility/{gene}.pdb'
-
-    output:
-        asa='data/surface_accessibility/{gene}.asa',
-        rsa='data/surface_accessibility/{gene}.rsa'
-
-    log:
-        'logs/naccess/{gene}.log'
-
-    shell:
-        """
-        naccess {input} &> {log}
-        cat {wildcards.gene}.log >> {log}
-        rm {wildcards.gene}.log
-        mv {wildcards.gene}.asa {output.asa}
-        mv {wildcards.gene}.rsa {output.rsa}
-        """
-
-rule k_nearest_profile:
-    input:
-        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
-        yaml='meta/structures.yaml'
-
-    output:
-        'data/chemical_environment/{gene}_{k}_nearest.tsv'
-
-    log:
-        'logs/k_nearest_profile/{gene}_{k}.log'
-
-    shell:
-        'python bin/data_processing/get_chem_env_profiles.py --k_nearest {wildcards.k} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
-
-rule within_a_profile:
-    input:
-        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
-        yaml='meta/structures.yaml'
-
-    output:
-        'data/chemical_environment/{gene}_within_{a}.tsv'
-
-    log:
-        'logs/within_a_profile/{gene}_{a}.log'
-
-    shell:
-        'python bin/data_processing/get_chem_env_profiles.py --angstroms {wildcards.a} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'

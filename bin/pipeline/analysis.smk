@@ -17,8 +17,27 @@ rule principle_component_analysis:
         'figures/1_landscape_properties/pc2_vs_hydrophobicity.pdf',
         'figures/1_landscape_properties/foldx_pc_cor.pdf'
 
+    log:
+        'logs/principle_component_analysis.log'
+
     shell:
-        'Rscript bin/analysis/1_landscape_properties/principle_component_analysis.R'
+        'Rscript bin/analysis/1_landscape_properties/principle_component_analysis.R &> {log}'
+
+rule tsne_analysis:
+    input:
+        'data/combined_mutational_scans.tsv'
+
+    output:
+        'figures/1_landscape_properties/tsne_study.pdf',
+        'figures/1_landscape_properties/tsne_aa.pdf',
+        'figures/1_landscape_properties/tsne_hydrophobicity.pdf',
+        'figures/1_landscape_properties/tsne_surface_accessibility.pdf'
+
+    log:
+        'logs/tsne_analysis.log'
+
+    shell:
+        'Rscript bin/analysis/1_landscape_properties/tsne.R &> {log}'
 
 #### Clustering ####
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
@@ -42,14 +61,14 @@ rule hclust_clustering:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'data/clusterings/hclust_{mode}_h_{h}_min_{min}_distance_{distance}.tsv',
-        [f'figures/2_clustering/hclust_{{mode}}_h_{{h}}_min_{{min}}_distance_{{distance}}/{x}' for x in cluster_plots]
+        'data/clusterings/hclust_{mode}_{cut}_{h}_min_{min}_distance_{distance}.tsv',
+        [f'figures/2_clustering/hclust_{{mode}}_{{cut}}_{{h}}_min_{{min}}_distance_{{distance}}/{x}' for x in cluster_plots]
 
     log:
-        'logs/hclust_clustering/{mode}_h_{h}_min_{min}_distance_{distance}.log'
+        'logs/hclust_clustering/{mode}_{cut}_{h}_min_{min}_distance_{distance}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/hclust_clustering.R --height {wildcards.h} --min_size {wildcards.min} --distance {wildcards.distance} --mode {wildcards.mode} &> {log}'
+        'Rscript bin/analysis/2_clustering/hclust_clustering.R --{wildcards.cut} {wildcards.h} --min_size {wildcards.min} --distance {wildcards.distance} --mode {wildcards.mode} &> {log}'
 
 rule hdbscan_clustering:
     input:
@@ -64,3 +83,17 @@ rule hdbscan_clustering:
 
     shell:
         'Rscript bin/analysis/2_clustering/hdbscan_clustering.R --min_size {wildcards.min} --mode {wildcards.mode} --distance {wildcards.distance} &> {log}'
+
+rule dbscan_clustering:
+    input:
+        'data/combined_mutational_scans.tsv'
+
+    output:
+        'data/clusterings/dbscan_{mode}_min_{min}_eps_{eps}_distance_{distance}.tsv',
+        [f'figures/2_clustering/dbscan_{{mode}}_min_{{min}}_eps_{{eps}}_distance_{{distance}}/{x}' for x in cluster_plots]
+
+    log:
+        'logs/dbscan_clustering/{mode}_min_{min}_eps_{eps}_distance_{distance}.log'
+
+    shell:
+        'Rscript bin/analysis/2_clustering/dbscan_clustering.R --minPts {wildcards.min} --eps {wildcards.eps} --mode {wildcards.mode} --distance {wildcards.distance} &> {log}'
