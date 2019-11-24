@@ -147,7 +147,8 @@ cluster_mean_profiles <- function(tbl, cols){
 plot_cluster_profiles <- function(tbl, cols){
   cols <- enquo(cols)
   profiles <- cluster_mean_profiles(tbl, !!cols) %>%
-    pivot_longer(-cluster, names_to = 'mut', values_to = 'score')
+    pivot_longer(-cluster, names_to = 'mut', values_to = 'score') %>%
+    drop_na(cluster)
   
   ggplot(profiles, aes(x=mut, y=cluster, fill=score)) +
     geom_tile() +
