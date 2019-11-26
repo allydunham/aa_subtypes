@@ -1,5 +1,11 @@
 """
 Rules for the study standardisation pipeline and generrating summary information on the data
+
+Expects global variables:
+  - STUDIES: dict of study properties
+  - GENES: dict linking genes to lists of studies
+  - UNFILTERED_STUDIES: list of unfiltered studies
+  - UNFILTERED_GENES: list of unfiltered genes
 """
 
 #### Summarisation ####
@@ -79,12 +85,12 @@ rule combine_dms_data:
     projection for the wide version of the data.
     """
     input:
-        expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
-        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction')),
-        expand('data/foldx/{gene}/average_{gene}.fxout', gene=GENES.keys()),
-        expand('data/backbone_angles/{gene}.tsv', gene=GENES.keys()),
-        expand('data/surface_accessibility/{gene}.rsa', gene=GENES.keys()),
-        expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=GENES.keys()),
+        expand('data/studies/{study}/{study}.{ext}', study=UNFILTERED_STUDIES, ext=('tsv', 'yaml')),
+        expand('data/sift/{gene}.{ext}', gene=UNFILTERED_GENES, ext=('fa', 'SIFTprediction')),
+        expand('data/foldx/{gene}/average_{gene}.fxout', gene=UNFILTERED_GENES),
+        expand('data/backbone_angles/{gene}.tsv', gene=UNFILTERED_GENES),
+        expand('data/surface_accessibility/{gene}.rsa', gene=UNFILTERED_GENES),
+        expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=UNFILTERED_GENES),
         'meta/residue_hydrophobicity.tsv'
 
     output:
@@ -92,4 +98,4 @@ rule combine_dms_data:
         'data/combined_mutational_scans.tsv'
 
     shell:
-        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s,v in STUDIES.items() if not v['qc']['filter']])}"
+        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in UNFILTERED_STUDIES])}"

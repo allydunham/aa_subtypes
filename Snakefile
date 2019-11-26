@@ -5,11 +5,9 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO Better logging
 # TODO Better all rules
 # TODO add automated download of some of the input data?
-# TODO add docstrings to rules
 # TODO clean up master pdb file locations?
 # TODO general clean up overhaul/check all in order
 # TODO rule to setup logging directories?
-# TODO Change to only unfiltered gene input in combine_dms_data
 # TODO Split out structures.yaml section validation from get_* scripts to utils
 
 import os
@@ -36,11 +34,13 @@ STUDIES = {}
 for study in os.listdir('data/studies'):
     with open(f'data/studies/{study}/{study}.yaml') as yaml_file:
         STUDIES[study] = yaml.load(yaml_file)
+UNFILTERED_STUDIES = [s for s,v in STUDIES.items() if not v['qc']['filter']]
 
 # Hash linking genes to studies
 GENES = defaultdict(list)
 for study, conf in STUDIES.items():
     GENES[sutil.gene_to_filename(conf['gene'])].append(study)
+UNFILTERED_GENES = [g for g, v in GENES.items() if any(s in UNFILTERED_STUDIES for s in v)]
 
 with open('meta/structures.yaml', 'r') as yaml_file:
     STRUCTURES = yaml.load(yaml_file)
