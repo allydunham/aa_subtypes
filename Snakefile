@@ -5,10 +5,7 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO Better logging
 # TODO Better all rules
 # TODO add automated download of some of the input data?
-# TODO clean up master pdb file locations?
 # TODO general clean up overhaul/check all in order
-# TODO rule to setup logging directories?
-# TODO Split out structures.yaml section validation from get_* scripts to utils
 
 import os
 import math
@@ -101,7 +98,11 @@ def quick_clean_files():
     output_files.append('meta/gene_summary.tsv')
     output_files.append('meta/overall_summary')
     output_files.append('data/combined_mutational_scans.tsv')
+    output_files.append('data/long_combined_mutational_scans.tsv')
     output_files.append('data/clustering/*')
+    output_files.append('data/backbone_angles/*')
+    output_files.append('data/chemical_environment/*')
+    output_files.append('data/surface_accessibility/*')
     output_files.append('logs/*/*')
     return output_files
 
@@ -123,17 +124,14 @@ rule full_clean:
         output_files = quick_clean_files()
 
         # SIFT results
-        output_files.extend([f'data/sift/{g}.fa' for g in GENES.keys()])
-        output_files.extend([f'data/sift/{g}.SIFTPrediction' for g in GENES.keys()])
+        output_files.extend([f'data/sift/{g}.*' for g in GENES.keys()])
 
         # FoldX results
-        output_files.extend([f"data/foldx/{g}/{g}_Repair.pdb" for g in GENES.keys()])
-        output_files.extend([f"data/foldx/{g}/individual_list" for g in GENES.keys()])
-        output_files.extend([f"data/foldx/{g}/*.fxout" for g in GENES.keys()])
-        output_files.extend([f"-r data/foldx/{g}/processing" for g in GENES.keys()])
+        output_files.extend([f"-r data/foldx/{g}/*" for g in GENES.keys()])
 
-        for i in output_files:
-            shell(f'rm {i} && echo "rm {i}" || true')
+        print(output_files)
+        #for i in output_files:
+        #    shell(f'rm {i} && echo "rm {i}" || true')
 
 rule standardise_all_studies:
     """

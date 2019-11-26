@@ -13,7 +13,8 @@ from math import pi
 from pathlib import Path
 from Bio.PDB import PDBParser, PPBuilder
 from Bio.SeqUtils import seq1
-from ruamel.yaml import YAML
+
+from subtypes_utils import import_sections
 
 RAD_FACTOR = 180/pi
 HEADER = 'chain\tpdb_position\taa\tposition\tphi\tpsi'
@@ -46,7 +47,6 @@ def write_backbone_angles(chain, region=None, offset=0,
 
 def main(args):
     """Main script"""
-    yaml = YAML(typ='safe')
     pdb_parser = PDBParser()
 
     pdb_name = Path(args.pdb).stem
@@ -56,12 +56,7 @@ def main(args):
 
     structure = pdb_parser.get_structure(pdb_name, args.pdb)
 
-    sections = None
-    if args.yaml:
-        with open(args.yaml, 'r') as yaml_file:
-            sections = yaml.load(yaml_file)[pdb_name]['sections']
-    elif args.raw:
-        sections = yaml.load(args.raw)
+    sections = import_sections(args.yaml, pdb_name)
 
     if sections is None:
         print(f'# Backbone angles for {args.pdb}', file=sys.stdout)
@@ -90,10 +85,8 @@ def parse_args():
     parser.add_argument('pdb', metavar='P', help="Input PDB file(s)")
 
     parser.add_argument('--yaml', '-y',
-                        help="YAML file detailing regions to process for a set of genes")
-
-    parser.add_argument('--raw', '-r',
-                        help="Raw YAML input detailing the regions for the input PDB")
+                        help=("YAML file detailing regions to process for a set of genes or "
+                              "these sections in raw YAML strings"))
 
     return parser.parse_args()
 

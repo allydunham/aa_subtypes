@@ -12,12 +12,10 @@ from pathlib import Path
 from Bio.PDB import PDBParser
 from Bio.SeqUtils import seq1
 from Bio.Alphabet.IUPAC import protein as protein_alphabet
-from ruamel.yaml import YAML
 
 import chemical_environment as ce
-from filter_pdb import SectionSelecter
+from subtypes_utils import SectionSelecter, import_sections
 
-# TODO loading bars/progress stuff
 
 def main(args):
     """Main script"""
@@ -29,13 +27,7 @@ def main(args):
     pdb_parser = PDBParser()
     structure = pdb_parser.get_structure(pdb_name, args.pdb)
 
-    sections = None
-    yaml = YAML(typ='safe')
-    if args.yaml:
-        with open(args.yaml, 'r') as yaml_file:
-            sections = yaml.load(yaml_file)[pdb_name]['sections']
-    elif args.raw:
-        sections = yaml.load(args.raw)
+    sections = import_sections(args.yaml, pdb_name)
 
     selecter = SectionSelecter(sections, drop_hetero=True)
     residues = [r for c in structure[0] for r in c if selecter.accept_residue(r)]
@@ -61,10 +53,8 @@ def parse_args():
     parser.add_argument('pdb', metavar='P', help="Input PDB file")
 
     parser.add_argument('--yaml', '-y',
-                        help="YAML file detailing regions to process for a set of genes")
-
-    parser.add_argument('--raw', '-r',
-                        help="Raw YAML input detailing the regions for the input PDB")
+                        help=("YAML file detailing regions to process for a set of genes or "
+                              "these sections in raw YAML strings"))
 
     parser.add_argument('--k_nearest', '-k', type=int,
                         help='Profile based on k nearest residues')

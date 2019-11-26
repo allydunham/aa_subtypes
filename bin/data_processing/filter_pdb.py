@@ -7,35 +7,9 @@ import argparse
 from pathlib import Path
 
 from Bio.PDB import PDBParser
-from Bio.PDB.PDBIO import Select, PDBIO
-from ruamel.yaml import YAML
+from Bio.PDB.PDBIO import PDBIO
 
-class SectionSelecter(Select):
-    """
-    Selecter based on section input in the sytle of meta/structures.yaml
-    """
-    def __init__(self, sections, drop_hetero=False):
-        self.sections = sections
-        self.drop_hetero = drop_hetero
-
-        for section in self.sections:
-            if not 'region' in section:
-                section['region'] = [0, float('inf')]
-
-    def accept_residue(self, residue):
-        if self.drop_hetero and not residue.id[0] == ' ':
-            return 0
-
-        if self.sections is None:
-            return 1
-
-        chain = residue.full_id[2]
-        position = residue.id[1]
-        for section in self.sections:
-            if (chain == section['chain'] and
-                    section['region'][0] <= position <= section['region'][1]):
-                return 1
-        return 0
+from subtypes_utils import SectionSelecter, import_sections
 
 def main(args):
     """Main script"""
@@ -47,13 +21,7 @@ def main(args):
     pdb_parser = PDBParser()
     structure = pdb_parser.get_structure(pdb_name, args.pdb)
 
-    sections = None
-    yaml = YAML(typ='safe')
-    if args.yaml:
-        with open(args.yaml, 'r') as yaml_file:
-            sections = yaml.load(yaml_file)[pdb_name]['sections']
-    elif args.raw:
-        sections = yaml.load(args.raw)
+    sections = import_sections(args.yaml, pdb_name)
 
     pdbio = PDBIO()
     pdbio.set_structure(structure)
@@ -67,10 +35,8 @@ def parse_args():
     parser.add_argument('pdb', metavar='P', help="Input PDB file")
 
     parser.add_argument('--yaml', '-y',
-                        help="YAML file detailing regions to process for a set of genes")
-
-    parser.add_argument('--raw', '-r',
-                        help="Raw YAML input detailing the regions for the input PDB")
+                        help=("YAML file detailing regions to process for a set of genes or "
+                              "these sections in raw YAML strings"))
 
     return parser.parse_args()
 
