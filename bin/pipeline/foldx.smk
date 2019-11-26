@@ -56,10 +56,13 @@ checkpoint foldx_split:
     params:
         n_lines = config['foldx']['variants_per_run']
 
+    log:
+        "logs/foldx_split/{gene}.log"
+
     shell:
         """
-        mkdir "data/foldx/{wildcards.gene}/processing"
-        split -l {params.n_lines} data/foldx/{wildcards.gene}/individual_list data/foldx/{wildcards.gene}/processing/individual_list_
+        mkdir "data/foldx/{wildcards.gene}/processing &> {log}"
+        split -l {params.n_lines} data/foldx/{wildcards.gene}/individual_list data/foldx/{wildcards.gene}/processing/individual_list_ &> {log}
         """
 
 rule foldx_repair:
@@ -131,11 +134,14 @@ rule foldx_combine:
         "data/foldx/{gene}/dif_{gene}.fxout",
         "data/foldx/{gene}/raw_{gene}.fxout"
 
+    log:
+        "logs/foldx_combine.log"
+
     shell:
         """
-        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Average_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* > data/foldx/{wildcards.gene}/average_{wildcards.gene}.fxout
+        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Average_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* > data/foldx/{wildcards.gene}/average_{wildcards.gene}.fxout 2> {log}
 
-        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Dif_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* --type=dif > data/foldx/{wildcards.gene}/dif_{wildcards.gene}.fxout
+        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Dif_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* --type=dif > data/foldx/{wildcards.gene}/dif_{wildcards.gene}.fxout 2> {log}
 
-        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Raw_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* --type=raw > data/foldx/{wildcards.gene}/raw_{wildcards.gene}.fxout
+        python bin/data_processing/foldx_combine.py --foldx data/foldx/{wildcards.gene}/processing/Raw_*_{wildcards.gene}_Repair.fxout --variants data/foldx/{wildcards.gene}/processing/individual_list_* --type=raw > data/foldx/{wildcards.gene}/raw_{wildcards.gene}.fxout 2> {log}
         """

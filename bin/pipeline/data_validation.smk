@@ -47,8 +47,11 @@ rule validate_melnikov:
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
         "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf"
 
+    log:
+        "logs/data_validation/melnikov_2014_aph3ii.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
+        "Rscript bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R &> {log}"
 
 rule validate_kitzman:
     """
@@ -61,8 +64,11 @@ rule validate_kitzman:
     output:
         "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
 
+    log:
+        "logs/data_validation/kitzman_2015_gal4.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
+        "Rscript bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R &> {log}"
 
 rule validate_giacomelli:
     """
@@ -77,8 +83,11 @@ rule validate_giacomelli:
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
         "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf"
 
+    log:
+        "logs/data_validation/giacomelli_2018_tp53.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
+        "Rscript bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R &> {log}"
 
 rule validate_heredia:
     """
@@ -96,8 +105,11 @@ rule validate_heredia:
         "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
         "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf"
 
+    log:
+        "logs/data_validation/heredia_2018.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_heredia_2018.R"
+        "Rscript bin/analysis/0_data_properties/validate_heredia_2018.R &> {log}"
 
 rule validate_sarkisyan:
     """
@@ -110,8 +122,11 @@ rule validate_sarkisyan:
     output:
         "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
 
+    log:
+        "logs/data_validation/sarkisyan_2016_gfp.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
+        "Rscript bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R &> {log}"
 
 rule validate_dorrity:
     """
@@ -125,8 +140,11 @@ rule validate_dorrity:
         "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
         "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf"
 
+    log:
+        "logs/data_validation/dorrity_2018_ste12.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
+        "Rscript bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R &> {log}"
 
 rule validate_araya:
     """
@@ -139,8 +157,11 @@ rule validate_araya:
     output:
         "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
 
+    log:
+        "logs/data_validation/araya_2012_yap1.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
+        "Rscript bin/analysis/0_data_properties/validate_araya_2012_yap1.R &> {log}"
 
 rule validate_starita:
     """
@@ -153,8 +174,11 @@ rule validate_starita:
     output:
         "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
 
+    log:
+        "logs/data_validation/starita_2013_ube4b.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
+        "Rscript bin/analysis/0_data_properties/validate_starita_2013_ube4b.R &> {log}"
 
 #### Validate overall dataset ####
 rule sift_correlation:
@@ -169,8 +193,11 @@ rule sift_correlation:
         'figures/0_data_properties/sift_score_correlation.pdf',
         'figures/0_data_properties/sift_score_density.pdf'
 
+    log:
+        "logs/data_validation/sift_correlation.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/sift_correlation.R"
+        "Rscript bin/analysis/0_data_properties/sift_correlation.R &> {log}"
 
 # Analyse cases with multiple studies of the same gene
 rule gene_repeats:
@@ -192,6 +219,9 @@ rule gene_repeats:
         "figures/0_data_properties/gene_repeats/tem1.pdf",
         "figures/0_data_properties/gene_repeats/ubi.pdf"
 
+    log:
+        "logs/data_validation/gene_repeats.log"
+
     shell:
-        "Rscript bin/analysis/0_data_properties/gene_repeats.R"
+        "Rscript bin/analysis/0_data_properties/gene_repeats.R &> {log}"
 

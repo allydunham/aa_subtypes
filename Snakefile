@@ -65,8 +65,8 @@ rule all:
         - Also generates various summary and diagnostic tables/plots
     """
     input:
-        'data/combined_mutational_scans.tsv', # Covers all standardisation, SIFT and FoldX
-        'data/long_combined_mutational_scans.tsv',
+
+        'data/combined_mutational_scans.tsv', # Covers standardisation, SIFT, FoldX + other stats
         rules.summarise_study_set.output,
         VALIDATION_PLOTS,
         rules.study_summary_plots.output,
@@ -129,9 +129,8 @@ rule full_clean:
         # FoldX results
         output_files.extend([f"-r data/foldx/{g}/*" for g in GENES.keys()])
 
-        print(output_files)
-        #for i in output_files:
-        #    shell(f'rm {i} && echo "rm {i}" || true')
+        for i in output_files:
+            shell(f'rm {i} && echo "rm {i}" || true')
 
 rule standardise_all_studies:
     """
