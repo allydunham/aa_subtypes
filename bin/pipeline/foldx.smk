@@ -12,7 +12,7 @@ rule foldx_variants:
     correspond to the regions defined in meta/structures.yaml as part of the analyses protein
     """
     input:
-        pdb="data/foldx/{gene}/{gene}.pdb",
+        pdb="data/foldx/{gene}/{gene}_Repair.pdb",
         structures=ancient("meta/structures.yaml") # Imported generally
 
     output:
@@ -67,7 +67,7 @@ rule foldx_repair:
     Run FoldX RepairPDB command on PDB files
     """
     input:
-        pdb="data/foldx/{gene}/{gene}.pdb"
+        pdb="data/pdb/{gene}.pdb"
 
     output:
         "data/foldx/{gene}/{gene}_Repair.pdb",
@@ -80,7 +80,7 @@ rule foldx_repair:
         "logs/foldx_repair/{gene}.log"
 
     shell:
-        "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/foldx/{wildcards.gene} --clean-mode=3 --output-dir=data/foldx/{wildcards.gene} &> {log}"
+        "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/pdb --clean-mode=3 --output-dir=data/foldx/{wildcards.gene} &> {log}"
 
 rule foldx_model:
     """

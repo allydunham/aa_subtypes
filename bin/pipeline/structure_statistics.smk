@@ -8,7 +8,7 @@ rule calculate_backbone_angles:
     Calculate Phi/Psi angles from regions of interest in a PDB
     """
     input:
-        pdb="data/foldx/{gene}/{gene}_Repair.pdb",
+        pdb="data/pdb/{gene}.pdb",
         yaml="meta/structures.yaml"
 
     output:
@@ -25,7 +25,7 @@ rule filter_pdb:
     Filter a PDB to only contain regions of interest
     """
     input:
-        'data/foldx/{gene}/{gene}_Repair.pdb'
+        'data/pdb/{gene}.pdb'
 
     output:
         'data/surface_accessibility/{gene}.pdb'
@@ -64,7 +64,7 @@ rule k_nearest_profile:
     Produce k nearest residues profiles from regions of interest in a PDB
     """
     input:
-        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
+        pdb='data/pdb/{gene}.pdb',
         yaml='meta/structures.yaml'
 
     output:
@@ -81,7 +81,7 @@ rule within_a_profile:
     Produce within x angstroms profiles from regions of interest in a PDB
     """
     input:
-        pdb='data/foldx/{gene}/{gene}_Repair.pdb',
+        pdb='data/pdb/{gene}.pdb',
         yaml='meta/structures.yaml'
 
     output:
