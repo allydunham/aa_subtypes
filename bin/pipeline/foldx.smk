@@ -18,30 +18,11 @@ rule foldx_variants:
     output:
         muts="data/foldx/{gene}/individual_list"
 
-    run:
-        parser = PDBParser()
-        structure = parser.get_structure(f'{wildcards.gene}', input.pdb)
+    log:
+        "logs/foldx_variants/{gene}.log"
 
-        variants = []
-        for section in STRUCTURES[wildcards.gene]['sections']:
-            filter_region = 'region' in section
-            for residue in structure[0][section['chain']]:
-                if not residue.id[0] == ' ':
-                    continue # Filter HETATMs
-
-                position = int(residue.id[1])
-                aa = seq1(residue.get_resname())
-
-                if (filter_region and
-                    (position > section['region'][1] or
-                     position < section['region'][0])):
-                    continue
-
-                variants.extend([f"{aa}{section['chain']}{position}{x}" for
-                                 x in AA_ALPHABET if not x == aa])
-
-        with open(output.muts, 'w') as outfile:
-            print(*variants, sep=';\n', end=';\n', file=outfile)
+    shell:
+        "python bin/data_processing/foldx_variants.py --yaml {input.structures} {input.pdb} > {output.muts} 2> {log}"
 
 checkpoint foldx_split:
     """
@@ -135,7 +116,7 @@ rule foldx_combine:
         "data/foldx/{gene}/raw_{gene}.fxout"
 
     log:
-        "logs/foldx_combine.log"
+        "logs/foldx_combine/{gene}.log"
 
     shell:
         """

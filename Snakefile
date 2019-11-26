@@ -65,7 +65,6 @@ rule all:
         - Also generates various summary and diagnostic tables/plots
     """
     input:
-
         'data/combined_mutational_scans.tsv', # Covers standardisation, SIFT, FoldX + other stats
         rules.summarise_study_set.output,
         VALIDATION_PLOTS,
