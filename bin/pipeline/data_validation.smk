@@ -32,7 +32,11 @@ VALIDATION_PLOTS = [
     "figures/0_data_properties/gene_repeats/tem1.pdf",
     "figures/0_data_properties/gene_repeats/ubi.pdf"]
 
+#### Validate standardiation methods ####
 rule validate_melnikov:
+    """
+    Validate standardisation method used for Melnikov at al. 2014 (APH(3')II)
+    """
     input:
         [f'data/studies/melnikov_2014_aph3ii/raw/{x}' for
          x in STUDIES['melnikov_2014_aph3ii']['input_files']]
@@ -46,8 +50,10 @@ rule validate_melnikov:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R"
 
-# Validate Kitzman et al. 2015 (GAL4)
 rule validate_kitzman:
+    """
+    Validate standardisation method used for Kitzman et al. 2015 (GAL4)
+    """
     input:
         [f'data/studies/kitzman_2015_gal4/raw/{x}' for
          x in STUDIES['kitzman_2015_gal4']['input_files']]
@@ -58,8 +64,10 @@ rule validate_kitzman:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R"
 
-# Validate Giacomelli et al. 2018 (TP53)
 rule validate_giacomelli:
+    """
+    Validate standardisation method used for Giacomelli et al. 2018 (TP53)
+    """
     input:
         [f'data/studies/giacomelli_2018_tp53/raw/{x}' for
          x in STUDIES['giacomelli_2018_tp53']['input_files']]
@@ -72,8 +80,10 @@ rule validate_giacomelli:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R"
 
-# Validate Heredia et al. 2018
 rule validate_heredia:
+    """
+    Validate standardisation method used for Heredia et al. 2018 (CCR5 & CXCR4)
+    """
     input:
         [f'data/studies/heredia_2018_ccr5/raw/{x}' for
          x in STUDIES['heredia_2018_ccr5']['input_files']] +
@@ -89,8 +99,10 @@ rule validate_heredia:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_heredia_2018.R"
 
-# Validate Sarkisyan et al. 2016 (GFP)
 rule validate_sarkisyan:
+    """
+    Validate standardisation method used for Sarkisyan et al. 2016 (GFP)
+    """
     input:
         [f'data/studies/sarkisyan_2016_gfp/raw/{x}' for
          x in STUDIES['sarkisyan_2016_gfp']['input_files']]
@@ -101,8 +113,10 @@ rule validate_sarkisyan:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R"
 
-# Validate Dorrity et al. 2018 (STE12)
 rule validate_dorrity:
+    """
+    Validate standardisation method used for Dorrity et al. 2018 (STE12)
+    """
     input:
         [f'data/studies/dorrity_2018_ste12/raw/{x}' for
          x in STUDIES['dorrity_2018_ste12']['input_files']]
@@ -114,8 +128,10 @@ rule validate_dorrity:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R"
 
-# Validate Araya et al. 2012 (YAP1)
 rule validate_araya:
+    """
+    Validate standardisation method used for Araya et al. 2012 (YAP1)
+    """
     input:
         [f'data/studies/araya_2012_yap1/raw/{x}' for
          x in STUDIES['araya_2012_yap1']['input_files']]
@@ -126,8 +142,10 @@ rule validate_araya:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_araya_2012_yap1.R"
 
-# Validate Starita et al. 2013 (UBE4B)
 rule validate_starita:
+    """
+    Validate standardisation method used for Starita et al. 2013 (UBE4B)
+    """
     input:
         [f'data/studies/starita_2013_ube4b/raw/{x}' for
          x in STUDIES['starita_2013_ube4b']['input_files']]
@@ -138,8 +156,11 @@ rule validate_starita:
     shell:
         "Rscript bin/analysis/0_data_properties/validate_starita_2013_ube4b.R"
 
-# Check correlation with SIFT
+#### Validate overall dataset ####
 rule sift_correlation:
+    """
+    Check correlation between study results and SIFT scores
+    """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv')),
         expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction'))
@@ -153,6 +174,9 @@ rule sift_correlation:
 
 # Analyse cases with multiple studies of the same gene
 rule gene_repeats:
+    """
+    Analyse correlation between multiple studies of the same genes
+    """
     input:
         expand('data/studies/{study}/{study}.{ext}',
                ext=['yaml', 'tsv'],

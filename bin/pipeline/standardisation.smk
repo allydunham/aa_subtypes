@@ -4,6 +4,9 @@ Rules for the study standardisation pipeline and generrating summary information
 
 #### Summarisation ####
 rule summarise_study_set:
+    """
+    Produce tables detailing the studies processed for the project
+    """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
 
@@ -16,6 +19,9 @@ rule summarise_study_set:
         "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
 
 rule study_summary_plots:
+    """
+    Make plots summarising the dataset
+    """
     input:
         'meta/study_summary.tsv',
         'meta/gene_summary.tsv',
@@ -30,6 +36,9 @@ rule study_summary_plots:
         'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
 
 rule summarise_standardised_data:
+    """
+    Make plots summarising the standardised and filtered dataset
+    """
     input:
         'data/long_combined_mutational_scans.tsv'
 
@@ -43,6 +52,9 @@ rule summarise_standardised_data:
 
 #### Combine Deep Mutational Scans ####
 rule standardise_study:
+    """
+    Import a study and convert it into the standardised table format
+    """
     input:
         "data/studies/{study}/standardise_{study}.R",
         lambda wildcards: [f'data/studies/{wildcards.study}/raw/{x}' for x in
@@ -61,6 +73,11 @@ rule standardise_study:
         "Rscript {input} 2> {log}"
 
 rule combine_dms_data:
+    """
+    Gather all standardised data and additional data on the genes and structures and
+    combine it into a single tsv, including calculating principle components and tSNE
+    projection for the wide version of the data.
+    """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('tsv', 'yaml')),
         expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction')),

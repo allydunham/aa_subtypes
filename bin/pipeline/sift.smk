@@ -7,7 +7,10 @@ Expects global variables:
 FASTA_LINE_LENGTH = 80
 
 rule make_gene_fasta:
-    # seq really shouldn't change much even when .yaml's do -> sift results wont either
+    """
+    Generate a FASTA file for a gene from the sequence in the studies YAML configs
+    """
+    # marked ancient as seq shouldn't change when .yaml's do
     # force re-run if neccessary by deleting relevant .fa
     input:
         lambda wildcards: [ancient(f'data/studies/{i}/{i}.yaml') for i
@@ -33,6 +36,11 @@ rule make_gene_fasta:
                 print(seq[i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
 
 rule sift4g:
+    """
+    Run SIFT4G on a FASTA file, assessing all possible variants.
+    Note: for this project I have been using a modified version of SIFT4G that
+    outputs to 4.d.p rather than 2.
+    """
     input:
         fa = "data/sift/{gene}.fa",
         db = config['sift']['uniref90_fa_path']

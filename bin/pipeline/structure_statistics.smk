@@ -4,6 +4,9 @@ Rules for generating other statistics from PDB files (i.e. othat than FoldX)
 Requires the foldx_repair rule from foldx.smk to generate the *_Repair.pdb files
 """
 rule calculate_backbone_angles:
+    """
+    Calculate Phi/Psi angles from regions of interest in a PDB
+    """
     input:
         pdb="data/foldx/{gene}/{gene}_Repair.pdb",
         yaml="meta/structures.yaml"
@@ -18,6 +21,9 @@ rule calculate_backbone_angles:
         "python bin/data_processing/get_backbone_angles.py --yaml {input.yaml} {input.pdb} > {output} 2> {log}"
 
 rule filter_pdb:
+    """
+    Filter a PDB to only contain regions of interest
+    """
     input:
         'data/foldx/{gene}/{gene}_Repair.pdb'
 
@@ -31,6 +37,9 @@ rule filter_pdb:
         'python bin/data_processing/filter_pdb.py --yaml meta/structures.yaml {input} > {output} 2> {log}'
 
 rule naccess:
+    """
+    Run naccess to calculate surface accessibility for a PDB
+    """
     input:
         'data/surface_accessibility/{gene}.pdb'
 
@@ -51,6 +60,9 @@ rule naccess:
         """
 
 rule k_nearest_profile:
+    """
+    Produce k nearest residues profiles from regions of interest in a PDB
+    """
     input:
         pdb='data/foldx/{gene}/{gene}_Repair.pdb',
         yaml='meta/structures.yaml'
@@ -65,6 +77,9 @@ rule k_nearest_profile:
         'python bin/data_processing/get_chem_env_profiles.py --k_nearest {wildcards.k} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
 
 rule within_a_profile:
+    """
+    Produce within x angstroms profiles from regions of interest in a PDB
+    """
     input:
         pdb='data/foldx/{gene}/{gene}_Repair.pdb',
         yaml='meta/structures.yaml'

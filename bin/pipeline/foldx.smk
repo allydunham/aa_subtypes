@@ -7,6 +7,10 @@ Expects two global variables:
 """
 
 rule foldx_variants:
+    """
+    Produce a list of all possible variants from a PDB structure, from positions that
+    correspond to the regions defined in meta/structures.yaml as part of the analyses protein
+    """
     input:
         pdb="data/foldx/{gene}/{gene}.pdb",
         structures=ancient("meta/structures.yaml") # Imported generally
@@ -40,6 +44,9 @@ rule foldx_variants:
             print(*variants, sep=';\n', end=';\n', file=outfile)
 
 checkpoint foldx_split:
+    """
+    Split variants lists into subsections to parralelise FoldX
+    """
     input:
         "data/foldx/{gene}/individual_list"
 
@@ -56,6 +63,9 @@ checkpoint foldx_split:
         """
 
 rule foldx_repair:
+    """
+    Run FoldX RepairPDB command on PDB files
+    """
     input:
         pdb="data/foldx/{gene}/{gene}.pdb"
 
@@ -73,6 +83,9 @@ rule foldx_repair:
         "foldx --command=RepairPDB --pdb={wildcards.gene}.pdb --pdb-dir=data/foldx/{wildcards.gene} --clean-mode=3 --output-dir=data/foldx/{wildcards.gene} &> {log}"
 
 rule foldx_model:
+    """
+    Run FoldX BuildModel on a PDB and a paired list of variants
+    """
     input:
         pdb="data/foldx/{gene}/{gene}_Repair.pdb",
         muts="data/foldx/{gene}/processing/individual_list_{n}"
@@ -94,7 +107,7 @@ rule foldx_model:
 
 def get_foldx_split_files(wildcards):
     """
-    Retrieve the split FoldX jobs
+    Retrieve the IDs of split FoldX jobs
     """
     checkpoint_outdir = checkpoints.foldx_split.get(gene=wildcards.gene).output[0]
     fx_output = expand('data/foldx/{gene}/processing/{fi}_{n}_{gene}_Repair.fxout',
@@ -107,6 +120,9 @@ def get_foldx_split_files(wildcards):
     return fx_output + in_lists
 
 rule foldx_combine:
+    """
+    Combined output of split FoldX model results for a gene
+    """
     input:
         get_foldx_split_files
 

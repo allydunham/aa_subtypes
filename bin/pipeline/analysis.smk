@@ -6,6 +6,10 @@ Expects global variables:
 
 #### Analyse whole dataset ####
 rule principle_component_analysis:
+    """
+    Analyse principle components of the mutational landscape, relating them
+    to various biophysical properties
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
@@ -24,6 +28,10 @@ rule principle_component_analysis:
         'Rscript bin/analysis/1_landscape_properties/principle_component_analysis.R &> {log}'
 
 rule tsne_analysis:
+    """
+    Analyse tSNE dimensionality reduction of the mutational landscape, relating it to biophysical
+    properties
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
@@ -43,6 +51,10 @@ rule tsne_analysis:
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
                  'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf']
 rule kmeans_clustering:
+    """
+    Perform K-means clustering on each amino acid type to break them down into subtypes, and
+    produce plots analysing the clustering
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
@@ -57,6 +69,10 @@ rule kmeans_clustering:
         'Rscript bin/analysis/2_clustering/kmeans_clustering.R --ncluster {wildcards.k} --min_size {wildcards.min} --mode {wildcards.mode} &> {log}'
 
 rule hclust_clustering:
+    """
+    Perform Heirarchical clustering on each amino acid type to break them down into subtypes, and
+    produce plots analysing the clustering
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
@@ -71,6 +87,10 @@ rule hclust_clustering:
         'Rscript bin/analysis/2_clustering/hclust_clustering.R --{wildcards.cut} {wildcards.h} --min_size {wildcards.min} --distance {wildcards.distance} --mode {wildcards.mode} &> {log}'
 
 rule hdbscan_clustering:
+    """
+    Perform HDBSCAN clustering on each amino acid type to break them down into subtypes, and
+    produce plots analysing the clustering
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
@@ -85,6 +105,10 @@ rule hdbscan_clustering:
         'Rscript bin/analysis/2_clustering/hdbscan_clustering.R --min_size {wildcards.min} --mode {wildcards.mode} --distance {wildcards.distance} &> {log}'
 
 rule dbscan_clustering:
+    """
+    Perform DBSCAN clustering on each amino acid type to break them down into subtypes, and
+    produce plots analysing the clustering
+    """
     input:
         'data/combined_mutational_scans.tsv'
 
