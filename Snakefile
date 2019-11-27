@@ -93,7 +93,7 @@ def quick_clean_files():
     output_files.append('meta/overall_summary')
     output_files.append('data/combined_mutational_scans.tsv')
     output_files.append('data/long_combined_mutational_scans.tsv')
-    output_files.append('data/clustering/*')
+    output_files.append('data/clusterings/*')
     output_files.append('data/backbone_angles/*')
     output_files.append('data/chemical_environment/*')
     output_files.append('data/surface_accessibility/*')
