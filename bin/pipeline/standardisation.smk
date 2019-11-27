@@ -21,8 +21,11 @@ rule summarise_study_set:
         gene='meta/gene_summary.tsv',
         overall='meta/overall_summary',
 
+    log:
+        "logs/summarise_study_set.log"
+
     shell:
-        "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/*"
+        "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/* &> {log}"
 
 rule study_summary_plots:
     """
@@ -38,8 +41,11 @@ rule study_summary_plots:
         'figures/0_data_properties/gene_variants_summary.pdf',
         'figures/0_data_properties/position_coverage.pdf'
 
+    log:
+        "logs/study_summary_plots.log"
+
     shell:
-        'Rscript bin/analysis/0_data_properties/data_summary_plots.R'
+        'Rscript bin/analysis/0_data_properties/data_summary_plots.R &> {log}'
 
 rule summarise_standardised_data:
     """
@@ -52,8 +58,11 @@ rule summarise_standardised_data:
         'figures/0_data_properties/standardised_distributions.pdf',
         'figures/0_data_properties/position_data_summary.pdf'
 
+    log:
+        "logs/summarise_standardised_data.log"
+
     shell:
-        'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R'
+        'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R &> {log}'
 
 
 #### Combine Deep Mutational Scans ####
@@ -76,7 +85,7 @@ rule standardise_study:
         "logs/standardise_study/{study}.log"
 
     shell:
-        "Rscript {input} 2> {log}"
+        "Rscript {input} &> {log}"
 
 rule combine_dms_data:
     """
@@ -97,5 +106,8 @@ rule combine_dms_data:
         'data/long_combined_mutational_scans.tsv',
         'data/combined_mutational_scans.tsv'
 
+    log:
+        "logs/combine_dms_data.log"
+
     shell:
-        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in UNFILTERED_STUDIES])}"
+        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in UNFILTERED_STUDIES])} &> {log}"
