@@ -2,17 +2,12 @@
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
 # General todo list for pipeline
-# TODO Better all rules
 # TODO add automated download of some of the input data?
-# TODO general clean up overhaul/check all in order
 
 import os
 import math
+from pathlib import Path
 from collections import defaultdict
-
-from Bio import SeqIO
-from Bio.PDB import PDBParser
-from Bio.SeqUtils import seq1
 
 from ruamel.yaml import YAML
 yaml = YAML(typ='safe')
@@ -130,3 +125,37 @@ rule full_clean:
 
         for i in output_files:
             shell(f'rm {i} && echo "rm {i}" || true')
+
+rule setup_directories:
+    """
+    Setup initial project directory structure for all generated files. Assumes bin, src & docs
+    exist. Plus many of the others will often already exist for various reasons, but this rule
+    ensures everything is setup correctly
+    """
+    run:
+        # data
+        shell('mkdir data && echo "mkdir data" || true')
+        dirs = ['backbone_angles', 'chemical_environment', 'clusterings',
+                'foldx', 'pdb', 'sift', 'studies',
+                'surface_accessibility', 'wip']
+
+        for d in dirs:
+            shell(f'mkdir data/{d} && echo "mkdir data/{d}" || true')
+
+        # figures
+        shell('mkdir figures && echo "mkdir figures" || true')
+
+        # logs
+        shell('mkdir logs && echo "mkdir logs" || true')
+        dirs = ['calculate_backbone_angles', 'data_validation', 'dbscan_clustering',
+                'filter_pdb', 'foldx_combine', 'foldx_model', 'foldx_repair',
+                'foldx_split', 'foldx_variants', 'hclust_clustering',
+                'hdbscan_clustering', 'k_nearest_profile', 'kmeans_clustering',
+                'make_gene_fasta', 'naccess', 'sift4g', 'standardise_study',
+                'within_a_profile']
+
+        for d in dirs:
+            shell(f'mkdir logs/{d} && echo "mkdir logs/{d}" || true')
+
+        # meta
+        shell('mkdir meta && echo "mkdir meta" || true')
