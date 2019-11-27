@@ -45,3 +45,10 @@ rule sift4g:
 
     shell:
         "sift4g -q {input.fa} -d {input.db} --out data/sift 2> {log}"
+
+rule all_sift_predictions:
+    """
+    Produce SIFT predictions for all genes
+    """
+    input:
+        expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())

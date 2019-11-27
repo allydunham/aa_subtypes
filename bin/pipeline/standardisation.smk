@@ -87,6 +87,13 @@ rule standardise_study:
     shell:
         "Rscript {input} &> {log}"
 
+rule standardise_all_studies:
+    """
+    Run standardisation procedure for all studies
+    """
+    input:
+        expand('data/studies/{study}/{study}.tsv', study=STUDIES.keys())
+
 rule combine_dms_data:
     """
     Gather all standardised data and additional data on the genes and structures and

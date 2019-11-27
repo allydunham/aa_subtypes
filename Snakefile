@@ -43,6 +43,17 @@ with open('meta/structures.yaml', 'r') as yaml_file:
 
 AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
+STANDARD_CLUSTERINGS = ['kmeans_profile_k_4_min_5',
+                        'kmeans_pca_k_4_min_5',
+                        'hclust_profile_height_17_min_3_distance_manhattan',
+                        'hclust_pca_height_6_min_3_distance_manhattan',
+                        'hclust_profile_number_5_min_3_distance_manhattan',
+                        'hclust_pca_number_5_min_3_distance_manhattan',
+                        'hdbscan_profile_min_6_distance_manhattan',
+                        'hdbscan_pca_min_5_distance_manhattan',
+                        'dbscan_profile_min_5_eps_4_distance_manhattan',
+                        'dbscan_pca_min_5_eps_4_distance_manhattan']
+
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
 include: 'bin/pipeline/standardisation.smk'
@@ -52,7 +63,6 @@ include: 'bin/pipeline/structure_statistics.smk'
 include: 'bin/pipeline/analysis.smk'
 
 #### Global rules ####
-# TODO - group up plots into lists?
 rule all:
     """
     Run complete pipeline:
@@ -66,21 +76,12 @@ rule all:
     input:
         'data/combined_mutational_scans.tsv', # Covers standardisation, SIFT, FoldX + other stats
         rules.summarise_study_set.output,
-        VALIDATION_PLOTS,
+        [r.output for r in VALIDATION_RULES],
         rules.study_summary_plots.output,
         rules.summarise_standardised_data.output,
         rules.principle_component_analysis.output,
         rules.tsne_analysis.output,
-        'data/clusterings/kmeans_profile_k_4_min_5.tsv',
-        'data/clusterings/kmeans_pca_k_4_min_5.tsv',
-        'data/clusterings/hclust_profile_height_17_min_3_distance_manhattan.tsv',
-        'data/clusterings/hclust_pca_height_6_min_3_distance_manhattan.tsv',
-        'data/clusterings/hclust_profile_number_5_min_3_distance_manhattan.tsv',
-        'data/clusterings/hclust_pca_number_5_min_3_distance_manhattan.tsv',
-        'data/clusterings/hdbscan_profile_min_6_distance_manhattan.tsv',
-        'data/clusterings/hdbscan_pca_min_5_distance_manhattan.tsv',
-        'data/clusterings/dbscan_profile_min_5_eps_4_distance_manhattan.tsv',
-        'data/clusterings/dbscan_pca_min_5_eps_4_distance_manhattan.tsv'
+        [f'data/clusterings/{x}.tsv' for x in STANDARD_CLUSTERINGS]
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -129,33 +130,3 @@ rule full_clean:
 
         for i in output_files:
             shell(f'rm {i} && echo "rm {i}" || true')
-
-rule standardise_all_studies:
-    """
-    Run standardisation procedure for all studies
-    """
-    input:
-        expand('data/studies/{study}/{study}.tsv', study=STUDIES.keys())
-
-rule all_sift_predictions:
-    """
-    Produce SIFT predictions for all genes
-    """
-    input:
-        expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())
-
-rule all_foldx_predictions:
-    """
-    Produce FoldX predictions for all genes
-    """
-    input:
-        expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
-        expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
-        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys())
-
-rule validate_data:
-    """
-    Produce all data validation plots
-    """
-    input:
-        VALIDATION_PLOTS

@@ -6,32 +6,6 @@ Expects global variables:
 - GENES: dictionary mapping genes to lists of their study IDs
 """
 
-VALIDATION_PLOTS = [
-    "figures/0_data_properties/sift_score_correlation.pdf",
-    "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
-    "figures/0_data_properties/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
-    "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
-    "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf",
-    "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf",
-    "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
-    "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
-    "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf",
-    "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
-    "figures/0_data_properties/per_study/heredia_2018_ccr5/experiment_correlation.pdf",
-    "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
-    "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf",
-    "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf",
-    "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
-    "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf",
-    "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf",
-    "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf",
-    "figures/0_data_properties/sift_score_correlation.pdf",
-    "figures/0_data_properties/sift_score_density.pdf",
-    "figures/0_data_properties/gene_repeats/brca1.pdf",
-    "figures/0_data_properties/gene_repeats/hsp90.pdf",
-    "figures/0_data_properties/gene_repeats/tem1.pdf",
-    "figures/0_data_properties/gene_repeats/ubi.pdf"]
-
 #### Validate standardiation methods ####
 rule validate_melnikov:
     """
@@ -225,3 +199,14 @@ rule gene_repeats:
     shell:
         "Rscript bin/analysis/0_data_properties/gene_repeats.R &> {log}"
 
+VALIDATION_RULES = [rules.validate_melnikov, rules.validate_kitzman, rules.validate_giacomelli,
+                    rules.validate_heredia, rules.validate_sarkisyan, rules.validate_dorrity,
+                    rules.validate_araya, rules.validate_starita, rules.sift_correlation,
+                    rules.gene_repeats]
+
+rule validate_data:
+    """
+    Produce all data validation plots
+    """
+    input:
+        [r.output for r in VALIDATION_RULES]

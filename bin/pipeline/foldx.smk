@@ -1,10 +1,18 @@
 """
 Rules for FoldX pipeline
 
-Expects two global variables:
-- AA_ALPHABET: string of the 20 AA letters) and
-- STRUCTURES: dictionary of meta/structures.yaml
+Expects one global variables:
+- GENES: dict of all genes linking to lists of studies on each gene
 """
+
+rule all_foldx_predictions:
+    """
+    Produce FoldX predictions for all genes
+    """
+    input:
+        expand("data/foldx/{gene}/average_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/dif_{gene}.fxout", gene=GENES.keys()),
+        expand("data/foldx/{gene}/raw_{gene}.fxout", gene=GENES.keys())
 
 rule foldx_variants:
     """
