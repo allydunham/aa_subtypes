@@ -4,7 +4,6 @@ Rules for SIFT pipeline
 Expects global variables:
 - GENES: dict mapping genes to lists of the studies assessing them
 """
-FASTA_LINE_LENGTH = 80
 
 rule make_gene_fasta:
     """
@@ -19,21 +18,11 @@ rule make_gene_fasta:
     output:
         "data/sift/{gene}.fa"
 
-    run:
-        seq = None
-        for study_yaml in input:
-            with open(study_yaml, 'r') as yaml_file:
-                conf = yaml.load(yaml_file)
+    log:
+        "logs/make_gene_fasta/{gene}.log"
 
-            if seq is None:
-                seq = conf['seq']
-            elif not seq == conf['seq']:
-                raise ValueError(f"Two studies on {wildcards.gene} have different sequences")
-
-        with open(output[0], 'w') as fasta_file:
-            print(f">{wildcards.gene}", file=fasta_file)
-            for i in range(0, len(seq), FASTA_LINE_LENGTH):
-                print(seq[i:(i + FASTA_LINE_LENGTH)], file=fasta_file)
+    shell:
+        "python bin/data_processing/make_gene_fasta.py {input} > {output} 2> {log}"
 
 rule sift4g:
     """
