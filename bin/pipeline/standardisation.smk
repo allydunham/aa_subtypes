@@ -95,7 +95,7 @@ rule combine_dms_data:
     """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=UNFILTERED_STUDIES, ext=('tsv', 'yaml')),
-        expand('data/sift/{gene}.{ext}', gene=UNFILTERED_GENES, ext=('fa', 'SIFTprediction')),
+        expand('data/sift/{gene}.SIFTprediction', gene=UNFILTERED_GENES),
         expand('data/foldx/{gene}/average_{gene}.fxout', gene=UNFILTERED_GENES),
         expand('data/backbone_angles/{gene}.tsv', gene=UNFILTERED_GENES),
         expand('data/surface_accessibility/{gene}.rsa', gene=UNFILTERED_GENES),
@@ -110,4 +110,4 @@ rule combine_dms_data:
         "logs/combine_dms_data.log"
 
     shell:
-        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in UNFILTERED_STUDIES])} &> {log}"
+        f"Rscript bin/data_processing/combine_standardised_data.R {' '.join([f'data/studies/{s}' for s in UNFILTERED_STUDIES])} &> {{log}}"

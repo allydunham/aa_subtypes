@@ -2,7 +2,6 @@
 Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 """
 # General todo list for pipeline
-# TODO Better logging
 # TODO Better all rules
 # TODO add automated download of some of the input data?
 # TODO general clean up overhaul/check all in order
