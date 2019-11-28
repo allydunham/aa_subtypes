@@ -50,7 +50,7 @@ checkpoint foldx_split:
 
     shell:
         """
-        mkdir "data/foldx/{wildcards.gene}/processing &> {log}"
+        mkdir data/foldx/{wildcards.gene}/processing &> {log}
         split -l {params.n_lines} data/foldx/{wildcards.gene}/individual_list data/foldx/{wildcards.gene}/processing/individual_list_ &> {log}
         """
 
