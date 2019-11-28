@@ -56,6 +56,9 @@ def main(args):
                 position = int(residue.id[1])
                 amino_acid = seq1(residue.get_resname())
 
+                if not amino_acid in AA_ALPHABET:
+                    continue
+
                 variants.extend([f"{amino_acid}{chain.id}{position}{x}" for
                                  x in AA_ALPHABET if not x == amino_acid])
 
