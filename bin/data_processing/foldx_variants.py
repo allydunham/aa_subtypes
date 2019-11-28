@@ -37,6 +37,9 @@ def main(args):
                 position = int(residue.id[1])
                 amino_acid = seq1(residue.get_resname())
 
+                if not amino_acid in AA_ALPHABET:
+                    continue
+
                 if (filter_region and
                         (position > section['region'][1] or
                          position < section['region'][0])):
