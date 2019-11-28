@@ -25,7 +25,7 @@ rule summarise_study_set:
         "logs/summarise_study_set.log"
 
     shell:
-        "python bin/utils/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/* &> {log}"
+        "python bin/analysis/0_data_properties/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/* &> {log}"
 
 rule study_summary_plots:
     """
