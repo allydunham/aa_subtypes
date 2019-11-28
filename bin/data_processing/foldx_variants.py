@@ -38,6 +38,9 @@ def main(args):
                 amino_acid = seq1(residue.get_resname())
 
                 if not amino_acid in AA_ALPHABET:
+                    # Filter non-standard AAs, required when processing
+                    # foldx repaired PDBs as they turn HETATMs to regular ATOMs
+                    # for regular proteins
                     continue
 
                 if (filter_region and
