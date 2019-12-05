@@ -41,14 +41,19 @@ AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
 STANDARD_CLUSTERINGS = ['kmeans_profile_k_4_min_5',
                         'kmeans_pca_k_4_min_5',
-                        'hclust_profile_height_17_min_3_distance_manhattan',
-                        'hclust_pca_height_6_min_3_distance_manhattan',
-                        'hclust_profile_number_5_min_3_distance_manhattan',
-                        'hclust_pca_number_5_min_3_distance_manhattan',
-                        'hdbscan_profile_min_6_distance_manhattan',
-                        'hdbscan_pca_min_5_distance_manhattan',
-                        'dbscan_profile_min_5_eps_4_distance_manhattan',
-                        'dbscan_pca_min_5_eps_4_distance_manhattan']
+                        'kmeans_pca2_k_4_min_5',
+                        'hclust_profile_height_17_min_5_distance_manhattan',
+                        'hclust_pca_height_8_min_5_distance_manhattan',
+                        'hclust_pca2_height_6_min_5_distance_manhattan',
+                        'hclust_profile_number_5_min_5_distance_manhattan',
+                        'hclust_pca_number_5_min_5_distance_manhattan',
+                        'hclust_pca2_number_5_min_5_distance_manhattan',
+                        'hdbscan_profile_min_8_distance_manhattan',
+                        'hdbscan_pca_min_8_distance_manhattan',
+                        'hdbscan_pca2_min_8_distance_manhattan',
+                        'dbscan_profile_min_21_eps_5_distance_manhattan',
+                        'dbscan_pca_min_21_eps_5_distance_manhattan',
+                        'dbscan_pca2_min_20_eps_5_distance_manhattan']
 
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'

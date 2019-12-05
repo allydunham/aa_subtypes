@@ -9,14 +9,13 @@ parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" o
 parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
 args <- parse_args(parser)
 
-if (!args$mode %in% c('profile', 'pca')){
-  stop('--mode must be one of "profile" or "pca"')
+if (!args$mode %in% names(CLUSTER_COLS)){
+  stop(str_c('--mode must be one of ', str_c('"', names(CLUSTER_COLS), '"', collapse = ', ')))
 }
 
 if (!args$distance %in% c('euclidean', 'maximum', 'manhattan', 'canberra', 'binary', 'minkowski')){
   stop('--distance must be one of those supported by the R dist() function')
 }
-
 
 library(dbscan)
 source('src/config.R')
@@ -29,12 +28,7 @@ dir.create('data/clusterings')
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Create Clusters ###
-if (args$mode == 'profile'){
-  cols <- quo(A:Y)
-} else if (args$mode == 'pca'){
-  cols <- quo(PC2:PC20)
-}
-
+cols <- CLUSTER_COLS[[args$mode]]
 hdbscan_cluster <- group_by(dms_wide, wt) %>%
   group_map(~make_hdbscan_clusters(., !!cols, minPts = args$min_size, dist_method = args$distance), keep = TRUE)
 

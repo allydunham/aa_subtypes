@@ -9,8 +9,8 @@ parser <- add_argument(parser, arg = '--min_size', help = 'Minimum cluster size 
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
 args <- parse_args(parser)
 
-if (!args$mode %in% c('profile', 'pca')){
-  stop('--mode must be one of "profile" or "pca"')
+if (!args$mode %in% names(CLUSTER_COLS)){
+  stop(str_c('--mode must be one of ', str_c('"', names(CLUSTER_COLS), '"', collapse = ', ')))
 }
 
 source('src/config.R')
@@ -23,12 +23,7 @@ dir.create('data/clusterings')
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Create Clusters ###
-if (args$mode == 'profile'){
-  cols <- quo(A:Y)
-} else if (args$mode == 'pca'){
-  cols <- quo(PC2:PC20)
-}
-
+cols <- CLUSTER_COLS[[args$mode]]
 kmeans_cluster <- group_by(dms_wide, wt) %>%
   group_map(~make_kmeans_clusters(., !!cols, n = args$ncluster, min_size = args$min_size, nstart=5), keep = TRUE)
 

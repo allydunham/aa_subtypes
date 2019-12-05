@@ -1,6 +1,10 @@
 #!/usr/bin/env Rscript
 # Functions for AA subtypes clustering
 
+#### Utility ####
+CLUSTER_COLS <- list('profile'=quo(A:Y), 'pca'=quo(PC1:PC20), 'pca2'=quo(PC2:PC20))
+########
+
 #### k-means ####
 make_kmeans_clusters <- function(tbl, cols, n=3, min_size=1, ...){
   cols <- enquo(cols)
