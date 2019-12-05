@@ -1,6 +1,9 @@
 #!/ussr/bin/env Rscript
 # Perform an Hclust clustering of AA subtypes
 
+source('src/config.R')
+source('src/clustering.R')
+
 ### Parse Args and perform setup ###
 library(argparser)
 parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
@@ -8,7 +11,7 @@ parser <- add_argument(parser, arg = '--height', help = 'Height to cut dendogram
 parser <- add_argument(parser, arg = '--number', help = 'Number of clusters to select', default = NA, type = 'numeric')
 parser <- add_argument(parser, arg = '--min_size', help = 'Minimum cluster size to consider', default = 5)
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
-parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'euclidean')
+parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
 args <- parse_args(parser)
 
 if (!xor(is.na(args$number), is.na(args$height))){
@@ -22,9 +25,6 @@ if (!args$mode %in% names(CLUSTER_COLS)){
 if (!args$distance %in% c('euclidean', 'maximum', 'manhattan', 'canberra', 'binary', 'minkowski')){
   stop('--distance must be one of those supported by the R dist() function')
 }
-
-source('src/config.R')
-source('src/clustering.R')
 
 if (!is.na(args$height)){
   root_name <- str_c('hclust', args$mode, 'height', args$height, 'min', args$min_size, 'distance', args$distance, sep = '_')

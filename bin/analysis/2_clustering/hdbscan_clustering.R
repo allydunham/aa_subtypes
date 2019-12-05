@@ -1,9 +1,13 @@
 #!/ussr/bin/env Rscript
 # Perform an HDBSCAN clustering of AA subtypes
 
+library(dbscan)
+source('src/config.R')
+source('src/clustering.R')
+
 ### Parse Args and perform setup ###
 library(argparser)
-parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
+parser <- arg_parser(description = 'Make and analyse AA subtypes using HDBSCAN clustering', name = 'HDBSCAN AA Clustering')
 parser <- add_argument(parser, arg = '--min_size', help = 'Minimum allowed cluster size', default = 10)
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
 parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
@@ -17,9 +21,6 @@ if (!args$distance %in% c('euclidean', 'maximum', 'manhattan', 'canberra', 'bina
   stop('--distance must be one of those supported by the R dist() function')
 }
 
-library(dbscan)
-source('src/config.R')
-source('src/clustering.R')
 root_name <- str_c('hdbscan', args$mode, 'min', args$min_size, 'distance', args$distance, sep = '_')
 root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)

@@ -1,6 +1,9 @@
 #!/ussr/bin/env Rscript
 # Perform a K-means clustering of AA subtypes
 
+source('src/config.R')
+source('src/clustering.R')
+
 ### Parse Args and perform setup ###
 library(argparser)
 parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
@@ -13,8 +16,6 @@ if (!args$mode %in% names(CLUSTER_COLS)){
   stop(str_c('--mode must be one of ', str_c('"', names(CLUSTER_COLS), '"', collapse = ', ')))
 }
 
-source('src/config.R')
-source('src/clustering.R')
 root_name <- str_c('kmeans', args$mode, 'k', args$ncluster, 'min', args$min_size, sep = '_')
 root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)

@@ -48,12 +48,12 @@ STANDARD_CLUSTERINGS = ['kmeans_profile_k_4_min_5',
                         'hclust_profile_number_5_min_5_distance_manhattan',
                         'hclust_pca_number_5_min_5_distance_manhattan',
                         'hclust_pca2_number_5_min_5_distance_manhattan',
-                        'hdbscan_profile_min_8_distance_manhattan',
-                        'hdbscan_pca_min_8_distance_manhattan',
-                        'hdbscan_pca2_min_8_distance_manhattan',
-                        'dbscan_profile_min_21_eps_5_distance_manhattan',
-                        'dbscan_pca_min_21_eps_5_distance_manhattan',
-                        'dbscan_pca2_min_20_eps_5_distance_manhattan']
+                        'hdbscan_profile_min_3_distance_manhattan',
+                        'hdbscan_pca_min_4_distance_manhattan',
+                        'hdbscan_pca2_min_4_distance_manhattan',
+                        'dbscan_profile_min_11_eps_3_distance_manhattan',
+                        'dbscan_pca_min_11_eps_2_distance_manhattan',
+                        'dbscan_pca2_min_11_eps_1.5_distance_manhattan']
 
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'

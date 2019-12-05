@@ -1,9 +1,13 @@
 #!/ussr/bin/env Rscript
 # Perform an DBSCAN clustering of AA subtypes
 
+library(dbscan)
+source('src/config.R')
+source('src/clustering.R')
+
 ### Parse Args and perform setup ###
 library(argparser)
-parser <- arg_parser(description = 'Make and analyse AA subtypes using kmeans clustering', name = 'Kmeans AA Clustering')
+parser <- arg_parser(description = 'Make and analyse AA subtypes using DBSCAN clustering', name = 'DBSCAN AA Clustering')
 parser <- add_argument(parser, arg = '--minPts', help = 'Minimum points in the eps region for core points', default = 5)
 parser <- add_argument(parser, arg = '--eps', help = 'Epsilon neighbourhood size to use', default = 4)
 parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
@@ -19,9 +23,6 @@ if (!args$distance %in% c('euclidean', 'maximum', 'manhattan', 'canberra', 'bina
   stop('--distance must be one of those supported by the R dist() function')
 }
 
-library(dbscan)
-source('src/config.R')
-source('src/clustering.R')
 root_name <- str_c('dbscan', args$mode, 'min', args$minPts, 'eps', args$eps, 'distance', args$distance, sep = '_')
 root_fig_dir <- str_c('figures/2_clustering/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)
