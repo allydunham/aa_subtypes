@@ -1,4 +1,5 @@
 #!/ussr/bin/env Rscript
+# DEPRECIATED hclust script - now merged into make_subtypes
 # Perform an Hclust clustering of AA subtypes
 
 source('src/config.R')
@@ -12,6 +13,7 @@ parser <- add_argument(parser, arg = '--number', help = 'Number of clusters to s
 parser <- add_argument(parser, arg = '--min_size', help = 'Minimum cluster size to consider', default = 5)
 parser <- add_argument(parser, arg = '--mode', help = 'Cluster using "profile" or "pca"', default = 'profile')
 parser <- add_argument(parser, arg = '--distance', help = 'Distance metric to use', default = 'manhattan')
+parser <- add_argument(parser, arg = '--method', help = 'Linkage method to use', default = 'average')
 args <- parse_args(parser)
 
 if (!xor(is.na(args$number), is.na(args$height))){
@@ -26,10 +28,21 @@ if (!args$distance %in% c('euclidean', 'maximum', 'manhattan', 'canberra', 'bina
   stop('--distance must be one of those supported by the R dist() function')
 }
 
+if (!args$method %in% c('ward.D', 'ward.D2', 'single', 'complete', 'average', 'mcquitty', 'median', 'centroid')){
+  stop('--method must be one of those supported by the R hclust() function')
+}
+
 if (!is.na(args$height)){
-  root_name <- str_c('hclust', args$mode, 'height', args$height, 'min', args$min_size, 'distance', args$distance, sep = '_')
+  root_name <- str_c('hclust', args$mode, 'height', args$height, 'min', args$min_size, 'distance', args$distance, 'method', args$method, sep = '_')
 } else if (!is.na(args$number)){
   root_name <- str_c('hclust', args$mode, 'number', args$number, 'min', args$min_size, 'distance', args$distance, sep = '_')
+}
+
+if (is.na(args$height)){
+  args$height <- NULL
+}
+if (is.na(args$number)){
+  args$number <- NULL
 }
 
 root_fig_dir <- str_c('figures/2_clustering/', root_name)
@@ -41,7 +54,8 @@ dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 ### Create Clusters ###
 cols <- CLUSTER_COLS[[args$mode]]
 hclust_cluster <- group_by(dms_wide, wt) %>%
-  group_map(~make_hclust_clusters(., !!cols, h = args$height, k = args$number, min_size = args$min_size, dist_method=args$distance), keep = TRUE)
+  group_map(~make_hclust_clusters(., !!cols, h = args$height, k = args$number, min_size = args$min_size, dist_method=args$distance, method=args$method),
+            keep = TRUE)
 
 dms_wide <- map_dfr(hclust_cluster, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%

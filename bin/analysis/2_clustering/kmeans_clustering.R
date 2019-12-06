@@ -1,4 +1,5 @@
 #!/ussr/bin/env Rscript
+# DEPRECIATED kmeans script - now merged into make_subtypes
 # Perform a K-means clustering of AA subtypes
 
 source('src/config.R')
@@ -26,7 +27,7 @@ dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 ### Create Clusters ###
 cols <- CLUSTER_COLS[[args$mode]]
 kmeans_cluster <- group_by(dms_wide, wt) %>%
-  group_map(~make_kmeans_clusters(., !!cols, n = args$ncluster, min_size = args$min_size, nstart=5), keep = TRUE)
+  group_map(~make_kmeans_clusters(., !!cols, k = args$ncluster, min_size = args$min_size, nstart=5), keep = TRUE)
 
 dms_wide <- map_dfr(kmeans_cluster, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%

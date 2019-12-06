@@ -1,4 +1,5 @@
 #!/ussr/bin/env Rscript
+# DEPRECIATED hdbscan script - now merged into make_subtypes
 # Perform an HDBSCAN clustering of AA subtypes
 
 library(dbscan)

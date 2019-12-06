@@ -1,4 +1,5 @@
 #!/ussr/bin/env Rscript
+# DEPRECIATED dbscan script - now merged into make_subtypes
 # Perform an DBSCAN clustering of AA subtypes
 
 library(dbscan)
