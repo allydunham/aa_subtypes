@@ -1,0 +1,6 @@
+desc: "K-means clustering using PCs excluding positional significance"
+method: 'kmeans'
+columns: 'PC2:PC20'
+args:
+  k: 4
+  min_size: 5

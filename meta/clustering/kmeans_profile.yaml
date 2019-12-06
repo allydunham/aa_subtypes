@@ -1,0 +1,6 @@
+desc: "Basic K-means clustering"
+method: 'kmeans'
+columns: 'A:Y'
+args:
+  k: 4
+  min_size: 5

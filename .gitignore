@@ -11,4 +11,5 @@
 /figures/**
 /meta/*
 !/meta/fasta/
+!/meta/clustering/
 /docs/dataset_ideas.md

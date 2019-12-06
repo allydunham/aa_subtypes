@@ -1,0 +1,6 @@
+desc: "HDBSCAN clustering on ER profiles"
+method: 'hdbscan'
+columns: 'A:Y'
+args:
+  dist_method: 'manhattan'
+  minPts: 3 

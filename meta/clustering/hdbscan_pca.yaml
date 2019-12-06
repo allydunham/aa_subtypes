@@ -1,0 +1,6 @@
+desc: "HDBSCAN clustering on PCs"
+method: 'hdbscan'
+columns: 'PC1:PC20'
+args:
+  dist_method: 'manhattan'
+  minPts: 4 

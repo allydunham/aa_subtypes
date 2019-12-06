@@ -1,0 +1,6 @@
+desc: "HDBSCAN clustering on PCs excluding positional significance"
+method: 'hdbscan'
+columns: 'PC2:PC20'
+args:
+  dist_method: 'manhattan'
+  minPts: 4 

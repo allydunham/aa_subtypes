@@ -1,0 +1,6 @@
+desc: "Hierarchical clustering using ER profiles with dynamic cuts"
+method: 'hclust_dynamic'
+columns: 'A:Y'
+args:
+  dist_method: 'manhattan'
+

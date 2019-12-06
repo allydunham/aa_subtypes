@@ -1,0 +1,8 @@
+desc: "Hierarchical clustering using ER profiles based on height"
+method: 'hclust'
+columns: 'A:Y'
+args:
+  h: 17
+  min_size: 5
+  dist_method: 'manhattan'
+

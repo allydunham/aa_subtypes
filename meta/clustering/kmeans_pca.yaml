@@ -1,0 +1,6 @@
+desc: "K-means clustering using all PCs"
+method: 'kmeans'
+columns: 'PC1:PC20'
+args:
+  k: 4
+  min_size: 5
