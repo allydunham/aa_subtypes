@@ -6,7 +6,6 @@ Pipeline for the Mutational Landscapes/Amino Acids Subtypes Project
 # TODO Why is naccess tem,pramental?
 
 import os
-import math
 from pathlib import Path
 from collections import defaultdict
 
@@ -39,21 +38,7 @@ with open('meta/structures.yaml', 'r') as yaml_file:
 
 AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
-STANDARD_CLUSTERINGS = ['kmeans_profile_k_4_min_5',
-                        'kmeans_pca_k_4_min_5',
-                        'kmeans_pca2_k_4_min_5',
-                        'hclust_profile_height_17_min_5_distance_manhattan',
-                        'hclust_pca_height_8_min_5_distance_manhattan',
-                        'hclust_pca2_height_6_min_5_distance_manhattan',
-                        'hclust_profile_number_5_min_5_distance_manhattan',
-                        'hclust_pca_number_5_min_5_distance_manhattan',
-                        'hclust_pca2_number_5_min_5_distance_manhattan',
-                        'hdbscan_profile_min_3_distance_manhattan',
-                        'hdbscan_pca_min_4_distance_manhattan',
-                        'hdbscan_pca2_min_4_distance_manhattan',
-                        'dbscan_profile_min_11_eps_3_distance_manhattan',
-                        'dbscan_pca_min_11_eps_2_distance_manhattan',
-                        'dbscan_pca2_min_11_eps_1.5_distance_manhattan']
+STANDARD_CLUSTERINGS = [Path(x).stem for x in os.listdir('meta/clustering')]
 
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
@@ -71,7 +56,7 @@ rule all:
         - Run SIFT and FoldX on all genes
         - Calculate other statistics from structures
         - Combine all data
-        - Produce example clusterings
+        - Produce standard clusterings
         - Also generates various summary and diagnostic tables/plots
     """
     input:
@@ -82,7 +67,7 @@ rule all:
         rules.summarise_standardised_data.output,
         rules.principle_component_analysis.output,
         rules.tsne_analysis.output,
-        [f'data/clusterings/{x}.tsv' for x in STANDARD_CLUSTERINGS]
+        [f'data/clustering/{x}.tsv' for x in STANDARD_CLUSTERINGS]
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -155,8 +140,7 @@ rule setup_directories:
         shell('mkdir logs && echo "mkdir logs" || true')
         dirs = ['calculate_backbone_angles', 'data_validation', 'dbscan_clustering',
                 'filter_pdb', 'foldx_combine', 'foldx_model', 'foldx_repair',
-                'foldx_split', 'foldx_variants', 'hclust_clustering',
-                'hdbscan_clustering', 'k_nearest_profile', 'kmeans_clustering',
+                'foldx_split', 'foldx_variants', 'make_subtypes',
                 'make_gene_fasta', 'naccess', 'sift4g', 'standardise_study',
                 'within_a_profile']
 

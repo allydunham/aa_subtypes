@@ -13,6 +13,8 @@ library(GGally)
 #library(scales)
 #library(Rtsne)
 library(yaml)
+library(dynamicTreeCut)
+library(dbscan)
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)

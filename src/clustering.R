@@ -2,16 +2,17 @@
 # Functions for AA subtypes clustering
 
 #### Utility ####
+# Lookup table for old style clustering scripts
 CLUSTER_COLS <- list('profile'=quo(A:Y), 'pca'=quo(PC1:PC20), 'pca2'=quo(PC2:PC20))
 ########
 
 #### k-means ####
-make_kmeans_clusters <- function(tbl, cols, n=3, min_size=1, ...){
+make_kmeans_clusters <- function(tbl, cols, k=3, min_size=1, ...){
   cols <- enquo(cols)
-  
+
   mat <- tibble_to_matrix(tbl, !!cols)
   
-  km <- kmeans(mat, centers = n, ...)
+  km <- kmeans(mat, centers = k, ...)
   
   tbl <- mutate(tbl, cluster = km$cluster) %>%
     select(cluster, everything())
@@ -20,25 +21,18 @@ make_kmeans_clusters <- function(tbl, cols, n=3, min_size=1, ...){
     filter(n < min_size) %>%
     pull(cluster)
   
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- NA
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
   return(list(tbl=tbl, kmeans=km))
 }
 ########
 
 #### hclust clustering ####
-make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, dist_method = 'euclidean', ...){
+make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, dist_method = 'euclidean', method = 'average'){
   cols <- enquo(cols)
-  
-  if (is.na(h)){
-    h <- NULL
-  }
-  if (is.na(k)){
-    k <- NULL
-  }
-  
+
   mat <- tibble_to_matrix(tbl, !!cols)
-  hc <- hclust(dist(mat, method = dist_method), ...)
+  hc <- hclust(dist(mat, method = dist_method), method = method)
   clus <- cutree(hc, h = h, k = k)
   
   tbl <- mutate(tbl, cluster = clus) %>%
@@ -48,11 +42,26 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
     filter(n < min_size) %>%
     pull(cluster)
   
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- NA
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
   return(list(tbl = tbl, hclust = hc))
 }
 
+make_dynamic_hclust_clusters <- function(tbl, cols, dist_method = 'euclidean',
+                                         hclust_args = list(method='average'),
+                                         treecut_args = list()){
+  cols <- enquo(cols)
+  
+  mat <- tibble_to_matrix(tbl, !!cols)
+  d <- dist(mat, method = dist_method)
+  hc <- do.call(hclust, c(list(d=d), hclust_args))
+  clus <- do.call(cutreeHybrid, c(list(dendro=hc, distM=as.matrix(d)), treecut_args))
+  
+  tbl <- mutate(tbl, cluster = clus$labels) %>%
+    select(cluster, everything())
+  
+  return(list(tbl = tbl, hclust = hc))
+}
 ########
 
 #### hdbscan clustering ####
@@ -64,8 +73,7 @@ make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=1
   hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
   
   tbl <- mutate(tbl, cluster = hdb$cluster) %>% 
-    select(cluster, everything()) %>%
-    mutate(cluster = na_if(cluster, 0))
+    select(cluster, everything())
   
   return(list(tbl = tbl, hdbscan = hdb))
 }
@@ -80,23 +88,7 @@ make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minP
   db <- dbscan(dis, eps=eps, minPts = minPts, ...)
   
   tbl <- mutate(tbl, cluster = db$cluster) %>% 
-    select(cluster, everything()) %>% 
-    mutate(cluster = na_if(cluster, 0))
-  
-  return(list(tbl = tbl, hdbscan = db))
-}
-########
-
-#### SubClu clustering ####
-make_subclu_clusters <- function(tbl, cols, eps, minPts, ...){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  clus <- SubClu(tbl, epsilon = eps, minSupport = minPts)
-  
-  tbl <- mutate(tbl, cluster = db$cluster) %>% 
-    select(cluster, everything()) %>% 
-    mutate(cluster = na_if(cluster, 0))
+    select(cluster, everything())
   
   return(list(tbl = tbl, hdbscan = db))
 }
@@ -167,7 +159,7 @@ plot_cluster_profiles <- function(tbl, cols){
   cols <- enquo(cols)
   profiles <- cluster_mean_profiles(tbl, !!cols) %>%
     pivot_longer(-cluster, names_to = 'mut', values_to = 'score') %>%
-    drop_na(cluster)
+    filter(str_ends(cluster, '0', negate = TRUE))
   
   ggplot(profiles, aes(x=mut, y=cluster, fill=score)) +
     geom_tile() +
@@ -185,7 +177,6 @@ plot_cluster_profiles <- function(tbl, cols){
 cluster_profile_correlation <- function(tbl, cols){
   cols <- enquo(cols)
   cluster_mean_profiles(tbl, !!cols) %>%
-    drop_na(cluster) %>%
     transpose_tibble(cluster, id_col = 'aa') %>%
     tibble_correlation(x=-aa) %>%
     rename(cluster1 = cat1, cluster2 = cat2) %>%
@@ -195,7 +186,9 @@ cluster_profile_correlation <- function(tbl, cols){
 
 plot_cluster_profile_correlation <- function(tbl, cols){
   cols <- enquo(cols)
-  cors <- cluster_profile_correlation(tbl, !!cols)
+  cors <- cluster_profile_correlation(tbl, !!cols) %>%
+    filter(str_ends(cluster1, '0', negate = TRUE),
+           str_ends(cluster2, '0', negate = TRUE))
   
   ggplot(cors, aes(x=cluster1, y=cluster2, fill=cor)) +
     geom_tile() +
@@ -218,6 +211,7 @@ cluster_foldx_profiles <- function(tbl){
 
 plot_cluster_foldx_profiles <- function(tbl){
   profiles <- cluster_foldx_profiles(tbl) %>%
+    filter(str_ends(cluster, '0', negate = TRUE)) %>%
     pivot_longer(cols = total_energy:energy_ionisation, names_to = 'term', values_to = 'ddg') %>%
     group_by(term) %>%
     mutate(rel_ddg = ddg / max(abs(ddg), na.rm = TRUE)) %>%
