@@ -199,10 +199,35 @@ rule gene_repeats:
     shell:
         "Rscript bin/analysis/0_data_properties/gene_repeats.R &> {log}"
 
+# Assess predictive performance against ClinVar
+rule clinvar_prediction:
+    """
+    Compare ability of ER to predict ClinVar pathogenicity with SIFT/FoldX
+    and combination models
+    """
+    input:
+        "data/long_combined_mutational_scans.tsv",
+        "meta/gene_summary.tsv",
+        "data/clinvar/clinvar_20191202.vcf.gz",
+        "data/clinvar/clinvar_20191202.vcf.gz.tbi"
+
+    output:
+        "figures/0_data_properties/clinvar_roc.pdf",
+        "figures/0_data_properties/clinvar_auc.pdf",
+        "figures/0_data_properties/clinvar_roc_per_gene.pdf",
+        "figures/0_data_properties/clinvar_auc_per_gene.pdf",
+
+    log:
+        "logs/clinvar_prediction.log"
+
+    shell:
+        "Rscript bin/analysis/0_data_properties/clinvar_classification.R &> {log}"
+
+
 VALIDATION_RULES = [rules.validate_melnikov, rules.validate_kitzman, rules.validate_giacomelli,
                     rules.validate_heredia, rules.validate_sarkisyan, rules.validate_dorrity,
                     rules.validate_araya, rules.validate_starita, rules.sift_correlation,
-                    rules.gene_repeats]
+                    rules.gene_repeats, rules.clinvar_prediction]
 
 rule validate_data:
     """
