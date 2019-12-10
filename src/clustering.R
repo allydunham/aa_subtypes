@@ -4,6 +4,13 @@
 #### Utility ####
 # Lookup table for old style clustering scripts
 CLUSTER_COLS <- list('profile'=quo(A:Y), 'pca'=quo(PC1:PC20), 'pca2'=quo(PC2:PC20))
+
+# Drop unused integer cluster labels
+compress_cluster_labels <- function(x){
+  unq <- unique(x)
+  hash <- structure(as.character(0:(length(unq)-1)), names=as.character(sort(unq)))
+  unname(hash[as.character(x)])
+}
 ########
 
 #### k-means ####
@@ -23,7 +30,22 @@ make_kmeans_clusters <- function(tbl, cols, k=3, min_size=1, ...){
   
   tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster))
+  
   return(list(tbl=tbl, kmeans=km))
+}
+
+# Expects named list of outputs from make_kmeans_clusters
+plot_clustering_kmeans <- function(clusters){
+  tbls <- sapply(clusters, extract2, 'tbl', simplify = FALSE) %>%
+    bind_rows()
+  
+  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
+    geom_point(shape = 20) +
+    facet_wrap(~wt, nrow = 4) +
+    labs(x='UMAP1', y='UMAP2') +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
+    guides(colour = guide_legend(title = 'Subtype'))
 }
 ########
 
@@ -44,6 +66,8 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
   
   tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster))
+  
   return(list(tbl = tbl, hclust = hc))
 }
 
@@ -57,10 +81,34 @@ make_dynamic_hclust_clusters <- function(tbl, cols, dist_method = 'euclidean',
   hc <- do.call(hclust, c(list(d=d), hclust_args))
   clus <- do.call(cutreeHybrid, c(list(dendro=hc, distM=as.matrix(d)), treecut_args))
   
-  tbl <- mutate(tbl, cluster = clus$labels) %>%
+  tbl <- mutate(tbl, cluster = as.character(clus$labels)) %>%
     select(cluster, everything())
   
   return(list(tbl = tbl, hclust = hc))
+}
+
+# Expects named list of outputs from make_(dynamic_)hclust_clusters
+plot_clustering_hclust <- function(clusters){
+  dend_data <- sapply(clusters, function(x){dendro_data(x$hclust)}, simplify = FALSE)
+  
+  branches <- sapply(dend_data, extract2, 'segments', simplify = FALSE) %>%
+    bind_rows(.id = 'wt') %>%
+    as_tibble()
+  
+  leaves <- sapply(dend_data, function(x){mutate(as_tibble(x$labels), label = as.character(label))}, simplify = FALSE) %>%
+    map2(clusters, function(x, y){bind_cols(x, y$tbl[as.integer(x$label),'cluster'])}) %>%
+    bind_rows(.id = 'wt')
+  
+  ggplot() +
+    geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+    geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape = 20) +
+    facet_wrap(~wt, nrow = 4, scales = 'free_x') +
+    theme(axis.line.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.title = element_blank()) +
+    guides(colour = guide_legend(title = 'Subtype')) +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
 }
 ########
 
@@ -72,10 +120,34 @@ make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=1
   dis <- dist(mat, method = dist_method)
   hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
   
-  tbl <- mutate(tbl, cluster = hdb$cluster) %>% 
+  tbl <- mutate(tbl, cluster = as.character(hdb$cluster)) %>% 
     select(cluster, everything())
   
   return(list(tbl = tbl, hdbscan = hdb))
+}
+
+# Expects a named list of outputs from make_hdbscan_clusters
+plot_clustering_hdbscan <- function(clusters){
+  dend_data <- sapply(clusters, function(x){dendro_data(x$hdbscan$hc)}, simplify = FALSE)
+  
+  branches <- sapply(dend_data, extract2, 'segments', simplify = FALSE) %>%
+    bind_rows(.id = 'wt') %>%
+    as_tibble()
+  
+  leaves <- sapply(dend_data, function(x){mutate(as_tibble(x$labels), label = as.character(label))}, simplify = FALSE) %>%
+    map2(clusters, function(x, y){bind_cols(x, y$tbl[as.integer(x$label),'cluster'])}) %>%
+    bind_rows(.id = 'wt')
+  
+  ggplot() +
+    geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+    geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape = 20) +
+    facet_wrap(~wt, nrow = 4, scales = 'free_x') +
+    theme(axis.line.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.title = element_blank()) +
+    guides(colour = guide_legend(title = 'Subtype')) +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
 }
 ########
 
@@ -87,10 +159,23 @@ make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minP
   dis <- dist(mat, method = dist_method)
   db <- dbscan(dis, eps=eps, minPts = minPts, ...)
   
-  tbl <- mutate(tbl, cluster = db$cluster) %>% 
+  tbl <- mutate(tbl, cluster = as.character(db$cluster)) %>% 
     select(cluster, everything())
   
-  return(list(tbl = tbl, hdbscan = db))
+  return(list(tbl = tbl, dbscan = db))
+}
+
+# Expects a named list of outputs from make_dbscan_clusters
+plot_clustering_dbscan <- function(clusters){
+  tbls <- sapply(clusters, extract2, 'tbl', simplify = FALSE) %>%
+    bind_rows()
+  
+  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
+    geom_point(shape = 20) +
+    facet_wrap(~wt, nrow = 4) +
+    labs(x='UMAP1', y='UMAP2') +
+    guides(colour = guide_legend(title = 'Subtype')) +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
 }
 ########
 
@@ -98,12 +183,15 @@ make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minP
 # Wrapper function
 # Expects tbl to be in the format generated by make_dms_wide in subtypes_utils.R
 # TODO - overall profile for cluster
-make_cluster_plots <- function(tbl, cols, chem_env_cols){
+make_cluster_plots <- function(tbl, cols, chem_env_cols, clusters){
   cols <- enquo(cols)
   chem_env_cols <- enquo(chem_env_cols)
   n_clusters <- n_distinct(tbl$cluster)
   plots <- list()
+  
+  plots$clustering <- labeled_plot(plot_clustering(clusters), units='cm', height = 30, width = 30)
   plots$tsne <- labeled_plot(plot_tsne_clusters(tbl), units='cm', height = 20, width = 20)
+  plots$umap <- labeled_plot(plot_umap_clusters(tbl), units='cm', height = 20, width = 20)
   plots$ramachanran_angles <- labeled_plot(plot_ramachandran_angles(tbl), units='cm', height = 20, width = 20)
   plots$cluster_sizes <- labeled_plot(plot_cluster_sizes(tbl), units='cm', height = 10, width = n_clusters*0.5 + 2, limitsize=FALSE)
   plots$mean_profiles <- labeled_plot(plot_cluster_profiles(tbl, !!cols), units='cm', height = n_clusters*0.5 + 2, width = 15, limitsize=FALSE)
@@ -113,14 +201,41 @@ make_cluster_plots <- function(tbl, cols, chem_env_cols){
   return(plots)
 }
 
-# All functions expect a cluster tibble
+# Expects clusters as a list whose entries each have tbl and cluster items, as output by make_xx_clusters
+plot_clustering <- function(clusters){
+  # Dispatch to specific plot functions based on first entry of clusters list
+  # (assume all will be the same as generated in this pipeline)
+  if ('kmeans' %in% names(clusters[[1]])){
+    p <- plot_clustering_kmeans(clusters)
+  } else if ('hclust' %in% names(clusters[[1]])){
+    p <- plot_clustering_hclust(clusters)
+  } else if ('dbscan' %in% names(clusters[[1]])){
+    p <- plot_clustering_dbscan(clusters)
+  } else if ('hdbscan' %in% names(clusters[[1]])){
+    p <- plot_clustering_hdbscan(clusters)
+  } else {
+    stop('Unrecognised clusters list')
+  }
+}
+
+# All other functions expect a cluster tibble
 plot_tsne_clusters <- function(tbl){
   mutate(dms_wide, cluster_sym = str_sub(cluster, start = -1)) %>%
     ggplot(aes(x=tSNE1, y=tSNE2, colour=cluster_sym)) +
     geom_point() +
     facet_wrap(~wt) +
     scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
-    guides(colour = guide_legend(title = 'Cluster'))
+    guides(colour = guide_legend(title = 'Subtype'))
+}
+
+plot_umap_clusters <- function(tbl){
+  mutate(dms_wide, cluster_sym = str_sub(cluster, start = -1)) %>%
+    ggplot(aes(x=umap1, y=umap2, colour=cluster_sym)) +
+    geom_point() +
+    facet_wrap(~wt) +
+    labs(x='UMAP1', y='UMAP2') +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
+    guides(colour = guide_legend(title = 'Subtype'))
 }
 
 plot_ramachandran_angles <- function(tbl){
@@ -130,7 +245,7 @@ plot_ramachandran_angles <- function(tbl){
     facet_wrap(~wt) +
     scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
     scale_y_continuous(breaks = c(-180, -90, 0, 90, 180)) +
-    scale_colour_viridis_d() +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
     labs(x = expression(Phi), y = expression(Psi)) +
     guides(colour = guide_legend(title = 'Cluster')) +
     theme(panel.grid.major = element_line(linetype = 'dotted', colour='gray'))
@@ -308,5 +423,4 @@ plot_cluster_chem_env_profiles <- function(tbl, cols){
           axis.text.y.left = element_text(colour = AA_COLOURS[str_sub(unique(profiles$cluster), end = 1)]),
           legend.title.align = 0.5)
 }
-
 ########
