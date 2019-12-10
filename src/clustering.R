@@ -8,7 +8,12 @@ CLUSTER_COLS <- list('profile'=quo(A:Y), 'pca'=quo(PC1:PC20), 'pca2'=quo(PC2:PC2
 # Drop unused integer cluster labels
 compress_cluster_labels <- function(x){
   unq <- unique(x)
-  hash <- structure(as.character(0:(length(unq)-1)), names=as.character(sort(unq)))
+  if (0 %in% unq){
+    hash <- structure(as.character(0:(length(unq)-1)), names=as.character(sort(unq)))
+  } else {
+    hash <- structure(as.character(1:length(unq)), names=as.character(sort(unq)))
+  }
+  
   unname(hash[as.character(x)])
 }
 ########
@@ -189,7 +194,7 @@ make_cluster_plots <- function(tbl, cols, chem_env_cols, clusters){
   n_clusters <- n_distinct(tbl$cluster)
   plots <- list()
   
-  plots$clustering <- labeled_plot(plot_clustering(clusters), units='cm', height = 30, width = 30)
+  plots$clustering <- labeled_plot(plot_clustering(clusters), units='cm', height = 40, width = 50)
   plots$tsne <- labeled_plot(plot_tsne_clusters(tbl), units='cm', height = 20, width = 20)
   plots$umap <- labeled_plot(plot_umap_clusters(tbl), units='cm', height = 20, width = 20)
   plots$ramachanran_angles <- labeled_plot(plot_ramachandran_angles(tbl), units='cm', height = 20, width = 20)
@@ -303,7 +308,8 @@ plot_cluster_profile_correlation <- function(tbl, cols){
   cols <- enquo(cols)
   cors <- cluster_profile_correlation(tbl, !!cols) %>%
     filter(str_ends(cluster1, '0', negate = TRUE),
-           str_ends(cluster2, '0', negate = TRUE))
+           str_ends(cluster2, '0', negate = TRUE)) %>%
+    mutate(cluster1 = droplevels(cluster1), cluster2 = droplevels(cluster2))
   
   ggplot(cors, aes(x=cluster1, y=cluster2, fill=cor)) +
     geom_tile() +
@@ -385,7 +391,8 @@ plot_cluster_chem_env_profiles <- function(tbl, cols){
     mutate(rel_count = log2((count + min(count[count > 0], na.rm = TRUE)/10)/mean(count, na.rm=TRUE))) %>%
     ungroup() %>%
     mutate(prop = str_c(n_chem_env, '/', n),
-           aa = str_sub(aa, start = -1))
+           aa = str_sub(aa, start = -1)) %>%
+    filter(str_ends(cluster, '0', negate = TRUE))
   
   # Group terms based on complete profiles only
   aa_order <- group_by(profiles, cluster) %>%
