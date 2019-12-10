@@ -47,9 +47,32 @@ rule tsne_analysis:
     shell:
         'Rscript bin/analysis/1_landscape_properties/tsne.R &> {log}'
 
+rule umap_analysis:
+    """
+    Analyse UMAP dimensionality reduction of the mutational landscape, relating it to biophysical
+    properties
+    """
+    input:
+        'data/combined_mutational_scans.tsv'
+
+    output:
+        'figures/1_landscape_properties/umap_study.pdf',
+        'figures/1_landscape_properties/umap_aa.pdf',
+        'figures/1_landscape_properties/umap_hydrophobicity.pdf',
+        'figures/1_landscape_properties/umap_mean_er.pdf',
+        'figures/1_landscape_properties/umap_surface_accessibility.pdf'
+
+    log:
+        'logs/umap_analysis.log'
+
+    shell:
+        'Rscript bin/analysis/1_landscape_properties/umap.R &> {log}'
+
+
 #### Clustering ####
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
-                 'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf']
+                 'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf',
+                 'clustering.pdf', 'umap.pdf']
 rule make_subtypes:
     """
     Generalised clustering script, taking parameters from YAML files in meta/clustering

@@ -67,6 +67,7 @@ rule all:
         rules.summarise_standardised_data.output,
         rules.principle_component_analysis.output,
         rules.tsne_analysis.output,
+        rules.umap_analysis.output,
         [f'data/clustering/{x}.tsv' for x in STANDARD_CLUSTERINGS]
 
 # Only remove rapidly generated results
