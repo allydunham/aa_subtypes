@@ -1,6 +1,5 @@
 #!/ussr/bin/env Rscript
 # Perform a clustering of AA subtypes, based on a YAML config
-
 source('src/config.R')
 source('src/clustering.R')
 library(argparser)
@@ -12,7 +11,7 @@ parser <- add_argument(parser, arg = '--data', help = 'Directory to save cluster
 parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_clustering')
 args <- parse_args(parser)
 
-conf <- read_yaml(args$yaml, )
+conf <- read_yaml(args$yaml)
 root_name <- str_split(basename(args$yaml), '\\.', simplify = TRUE)[1]
 
 cols <- eval(parse(text = str_c('quo(', conf$columns,')')))
@@ -36,14 +35,15 @@ if (conf$method %in% names(cluster_funcs)){
 
 ### Make Clusters ###
 clusters <- group_by(dms_wide, wt) %>%
-  group_map(~do.call(cluster_func, c(list(tbl=.), conf$args)), keep = TRUE)
+  group_map(~do.call(cluster_func, c(list(tbl=.), conf$args)), keep = TRUE) %>%
+  set_names(sapply(., function(x){first(x$tbl$wt)}))
 
 dms_wide <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
 
 ### Analyse clusters and save results ###
-plots <- make_cluster_plots(dms_wide, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y)
+plots <- make_cluster_plots(dms_wide, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y, clusters = clusters)
 
 write_tsv(select(dms_wide, cluster, study, gene, position, wt), str_c(args$data, '/', root_name, '.tsv'))
 
