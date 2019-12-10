@@ -7,7 +7,7 @@ source('src/study_standardising.R')
 # study_dirs <- dir('data/studies', full.names = TRUE) # For interactive use
 study_dirs <- commandArgs(trailingOnly = TRUE)
 
-dms <- sapply(study_dirs, import_study, fields = c('gene'), simplify = FALSE) %>%
+dms <- sapply(study_dirs, import_study, fields = c('gene'), simplify = FALSE, filter=TRUE) %>%
   bind_rows() %>%
   group_by(study, gene, position, wt) %>%
   filter(sum(!mut == wt) >= 15) %>% # Only keep positions with a maximum of 4 missing scores
@@ -83,6 +83,9 @@ pca <- tibble_pca(dms_wide, A:Y)
 dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
 tsne <- tibble_tsne(dms_wide, A:Y)
 dms_wide <- tsne$tbl
+dms_umap <- tibble_to_matrix(dms_wide, A:Y) %>%
+  umap(metric = 'manhattan')
+dms_wide <- bind_cols(dms_wide, set_colnames(dms_umap, c('umap1', 'umap2')) %>% as_tibble())
 
 # Write combined data
 write_tsv(dms, 'data/long_combined_mutational_scans.tsv')

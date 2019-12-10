@@ -32,10 +32,13 @@ make_dms_wide <- function(dms){
 
 #### Importing Standardised Data ####
 # Import a study TSV
-import_study <- function(d, fields = NULL){
+import_study <- function(d, fields = NULL, filter=FALSE){
   study <- str_split(d, '/')[[1]]
   study <- study[length(study)]
   yaml = read_yaml(str_c(d, '/', study, '.yaml'))
+  if (filter & yaml$qc$filter){
+    return(NULL)
+  }
   
   tbl <- read_tsv(str_c(d, '/', study, '.tsv'))
   for (f in c('study', fields)){
