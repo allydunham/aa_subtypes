@@ -12,9 +12,11 @@ library(ggpubr)
 library(GGally)
 #library(scales)
 #library(Rtsne)
+library(uwot)
 library(yaml)
 library(dynamicTreeCut)
 library(dbscan)
+library(ggdendro)
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)
