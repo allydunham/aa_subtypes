@@ -3,4 +3,6 @@ method: 'hclust_dynamic'
 columns: 'A:Y'
 args:
   dist_method: 'manhattan'
+  treecut_args:
+    deepSplit: 2
 

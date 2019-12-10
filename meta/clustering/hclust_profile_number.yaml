@@ -2,7 +2,7 @@ desc: "Hierarchical clustering using ER profiles based on number of clusters"
 method: 'hclust'
 columns: 'A:Y'
 args:
-  h: 5
+  k: 5
   min_size: 5
   dist_method: 'manhattan'
 
