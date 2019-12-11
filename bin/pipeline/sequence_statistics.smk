@@ -71,7 +71,7 @@ rule porter5:
 
     shell:
         """
-        python3 Porter5/Porter5.py -i {input} --cpu 4 &> {log}
+        Porter5.py -i {input} --cpu 4 &> {log}
         mv data/fasta/{wildcards.gene}.ss3 {output.ss3} &>> {log}
         mv data/fasta/{wildcards.gene}.ss8 {output.ss8} &>> {log}
         """
