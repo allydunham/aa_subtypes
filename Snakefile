@@ -43,7 +43,7 @@ STANDARD_CLUSTERINGS = [Path(x).stem for x in os.listdir('meta/clustering')]
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
 include: 'bin/pipeline/standardisation.smk'
-include: 'bin/pipeline/sift.smk'
+include: 'bin/pipeline/sequence_statistics.smk'
 include: 'bin/pipeline/foldx.smk'
 include: 'bin/pipeline/structure_statistics.smk'
 include: 'bin/pipeline/analysis.smk'
@@ -128,7 +128,7 @@ rule setup_directories:
         # data
         shell('mkdir data && echo "mkdir data" || true')
         dirs = ['backbone_angles', 'chemical_environment', 'clusterings',
-                'foldx', 'pdb', 'sift', 'studies',
+                'foldx', 'pdb', 'sift', 'studies', 'fasta', 'porter5',
                 'surface_accessibility', 'wip']
 
         for d in dirs:

@@ -1,5 +1,5 @@
 """
-Rules for SIFT pipeline
+Rules for generating statistics from protein sequences, including the Porter5 and SIFT pipeline
 
 Expects global variables:
 - GENES: dict mapping genes to lists of the studies assessing them
@@ -16,7 +16,7 @@ rule make_gene_fasta:
                            in GENES[wildcards.gene]]
 
     output:
-        "data/sift/{gene}.fa"
+        "data/fasta/{gene}.fa"
 
     log:
         "logs/make_gene_fasta/{gene}.log"
@@ -31,7 +31,7 @@ rule sift4g:
     outputs to 4.d.p rather than 2.
     """
     input:
-        fa = "data/sift/{gene}.fa",
+        fa = "data/fasta/{gene}.fa",
         db = config['sift']['uniref90_fa_path']
 
     output:
