@@ -4,5 +4,9 @@ foldx:
 sift:
   uniref90_fa_path: '/hps/research1/beltrao/ally/databases/uniref90/uniref90_2019_1.fasta'
 
+porter5:
+  path: '/nfs/research1/beltrao/ally/software/packages/Porter5/Porter5.py'
+
 misc:
   fasta_line_length: 80
+

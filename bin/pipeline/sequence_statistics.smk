@@ -70,8 +70,16 @@ rule porter5:
     threads: 4
 
     shell:
+        f"""
+        python {config['porter5']['path']} -i {{input}} --cpu 4 &> {{log}}
+        mv data/fasta/{{wildcards.gene}}.ss3 {{output.ss3}} &>> {{log}}
+        mv data/fasta/{{wildcards.gene}}.ss8 {{output.ss8}} &>> {{log}}
         """
-        Porter5.py -i {input} --cpu 4 &> {log}
-        mv data/fasta/{wildcards.gene}.ss3 {output.ss3} &>> {log}
-        mv data/fasta/{wildcards.gene}.ss8 {output.ss8} &>> {log}
-        """
+
+rule all_porter5_predictions:
+    """
+    Produce SIFT predictions for all genes
+    """
+    input:
+        expand('data/porter5/{gene}.ss8', gene=GENES.keys()),
+        expand('data/porter5/{gene}.ss3', gene=GENES.keys())
