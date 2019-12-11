@@ -143,7 +143,7 @@ rule setup_directories:
                 'filter_pdb', 'foldx_combine', 'foldx_model', 'foldx_repair',
                 'foldx_split', 'foldx_variants', 'make_subtypes',
                 'make_gene_fasta', 'naccess', 'sift4g', 'standardise_study',
-                'within_a_profile']
+                'within_a_profile', 'porter5']
 
         for d in dirs:
             shell(f'mkdir logs/{d} && echo "mkdir logs/{d}" || true')

@@ -52,3 +52,26 @@ rule all_sift_predictions:
     """
     input:
         expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())
+
+rule porter5:
+    """
+    Run Porter5 on a FASTA file, generating secondary structure predictions for each residue.
+    """
+    input:
+        "data/fasta/{gene}.fa"
+
+    output:
+        ss3="data/porter5/{gene}.ss3",
+        ss8="data/porter5/{gene}.ss8"
+
+    log:
+        "logs/porter5/{gene}.log"
+
+    threads: 4
+
+    shell:
+        """
+        python3 Porter5/Porter5.py -i {input} --cpu 4 &> {log}
+        mv data/fasta/{wildcards.gene}.ss3 {output.ss3} &>> {log}
+        mv data/fasta/{wildcards.gene}.ss8 {output.ss8} &>> {log}
+        """
