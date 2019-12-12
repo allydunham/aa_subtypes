@@ -89,6 +89,7 @@ def quick_clean_files():
     output_files.append('data/backbone_angles/*')
     output_files.append('data/chemical_environment/*')
     output_files.append('data/surface_accessibility/*')
+
     output_files.append('logs/*/*')
     return output_files
 
@@ -109,11 +110,17 @@ rule full_clean:
     run:
         output_files = quick_clean_files()
 
+        # Quick to generate but dependancy for SIFT/Porter5
+        output_files.append('data/fasta/*')
+
         # SIFT results
         output_files.extend([f'data/sift/{g}.*' for g in GENES.keys()])
 
         # FoldX results
         output_files.extend([f"-r data/foldx/{g}/*" for g in GENES.keys()])
+
+        # Porter5 results
+        output_files.extend([f'data/porter5/{g}.*' for g in GENES.keys()])
 
         for i in output_files:
             shell(f'rm {i} && echo "rm {i}" || true')

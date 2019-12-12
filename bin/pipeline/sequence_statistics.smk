@@ -74,9 +74,12 @@ rule porter5:
 
     shell:
         f"""
-        python {config['porter5']['path']} -i {{input}} --fast --cpu 4 &> {{log}}
+        python {config['porter5']['path']} -i {{input}} --fast --cpu 4 --tmp &> {{log}}
+        cat data/fasta/{{wildcards.gene}}.fa.log >> {{log}} 2>&1
         mv data/fasta/{{wildcards.gene}}.fa.ss3 {{output.ss3}} >> {{log}} 2>&1
         mv data/fasta/{{wildcards.gene}}.fa.ss8 {{output.ss8}} >> {{log}} 2>&1
+        rm data/fasta/{{wildcards.gene}}.fa.* &> {{log}}
+        rm data/fasta/{{wildcards.gene}}.hhr &> {{log}}
         """
 
 rule all_porter5_predictions:
