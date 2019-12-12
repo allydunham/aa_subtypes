@@ -67,14 +67,14 @@ rule porter5:
     log:
         "logs/porter5/{gene}.log"
 
-    threads: 4
+    threads: 8
 
     resources:
-        mem_mb = 20000
+        mem_mb = 30000
 
     shell:
         f"""
-        python {config['porter5']['path']} -i {{input}} --fast --cpu 4 --tmp &> {{log}}
+        python {config['porter5']['path']} -i {{input}} --cpu 8 --tmp &> {{log}}
         cat data/fasta/{{wildcards.gene}}.fa.log >> {{log}} 2>&1
         mv data/fasta/{{wildcards.gene}}.fa.ss3 {{output.ss3}} >> {{log}} 2>&1
         mv data/fasta/{{wildcards.gene}}.fa.ss8 {{output.ss8}} >> {{log}} 2>&1
