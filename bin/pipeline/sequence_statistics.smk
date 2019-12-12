@@ -67,16 +67,16 @@ rule porter5:
     log:
         "logs/porter5/{gene}.log"
 
-    threads: 8
+    threads: 4
 
     resources:
         mem_mb = 20000
 
     shell:
         f"""
-        python {config['porter5']['path']} -i {{input}} --cpu 8 &> {{log}}
-        mv data/fasta/{{wildcards.gene}}.ss3 {{output.ss3}} >> {{log}} 2> &1
-        mv data/fasta/{{wildcards.gene}}.ss8 {{output.ss8}} >> {{log}} 2> &1
+        python {config['porter5']['path']} -i {{input}} --fast --cpu 4 &> {{log}}
+        mv data/fasta/{{wildcards.gene}}.ss3 {{output.ss3}} >> {{log}} 2>&1
+        mv data/fasta/{{wildcards.gene}}.ss8 {{output.ss8}} >> {{log}} 2>&1
         """
 
 rule all_porter5_predictions:
