@@ -430,4 +430,18 @@ plot_cluster_chem_env_profiles <- function(tbl, cols){
           axis.text.y.left = element_text(colour = AA_COLOURS[str_sub(unique(profiles$cluster), end = 1)]),
           legend.title.align = 0.5)
 }
+
+full_cluster_characterisation <- function(tbl, cols){
+  cols <- enquo(cols)
+  
+  mean_profiles <- cluster_mean_profiles(tbl, !!cols)
+  foldx_profiles <- cluster_foldx_profiles(tbl) %>% rename(n_structure = n_foldx)
+  chem_env_profiles <- cluster_chem_env_profiles(tbl, within_10_0_A:within_10_0_Y)
+  
+  sift_profiles <- group_by(tbl, cluster) %>%
+    summarise_at(vars(log10_sift_A:log10_sift_Y), mean, na.rm=TRUE)
+  
+  ss_profiles <- group_by(tbl, cluster) %>%
+    summarise_at(vars(starts_with('ss_')), mean, na.rm=TRUE)
+}
 ########
