@@ -5,7 +5,7 @@ source('src/clustering.R')
 library(argparser)
 
 ### Parse args and setup ###
-parser <- arg_parser(description = 'Make and analyse AA subtypes', name = 'Kmeans AA Clustering')
+parser <- arg_parser(description = 'Make and analyse AA subtypes', name = 'AA Subtypes')
 parser <- add_argument(parser, arg = 'yaml', help = 'YAML file parameterising clustering')
 parser <- add_argument(parser, arg = '--data', help = 'Directory to save cluster assignments', default = 'data/clustering')
 parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_clustering')
