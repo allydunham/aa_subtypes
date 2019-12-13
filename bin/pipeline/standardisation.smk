@@ -102,11 +102,13 @@ rule combine_dms_data:
     """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=UNFILTERED_STUDIES, ext=('tsv', 'yaml')),
+        expand('data/fasta/{gene}.fa', gene=UNFILTERED_GENES),
         expand('data/sift/{gene}.SIFTprediction', gene=UNFILTERED_GENES),
         expand('data/foldx/{gene}/average_{gene}.fxout', gene=UNFILTERED_GENES),
         expand('data/backbone_angles/{gene}.tsv', gene=UNFILTERED_GENES),
         expand('data/surface_accessibility/{gene}.rsa', gene=UNFILTERED_GENES),
         expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=UNFILTERED_GENES),
+        expand('data/porter5/{gene}.ss8', gene=UNFILTERED_GENES),
         'meta/residue_hydrophobicity.tsv'
 
     output:

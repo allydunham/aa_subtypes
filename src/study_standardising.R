@@ -49,10 +49,10 @@ import_study <- function(d, fields = NULL, filter=FALSE){
 }
 
 # Import sift results from all variant SIFT output
-# Expects sift results to be in sift_dir with both gene.fa and gene.SIFTPrediction available
-import_sift <- function(gene, sift_dir='data/sift'){
+# Expects sift results to be in sift_dir and fasta files in fasta_dir
+import_sift <- function(gene, sift_dir='data/sift', fasta_dir='data/fasta/'){
   gene <- gene_to_filename(gene)
-  fa <- as.character(readAAStringSet(str_c(sift_dir, '/', gene, '.fa'), format = 'fasta')[[1]])
+  fa <- as.character(readAAStringSet(str_c(fasta_dir, '/', gene, '.fa'), format = 'fasta')[[1]])
   sift <- read_table(str_c(sift_dir, '/', gene, '.SIFTprediction'), skip = 5, comment = '//',
                      col_names = c('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
                                    'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T',
@@ -155,6 +155,14 @@ import_chem_env <- function(filepath, sections=NULL){
   }
   
   return(profs)
+}
+
+# Import Porter5 results
+import_porter5 <- function(filepath){
+  read_tsv(filepath) %>%
+    rename(position = `#`, wt = AA) %>%
+    rename_all(~str_to_lower(.)) %>%
+    rename_at(vars(-position, -wt, -ss), ~str_c('ss_', .))
 }
 ########
 

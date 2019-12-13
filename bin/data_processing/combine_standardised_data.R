@@ -58,6 +58,15 @@ hydrophobicity <- read_tsv('meta/residue_hydrophobicity.tsv', comment = '#') %>%
   rename(wt=AA, hydrophobicity = TW) %>% # use scale from Bandyopadhyay & Mehler 2008
   select(wt, hydrophobicity)
 
+# Import Porter5 results
+import_porter5_gene <- function(gene){
+  gene <- gene_to_filename(gene)
+  import_porter5(str_c('data/porter5/', gene, '.ss8'))
+}
+porter5 <- sapply(unique(dms$gene), import_porter5_gene, simplify = FALSE) %>%
+  bind_rows(.id = 'gene') %>%
+  select(-ss)
+
 # Filter incomplete positions and impute
 imputed_dms <- select(dms, -transformed_score, -raw_score, -class) %>%
   pivot_wider(id_cols = c(study, gene, position, wt, mut), names_from = mut, values_from = score) %>%
@@ -74,6 +83,7 @@ dms <- rename(imputed_dms, imputed_score=score) %>%
   left_join(angles, by = c('gene', 'position', 'wt')) %>%
   left_join(surface_accessibility, by = c('gene', 'position', 'wt')) %>%
   left_join(chemical_environments, by = c('gene', 'position', 'wt')) %>%
+  left_join(porter5, by = c('gene', 'position', 'wt')) %>%
   left_join(hydrophobicity, by = c('wt')) %>%
   mutate(class = get_variant_class(wt, mut)) %>%
   arrange(study, position, wt, mut)
