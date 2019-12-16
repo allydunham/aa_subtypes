@@ -15,4 +15,5 @@ subtypes <- read_tsv(args$subtypes)
 dms <- read_tsv(args$dms) %>%
   left_join(subtypes, ., by = c('study', 'gene', 'position', 'wt'))
 
+data <- full_cluster_characterisation(dms)
 
