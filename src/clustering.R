@@ -516,7 +516,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
     mutate(cluster = factor(cluster, levels = rev(cluster_order))) %>%
     ggplot(aes(x = all_atom_abs, fill = wt)) +
     facet_wrap(~cluster, ncol = 1, strip.position = 'left') +
-    geom_histogram() +
+    geom_density(alpha = 0.75, colour = NA) +
     scale_fill_manual(values = AA_COLOURS) +
     labs(x = '', y = '', title = 'Surface Accessibility (All Atom Abs)') +
     guides(fill = FALSE) +
@@ -534,8 +534,10 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
     labs(y = '', x = '', title = 'Secondary Structure Probability') +
     scale_fill_distiller(type = 'div', palette = 'BrBG', direction = 1, limits = ss_lims) +
     scale_x_discrete(labels = DSSP_CLASSES) + 
-    theme(axis.text.y = element_text(colour = cluster_cols),
-          axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    theme(axis.ticks = element_blank(),
+          axis.text.y = element_text(colour = cluster_cols),
+          axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+          panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean ER profiles
@@ -557,7 +559,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
     geom_raster() +
     coord_equal() +
     labs(y = '', x = '', title = 'SIFT Profile') +
-    scale_fill_distiller(type = 'seq', palette = 'PuRd', direction = -1) +
+    scale_fill_distiller(type = 'seq', palette = 'PuRd', direction = -1, limits = NULL) +
     theme(axis.text.x = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
           axis.text.y = element_text(colour = cluster_cols),
           plot.title = element_text(hjust = 0))
@@ -570,7 +572,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
     coord_equal() +
     labs(y = '', x = '', title = 'FoldX Profile') +
     scale_fill_distiller(type = 'div', palette = 'PiYG', direction = 1, limits = foldx_lims) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
           axis.text.y = element_text(colour = cluster_cols),
           plot.title = element_text(hjust = 0))
   
@@ -587,8 +589,16 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
           plot.title = element_text(hjust = 0))
   
   
+  p_overall <- multi_panel_figure(width = 20, height = 20, columns = 6, rows = 4, unit = 'cm', panel_label_type = 'none') %>%
+    fill_panel(p_sizes, row = 1, column = c(1, 2)) %>%
+    fill_panel(p_ss, row = 2, column = c(1, 2)) %>%
+    fill_panel(p_sa, row = c(3, 4), column = c(1, 2)) %>%
+    fill_panel(p_profile, row = 1, column = 3:6) %>%
+    fill_panel(p_sift, row = 2, column = 3:6) %>%
+    fill_panel(p_foldx, row = 3, column = 3:6) %>%
+    fill_panel(p_chem_env, row = 4, column = 3:6)
   
-  p_overall <- multi_panel_figure()
-  
+  return(list(overall=p_overall, sizes=p_sizes, secondary_structure=p_ss, profile=p_profile,
+              sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))
 }
 ########
