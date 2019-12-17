@@ -1,3 +1,5 @@
+Unrecognized_molecules.txt
+rotabase.txt
 .snakemake/**
 /data/*
 !/data/studies/
