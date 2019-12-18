@@ -482,18 +482,18 @@ full_cluster_characterisation <- function(tbl){
        chem_env=chem_env_profiles, secondary_structure=ss_profiles, surface_accessibility=sa_profiles)
 }
 
-plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
+plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, global_scale=TRUE){
   cluster_order <- filter(data$summary, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
     arrange(desc(n)) %>%
     pull(cluster)
   
   cluster_cols <- AA_COLOURS[str_sub(cluster_order, end=1)]
   
-  er_lims <- filter(data$profiles, !str_ends(cluster, '0') | !exclude_outliers) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
-  foldx_lims <- filter(data$foldx, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
-  chem_env_lims <- filter(data$chem_env, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
-  ss_lims <- filter(data$secondary_structure, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
-  sift_lims <- filter(data$sift, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(log10_sift) %>% pretty_break(step = 1)
+  er_lims <- filter(data$profiles, !str_ends(cluster, '0') | !exclude_outliers, cluster %in% clusters | global_scale) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
+  foldx_lims <- filter(data$foldx, !str_ends(cluster, '0') | !exclude_outliers, cluster %in% clusters | global_scale) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
+  chem_env_lims <- filter(data$chem_env, !str_ends(cluster, '0') | !exclude_outliers, cluster %in% clusters | global_scale) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
+  ss_lims <- filter(data$secondary_structure, !str_ends(cluster, '0') | !exclude_outliers, cluster %in% clusters | global_scale) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
+  sift_lims <- filter(data$sift, !str_ends(cluster, '0') | !exclude_outliers, cluster %in% clusters | global_scale) %>%  pull(log10_sift) %>% pretty_break(step = 1)
   
   # Summarise subtype sizes
   p_sizes <- filter(data$summary, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
@@ -604,15 +604,15 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
   text_theme <- theme(text = element_text(size = 9))
   legend_theme <- theme(legend.key.height = unit(0.5, 'cm'), legend.key.width = unit(0.5, 'cm'))
   
-  p_overall <- multi_panel_figure(width = 20, height = 20, columns = 7, rows = 4, unit = 'cm', 
-                                  row_spacing = 0.1, column_spacing = 0.1, panel_label_type = 'upper-alpha') %>%
+  p_overall <- multi_panel_figure(width = 21, height = 21, columns = 7, rows = 4, unit = 'cm', 
+                                  row_spacing = 0.3, column_spacing = 0.3, panel_label_type = 'upper-alpha') %>%
     fill_panel(p_sizes + text_theme, row = 1, column = c(1, 2)) %>%
     fill_panel(p_ss + text_theme + legend_theme, row = 2, column = c(1, 2, 3)) %>%
     fill_panel(p_profile + text_theme + legend_theme, row = c(1, 2), column = c(4, 5)) %>%
     fill_panel(p_sift + text_theme + legend_theme, row = c(1, 2), column = c(6, 7)) %>%
     fill_panel(p_sa + text_theme, row = c(3, 4), column = c(1, 2)) %>%
     fill_panel(p_foldx + text_theme + legend_theme, row = c(3, 4), column = c(3, 4, 5)) %>%
-    fill_panel(p_chem_env + text_theme + legend_theme, row = c(3, 4), column = c(6, 7))
+    fill_panel(p_chem_env + text_theme + legend_theme, row = c(3, 4), column = c(6, 7), )
   
   return(list(overall=p_overall, sizes=p_sizes, secondary_structure=p_ss, profile=p_profile,
               sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))

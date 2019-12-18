@@ -100,7 +100,8 @@ rule characterise_subtypes:
         subtypes="data/clustering/{name}.tsv"
 
     output:
-        [f"figures/2_clustering/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET]
+        [f"figures/2_clustering/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET],
+        [f"figures/2_clustering/{{name}}/aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET]
 
     log:
         'logs/characterise_subtypes/{name}.log'
