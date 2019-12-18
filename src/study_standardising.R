@@ -61,7 +61,7 @@ import_sift <- function(gene, sift_dir='data/sift', fasta_dir='data/fasta/'){
     pivot_longer(everything(), names_to = 'mut', values_to = 'sift') %>%
     mutate(position = rep(1:nchar(fa), each = 25),
            wt = str_split(fa, '')[[1]][position],
-           log10_sift = log10(sift + 0.00005)) # SIFT goes to 4dp so 0.00005 is smaller than everything else
+           log10_sift = clamp(log10(sift + 0.00005), upper = 0)) # SIFT goes to 4dp so 0.00005 is smaller than everything else
   return(sift)
 }
 
