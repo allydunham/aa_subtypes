@@ -108,3 +108,21 @@ rule characterise_subtypes:
 
     shell:
         "Rscript bin/analysis/2_clustering/characterise_subtypes.R --dms {input.dms} --figures figures/2_clustering {input.subtypes} &> {log}"
+
+rule all_position_subtypes:
+    """
+    Genreate subtypes from positions of all amino acids (using Hclust with dynamic cutting)
+    """
+    input:
+        "data/combined_mutational_scans.tsv"
+
+    output:
+        "data/clustering/hclust_profile_dynamic_all_positions.tsv",
+        [f"figures/2_clustering/hclust_profile_dynamic_all_positions/{x}" for x in cluster_plots],
+        "figures/2_clustering/hclust_profile_dynamic_all_positions/cluster_occupancy.pdf"
+
+    log:
+        "logs/all_position_subtypes.log"
+
+    shell:
+        "Rscript bin/analysis/2_clustering/all_positions.R &> {log}"
