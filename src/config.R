@@ -17,6 +17,8 @@ library(yaml)
 library(dynamicTreeCut)
 library(dbscan)
 library(ggdendro)
+library(multipanelfigure)
+library(tools)
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)
