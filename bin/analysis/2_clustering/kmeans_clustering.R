@@ -34,6 +34,6 @@ dms_wide <- map_dfr(kmeans_cluster, .f = ~ .$tbl) %>%
   arrange(study, position)
 
 ### Analyse clusters and save results ###
-plots <- make_cluster_plots(dms_wide, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y)
+plots <- make_cluster_plots(dms_wide, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y, clusters = kmeans_cluster)
 write_tsv(select(dms_wide, cluster, study, gene, position, wt), str_c('data/clusterings/', root_name, '.tsv'))
 save_plotlist(plots, root = root_fig_dir, overwrite = 'all')
