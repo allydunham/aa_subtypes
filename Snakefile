@@ -68,7 +68,14 @@ rule all:
         rules.principle_component_analysis.output,
         rules.tsne_analysis.output,
         rules.umap_analysis.output,
-        [f'data/clustering/{x}.tsv' for x in STANDARD_CLUSTERINGS]
+        [f'data/clustering/{x}.tsv' for x in STANDARD_CLUSTERINGS],
+        [f'figures/2_clustering/{x}/aa_profiles/A.pdf' for x in ('hclust_pca_dynamic',
+                                                                 'hclust_pca_no_sig_dynamic',
+                                                                 'hclust_pca_no_sig_dynamic_small',
+                                                                 'hclust_profile_dynamic',
+                                                                 'kmeans_pca',
+                                                                 'kmeans_pca_no_sig',
+                                                                 'kmeans_profile')]
 
 # Only remove rapidly generated results
 def quick_clean_files():

@@ -90,3 +90,20 @@ rule make_subtypes:
 
     shell:
         'Rscript bin/analysis/2_clustering/make_subtypes.R --data data/clustering --figures figures/2_clustering {input.yaml} &> {log}'
+
+rule characterise_subtypes:
+    """
+    Make characterisation plots for each amino acid from an input subtype clustering
+    """
+    input:
+        dms="data/combined_mutational_scans.tsv",
+        subtypes="data/clustering/{name}.tsv"
+
+    output:
+        [f"figures/2_clustering/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET]
+
+    log:
+        'logs/characterise_subtypes/{name}.log'
+
+    shell:
+        "Rscript bin/analysis/2_clustering/characterise_subtypes.R --dms {input.dms} --figures figures/2_clustering {input.subtypes} &> {log}"
