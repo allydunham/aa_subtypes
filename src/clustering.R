@@ -484,28 +484,29 @@ full_cluster_characterisation <- function(tbl){
 
 plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
   cluster_order <- filter(data$summary, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
-    arrange(n) %>%
+    arrange(desc(n)) %>%
     pull(cluster)
   
   cluster_cols <- AA_COLOURS[str_sub(cluster_order, end=1)]
-  er_lims <- filter(data$profiles, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(er) %>% abs() %>% max() %>% multiply_by(c(-1, 1))
-  foldx_lims <- filter(data$foldx, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_ddg) %>% abs() %>% max() %>% multiply_by(c(-1, 1))
-  chem_env_lims <- filter(data$chem_env, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_count) %>% abs() %>% max() %>% multiply_by(c(-1, 1))
-  ss_lims <- filter(data$secondary_structure, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_prob) %>% abs() %>% max() %>% multiply_by(c(-1, 1))
+  
+  er_lims <- filter(data$profiles, !str_ends(cluster, '0') | !exclude_outliers) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
+  foldx_lims <- filter(data$foldx, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
+  chem_env_lims <- filter(data$chem_env, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
+  ss_lims <- filter(data$secondary_structure, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
+  sift_lims <- filter(data$sift, !str_ends(cluster, '0') | !exclude_outliers) %>%  pull(log10_sift) %>% pretty_break(step = 1)
   
   # Summarise subtype sizes
   p_sizes <- filter(data$summary, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
-    mutate(cluster = factor(cluster, levels = cluster_order),
+    mutate(cluster = factor(cluster, levels = rev(cluster_order)),
            sum_str = str_c(n, ' (', n_structure, ')')) %>%
     ggplot(aes(x=cluster, fill=str_sub(cluster, end = 1))) +
     geom_col(aes(y=n), width = 0.5) +
-    geom_errorbar(aes(ymin=n_structure, ymax=n_structure), colour='black', width=0.5) +
-    geom_text(aes(y = max(n) + 10, label = sum_str), hjust=0) +
+    geom_errorbar(aes(ymin=n_structure, ymax=n_structure), colour='white', width=0.4) +
+    geom_text(aes(y = max(n) + 10, label = sum_str), hjust=0, size=3) +
     scale_fill_manual(values = AA_COLOURS) +
-    scale_y_continuous(expand = c(0.2, 0.2)) +
     guides(fill=FALSE) +
-    coord_flip() +
-    labs(x='', y='Count', title = 'Subtype Size') +
+    coord_flip(clip = 'off') +
+    labs(x='', y='Count') +
     theme(panel.grid.major.y = element_blank(),
           panel.grid.major.x = element_line(colour = 'grey', linetype = 'dotted'),
           axis.text.y = element_text(colour = cluster_cols),
@@ -513,90 +514,105 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE){
   
   # Histograms of subtype surface accessibility
   p_sa <- filter(data$tbl, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
-    mutate(cluster = factor(cluster, levels = rev(cluster_order))) %>%
+    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = all_atom_abs, fill = wt)) +
     facet_wrap(~cluster, ncol = 1, strip.position = 'left') +
     geom_density(alpha = 0.75, colour = NA) +
     scale_fill_manual(values = AA_COLOURS) +
-    labs(x = '', y = '', title = 'Surface Accessibility (All Atom Abs)') +
+    labs(x = 'All Atom Abs.', y = '') +
     guides(fill = FALSE) +
-    theme(plot.title = element_text(hjust = 0),
-          strip.placement = 'outside',
+    theme(strip.placement = 'outside',
           strip.text.y = element_text(angle = 180, colour = cluster_cols),
           panel.spacing = unit(0.05, 'npc'))
   
   # Subtype secondary structure probability increases vs background
   p_ss <- filter(data$secondary_structure, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
-    ggplot(aes(x=ss, y=cluster, fill=rel_prob)) +
+    ggplot(aes(x=cluster, y=ss, fill=rel_prob)) +
     geom_raster() +
     coord_equal() +
-    labs(y = '', x = '', title = 'Secondary Structure Probability') +
-    scale_fill_distiller(type = 'div', palette = 'BrBG', direction = 1, limits = ss_lims) +
-    scale_x_discrete(labels = DSSP_CLASSES) + 
+    labs(y = '', x = '') +
+    scale_fill_distiller(type = 'div', palette = 'BrBG', direction = 1, limits = ss_lims$limits, breaks = ss_lims$breaks, labels = ss_lims$labels) +
+    scale_y_discrete(labels = DSSP_CLASSES) + 
+    guides(fill = guide_colourbar(title = expression('log'[2]~frac(italic(P)(SS~"|"~X), italic(P)(SS))))) +
     theme(axis.ticks = element_blank(),
-          axis.text.y = element_text(colour = cluster_cols),
-          axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+          axis.text.x = element_text(colour = cluster_cols),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean ER profiles
   p_profile <- filter(data$profiles, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
-    ggplot(aes(x = mut, y = cluster, fill = er)) +
+    ggplot(aes(x = cluster, y = mut, fill = er)) +
     geom_raster() +
     coord_equal() +
-    labs(y = '', x = '', title = 'ER Profile') +
-    scale_fill_distiller(type = 'div', palette = 'RdBu', direction = 1, limits = er_lims) +
-    theme(axis.text.x = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
-          axis.text.y = element_text(colour = cluster_cols),
+    labs(y = '', x = '') +
+    guides(fill = guide_colourbar(title = 'Norm. ER')) + 
+    scale_fill_distiller(type = 'div', palette = 'RdBu', direction = 1, limits = er_lims$limits, breaks = er_lims$breaks, labels = er_lims$labels) +
+    theme(axis.ticks = element_blank(),
+          axis.text.y = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
+          axis.text.x = element_text(colour = cluster_cols),
+          panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean sift profiles
   p_sift <- filter(data$sift, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
-    ggplot(aes(x = aa, y = cluster, fill = log10_sift)) +
+    ggplot(aes(x = cluster, y = aa, fill = log10_sift)) +
     geom_raster() +
     coord_equal() +
-    labs(y = '', x = '', title = 'SIFT Profile') +
-    scale_fill_distiller(type = 'seq', palette = 'PuRd', direction = -1, limits = NULL) +
-    theme(axis.text.x = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
-          axis.text.y = element_text(colour = cluster_cols),
+    labs(y = '', x = '') +
+    scale_fill_distiller(type = 'seq', palette = 'PuRd', direction = -1, limits = sift_lims$limits, breaks = sift_lims$breaks, labels = sift_lims$labels) +
+    guides(fill = guide_colourbar(title = expression(log[10]*'SIFT'))) + 
+    theme(axis.ticks = element_blank(),
+          axis.text.y = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
+          axis.text.x = element_text(colour = cluster_cols),
+          panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean foldx profiles
   p_foldx <- filter(data$foldx, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers, !term == 'Total Energy') %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
-    ggplot(aes(x = term, y = cluster, fill = rel_ddg)) +
+    ggplot(aes(x = cluster, y = term, fill = rel_ddg)) +
     geom_raster() +
     coord_equal() +
-    labs(y = '', x = '', title = 'FoldX Profile') +
-    scale_fill_distiller(type = 'div', palette = 'PiYG', direction = 1, limits = foldx_lims) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
-          axis.text.y = element_text(colour = cluster_cols),
+    labs(y = '', x = '') +
+    guides(fill = guide_colourbar(title = expression(frac(Delta*Delta*G[italic(term)], "|"*Delta*Delta*G[italic(term)]^{italic(max)}*"|")))) + 
+    scale_fill_distiller(type = 'div', palette = 'PiYG', direction = 1, limits = foldx_lims$limits, breaks = foldx_lims$breaks, labels = foldx_lims$labels) +
+    theme(axis.ticks = element_blank(),
+          axis.text.x = element_text(colour = cluster_cols),
+          axis.text.y = element_text(colour = 'black'), # TODO colour code foldx terms?
+          panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # subtype mean chemical environment profiles
   p_chem_env <- filter(data$chem_env, cluster %in% clusters, !str_ends(cluster, '0') | !exclude_outliers) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
-    ggplot(aes(x = aa, y = cluster, fill = rel_count)) +
+    ggplot(aes(x = cluster, y = aa, fill = rel_count)) +
     geom_raster() +
     coord_equal() +
-    labs(y = '', x = '', title = 'Chemical Environment Profile') +
-    scale_fill_distiller(type = 'div', palette = 'PRGn', direction = 1, limits = chem_env_lims) +
-    theme(axis.text.x = element_text(colour = AA_COLOURS[unique(data$chem_env$aa)]),
-          axis.text.y = element_text(colour = cluster_cols),
+    labs(y = '', x = '') +
+    guides(fill = guide_colourbar(title = expression("log"[2]~frac('#AA', symbol("\341")~'#AA'~symbol("\361"))))) +
+    scale_fill_distiller(type = 'div', palette = 'PRGn', direction = 1, limits = chem_env_lims$limits, breaks = chem_env_lims$breaks, labels = chem_env_lims$labels) +
+    theme(axis.ticks = element_blank(),
+          axis.text.y = element_text(colour = AA_COLOURS[unique(data$chem_env$aa)]),
+          axis.text.x = element_text(colour = cluster_cols),
+          panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   
-  p_overall <- multi_panel_figure(width = 20, height = 20, columns = 6, rows = 4, unit = 'cm', panel_label_type = 'none') %>%
-    fill_panel(p_sizes, row = 1, column = c(1, 2)) %>%
-    fill_panel(p_ss, row = 2, column = c(1, 2)) %>%
-    fill_panel(p_sa, row = c(3, 4), column = c(1, 2)) %>%
-    fill_panel(p_profile, row = 1, column = 3:6) %>%
-    fill_panel(p_sift, row = 2, column = 3:6) %>%
-    fill_panel(p_foldx, row = 3, column = 3:6) %>%
-    fill_panel(p_chem_env, row = 4, column = 3:6)
+  text_theme <- theme(text = element_text(size = 9))
+  legend_theme <- theme(legend.key.height = unit(0.5, 'cm'), legend.key.width = unit(0.5, 'cm'))
+  
+  p_overall <- multi_panel_figure(width = 20, height = 20, columns = 7, rows = 4, unit = 'cm', 
+                                  row_spacing = 0.1, column_spacing = 0.1, panel_label_type = 'upper-alpha') %>%
+    fill_panel(p_sizes + text_theme, row = 1, column = c(1, 2)) %>%
+    fill_panel(p_ss + text_theme + legend_theme, row = 2, column = c(1, 2, 3)) %>%
+    fill_panel(p_profile + text_theme + legend_theme, row = c(1, 2), column = c(4, 5)) %>%
+    fill_panel(p_sift + text_theme + legend_theme, row = c(1, 2), column = c(6, 7)) %>%
+    fill_panel(p_sa + text_theme, row = c(3, 4), column = c(1, 2)) %>%
+    fill_panel(p_foldx + text_theme + legend_theme, row = c(3, 4), column = c(3, 4, 5)) %>%
+    fill_panel(p_chem_env + text_theme + legend_theme, row = c(3, 4), column = c(6, 7))
   
   return(list(overall=p_overall, sizes=p_sizes, secondary_structure=p_ss, profile=p_profile,
               sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))
