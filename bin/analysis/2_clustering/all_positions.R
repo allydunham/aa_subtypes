@@ -6,7 +6,7 @@ source('src/clustering.R')
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Make Dynamic Hclust Clusters ###
-clusters <- make_dynamic_hclust_clusters(dms_wide, A:Y, dist_method = 'manhattan', treecut_args = list(deepSplit=2))
+clusters <- make_dynamic_hclust_clusters(dms_wide, PC2:PC10, dist_method = 'manhattan', treecut_args = list(deepSplit=2))
 dms_wide <- mutate(clusters$tbl, cluster = str_c('X', cluster))
 
 ### Analyse clusters ###

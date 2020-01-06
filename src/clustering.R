@@ -438,7 +438,9 @@ full_cluster_characterisation <- function(tbl){
               n_structure = sum(!is.na(total_energy)),
               mean_sift = mean(mean_sift),
               mean_er = mean(mean_score),
-              mean_foldx = mean(total_energy, na.rm=TRUE))
+              mean_foldx = mean(total_energy, na.rm=TRUE),
+              mean_sa = mean(all_atom_abs, na.rm=TRUE)) %>%
+    mutate(aa = str_sub(cluster, end = 1))
   
   mean_profiles <- cluster_mean_profiles(tbl, A:Y) %>%
     pivot_longer(A:Y, names_to = 'mut', values_to = 'er')
@@ -612,7 +614,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     fill_panel(p_sift + text_theme + legend_theme, row = c(1, 2), column = c(6, 7)) %>%
     fill_panel(p_sa + text_theme, row = c(3, 4), column = c(1, 2)) %>%
     fill_panel(p_foldx + text_theme + legend_theme, row = c(3, 4), column = c(3, 4, 5)) %>%
-    fill_panel(p_chem_env + text_theme + legend_theme, row = c(3, 4), column = c(6, 7), )
+    fill_panel(p_chem_env + text_theme + legend_theme, row = c(3, 4), column = c(6, 7))
   
   return(list(overall=p_overall, sizes=p_sizes, secondary_structure=p_ss, profile=p_profile,
               sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))
