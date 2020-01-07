@@ -75,7 +75,8 @@ rule all:
                                                                  'hclust_profile_dynamic',
                                                                  'kmeans_pca',
                                                                  'kmeans_pca_no_sig',
-                                                                 'kmeans_profile')]
+                                                                 'kmeans_profile')],
+        rules.all_position_characterisation.output
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -150,6 +151,10 @@ rule setup_directories:
 
         # figures
         shell('mkdir figures && echo "mkdir figures" || true')
+        dirs = ['0_data_properties', '1_landscape_properties', '2_clustering', '3_continuous']
+
+        for d in dirs:
+            shell(f'mkdir figures/{d} && echo "mkdir figures/{d}" || true')
 
         # logs
         shell('mkdir logs && echo "mkdir logs" || true')
