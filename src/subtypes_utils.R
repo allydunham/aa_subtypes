@@ -46,7 +46,7 @@ pretty_break <- function(x, step=NULL, rough_n=NULL, sig_figs=4, sym=NULL){
   }
   
   if (is.null(step) & !is.null(rough_n)){
-    step = signif((x[2] - x[1])/rough_n, 1)
+    step = signif((limits[2] - limits[1])/rough_n, 1)
   }
   
   limits_trunc <- trunc(limits/step) * step
