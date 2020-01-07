@@ -129,3 +129,19 @@ rule all_position_subtypes:
 
     shell:
         "Rscript bin/analysis/2_clustering/all_positions.R &> {log}"
+
+rule all_position_characterisation:
+    """
+    Analyse all positions against the various biochemical factors directly
+    """
+    input:
+        "data/combined_mutational_scans.tsv"
+
+    output:
+        "figures/3_continuous/mean_er_correlations.pdf"
+
+    log:
+        "logs/all_position_characterisation.log"
+
+    shell:
+        "Rscript bin/analysis/3_continuous/all_position_characterisation.R &> {log}"
