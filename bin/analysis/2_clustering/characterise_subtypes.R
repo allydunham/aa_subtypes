@@ -50,8 +50,9 @@ plots$er_vs_size <- (filter(full_characterisation$summary, !str_ends(cluster, '0
                        labs(x = 'Mean Norm. ER', y = 'Count')) %>%
   labeled_plot(width = 20, height = 15, units = 'cm')
 
-plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
-  group_map(~plot_ss_density(.), keep = TRUE) %>%
+plots$ss_probabilities <- filter(full_characterisation$tbl, !str_ends(cluster, '0')) %>%
+  group_by(wt) %>%
+  group_map(~labeled_plot(plot_ss_density(.), units = 'cm', height = 20, width = 20), keep = TRUE) %>%
   set_names(sort(unique(full_characterisation$tbl$wt)))
 
 ### Save Plots ###
