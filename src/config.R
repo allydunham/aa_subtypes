@@ -70,7 +70,13 @@ FOLDX_TERMS <- c(total_energy='Total Energy', backbone_hbond='Backbone H-bonds',
                  disulfide='Disulphide Bonds', electrostatic_kon='Electorstatic Kon', partial_covalent_bonds='Partical Covalent Bonds', 
                  energy_ionisation='Ionisation Energy', sloop_entropy='S-Loop Entropy', mloop_entropy='M-Loop Entropy', entropy_complex='Complex Entropy',
                  water_bridge='Water Bridges')
-
+FOLDX_EXPRESSION <- c(total_energy='Total Energy', backbone_hbond='Backbone H-bonds', sidechain_hbond='Sidechain H-bonds', van_der_waals='Van der Waals Forces', 
+                      electrostatics='Electrostatics', solvation_polar='Solvation (Polar)', solvation_hydrophobic='Solvation (Hydrophobic)', 
+                      van_der_waals_clashes='Van der Waals Clashes', entropy_sidechain='Sidechain Entropy', entropy_mainchain='Mainchain Entropy', 
+                      cis_bond=expression(italic(cis)*'-Peptide Bonds'), torsional_clash='Torsional Clash', backbone_clash='Backbone Clash', helix_dipole='Helix Dipoles',
+                      disulfide='Disulphide Bonds', electrostatic_kon='Electorstatic Kon', partial_covalent_bonds='Partical Covalent Bonds', 
+                      energy_ionisation='Ionisation Energy', sloop_entropy='S-Loop Entropy', mloop_entropy='M-Loop Entropy', entropy_complex='Complex Entropy',
+                      water_bridge='Water Bridges')
 # DSSP Classes
 DSSP_CLASSES_STR <- c(g="3[10]*'-helix'", h="alpha*'-helix'", i="pi*'-helix'", e="beta*'-strand'", b="beta*'-bridge'", c="'Coil'", s="'Bend'", t="'Turn'")
 DSSP_CLASSES <- c(g=expression(3[10]*'-helix'), h=expression(alpha*'-helix'), i=expression(pi*'-helix'), e=expression(beta*'-strand'),
