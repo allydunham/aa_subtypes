@@ -25,9 +25,12 @@ get_aa_plot <- function(x, global_scale=TRUE){
 }
 
 ### Plot Per AA characterisations ###
-# aa_profiles and aa_profiles_relative refer to the scales being shared among all AAs or specific to each
-plots$aa_profiles <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=TRUE)
-plots$aa_profiles_relative <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=FALSE)
+# relative and global refer to the scales being shared among all AAs or specific to each
+plots_global <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=TRUE)
+plots_relative <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=FALSE)
+
+plots$aa_profiles <- map(plots_global, extract2, 'overall')
+plots$aa_profiles_relative <- map(plots_relative, extract2, 'overall')
 
 ### Plot all-subtype summaries ###
 plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str_ends(cluster, '0')) %>%
@@ -36,19 +39,21 @@ plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str
                                         geom_text() +
                                         geom_smooth(method = 'lm', se = FALSE, fullrange = TRUE) + 
                                         scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
-                                        labs(x = 'Mean Norm. ER'), y = 'Mean Surface Accessibility') %>%
-  labeled_plot(width = 15, height = 10, units = 'cm')
+                                        labs(x = 'Mean Norm. ER', y = 'Mean Surface Accessibility')) %>%
+  labeled_plot(width = 20, height = 15, units = 'cm')
 
 plots$er_vs_size <- (filter(full_characterisation$summary, !str_ends(cluster, '0')) %>%
                        ggplot(aes(x = mean_er, y = n, label = cluster, colour = aa)) +
                        facet_wrap(~aa) + 
                        geom_text() +
                        scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
-                       labs(x = 'Mean Norm. ER'), y = 'Count') %>%
-  labeled_plot(width = 15, height = 10, units = 'cm')
+                       labs(x = 'Mean Norm. ER', y = 'Count')) %>%
+  labeled_plot(width = 20, height = 15, units = 'cm')
+
+plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
+  group_map(~plot_ss_density(.), keep = TRUE) %>%
+  set_names(sort(unique(full_characterisation$tbl$wt)))
 
 ### Save Plots ###
 root <- str_c(args$figures, '/', basename(file_path_sans_ext(args$subtypes)))
-save_plotlist(plots, root, verbose = 3)
-
-
+save_plotlist(plots, root, verbose = 2)

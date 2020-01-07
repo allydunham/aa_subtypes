@@ -102,6 +102,7 @@ rule characterise_subtypes:
     output:
         [f"figures/2_clustering/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET],
         [f"figures/2_clustering/{{name}}/aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET],
+        [f"figures/2_clustering/{{name}}/ss_probabilities/{x}.pdf" for x in AA_ALPHABET],
         "figures/2_clustering/{name}/er_vs_surface_accessibility.pdf",
         "figures/2_clustering/{name}/er_vs_size.pdf"
 

@@ -431,6 +431,17 @@ plot_cluster_chem_env_profiles <- function(tbl, cols){
           legend.title.align = 0.5)
 }
 
+plot_ss_density <- function(tbl){
+  select(tbl, cluster, wt, starts_with('ss_')) %>%
+    pivot_longer(starts_with('ss_'), names_to = 'ss', names_prefix = 'ss_', values_to = 'prob') %>%
+    mutate(ss = DSSP_CLASSES_STR[ss]) %>%
+    ggplot(aes(x = prob, fill = wt)) +
+    facet_grid(cols = vars(cluster), rows = vars(ss), scales = 'free_y', labeller = labeller(.rows = label_parsed)) +
+    geom_density(alpha = 0.75, colour = NA) +
+    scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
+    labs(x = expression(italic(P)(SS~"|"~"Cluster")), y = 'Density')
+}
+
 ### Full characterisation
 full_cluster_characterisation <- function(tbl){
   cluster_summary <- group_by(tbl, cluster) %>%
