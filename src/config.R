@@ -72,6 +72,7 @@ FOLDX_TERMS <- c(total_energy='Total Energy', backbone_hbond='Backbone H-bonds',
                  water_bridge='Water Bridges')
 
 # DSSP Classes
+DSSP_CLASSES_STR <- c(g="3[10]*'-helix'", h="alpha*'-helix'", i="pi*'-helix'", e="beta*'-strand'", b="beta*'-bridge'", c="'Coil'", s="'Bend'", t="'Turn'")
 DSSP_CLASSES <- c(g=expression(3[10]*'-helix'), h=expression(alpha*'-helix'), i=expression(pi*'-helix'), e=expression(beta*'-strand'),
                   b=expression(beta*'-bridge'), c=expression('Coil'), s=expression('Bend'), t=expression('Turn'))
 ########
