@@ -1,8 +1,6 @@
 #!/usr/bin/env Rscript
 # Summarise standardised dataset
-
 source('src/config.R')
-
 dms <- read_tsv('data/long_combined_mutational_scans.tsv')
 
 p_score_dist <- ggplot(dms, aes(x=imputed_score, fill=ifelse(!is.na(score), 'Experiment', 'Imputed'))) +
@@ -11,7 +9,7 @@ p_score_dist <- ggplot(dms, aes(x=imputed_score, fill=ifelse(!is.na(score), 'Exp
   labs(x = 'Normalised ER', y='Count') +
   scale_fill_manual(values = c(Experiment='cornflowerblue', Imputed='firebrick2')) +
   guides(fill=guide_legend(title = ''))
-ggsave('figures/0_data_properties/standardised_distributions.pdf', p_score_dist, units = 'cm', height = 35, width = 30)
+ggsave('figures/0_data/standardised_distributions.pdf', p_score_dist, units = 'cm', height = 35, width = 30)
 
 summary_tbl <- group_by(dms, study, position, wt) %>%
   summarise(fx = sum(!is.na(total_energy)) == 19,
@@ -37,4 +35,4 @@ p_position_summary <- ggplot(summary_tbl, aes(x = metric, y = Count, fill = metr
   labs(x='', title = 'Summary of data collected after filtering') +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.y = element_blank())
-ggsave('figures/0_data_properties/position_data_summary.pdf', p_position_summary, units = 'cm', height = 8, width = 15)
+ggsave('figures/0_data/position_data_summary.pdf', p_position_summary, units = 'cm', height = 8, width = 15)

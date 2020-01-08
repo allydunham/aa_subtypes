@@ -3,7 +3,6 @@
 source('src/config.R')
 source('src/dimensionality_reduction.R')
 
-dir.create('figures/1_landscape_properties')
 plots <- list()
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
@@ -38,4 +37,4 @@ plots$tsne_surface_accessibility <- (drop_na(dms_wide, all_atom_abs) %>%
 ########
 
 # Save plots
-save_plotlist(plots, 'figures/1_landscape_properties/', overwrite = 'all', default_format = 'pdf')
+save_plotlist(plots, 'figures/1_landscape', overwrite = 'all', default_format = 'pdf')

@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Combine all standardised datasets
-
 source('src/config.R')
 source('src/study_standardising.R')
 

@@ -1,6 +1,11 @@
 #!/usr/bin/env Rscript
 # Utility functions for Subtypes project
 
+# Consistent filename from gene
+gene_to_filename <- function(x){
+  return(str_replace_all(str_to_lower(x), ' ', ''))
+}
+
 # Function to generate a pretty study name from the id using YAML config data
 format_study <- function(x, max_width=60, study_dir='data/studies', mark_filtered=FALSE){
   yaml <- read_yaml(str_c(study_dir, '/', x, '/', x, '.yaml'))
@@ -13,11 +18,6 @@ format_study <- function(x, max_width=60, study_dir='data/studies', mark_filtere
   }
   
   return(study)
-}
-
-# Consistent filename from gene
-gene_to_filename <- function(x){
-  return(str_replace_all(str_to_lower(x), ' ', ''))
 }
 
 # Make pretty p value categories for plots
@@ -39,7 +39,7 @@ pretty_break <- function(x, step=NULL, rough_n=NULL, sig_figs=4, sym=NULL){
     rough_n <- 3
   }
   
-  limits <- range(x)
+  limits <- range(x, na.rm = TRUE)
   if (!is.null(sym)){
     m <- max(abs(limits - sym))
     limits <- m * c(-1, 1) + sym

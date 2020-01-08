@@ -14,7 +14,7 @@ counts <- sapply(count_files, read_melnikov_table, simplify = FALSE) %>%
 bkg_counts <- counts[c('Bkg1', 'Bkg2')]
 counts <- counts[which(!names(counts) %in% c('Bkg1', 'Bkg2'))]
 
-# Process data, see bin/0_data_properties/validate_melnikov.R for details + comments
+# Process data, see bin/0_data/validate_melnikov.R for details + comments
 dm_data <- mapply(melnikov_fitness, counts, names(counts), MoreArgs = list(bkg=bkg_counts), SIMPLIFY = FALSE) %>% # Calculate fitness for each count
   bind_rows(.id = 'experiment') %>%
   

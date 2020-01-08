@@ -1,14 +1,14 @@
 #!/usr/bin/env Rscript
 # Characterise generated clusters
 source('src/config.R')
-source('src/clustering.R')
+source('src/subtypes.R')
 library(argparser)
 
 ### Parse args and setup ###
 parser <- arg_parser(description = 'Characterise AA subtypes', name = 'AA Subtype Characerisation')
 parser <- add_argument(parser, arg = 'subtypes', help = 'TSV file assigning positions to clusters')
 parser <- add_argument(parser, arg = '--dms', help = 'Path to DMS data', default = 'data/combined_mutational_scans.tsv')
-parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_clustering')
+parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_subtypes')
 args <- parse_args(parser)
 
 subtypes <- read_tsv(args$subtypes)
@@ -50,8 +50,7 @@ plots$er_vs_size <- (filter(full_characterisation$summary, !str_ends(cluster, '0
                        labs(x = 'Mean Norm. ER', y = 'Count')) %>%
   labeled_plot(width = 20, height = 15, units = 'cm')
 
-plots$ss_probabilities <- filter(full_characterisation$tbl, !str_ends(cluster, '0')) %>%
-  group_by(wt) %>%
+plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
   group_map(~labeled_plot(plot_ss_density(.), units = 'cm', height = 20, width = 20), keep = TRUE) %>%
   set_names(sort(unique(full_characterisation$tbl$wt)))
 

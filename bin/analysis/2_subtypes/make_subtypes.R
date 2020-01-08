@@ -1,14 +1,15 @@
 #!/ussr/bin/env Rscript
 # Perform a clustering of AA subtypes, based on a YAML config
 source('src/config.R')
-source('src/clustering.R')
+source('src/subtypes.R')
 library(argparser)
 
 ### Parse args and setup ###
 parser <- arg_parser(description = 'Make and analyse AA subtypes', name = 'AA Subtypes')
 parser <- add_argument(parser, arg = 'yaml', help = 'YAML file parameterising clustering')
-parser <- add_argument(parser, arg = '--data', help = 'Directory to save cluster assignments', default = 'data/clustering')
-parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_clustering')
+parser <- add_argument(parser, arg = '--data', help = 'Directory to save cluster assignments', default = 'data/subtypes')
+parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_subtypes')
+parser <- add_argument(parser, arg = '--dms', help = 'DMS data path', default = 'data/combined_mutational_scans.tsv')
 args <- parse_args(parser)
 
 conf <- read_yaml(args$yaml)
@@ -16,7 +17,7 @@ root_name <- str_split(basename(args$yaml), '\\.', simplify = TRUE)[1]
 
 cols <- eval(parse(text = str_c('quo(', conf$columns,')')))
 
-dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
+dms <- read_tsv(args$dms)
 
 ### Setup function to pass arguments to cluster function ###
 # need to use ... construct 
@@ -34,18 +35,18 @@ if (conf$method %in% names(cluster_funcs)){
 }
 
 ### Make Clusters ###
-clusters <- group_by(dms_wide, wt) %>%
+clusters <- group_by(dms, wt) %>%
   group_map(~do.call(cluster_func, c(list(tbl=.), conf$args)), keep = TRUE) %>%
   set_names(sapply(., function(x){first(x$tbl$wt)}))
 
-dms_wide <- map_dfr(clusters, .f = ~ .$tbl) %>%
+dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
 
 ### Analyse clusters and save results ###
-plots <- make_cluster_plots(dms_wide, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y, clusters = clusters)
+plots <- make_cluster_plots(dms, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y, clusters = clusters)
 
-write_tsv(select(dms_wide, cluster, study, gene, position, wt), str_c(args$data, '/', root_name, '.tsv'))
+write_tsv(select(dms, cluster, study, gene, position, wt), str_c(args$data, '/', root_name, '.tsv'))
 
 root_fig_dir <- str_c(args$figures, '/', root_name)
 dir.create(root_fig_dir, recursive = TRUE)

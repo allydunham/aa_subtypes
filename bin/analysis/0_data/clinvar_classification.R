@@ -23,7 +23,7 @@ dms_gene_ranges <- dms_gene_ranges[dms_gene_ranges$gene_id %in% dms_genes_entrez
 seqlevels(dms_gene_ranges) <- structure(c(1:22, 'X', 'Y'), names=str_c('chr', c(1:22, 'X', 'Y')))
 
 # Import clinvar data from appropriate regions
-tbi <- TabixFile('data/clinvar/clinvar_20191202.vcf.gz')
+tbi <- TabixFile('data/clinvar/clinvar_20200106.vcf.gz')
 clinvar <- readVcf(tbi, "hg38", param = dms_gene_ranges)
 seqlevels(rowRanges(clinvar)) <- structure(str_c('chr', seqlevels(rowRanges(clinvar))), names=seqlevels(rowRanges(clinvar)))
 
@@ -174,8 +174,8 @@ p_auc <- ggplot(score_auc, aes(x = score, y = auc, fill = score)) +
         panel.grid = element_blank()) +
   scale_fill_manual(values = score_cols)
 
-ggsave('figures/0_data_properties/clinvar_auc.pdf', p_auc, width = 4, height = 8, units = 'cm')
-ggsave('figures/0_data_properties/clinvar_roc.pdf', p_roc, width = 12, height = 8, units = 'cm')
+ggsave('figures/0_data/clinvar_auc.pdf', p_auc, width = 4, height = 8, units = 'cm')
+ggsave('figures/0_data/clinvar_roc.pdf', p_roc, width = 12, height = 8, units = 'cm')
 
 ########
 
@@ -209,7 +209,7 @@ p_auc_per_gene <- ggplot(per_gene_auc, aes(x = score, y = auc, fill = score)) +
         panel.grid = element_blank()) +
   scale_fill_manual(values = score_cols)
 
-ggsave('figures/0_data_properties/clinvar_auc_per_gene.pdf', p_auc_per_gene, width = 8, height = 16, units = 'cm')
-ggsave('figures/0_data_properties/clinvar_roc_per_gene.pdf', p_roc_per_gene, width = 24, height = 16, units = 'cm')
+ggsave('figures/0_data/clinvar_auc_per_gene.pdf', p_auc_per_gene, width = 8, height = 16, units = 'cm')
+ggsave('figures/0_data/clinvar_roc_per_gene.pdf', p_roc_per_gene, width = 24, height = 16, units = 'cm')
 
 #######

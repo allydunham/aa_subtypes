@@ -3,7 +3,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-dir.create('figures/0_data_properties/per_study/giacomelli_2018_tp53')
+dir.create('figures/0_data/per_study/giacomelli_2018_tp53')
 
 # Import data
 dm_data <- read_xlsx('data/studies/giacomelli_2018_tp53/raw/41588_2018_204_MOESM5_ESM.xlsx', skip=1) %>%
@@ -42,7 +42,7 @@ p_exp <- select(dm_data, -initial_freq, -freq, -er) %>%
   geom_smooth(colour = 'black', method = 'lm') +
   geom_abline(slope = 1, linetype = 'dashed') +
   labs(title = 'Correlation between technical replicates', subtitle = 'Without codon averaging')
-ggsave('figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf', p_exp, width = 15, height = 15, units = 'cm')
+ggsave('figures/0_data/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf', p_exp, width = 15, height = 15, units = 'cm')
 
 # Averaging codons improves cor between experiments
 p_exp_codon <- group_by(dm_data, position, wt, mut, p53, experiment, drug, class) %>%
@@ -54,7 +54,7 @@ p_exp_codon <- group_by(dm_data, position, wt, mut, p53, experiment, drug, class
   geom_smooth(colour = 'black', method = 'lm') +
   geom_abline(slope = 1, linetype = 'dashed') +
   labs(title = 'Correlation between technical replicates', subtitle = 'With codon averaging')
-ggsave('figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf', p_exp_codon, width = 15, height = 15, units = 'cm')
+ggsave('figures/0_data/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf', p_exp_codon, width = 15, height = 15, units = 'cm')
 
 ## Average codons and then experiments
 dm_data <- group_by(dm_data, position, wt, mut, class, p53, experiment, drug) %>%
@@ -67,7 +67,7 @@ p_cond <- ggplot(dm_data, aes(x = raw_score, fill = class)) +
   facet_grid(rows = vars(p53), cols = vars(drug)) +
   geom_histogram() +
   labs(title = 'Distribution of the three conditions in Giacomelli et al. 2018 (TP53)')
-ggsave('figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf', p_cond, width = 15, height = 15, units = 'cm')
+ggsave('figures/0_data/per_study/giacomelli_2018_tp53/conditions.pdf', p_cond, width = 15, height = 15, units = 'cm')
 
 # Etoposide both matches our desired distribution and selection type (enriches for functional TP53) so just use that
 # others do test other aspects of the protein though and could potentially be integrated

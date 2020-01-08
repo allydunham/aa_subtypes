@@ -25,7 +25,7 @@ rule summarise_study_set:
         "logs/summarise_study_set.log"
 
     shell:
-        "python bin/analysis/0_data_properties/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/* &> {log}"
+        "python bin/analysis/0_data/summarise_studies.py -s {output.study} -g {output.gene} -u {output.overall} data/studies/* &> {log}"
 
 rule study_summary_plots:
     """
@@ -37,15 +37,15 @@ rule study_summary_plots:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv'))
 
     output:
-        'figures/0_data_properties/study_variants_summary.pdf',
-        'figures/0_data_properties/gene_variants_summary.pdf',
-        'figures/0_data_properties/position_coverage.pdf'
+        'figures/0_data/study_variants_summary.pdf',
+        'figures/0_data/gene_variants_summary.pdf',
+        'figures/0_data/position_coverage.pdf'
 
     log:
         "logs/study_summary_plots.log"
 
     shell:
-        'Rscript bin/analysis/0_data_properties/data_summary_plots.R &> {log}'
+        'Rscript bin/analysis/0_data/data_summary_plots.R &> {log}'
 
 rule summarise_standardised_data:
     """
@@ -55,14 +55,14 @@ rule summarise_standardised_data:
         'data/long_combined_mutational_scans.tsv'
 
     output:
-        'figures/0_data_properties/standardised_distributions.pdf',
-        'figures/0_data_properties/position_data_summary.pdf'
+        'figures/0_data/standardised_distributions.pdf',
+        'figures/0_data/position_data_summary.pdf'
 
     log:
         "logs/summarise_standardised_data.log"
 
     shell:
-        'Rscript bin/analysis/0_data_properties/summarise_standardised_data.R &> {log}'
+        'Rscript bin/analysis/0_data/summarise_standardised_data.R &> {log}'
 
 
 #### Combine Deep Mutational Scans ####
@@ -77,9 +77,9 @@ rule standardise_study:
 
     output:
         "data/studies/{study}/{study}.tsv",
-        "figures/0_data_properties/per_study/{study}/original_distribution.pdf",
-        "figures/0_data_properties/per_study/{study}/transformed_distribution.pdf",
-        "figures/0_data_properties/per_study/{study}/normalised_distribution.pdf"
+        "figures/0_data/per_study/{study}/original_distribution.pdf",
+        "figures/0_data/per_study/{study}/transformed_distribution.pdf",
+        "figures/0_data/per_study/{study}/normalised_distribution.pdf"
 
     log:
         "logs/standardise_study/{study}.log"

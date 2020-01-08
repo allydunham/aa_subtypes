@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Make summary plots of the project data
-
 source('src/config.R')
 source('src/study_standardising.R')
 
@@ -21,7 +20,7 @@ p_studies <- select(study_summary, study, study_pretty, completeness, coverage, 
                                     colour = filtered[unique(study_summary$study_pretty)])) +
   guides(fill = guide_colourbar(title = '# Positions')) +
   scale_fill_viridis_c()
-ggsave('figures/0_data_properties/study_variants_summary.pdf', p_studies, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data/study_variants_summary.pdf', p_studies, units = 'cm', width = 20, height = 20)
 ########
 
 #### Genes ####
@@ -37,7 +36,7 @@ p_genes <- select(gene_summary, gene, completeness, coverage, mutated_positions)
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
   guides(fill = guide_colourbar(title = '# Positions')) +
   scale_fill_viridis_c()
-ggsave('figures/0_data_properties/gene_variants_summary.pdf', p_genes, units = 'cm', width = 20, height = 20)
+ggsave('figures/0_data/gene_variants_summary.pdf', p_genes, units = 'cm', width = 20, height = 20)
 ########
 
 #### All position coverage ####
@@ -56,7 +55,7 @@ p_coverage <- ggplot(study_coverage, aes(x = position, y = coverage, fill = wt))
   lims(y = c(0, 1)) +
   scale_fill_manual(values = AA_COLOURS) +
   theme(legend.position = 'bottom')
-ggsave('figures/0_data_properties/position_coverage.pdf', p_coverage, units = 'cm', width = 50, height = 30)
+ggsave('figures/0_data/position_coverage.pdf', p_coverage, units = 'cm', width = 50, height = 30)
 
 ########
 

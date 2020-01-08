@@ -3,7 +3,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-dir.create('figures/0_data_properties/per_study/starita_2013_ube4b/')
+dir.create('figures/0_data/per_study/starita_2013_ube4b/')
 
 # Import and process data
 meta <- read_yaml('data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml')
@@ -48,4 +48,4 @@ p_sing_multi <- ggplot(mut_count_data, aes(x = single_score, y = multi_score)) +
        y = 'log2(Score) (Mean Over Multiple Variants)',
        title = 'Accuracy of multi-variant averaging for scoring in Starita et al. 2013 (UBE4B)',
        subtitle = str_c('Fraction of variants with individual measures: ', single_frac))
-ggsave('figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)
+ggsave('figures/0_data/per_study/starita_2013_ube4b/multi_mut_validation.pdf', p_sing_multi, units = 'cm', height = 15, width = 25)

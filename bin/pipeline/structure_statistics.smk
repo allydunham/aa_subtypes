@@ -22,7 +22,7 @@ rule calculate_backbone_angles:
 
 rule filter_pdb:
     """
-    Filter a PDB to only contain regions of interest
+    Filter a PDB to only contain regions of interest for Naccess
     """
     input:
         'data/pdb/{gene}.pdb'

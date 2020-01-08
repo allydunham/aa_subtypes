@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Functions for importing studies in a standardised manner
-
 source('src/config.R')
 
 AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
@@ -31,7 +30,7 @@ make_dms_wide <- function(dms){
 }
 
 #### Importing Standardised Data ####
-# Import a study TSV
+# Import a study from its directory, based on the standard layout
 import_study <- function(d, fields = NULL, filter=FALSE){
   study <- str_split(d, '/')[[1]]
   study <- study[length(study)]
@@ -50,7 +49,7 @@ import_study <- function(d, fields = NULL, filter=FALSE){
 
 # Import sift results from all variant SIFT output
 # Expects sift results to be in sift_dir and fasta files in fasta_dir
-import_sift <- function(gene, sift_dir='data/sift', fasta_dir='data/fasta/'){
+import_sift <- function(gene, sift_dir='data/sift', fasta_dir='data/fasta'){
   gene <- gene_to_filename(gene)
   fa <- as.character(readAAStringSet(str_c(fasta_dir, '/', gene, '.fa'), format = 'fasta')[[1]])
   sift <- read_table(str_c(sift_dir, '/', gene, '.SIFTprediction'), skip = 5, comment = '//',
@@ -194,12 +193,12 @@ standardise_study <- function(dm_data, study_id, transform = 'No Transform'){
     labs(title = str_c('Normalised score distribution for ', study_name), x = 'Normalised Score', y = 'Count')
   
   # Write output
-  if (!dir.exists(str_c('figures/0_data_properties/per_study/', study_id))){
-    dir.create(str_c('figures/0_data_properties/per_study/', study_id))
+  if (!dir.exists(str_c('figures/0_data/per_study/', study_id))){
+    dir.create(str_c('figures/0_data/per_study/', study_id))
   }
-  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
-  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
-  ggsave(str_c('figures/0_data_properties/per_study/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data/per_study/', study_id, '/original_distribution.pdf'), p_orig, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data/per_study/', study_id, '/transformed_distribution.pdf'), p_trans, units = 'cm', height = 12, width = 20)
+  ggsave(str_c('figures/0_data/per_study/', study_id, '/normalised_distribution.pdf'), p_norm, units = 'cm', height = 12, width = 20)
   
   if (any(is.na(dm_data$position))){
     warning('NA value in position')

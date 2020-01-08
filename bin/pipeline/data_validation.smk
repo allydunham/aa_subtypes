@@ -16,16 +16,16 @@ rule validate_melnikov:
          x in STUDIES['melnikov_2014_aph3ii']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
-        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
-        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
-        "figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf"
+        "figures/0_data/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf",
+        "figures/0_data/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf",
+        "figures/0_data/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf",
+        "figures/0_data/per_study/melnikov_2014_aph3ii/drug_correlation.pdf"
 
     log:
         "logs/data_validation/melnikov_2014_aph3ii.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_melnikov_2014_aph3ii.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_melnikov_2014_aph3ii.R &> {log}"
 
 rule validate_kitzman:
     """
@@ -36,13 +36,13 @@ rule validate_kitzman:
          x in STUDIES['kitzman_2015_gal4']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
+        "figures/0_data/per_study/kitzman_2015_gal4/validate_selection_combination.pdf"
 
     log:
         "logs/data_validation/kitzman_2015_gal4.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_kitzman_2015_gal4.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_kitzman_2015_gal4.R &> {log}"
 
 rule validate_giacomelli:
     """
@@ -53,15 +53,15 @@ rule validate_giacomelli:
          x in STUDIES['giacomelli_2018_tp53']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
-        "figures/0_data_properties/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
-        "figures/0_data_properties/per_study/giacomelli_2018_tp53/conditions.pdf"
+        "figures/0_data/per_study/giacomelli_2018_tp53/initial_experiment_cor.pdf",
+        "figures/0_data/per_study/giacomelli_2018_tp53/codon_averaged_experiment_cor.pdf",
+        "figures/0_data/per_study/giacomelli_2018_tp53/conditions.pdf"
 
     log:
         "logs/data_validation/giacomelli_2018_tp53.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_giacomelli_2018_tp53.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_giacomelli_2018_tp53.R &> {log}"
 
 rule validate_heredia:
     """
@@ -74,16 +74,16 @@ rule validate_heredia:
          x in STUDIES['heredia_2018_cxcr4']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
-        "figures/0_data_properties/per_study/heredia_2018_ccr5/experiment_correlation.pdf",
-        "figures/0_data_properties/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
-        "figures/0_data_properties/per_study/heredia_2018_cxcr4/experiment_correlation.pdf"
+        "figures/0_data/per_study/heredia_2018_ccr5/replicate_correlation.pdf",
+        "figures/0_data/per_study/heredia_2018_ccr5/experiment_correlation.pdf",
+        "figures/0_data/per_study/heredia_2018_cxcr4/replicate_correlation.pdf",
+        "figures/0_data/per_study/heredia_2018_cxcr4/experiment_correlation.pdf"
 
     log:
         "logs/data_validation/heredia_2018.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_heredia_2018.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_heredia_2018.R &> {log}"
 
 rule validate_sarkisyan:
     """
@@ -94,13 +94,13 @@ rule validate_sarkisyan:
          x in STUDIES['sarkisyan_2016_gfp']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
+        "figures/0_data/per_study/sarkisyan_2016_gfp/multi_mut_validation.pdf"
 
     log:
         "logs/data_validation/sarkisyan_2016_gfp.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_sarkisyan_2016_gfp.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_sarkisyan_2016_gfp.R &> {log}"
 
 rule validate_dorrity:
     """
@@ -111,14 +111,14 @@ rule validate_dorrity:
          x in STUDIES['dorrity_2018_ste12']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/dorrity_2018_ste12/rep_correlation.pdf",
-        "figures/0_data_properties/per_study/dorrity_2018_ste12/multi_mut_validation.pdf"
+        "figures/0_data/per_study/dorrity_2018_ste12/rep_correlation.pdf",
+        "figures/0_data/per_study/dorrity_2018_ste12/multi_mut_validation.pdf"
 
     log:
         "logs/data_validation/dorrity_2018_ste12.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_dorrity_2018_ste12.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_dorrity_2018_ste12.R &> {log}"
 
 rule validate_araya:
     """
@@ -129,13 +129,13 @@ rule validate_araya:
          x in STUDIES['araya_2012_yap1']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/araya_2012_yap1/multi_mut_validation.pdf"
+        "figures/0_data/per_study/araya_2012_yap1/multi_mut_validation.pdf"
 
     log:
         "logs/data_validation/araya_2012_yap1.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_araya_2012_yap1.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_araya_2012_yap1.R &> {log}"
 
 rule validate_starita:
     """
@@ -146,13 +146,13 @@ rule validate_starita:
          x in STUDIES['starita_2013_ube4b']['input_files']]
 
     output:
-        "figures/0_data_properties/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
+        "figures/0_data/per_study/starita_2013_ube4b/multi_mut_validation.pdf"
 
     log:
         "logs/data_validation/starita_2013_ube4b.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/validate_starita_2013_ube4b.R &> {log}"
+        "Rscript bin/analysis/0_data/validate_starita_2013_ube4b.R &> {log}"
 
 #### Validate overall dataset ####
 rule sift_correlation:
@@ -161,17 +161,18 @@ rule sift_correlation:
     """
     input:
         expand('data/studies/{study}/{study}.{ext}', study=STUDIES.keys(), ext=('yaml', 'tsv')),
-        expand('data/sift/{gene}.{ext}', gene=GENES.keys(), ext=('fa', 'SIFTprediction'))
+        expand('data/fasta/{gene}.fa', gene=GENES.keys()),
+        expand('data/sift/{gene}.SIFTprediction', gene=GENES.keys())
 
     output:
-        'figures/0_data_properties/sift_score_correlation.pdf',
-        'figures/0_data_properties/sift_score_density.pdf'
+        'figures/0_data/sift_score_correlation.pdf',
+        'figures/0_data/sift_score_density.pdf'
 
     log:
         "logs/data_validation/sift_correlation.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/sift_correlation.R &> {log}"
+        "Rscript bin/analysis/0_data/sift_correlation.R &> {log}"
 
 # Analyse cases with multiple studies of the same gene
 rule gene_repeats:
@@ -188,16 +189,16 @@ rule gene_repeats:
                       'roscoe_2014_ubi'])
 
     output:
-        "figures/0_data_properties/gene_repeats/brca1.pdf",
-        "figures/0_data_properties/gene_repeats/hsp90.pdf",
-        "figures/0_data_properties/gene_repeats/tem1.pdf",
-        "figures/0_data_properties/gene_repeats/ubi.pdf"
+        "figures/0_data/gene_repeats/brca1.pdf",
+        "figures/0_data/gene_repeats/hsp90.pdf",
+        "figures/0_data/gene_repeats/tem1.pdf",
+        "figures/0_data/gene_repeats/ubi.pdf"
 
     log:
         "logs/data_validation/gene_repeats.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/gene_repeats.R &> {log}"
+        "Rscript bin/analysis/0_data/gene_repeats.R &> {log}"
 
 # Assess predictive performance against ClinVar
 rule clinvar_prediction:
@@ -208,20 +209,20 @@ rule clinvar_prediction:
     input:
         "data/long_combined_mutational_scans.tsv",
         "meta/gene_summary.tsv",
-        "data/clinvar/clinvar_20191202.vcf.gz",
-        "data/clinvar/clinvar_20191202.vcf.gz.tbi"
+        "data/clinvar/clinvar_20200106.vcf.gz",
+        "data/clinvar/clinvar_20200106.vcf.gz.tbi"
 
     output:
-        "figures/0_data_properties/clinvar_roc.pdf",
-        "figures/0_data_properties/clinvar_auc.pdf",
-        "figures/0_data_properties/clinvar_roc_per_gene.pdf",
-        "figures/0_data_properties/clinvar_auc_per_gene.pdf",
+        "figures/0_data/clinvar_roc.pdf",
+        "figures/0_data/clinvar_auc.pdf",
+        "figures/0_data/clinvar_roc_per_gene.pdf",
+        "figures/0_data/clinvar_auc_per_gene.pdf",
 
     log:
         "logs/clinvar_prediction.log"
 
     shell:
-        "Rscript bin/analysis/0_data_properties/clinvar_classification.R &> {log}"
+        "Rscript bin/analysis/0_data/clinvar_classification.R &> {log}"
 
 
 VALIDATION_RULES = [rules.validate_melnikov, rules.validate_kitzman, rules.validate_giacomelli,

@@ -3,7 +3,7 @@
 source('src/config.R')
 source('src/study_standardising.R')
 
-dir.create('figures/0_data_properties/per_study/melnikov_2014_aph3ii')
+dir.create('figures/0_data/per_study/melnikov_2014_aph3ii')
 
 #### Import data ####
 count_files <- grep('\\.aacounts\\.txt', dir('data/studies/melnikov_2014_aph3ii/raw/'), value = TRUE)
@@ -34,7 +34,7 @@ p_lib_test <- ggplot(dm_data, aes(x=L1, y=L2, colour=drug)) +
   guides(colour=FALSE) +
   labs(title = "Relationship between duplicate libraries in Melnikov et al. 2014 (APH(3')-II)",
        subtitle = "Faceted by drug and drug concentration relative to MIC")
-ggsave('figures/0_data_properties/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf', p_lib_test, units = 'cm', width = 18, height = 18)
+ggsave('figures/0_data/per_study/melnikov_2014_aph3ii/initial_library_correlation.pdf', p_lib_test, units = 'cm', width = 18, height = 18)
 
 # Filter conditions where libraries don't agree and observations where libraries differ a lot
 # Then take average over libraries
@@ -52,7 +52,7 @@ p_lib_filtered <- ggplot(dm_data, aes(x=L1, y=L2, colour=drug)) +
   guides(colour=FALSE) +
   labs(title = "Relationship between duplicate libraries in Melnikov et al. 2014 (APH(3')-II)",
        subtitle = "After bad filtering bad libraries and observations where L1 - L2 > 3sd")
-ggsave('figures/0_data_properties/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf', p_lib_filtered, units = 'cm', width = 18, height = 18)
+ggsave('figures/0_data/per_study/melnikov_2014_aph3ii/filtered_library_correlation.pdf', p_lib_filtered, units = 'cm', width = 18, height = 18)
 ########
 
 #### Drug and Concentration Relationships ####
@@ -75,7 +75,7 @@ p_rel_conc <- ggplot(dm_data_rc, aes(x=c1, y=c2, colour=drug)) +
   labs(title = "Relationship between drug concentrations in Melnikov et al. 2014 (APH(3')-II)",
        subtitle = "Concentrations relative to MIC of drug",
        x = 'log2(ER), Conc. 1', y = 'log2(ER), Conc. 2')
-ggsave('figures/0_data_properties/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf', p_rel_conc, units = 'cm', width = 25, height = 25)
+ggsave('figures/0_data/per_study/melnikov_2014_aph3ii/rel_conc_correlation.pdf', p_rel_conc, units = 'cm', width = 25, height = 25)
 
 # Behaviour changes a lot depending on concentration of drug - Use one?
 p_drug_conc <- ggplot(dm_data, aes(x = score, y = ..density.., fill = drug)) +
@@ -86,7 +86,7 @@ p_drug_conc <- ggplot(dm_data, aes(x = score, y = ..density.., fill = drug)) +
   labs(title = "Distribution of log(ER) for each Drug-Conc. Combination",
        subtitle = "from Melnikov et al. 2014 (APH(3')-II)",
        x = 'log2(ER)', y = 'Frequency')
-ggsave('figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_conc_distribution.pdf', p_drug_conc, units = 'cm', width = 25, height = 25)
+ggsave('figures/0_data/per_study/melnikov_2014_aph3ii/drug_conc_distribution.pdf', p_drug_conc, units = 'cm', width = 25, height = 25)
 
 # Choose best distributions:
 dm_data <- filter(dm_data,
@@ -102,7 +102,7 @@ dm_data <- filter(dm_data,
 dm_data_drug <- pivot_wider(dm_data, names_from = drug, values_from = score)
 p_drug_cors <- ggpairs(dm_data_drug, columns = c('Ami', 'G418', 'Kan', 'Neo', 'Paro', 'Ribo'),
                        title = "Correlation between drug scores at best concentrations from Melnikov et al. 2014 (APH(3')-II)")
-ggsave('figures/0_data_properties/per_study/melnikov_2014_aph3ii/drug_correlation.pdf', p_drug_cors, units = 'cm', width = 25, height = 25)
+ggsave('figures/0_data/per_study/melnikov_2014_aph3ii/drug_correlation.pdf', p_drug_cors, units = 'cm', width = 25, height = 25)
 
 # All but Ami seem to correlate well -> filter Ami and average rest?
 # Could also take worst or something to account

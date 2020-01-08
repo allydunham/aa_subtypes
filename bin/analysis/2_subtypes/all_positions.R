@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Perform clustering on all positions at once
 source('src/config.R')
-source('src/clustering.R')
+source('src/subtypes.R')
 
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 

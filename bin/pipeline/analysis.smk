@@ -14,18 +14,18 @@ rule principle_component_analysis:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'figures/1_landscape_properties/pc1_vs_mean_score.pdf',
-        'figures/1_landscape_properties/pc1_pc2_mean_score.pdf',
-        'figures/1_landscape_properties/pc2_pc4_surface_accessibility.pdf',
-        'figures/1_landscape_properties/pc2_vs_surface_accessibility.pdf',
-        'figures/1_landscape_properties/pc2_vs_hydrophobicity.pdf',
-        'figures/1_landscape_properties/foldx_pc_cor.pdf'
+        'figures/1_landscape/pc1_vs_mean_score.pdf',
+        'figures/1_landscape/pc1_pc2_mean_score.pdf',
+        'figures/1_landscape/pc2_pc4_surface_accessibility.pdf',
+        'figures/1_landscape/pc2_vs_surface_accessibility.pdf',
+        'figures/1_landscape/pc2_vs_hydrophobicity.pdf',
+        'figures/1_landscape/foldx_pc_cor.pdf'
 
     log:
         'logs/principle_component_analysis.log'
 
     shell:
-        'Rscript bin/analysis/1_landscape_properties/principle_component_analysis.R &> {log}'
+        'Rscript bin/analysis/1_landscape/principle_component_analysis.R &> {log}'
 
 rule tsne_analysis:
     """
@@ -36,16 +36,16 @@ rule tsne_analysis:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'figures/1_landscape_properties/tsne_study.pdf',
-        'figures/1_landscape_properties/tsne_aa.pdf',
-        'figures/1_landscape_properties/tsne_hydrophobicity.pdf',
-        'figures/1_landscape_properties/tsne_surface_accessibility.pdf'
+        'figures/1_landscape/tsne_study.pdf',
+        'figures/1_landscape/tsne_aa.pdf',
+        'figures/1_landscape/tsne_hydrophobicity.pdf',
+        'figures/1_landscape/tsne_surface_accessibility.pdf'
 
     log:
         'logs/tsne_analysis.log'
 
     shell:
-        'Rscript bin/analysis/1_landscape_properties/tsne.R &> {log}'
+        'Rscript bin/analysis/1_landscape/tsne.R &> {log}'
 
 rule umap_analysis:
     """
@@ -56,17 +56,17 @@ rule umap_analysis:
         'data/combined_mutational_scans.tsv'
 
     output:
-        'figures/1_landscape_properties/umap_study.pdf',
-        'figures/1_landscape_properties/umap_aa.pdf',
-        'figures/1_landscape_properties/umap_hydrophobicity.pdf',
-        'figures/1_landscape_properties/umap_mean_er.pdf',
-        'figures/1_landscape_properties/umap_surface_accessibility.pdf'
+        'figures/1_landscape/umap_study.pdf',
+        'figures/1_landscape/umap_aa.pdf',
+        'figures/1_landscape/umap_hydrophobicity.pdf',
+        'figures/1_landscape/umap_mean_er.pdf',
+        'figures/1_landscape/umap_surface_accessibility.pdf'
 
     log:
         'logs/umap_analysis.log'
 
     shell:
-        'Rscript bin/analysis/1_landscape_properties/umap.R &> {log}'
+        'Rscript bin/analysis/1_landscape/umap.R &> {log}'
 
 
 #### Clustering ####
@@ -79,17 +79,17 @@ rule make_subtypes:
     """
     input:
         dms_wide='data/combined_mutational_scans.tsv',
-        yaml='meta/clustering/{name}.yaml'
+        yaml='meta/subtypes/{name}.yaml'
 
     output:
-        'data/clustering/{name}.tsv',
-        [f'figures/2_clustering/{{name}}/{x}' for x in cluster_plots]
+        'data/subtypes/{name}.tsv',
+        [f'figures/2_subtypes/{{name}}/{x}' for x in cluster_plots]
 
     log:
         'logs/make_subtypes/{name}.log'
 
     shell:
-        'Rscript bin/analysis/2_clustering/make_subtypes.R --data data/clustering --figures figures/2_clustering {input.yaml} &> {log}'
+        'Rscript bin/analysis/2_subtypes/make_subtypes.R --data data/subtypes --figures figures/2_subtypes {input.yaml} &> {log}'
 
 rule characterise_subtypes:
     """
@@ -97,20 +97,20 @@ rule characterise_subtypes:
     """
     input:
         dms="data/combined_mutational_scans.tsv",
-        subtypes="data/clustering/{name}.tsv"
+        subtypes="data/subtypes/{name}.tsv"
 
     output:
-        [f"figures/2_clustering/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET],
-        [f"figures/2_clustering/{{name}}/aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET],
-        [f"figures/2_clustering/{{name}}/ss_probabilities/{x}.pdf" for x in AA_ALPHABET],
-        "figures/2_clustering/{name}/er_vs_surface_accessibility.pdf",
-        "figures/2_clustering/{name}/er_vs_size.pdf"
+        [f"figures/2_subtypes/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET],
+        [f"figures/2_subtypes/{{name}}/aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET],
+        [f"figures/2_subtypes/{{name}}/ss_probabilities/{x}.pdf" for x in AA_ALPHABET],
+        "figures/2_subtypes/{name}/er_vs_surface_accessibility.pdf",
+        "figures/2_subtypes/{name}/er_vs_size.pdf"
 
     log:
         'logs/characterise_subtypes/{name}.log'
 
     shell:
-        "Rscript bin/analysis/2_clustering/characterise_subtypes.R --dms {input.dms} --figures figures/2_clustering {input.subtypes} &> {log}"
+        "Rscript bin/analysis/2_subtypes/characterise_subtypes.R --dms {input.dms} --figures figures/2_subtypes {input.subtypes} &> {log}"
 
 rule all_position_subtypes:
     """
@@ -121,14 +121,14 @@ rule all_position_subtypes:
 
     output:
         "data/clustering/hclust_profile_dynamic_all_positions.tsv",
-        [f"figures/2_clustering/hclust_profile_dynamic_all_positions/{x}" for x in cluster_plots],
-        "figures/2_clustering/hclust_profile_dynamic_all_positions/cluster_occupancy.pdf"
+        [f"figures/2_subtypes/hclust_profile_dynamic_all_positions/{x}" for x in cluster_plots],
+        "figures/2_subtypes/hclust_profile_dynamic_all_positions/cluster_occupancy.pdf"
 
     log:
         "logs/all_position_subtypes.log"
 
     shell:
-        "Rscript bin/analysis/2_clustering/all_positions.R &> {log}"
+        "Rscript bin/analysis/2_subtypes/all_positions.R &> {log}"
 
 rule all_position_characterisation:
     """

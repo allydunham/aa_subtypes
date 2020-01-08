@@ -1,10 +1,8 @@
 #!/usr/bin/env Rscript
 # Perform principle component analysis on the full dataset
-
 source('src/config.R')
 source('src/dimensionality_reduction.R')
 
-dir.create('figures/1_landscape_properties')
 plots <- list()
 dms_wide <- read_tsv('data/combined_mutational_scans.tsv')
 
@@ -62,4 +60,4 @@ plots$foldx_pc_cor <- (ggplot(foldx_term_cor, aes(x=cat1, y=cat2, fill=cor)) +
   labeled_plot(units = 'cm', height = 15, width = 20)
 
 # Save plots
-save_plotlist(plots, 'figures/1_landscape_properties/', overwrite = 'all', default_format = 'pdf')
+save_plotlist(plots, 'figures/1_landscape', overwrite = 'all', default_format = 'pdf')
