@@ -13,7 +13,7 @@
 ## Config ##
 project_name="Amino Acid Subtypes Project"
 local_dir=$HOME/phd/subtypes
-remote_dirs=( "ebi:/nfs/research1/beltrao/ally/subtypes" "ebi:/hps/research1/beltrao/ally/subtypes" )
+remote_dirs=( "ebi:/hps/research1/beltrao/ally/subtypes" )
 folders=( "data" "meta" "figures" "docs" "logs" )
 
 ## Colours for printf ##
