@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 # Functions for AA subtypes clustering
+# TODO break down into smaller modules
 
 #### Utility ####
 # Drop unused integer cluster labels
@@ -199,6 +200,7 @@ make_cluster_plots <- function(tbl, cols, chem_env_cols, clusters){
   plots$profile_correlation <- labeled_plot(plot_cluster_profile_correlation(tbl, !!cols), units='cm', height = n_clusters*0.5 + 2, width = n_clusters*0.5 + 4, limitsize=FALSE)
   plots$foldx_profiles <- labeled_plot(plot_cluster_foldx_profiles(tbl), units='cm', height = n_clusters*0.5 + 2, width = 25, limitsize=FALSE)
   plots$chem_env_profiles <- labeled_plot(plot_cluster_chem_env_profiles(tbl, !!chem_env_cols), units='cm', height = n_clusters*0.5 + 2, width = 25, limitsize=FALSE)
+  plots$all_cluster_silhouette <- labeled_plot(plot_silhouette(tbl, !!chem_env_cols), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
   return(plots)
 }
 
@@ -217,6 +219,65 @@ plot_clustering <- function(clusters){
   } else {
     stop('Unrecognised clusters list')
   }
+}
+
+# Calculate silhouette data for a clustering
+# expects a tibble with columns cluster and cols, with cols giving the position
+cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
+  cols <- enquo(cols)
+  
+  # Calculate distance between all points
+  distance <- tibble_to_matrix(tbl, !!cols) %>%
+    dist(method = distance_method) %>%
+    as.matrix()
+  diag(distance) <- NA
+  
+  # Calculate mean distance each point and all clusters
+  get_silhouette_distance <- function(x){
+    ind <- tbl$cluster == x
+    if (sum(ind) == 1){
+      return(distance[,ind])
+    } else {
+      return(rowMeans(distance[,tbl$cluster == x], na.rm = TRUE))
+    }
+  }
+  mean_dists <- sapply(unique(tbl$cluster), get_silhouette_distance)
+  
+  # Calculate mean dist within cluster
+  same_cluster <- cbind(1:nrow(mean_dists), match(tbl$cluster, colnames(mean_dists)))
+  a <- mean_dists[same_cluster]
+  
+  # Calculate mean dist to other clusters
+  mean_dists[same_cluster] <- NA
+  b <- apply(mean_dists, 1, min, na.rm=TRUE)
+  
+  # Calculate silhouette score
+  s <- (b - a)/(pmax(a, b))
+  
+  singlton_clusters <- table(tbl$cluster)
+  singlton_clusters <- names(singlton_clusters)[singlton_clusters == 1]
+  
+  s[tbl$cluster %in% singlton_clusters] <- 0
+  
+  return(s)
+}
+
+plot_silhouette <- function(tbl, cols){
+  cols <- enquo(cols)
+  
+  tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
+    mutate(silhouette_score = cluster_silhouette(., !!cols),
+           cluster_num = str_sub(cluster, start = -1)) %>%
+    select(cluster, cluster_num, study, position, wt, silhouette_score)
+  
+  ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
+    geom_boxplot() +
+    geom_hline(yintercept = 0) +
+    scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
+    labs(x = '', y = 'Silhouette Score') +
+    coord_flip() +
+    theme(panel.grid.major.y = element_blank(),
+          axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
 }
 
 # All other functions expect a cluster tibble

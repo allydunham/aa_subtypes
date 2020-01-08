@@ -39,7 +39,7 @@ rule landscape_dimensionality_reduction:
 #### Clustering ####
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
                  'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf',
-                 'clustering.pdf', 'umap.pdf']
+                 'clustering.pdf', 'umap.pdf', 'all_cluster_silhouette.pdf']
 rule make_subtypes:
     """
     Generalised clustering script, taking parameters from YAML files in meta/clustering
