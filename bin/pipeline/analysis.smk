@@ -5,13 +5,13 @@ Expects global variables:
 """
 
 #### Analyse whole dataset ####
-rule principle_component_analysis:
+rule landscape_dimensionality_reduction:
     """
-    Analyse principle components of the mutational landscape, relating them
-    to various biophysical properties
+    Analyse the mutational landscape using PCA, tSNE and UMAP dimensionality
+    reduction, relating them to various biophysical properties
     """
     input:
-        'data/combined_mutational_scans.tsv'
+         'data/combined_mutational_scans.tsv'
 
     output:
         'figures/1_landscape/pc1_vs_mean_score.pdf',
@@ -19,43 +19,11 @@ rule principle_component_analysis:
         'figures/1_landscape/pc2_pc4_surface_accessibility.pdf',
         'figures/1_landscape/pc2_vs_surface_accessibility.pdf',
         'figures/1_landscape/pc2_vs_hydrophobicity.pdf',
-        'figures/1_landscape/foldx_pc_cor.pdf'
-
-    log:
-        'logs/principle_component_analysis.log'
-
-    shell:
-        'Rscript bin/analysis/1_landscape/principle_component_analysis.R &> {log}'
-
-rule tsne_analysis:
-    """
-    Analyse tSNE dimensionality reduction of the mutational landscape, relating it to biophysical
-    properties
-    """
-    input:
-        'data/combined_mutational_scans.tsv'
-
-    output:
+        'figures/1_landscape/foldx_pc_cor.pdf',
         'figures/1_landscape/tsne_study.pdf',
         'figures/1_landscape/tsne_aa.pdf',
         'figures/1_landscape/tsne_hydrophobicity.pdf',
-        'figures/1_landscape/tsne_surface_accessibility.pdf'
-
-    log:
-        'logs/tsne_analysis.log'
-
-    shell:
-        'Rscript bin/analysis/1_landscape/tsne.R &> {log}'
-
-rule umap_analysis:
-    """
-    Analyse UMAP dimensionality reduction of the mutational landscape, relating it to biophysical
-    properties
-    """
-    input:
-        'data/combined_mutational_scans.tsv'
-
-    output:
+        'figures/1_landscape/tsne_surface_accessibility.pdf',
         'figures/1_landscape/umap_study.pdf',
         'figures/1_landscape/umap_aa.pdf',
         'figures/1_landscape/umap_hydrophobicity.pdf',
@@ -63,11 +31,10 @@ rule umap_analysis:
         'figures/1_landscape/umap_surface_accessibility.pdf'
 
     log:
-        'logs/umap_analysis.log'
+        'logs/landscape_dimensionality_reduction.log'
 
     shell:
-        'Rscript bin/analysis/1_landscape/umap.R &> {log}'
-
+        'Rscript bin/analysis/1_landscape/dimensionality_reduction.R &> {log}'
 
 #### Clustering ####
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
