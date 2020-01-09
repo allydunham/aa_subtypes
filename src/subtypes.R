@@ -20,6 +20,11 @@ compress_cluster_labels <- function(x){
 cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
   cols <- enquo(cols)
   
+  if (n_distinct(tbl$cluster) == 1){
+    warning('Silhouette undefined for a single cluster, returning NA')
+    return(rep(NA, nrow(tbl)))
+  }
+  
   # Calculate distance between all points
   distance <- tibble_to_matrix(tbl, !!cols) %>%
     dist(method = distance_method) %>%
@@ -93,8 +98,13 @@ plot_clustering_kmeans <- function(clusters){
     guides(colour = guide_legend(title = 'Subtype'))
 }
 
-evaluate_k <- function(tbl, cols, k, min_size = 1){
+evaluate_k <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
   cols <- enquo(cols)
+  dist_cols <- enquo(dist_cols)
+  
+  if (quo_is_null(dist_cols)){
+    dist_cols <- cols 
+  }
   
   # Make Clusters
   clusters <- group_by(tbl, wt) %>%
@@ -104,12 +114,12 @@ evaluate_k <- function(tbl, cols, k, min_size = 1){
   cluster_tbl <- map_dfr(clusters, .f = ~ .$tbl) %>%
     mutate(cluster = str_c(wt, cluster)) %>%
     arrange(study, position) %>%
-    select(cluster, study, position, wt, !!cols)
+    select(cluster, study, position, wt, !!dist_cols)
   
   # Average silhouette
   avg_sil <- filter(cluster_tbl, !str_ends(cluster, '0')) %>%
     group_by(wt) %>%
-    group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols))) %>%
+    group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!dist_cols))) %>%
     summarise(silhouette_score = mean(silhouette_score, na.rm=TRUE))
     
   return(avg_sil)
