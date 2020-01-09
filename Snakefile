@@ -64,9 +64,8 @@ rule all:
         [r.output for r in VALIDATION_RULES],
         rules.study_summary_plots.output,
         rules.summarise_standardised_data.output,
-        rules.principle_component_analysis.output,
-        rules.tsne_analysis.output,
-        rules.umap_analysis.output,
+        rules.landscape_dimensionality_reduction.output,
+        rules.evaluate_kmeans_k.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
         rules.all_position_characterisation.output

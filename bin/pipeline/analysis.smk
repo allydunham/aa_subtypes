@@ -39,7 +39,7 @@ rule landscape_dimensionality_reduction:
 #### Clustering ####
 cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
                  'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf',
-                 'clustering.pdf', 'umap.pdf', 'all_cluster_silhouette.pdf']
+                 'clustering.pdf', 'umap.pdf', 'global_silhouette.pdf', 'per_aa_silhouette.pdf']
 rule make_subtypes:
     """
     Generalised clustering script, taking parameters from YAML files in meta/clustering
@@ -112,3 +112,19 @@ rule all_position_characterisation:
 
     shell:
         "Rscript bin/analysis/3_continuous/all_position_characterisation.R &> {log}"
+
+rule evaluate_kmeans_k:
+    """
+    Assess different values of k to use for k-means clustering, based on silhouette scores
+    """
+    input:
+        "data/combined_mutational_scans.tsv"
+
+    output:
+        "figures/2_subtypes/kmean_k_silhouettes.pdf"
+
+    log:
+        "logs/evaluate_kmeans_k.log"
+
+    shell:
+        "Rscript bin/analysis/2_subtypes/evaluate_kmeans_k.R &> {log}"
