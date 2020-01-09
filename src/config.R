@@ -3,6 +3,8 @@
 
 # Load all libraries (keeps namespace consistent)
 library(Biostrings)
+library(mclust)
+
 library(tidyverse)
 library(rlang)
 library(magrittr)
@@ -17,6 +19,7 @@ library(dbscan)
 library(ggdendro)
 library(multipanelfigure)
 library(tools)
+
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)

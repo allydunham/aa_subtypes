@@ -26,7 +26,7 @@ make_cluster_func <- function(func){
 }
 
 cluster_funcs <- list(kmeans=make_kmeans_clusters, hclust=make_hclust_clusters, hclust_dynamic=make_dynamic_hclust_clusters,
-                      dbscan=make_dbscan_clusters, hdbscan=make_hdbscan_clusters)
+                      dbscan=make_dbscan_clusters, hdbscan=make_hdbscan_clusters, gmm=make_gmm_clusters)
 
 if (conf$method %in% names(cluster_funcs)){
   cluster_func <- make_cluster_func(cluster_funcs[[conf$method]])
