@@ -47,6 +47,15 @@ AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
                 D='purple', E='pink',
                 G='antiquewhite2', P='black', X='grey')
 
+# Colourbrewer scales for various metrics
+CLUSTER_COLOURS <- list(type='qual', palette='Set3', direction = -1)
+ER_PROFILE_COLOURS <- list(type='div', palette='RdBu', direction = 1)
+ER_COR_COLOURS <- list(type='div', palette='RdYlBu', direction = 1)
+SIFT_COLOURS <- list(type='seq', palette='PuRd', direction = -1)
+FOLDX_COLOURS <- list(type='div', palette='PiYG', direction = 1)
+SS_COLOURS <- list(type='div', palette='BrBG', direction = 1)
+CHEM_ENV_COLOURS <- list(type='div', palette='PRGn', direction = 1)
+
 ### Biological Data ###
 # Categories of amino acid
 # From Sigma-Aldrich website (https://www.sigmaaldrich.com/life-science/metabolomics/learning-center/amino-acid-reference-chart.html)
