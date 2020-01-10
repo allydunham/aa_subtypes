@@ -37,9 +37,8 @@ rule landscape_dimensionality_reduction:
         'Rscript bin/analysis/1_landscape/dimensionality_reduction.R &> {log}'
 
 #### Clustering ####
-cluster_plots = ['ramachanran_angles.pdf', 'cluster_sizes.pdf', 'mean_profiles.pdf',
-                 'profile_correlation.pdf', 'foldx_profiles.pdf', 'chem_env_profiles.pdf',
-                 'clustering.pdf', 'umap.pdf', 'global_silhouette.pdf', 'per_aa_silhouette.pdf']
+diagnostic_plots = ['clustering.pdf', 'umap.pdf', 'tsne.pdf', 'global_silhouette.pdf',
+                    'per_aa_silhouette.pdf', 'clustering_silhouette.pdf', ]
 rule make_subtypes:
     """
     Generalised clustering script, taking parameters from YAML files in meta/clustering
@@ -50,14 +49,20 @@ rule make_subtypes:
 
     output:
         'data/subtypes/{name}.tsv',
-        [f'figures/2_subtypes/{{name}}/{x}' for x in cluster_plots]
+        [f'figures/2_subtypes/{{name}}/{x}' for x in diagnostic_plots]
 
     log:
         'logs/make_subtypes/{name}.log'
 
     shell:
-        'Rscript bin/analysis/2_subtypes/make_subtypes.R --data data/subtypes --figures figures/2_subtypes {input.yaml} &> {log}'
+        """
+        mkdir figures/2_subtypes/{wildcards.name} &> {log} || true
+        Rscript bin/analysis/2_subtypes/make_subtypes.R --figures figures/2_subtypes/{wildcards.name} {input.yaml} --out 'data/subtypes/{wildcards.name}.tsv' &> {log}
+        """
 
+characterisation_plots = ['ramachandran_angles.pdf', 'sizes.pdf', 'er_profiles.pdf',
+                          'er_correlation.pdf', 'foldx.pdf', 'chem_env.pdf', 'ss_probability.pdf',
+                          'er_vs_surface_accessibility.pdf', 'er_vs_size.pdf']
 rule characterise_subtypes:
     """
     Make characterisation plots for each amino acid from an input subtype clustering
@@ -67,17 +72,16 @@ rule characterise_subtypes:
         subtypes="data/subtypes/{name}.tsv"
 
     output:
+        [f'figures/2_subtypes/{{name}}/{x}' for x in characterisation_plots],
         [f"figures/2_subtypes/{{name}}/aa_profiles/{x}.pdf" for x in AA_ALPHABET],
         [f"figures/2_subtypes/{{name}}/aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET],
-        [f"figures/2_subtypes/{{name}}/ss_probabilities/{x}.pdf" for x in AA_ALPHABET],
-        "figures/2_subtypes/{name}/er_vs_surface_accessibility.pdf",
-        "figures/2_subtypes/{name}/er_vs_size.pdf"
+        [f"figures/2_subtypes/{{name}}/ss_probabilities/{x}.pdf" for x in AA_ALPHABET]
 
     log:
         'logs/characterise_subtypes/{name}.log'
 
     shell:
-        "Rscript bin/analysis/2_subtypes/characterise_subtypes.R --dms {input.dms} --figures figures/2_subtypes {input.subtypes} &> {log}"
+        "Rscript bin/analysis/2_subtypes/characterise_subtypes.R --dms {input.dms} --figures figures/2_subtypes/{wildcards.name} {input.subtypes} &> {log}"
 
 rule all_position_subtypes:
     """
@@ -88,7 +92,7 @@ rule all_position_subtypes:
 
     output:
         "data/clustering/hclust_profile_dynamic_all_positions.tsv",
-        [f"figures/2_subtypes/hclust_profile_dynamic_all_positions/{x}" for x in cluster_plots],
+        [f"figures/2_subtypes/hclust_profile_dynamic_all_positions/{x}" for x in diagnostic_plots],
         "figures/2_subtypes/hclust_profile_dynamic_all_positions/cluster_occupancy.pdf"
 
     log:

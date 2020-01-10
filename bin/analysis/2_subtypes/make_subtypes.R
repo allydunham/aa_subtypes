@@ -7,13 +7,16 @@ library(argparser)
 ### Parse args and setup ###
 parser <- arg_parser(description = 'Make and analyse AA subtypes', name = 'AA Subtypes')
 parser <- add_argument(parser, arg = 'yaml', help = 'YAML file parameterising clustering')
-parser <- add_argument(parser, arg = '--data', help = 'Directory to save cluster assignments', default = 'data/subtypes')
-parser <- add_argument(parser, arg = '--figures', help = 'Root directory to save figures', default = 'figures/2_subtypes')
+parser <- add_argument(parser, arg = '--figures', help = 'Directory to save figures', default = NA)
 parser <- add_argument(parser, arg = '--dms', help = 'DMS data path', default = 'data/combined_mutational_scans.tsv')
+parser <- add_argument(parser, arg = '--out', help = 'Patht to output classifications', default = NA)
 args <- parse_args(parser)
 
 conf <- read_yaml(args$yaml)
-root_name <- str_split(basename(args$yaml), '\\.', simplify = TRUE)[1]
+
+if (is.na(args$out)){
+  args$out <- str_c(str_split(basename(args$yaml), '\\.', simplify = TRUE)[1], '.tsv')
+}
 
 cols <- eval(parse(text = str_c('quo(', conf$columns,')')))
 
@@ -39,15 +42,14 @@ clusters <- group_by(dms, wt) %>%
   group_map(~do.call(cluster_func, c(list(tbl=.), conf$args)), keep = TRUE) %>%
   set_names(sapply(., function(x){first(x$tbl$wt)}))
 
+### Save Clusters ###
 dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
+write_tsv(select(dms, cluster, study, gene, position, wt), args$out)
 
-### Analyse clusters and save results ###
-plots <- make_cluster_plots(dms, cols = !!cols, chem_env_cols = within_10_0_A:within_10_0_Y, clusters = clusters)
-
-write_tsv(select(dms, cluster, study, gene, position, wt), str_c(args$data, '/', root_name, '.tsv'))
-
-root_fig_dir <- str_c(args$figures, '/', root_name)
-dir.create(root_fig_dir, recursive = TRUE)
-save_plotlist(plots, root = root_fig_dir, overwrite = 'all')
+### Save diagnostic plots ###
+if (!is.na(args$figures)){
+  plots <- plot_cluster_diagnostics(clusters, cols = !!cols)
+  save_plotlist(plots, root = args$figures, overwrite = 'all')
+}
