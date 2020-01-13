@@ -4,6 +4,6 @@ study_template.yaml
 fasta/**
 clustering/**
 structures.yaml
-graveyard/README.md
+README.md
 graveyard/*/*.yaml
 graveyard/*/*.R
