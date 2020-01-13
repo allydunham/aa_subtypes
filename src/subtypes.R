@@ -523,14 +523,21 @@ plot_cluster_sizes <- function(x){
     labs(x='', y = 'Cluster Size')
 }
 
-plot_cluster_profiles <- function(x){
+plot_cluster_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
-    x <- x$profiles
+    x <- left_join(x$profiles, select(x$summary, cluster, n), by='cluster')
   }
+  
+  if (filter_outliers > 0){
+    x <- filter(x, !str_ends(cluster, '0'), n > filter_outliers)
+  }
+  
+  breaks <- pretty_break(x$er, rough_n = 5, sig_figs = 3, sym = 0)
   
   ggplot(x, aes(x=cluster, y=mut, fill=er)) +
     geom_tile() +
-    scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction) +
+    scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
     coord_fixed() +
     guides(fill=guide_colourbar(title = 'Norm. ER')) +
     theme(axis.ticks = element_blank(),
@@ -550,9 +557,12 @@ plot_cluster_profile_correlation <- function(x){
            str_ends(cluster2, '0', negate = TRUE)) %>%
     mutate(cluster1 = droplevels(cluster1), cluster2 = droplevels(cluster2))
   
+  breaks <- pretty_break(cors$cor, rough_n = 5, sig_figs = 3, sym = 0)
+  
   ggplot(cors, aes(x=cluster1, y=cluster2, fill=cor)) +
     geom_tile() +
-    scale_fill_distiller(type = ER_COR_COLOURS$type, palette = ER_COR_COLOURS$palette, direction = ER_COR_COLOURS$direction) +
+    scale_fill_distiller(type = ER_COR_COLOURS$type, palette = ER_COR_COLOURS$palette, direction = ER_COR_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
     coord_fixed() +
     guides(fill = guide_colourbar(title = 'Pearson\nCorrelation')) +
     theme(axis.ticks = element_blank(),
@@ -562,18 +572,25 @@ plot_cluster_profile_correlation <- function(x){
           axis.text.y = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster2), end = 1)]))
 }
 
-plot_cluster_foldx_profiles <- function(x){
+plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$foldx, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
       mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
   }
   
+  if (filter_outliers > 0){
+    x <- filter(x, !str_ends(cluster, '0'), n_structure > filter_outliers)
+  }
+  
   cluster_labs <- levels(x$cluster)
   prop_labs <- structure(x$prop, names = as.character(x$cluster))[cluster_labs]
   
+  breaks <- pretty_break(x$rel_ddg, rough_n = 5, sig_figs = 3, sym = 0)
+  
   ggplot(x, aes(x=as.numeric(cluster), y=term, fill=rel_ddg)) +
     geom_raster() +
-    scale_fill_distiller(type = FOLDX_COLOURS$type, palette = FOLDX_COLOURS$palette, direction = FOLDX_COLOURS$direction) +
+    scale_fill_distiller(type = FOLDX_COLOURS$type, palette = FOLDX_COLOURS$palette, direction = FOLDX_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
     scale_x_continuous(breaks = 1:length(cluster_labs), labels = cluster_labs,
                        sec.axis = sec_axis(~., breaks = 1:length(prop_labs), labels = prop_labs)) +
     scale_y_discrete(labels = sapply(FOLDX_TERMS_PLOTMATH, function(x){parse(text = x)})) +
@@ -590,20 +607,25 @@ plot_cluster_foldx_profiles <- function(x){
 }
 
 # Currently assumes profile columns correspond to AA counts, would need to be updated with a completely new chem env scheme
-plot_cluster_chem_env_profiles <- function(x){
+plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$chem_env, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
       mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
   }
   
+  if (filter_outliers > 0){
+    x <- filter(x, !str_ends(cluster, '0'), n_structure > filter_outliers)
+  }
+  
   cluster_labs <- levels(x$cluster)
   prop_labs <- structure(x$prop, names = as.character(x$cluster))[cluster_labs]
   
-  max_val <- max(abs(x$rel_count), na.rm = TRUE)
+  breaks <- pretty_break(x$rel_count, rough_n = 5, sig_figs = 3, sym = 0)
   
   ggplot(x, aes(x=as.numeric(cluster), y=aa, fill=rel_count)) +
     geom_raster() +
-    scale_fill_distiller(type = CHEM_ENV_COLOURS$type, palette = CHEM_ENV_COLOURS$palette, direction = CHEM_ENV_COLOURS$direction, limits = c(-max_val, max_val)) +
+    scale_fill_distiller(type = CHEM_ENV_COLOURS$type, palette = CHEM_ENV_COLOURS$palette, direction = CHEM_ENV_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
     scale_x_continuous(breaks = 1:length(cluster_labs), labels = cluster_labs,
                        sec.axis = sec_axis(~., breaks = 1:length(prop_labs), labels = prop_labs)) +
     coord_fixed() +
@@ -619,16 +641,23 @@ plot_cluster_chem_env_profiles <- function(x){
           legend.title.align = 0.5)
 }
 
-plot_cluster_ss_profile <- function(x){
+plot_cluster_ss_profile <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
-    x <- x$secondary_structure
+    x <- left_join(x$secondary_structure, select(x$summary, cluster, n), by = 'cluster')
   }
+  
+  if (filter_outliers > 0){
+    x <- filter(x, !str_ends(cluster, '0'), n > filter_outliers)
+  }
+  
+  breaks <- pretty_break(x$rel_prob, rough_n = 5, sig_figs = 3, sym = 0)
   
   ggplot(x, aes(x=cluster, y=ss, fill=rel_prob)) +
     geom_raster() +
     coord_equal() +
     labs(y = '', x = '') +
-    scale_fill_distiller(type = SS_COLOURS$type, palette = SS_COLOURS$palette, direction = SS_COLOURS$direction) +
+    scale_fill_distiller(type = SS_COLOURS$type, palette = SS_COLOURS$palette, direction = SS_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
     scale_y_discrete(labels = sapply(DSSP_CLASSES_PLOTMATH, function(x){parse(text = x)})) + 
     guides(fill = guide_colourbar(title = expression('log'[2]~frac(italic(P)(SS~"|"~X), italic(P)(SS))))) +
     theme(axis.ticks = element_blank(),
