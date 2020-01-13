@@ -19,7 +19,7 @@ aph3ii:
   id: '3r87.2.A'
   sections: [{chain: 'A', offset: 0}]
 brca1:
-  type: 'x-raw'
+  type: 'x-ray'
   id: '4igk'
   sections: [{chain: 'A', offset: 1645}]
 calm1:

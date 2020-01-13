@@ -9,7 +9,7 @@ rule calculate_backbone_angles:
     """
     input:
         pdb="data/pdb/{gene}.pdb",
-        yaml="meta/structures.yaml"
+        yaml=ancient("meta/structures.yaml")
 
     output:
         "data/backbone_angles/{gene}.tsv"
@@ -25,7 +25,8 @@ rule filter_pdb:
     Filter a PDB to only contain regions of interest for Naccess
     """
     input:
-        'data/pdb/{gene}.pdb'
+        pdb='data/pdb/{gene}.pdb',
+        yaml=ancient("meta/structures.yaml")
 
     output:
         'data/surface_accessibility/{gene}.pdb'
@@ -34,7 +35,7 @@ rule filter_pdb:
         'logs/filter_pdb/{gene}.log'
 
     shell:
-        'python bin/data_processing/filter_pdb.py --yaml meta/structures.yaml {input} > {output} 2> {log}'
+        'python bin/data_processing/filter_pdb.py --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
 
 rule naccess:
     """
@@ -82,7 +83,7 @@ rule within_a_profile:
     """
     input:
         pdb='data/pdb/{gene}.pdb',
-        yaml='meta/structures.yaml'
+        yaml=ancient('meta/structures.yaml')
 
     output:
         'data/chemical_environment/{gene}_within_{a}.tsv'
