@@ -17,7 +17,7 @@ Metadata:
 * **subtypes/** - folder containing YAML config files for the various clustering approaches 
   to extracting amino acid subtypes.
 * **residue\_hydrophobicity.tsv** - Average amino acid hydrophobicity table, sourced from 
-  [Bandyopadhyay & Mehler (2008)](https://www.ncbi.nlm.nih.gov/pubmed/18247345)
+  [Bandyopadhyay & Mehler (2008)](https://onlinelibrary.wiley.com/doi/full/10.1002/prot.21958)
 * **fasta/** - can contain .fa files of the form {species/strain}\_{gene}.fa that act as 
   master copies when validating study config files. Not required for normal execution.
   In general the fasta files are sourced from Uniprot, although some come from the 

@@ -1,4 +1,4 @@
-# Various protein hydrophbicity scales as found in Bandyopadhyay & Mehler 2008 https://www.ncbi.nlm.nih.gov/pubmed/18247345
+# Various protein hydrophbicity scales as found in Bandyopadhyay & Mehler 2008 (https://onlinelibrary.wiley.com/doi/full/10.1002/prot.21958)
 AA	TW	Faupl24	Abodr25	Rose34	Ponnu8	Mijer35	KyteDo36	White4	Eisen2
 C	1.15	1.54	NA	0.91	14.93	7.93	2.5	-0.02	0.38
 I	0.97	1.8	9.3	0.88	14.77	8.83	4.5	-1.12	1.90
