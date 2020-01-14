@@ -5,9 +5,11 @@ This repo contains the code for the publication XXX
 
 
 ## Installation
-Once the repo is cloned the entire project can be run via the snakemake pipeline mangager
-using the included Snakefile, assuming the required packages are available and a few 
-settings tweaked for the local environment.
+There are a number of dependancies required to run the project and a few configuration
+settings, as well as the unfortunate requirement to manually download raw data files 
+from various journal websites. INSTALL.md contains detailed instructions for this. Once
+the neccessary dependancies and files are present the whole pipeline can be run through
+Snakemake. 
 
 ## Code Overview
 
