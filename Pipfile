@@ -12,6 +12,7 @@ ruamel-yaml = "*"
 biopython = "*"
 colorama = "*"
 pandas = "*"
+pyqt5 = "*"
 
 [requires]
 python_version = "3.7"
