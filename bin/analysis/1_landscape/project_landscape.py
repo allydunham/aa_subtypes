@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Project various mutational landscape metrics onto protein structures
+Project mutational landscape metrics onto protein structures
 """
+# TODO way to determine colour scheme and midpoint per property?
+# TODO allow sequential execution on differnt PDBs as well as properties?
+# TODO refactor main
+# TODO make into more general PDB projection function?
+
 import os
 import argparse
 from pathlib import Path
@@ -23,29 +28,36 @@ def main(args):
     except FileExistsError:
         pass # Don't mind if it already exists
 
+    # Cover the common case of FoldX adding _Repair
+    gene = args.gene or Path(args.pdb).stem.rsplit('_Repair', 1)[0]
+    sections = import_sections(args.structure_yaml, gene)
+    pdb_string = get_pdb_string(args.pdb, select=SectionSelecter(sections))
     dms = pd.read_csv(args.data, sep='\t')
-    colourer = ColourSpectrum.linear(min(dms[args.property]), max(dms[args.property]),
-                                     midpoint=0, colours='RdBu', na_colour='0xC0C0C0')
 
-    if args.scale:
-        pass
+    # Filter dms to only include the pdb region
+    pdb_dms = dms[[gene_to_filename(x) == gene for x in dms.gene]].copy()
+    pdb_dms['pdb_position'], pdb_dms['pdb_chain'] = position_offsetter(pdb_dms.position, sections)
+    pdb_dms = pdb_dms.dropna(subset=['pdb_position'])
 
-    else:
-        pdb_name = args.gene or Path(args.pdb).stem
+    for landscape_property in args.properties:
+        if args.global_scale:
+            minimum = min(dms[landscape_property])
+            maximum = max(dms[landscape_property])
+        else:
+            minimum = min(pdb_dms[landscape_property])
+            maximum = max(pdb_dms[landscape_property])
 
-        # deal with FoldX repaired PDBs
-        if pdb_name.endswith('_Repair'):
-            pdb_name = pdb_name.replace('_Repair', '')
+        colourer = ColourSpectrum.linear(minimum, maximum, midpoint=0,
+                                         colours='RdBu', na_colour='0xC0C0C0')
 
-        sections = import_sections(args.structure_yaml, pdb_name)
-        pdb_string = get_pdb_string(args.pdb, select=SectionSelecter(sections))
+        if args.colourbar:
+            # TODO Add way to output the scale bar
+            pass
 
-        dms = dms[[gene_to_filename(x) == pdb_name for x in dms.gene]]
-        dms['pdb_position'], dms['pdb_chain'] = position_offsetter(dms.position, sections)
-        dms = dms.dropna(subset=['pdb_position'])
-
-        project_spectrum(f'{args.output_dir}/{pdb_name}_pc1.png', pdb_string, dms.pdb_chain,
-                         dms.pdb_position, dms.PC1, colourer)
+        else:
+            project_spectrum(f'{args.output_dir}/{gene}_{landscape_property}.png',
+                             pdb_string, pdb_dms.pdb_chain, pdb_dms.pdb_position,
+                             pdb_dms[landscape_property], colourer)
 
 def get_pdb_string(pdb_path, select=None):
     """
@@ -101,11 +113,16 @@ def parse_args():
 
     parser.add_argument('pdb', metavar='P', help="Input PDB file")
 
-    parser.add_argument('property', metavar='R', help="Property to project onto the structure")
+    parser.add_argument('properties', metavar='R', nargs='+',
+                        help="Properties to project onto the structure")
 
-    parser.add_argument('--scale', '-s', action='store_true',
+    parser.add_argument('--colourbar', '-c', action='store_true',
                         help=("Output the universal colour scale for this property "
                               "instead of a projection"))
+
+    parser.add_argument('--global_scale', '-s', action='store_true',
+                        help=("Define the scale based on all values of the property, not just in "
+                              "this structure"))
 
     parser.add_argument('--gene', '-g', help="Gene name (use the PDB file prefix by default)")
 
