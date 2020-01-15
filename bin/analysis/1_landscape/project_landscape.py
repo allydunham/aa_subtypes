@@ -6,6 +6,7 @@ import os
 import argparse
 from pathlib import Path
 from io import StringIO
+from bisect import bisect
 
 import pandas as pd
 import numpy as np
@@ -45,25 +46,9 @@ def main(args):
     dms['pdb_position'], dms['pdb_chain'] = position_offsetter(dms.position, sections)
     dms = dms.dropna(subset=['pdb_position'])
 
+    colourer = get_colour_spectrum(dms.PC1, [(239, 138, 98), (247, 247, 247), (103, 169, 207)])
     project_spectrum(f'{args.output_dir}/{pdb_name}_pc1.png', pdb_string, dms.pdb_chain,
-                     dms.pdb_position, dms.PC1)
-
-
-def project_spectrum(output_file, pdb_string, chain, position, value, colours='red_white_blue'):
-    """
-    Project a given colouring onto a PDB file via PyMOL
-    """
-    with pymol2.PyMOL() as pymol:
-        pymol.cmd.read_pdbstr(pdb_string, 'prot')
-        pymol.cmd.alter('prot', 'b=0.0')
-        for c, p, v in zip(chain, position, value):
-            print(c, p, v)
-            pymol.cmd.alter(f'prot and chain {c} and resi {int(p)} and n. CA', f'b={v}')
-        pymol.cmd.spectrum("b", colours, "prot and n. CA")
-        pymol.cmd.png(output_file, 1000, 800, dpi=150, ray=1)
-
-    # TODO change to manually setting defined colours - we don't have good values for all
-    # positions in the proteins
+                     dms.pdb_position, dms.PC1, colourer)
 
 def position_offsetter(uniprot_positions, sections):
     """
@@ -84,6 +69,98 @@ def position_offsetter(uniprot_positions, sections):
             pdb_position.append(np.nan)
             chain.append(np.nan)
     return pdb_position, chain
+
+def project_spectrum(output_file, pdb_string, chains, positions, values, colourer):
+    """
+    Project a given colouring onto a PDB file via PyMOL
+    """
+    with pymol2.PyMOL() as pymol:
+        pymol.cmd.read_pdbstr(pdb_string, 'prot')
+        # give a values outside the range to get the NA colour - a bit hacky
+        pymol.cmd.color(colourer(max(values) + 1), 'prot')
+
+        for chn, pos, val in zip(chains, positions, values):
+            pymol.cmd.color(colourer(val), f'prot and chain {chn} and resi {int(pos)}')
+
+        pymol.cmd.png(output_file, 1000, 800, dpi=150, ray=1)
+
+def get_colour_spectrum(values, colours, sym=None, na_colour='0xC0C0C0'):
+    """
+    Generate a sensible colour_spectrum function for a given input vector.
+    Sym makes the scale symetric about a value, extending as far as the most
+    distant value from that point.
+    """
+    min_val = min(values)
+    max_val = max(values)
+    n_colours = len(colours)
+
+    if sym is not None:
+        if n_colours % 2 == 0:
+            mid_colour = rgb_interpolate(colours[n_colours // 2 - 1],
+                                         colours[n_colours // 2],
+                                         0.5)
+            colours.insert(n_colours // 2, mid_colour)
+
+        diff = max(abs(max_val - sym), abs(min_val - sym))
+        max_val = sym + diff
+        min_val = sym - diff
+
+    colour_div = (max_val - min_val)/n_colours
+    colour_values = [min_val + colour_div * x for x in range(n_colours)]
+    return colour_spectrum(colour_values, colours, outlier_colour=na_colour)
+
+
+def colour_spectrum(values, colours, outlier_colour='0xC0C0C0'):
+    """
+    Create a function converting numeric values to hex RGB codes.
+
+    values: iterable of numeric values
+    colours: iterable of RGB tuples corresponding to values
+    outlier_colour: RGB tuple or Hex code of colour to return for out out range values
+    """
+    if len(values) != len(colours):
+        raise ValueError('values and colours must be the same length')
+
+    if not isinstance(outlier_colour, str):
+        outlier_colour = rgb_to_hex(outlier_colour)
+
+    values = sorted(list(zip(values, colours)), key=lambda x: x[0])
+    values, colours = zip(*values)
+
+    def spectrum(val):
+        if val in values:
+            return rgb_to_hex(colours[values.index(val)])
+
+        ind = bisect(values, val)
+
+        if ind == 0 or ind >= len(values):
+            return outlier_colour
+
+        prop = (val - values[ind - 1]) / (values[ind] - values[ind - 1])
+        res = rgb_interpolate(colours[ind - 1], colours[ind], prop)
+
+        return rgb_to_hex(res)
+
+    return spectrum
+
+def rgb_interpolate(low, high, prop):
+    """
+    Interpolate between two RGB tuples
+    """
+    return [rgb_clamp(y + (x - y) * prop) for x, y in zip(low, high)]
+
+
+def rgb_clamp(colour_value):
+    """
+    Clamp a value to integers on the RGB 0-255 range
+    """
+    return int(min(255, max(0, colour_value)))
+
+def rgb_to_hex(rgb):
+    """
+    Covert RGB tuple to Hex code
+    """
+    return f'0x{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}'
 
 def parse_args():
     """Process input arguments"""
