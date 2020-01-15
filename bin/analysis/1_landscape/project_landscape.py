@@ -6,7 +6,6 @@ import os
 import argparse
 from pathlib import Path
 from io import StringIO
-from bisect import bisect
 
 import pandas as pd
 import numpy as np
@@ -15,6 +14,7 @@ from Bio.PDB import PDBParser
 from Bio.PDB.PDBIO import PDBIO
 
 from subtypes_utils import SectionSelecter, import_sections, gene_to_filename
+from colour_spectrum import ColourSpectrum
 
 def main(args):
     """Main script"""
@@ -23,32 +23,42 @@ def main(args):
     except FileExistsError:
         pass # Don't mind if it already exists
 
+    dms = pd.read_csv(args.data, sep='\t')
+    colourer = ColourSpectrum.linear(min(dms[args.property]), max(dms[args.property]),
+                                     midpoint=0, colours='RdBu', na_colour='0xC0C0C0')
 
-    pdb_name = args.gene or Path(args.pdb).stem
+    if args.scale:
+        pass
 
-    # deal with FoldX repaired PDBs
-    if pdb_name.endswith('_Repair'):
-        pdb_name = pdb_name.replace('_Repair', '')
+    else:
+        pdb_name = args.gene or Path(args.pdb).stem
 
-    sections = import_sections(args.structure_config, pdb_name)
+        # deal with FoldX repaired PDBs
+        if pdb_name.endswith('_Repair'):
+            pdb_name = pdb_name.replace('_Repair', '')
 
+        sections = import_sections(args.structure_yaml, pdb_name)
+        pdb_string = get_pdb_string(args.pdb, select=SectionSelecter(sections))
+
+        dms = dms[[gene_to_filename(x) == pdb_name for x in dms.gene]]
+        dms['pdb_position'], dms['pdb_chain'] = position_offsetter(dms.position, sections)
+        dms = dms.dropna(subset=['pdb_position'])
+
+        project_spectrum(f'{args.output_dir}/{pdb_name}_pc1.png', pdb_string, dms.pdb_chain,
+                         dms.pdb_position, dms.PC1, colourer)
+
+def get_pdb_string(pdb_path, select=None):
+    """
+    Get string representation of a PDB file, filtered using select as in Bio.PDB.PDBIO
+    """
     pdb_parser = PDBParser()
-    structure = pdb_parser.get_structure(pdb_name, args.pdb)
+    structure = pdb_parser.get_structure('_', pdb_path)
 
     pdbio = PDBIO()
     pdbio.set_structure(structure)
     with StringIO('PDB') as virtual_pdb_file:
-        pdbio.save(virtual_pdb_file, select=SectionSelecter(sections))
-        pdb_string = virtual_pdb_file.getvalue()
-
-    dms = pd.read_csv(args.data, sep='\t')
-    dms = dms[[gene_to_filename(x) == pdb_name for x in dms.gene]]
-    dms['pdb_position'], dms['pdb_chain'] = position_offsetter(dms.position, sections)
-    dms = dms.dropna(subset=['pdb_position'])
-
-    colourer = get_colour_spectrum(dms.PC1, [(239, 138, 98), (247, 247, 247), (103, 169, 207)])
-    project_spectrum(f'{args.output_dir}/{pdb_name}_pc1.png', pdb_string, dms.pdb_chain,
-                     dms.pdb_position, dms.PC1, colourer)
+        pdbio.save(virtual_pdb_file, select=select)
+        return virtual_pdb_file.getvalue()
 
 def position_offsetter(uniprot_positions, sections):
     """
@@ -84,84 +94,6 @@ def project_spectrum(output_file, pdb_string, chains, positions, values, coloure
 
         pymol.cmd.png(output_file, 1000, 800, dpi=150, ray=1)
 
-def get_colour_spectrum(values, colours, sym=None, na_colour='0xC0C0C0'):
-    """
-    Generate a sensible colour_spectrum function for a given input vector.
-    Sym makes the scale symetric about a value, extending as far as the most
-    distant value from that point.
-    """
-    min_val = min(values)
-    max_val = max(values)
-    n_colours = len(colours)
-
-    if sym is not None:
-        if n_colours % 2 == 0:
-            mid_colour = rgb_interpolate(colours[n_colours // 2 - 1],
-                                         colours[n_colours // 2],
-                                         0.5)
-            colours.insert(n_colours // 2, mid_colour)
-
-        diff = max(abs(max_val - sym), abs(min_val - sym))
-        max_val = sym + diff
-        min_val = sym - diff
-
-    colour_div = (max_val - min_val)/n_colours
-    colour_values = [min_val + colour_div * x for x in range(n_colours)]
-    return colour_spectrum(colour_values, colours, outlier_colour=na_colour)
-
-
-def colour_spectrum(values, colours, outlier_colour='0xC0C0C0'):
-    """
-    Create a function converting numeric values to hex RGB codes.
-
-    values: iterable of numeric values
-    colours: iterable of RGB tuples corresponding to values
-    outlier_colour: RGB tuple or Hex code of colour to return for out out range values
-    """
-    if len(values) != len(colours):
-        raise ValueError('values and colours must be the same length')
-
-    if not isinstance(outlier_colour, str):
-        outlier_colour = rgb_to_hex(outlier_colour)
-
-    values = sorted(list(zip(values, colours)), key=lambda x: x[0])
-    values, colours = zip(*values)
-
-    def spectrum(val):
-        if val in values:
-            return rgb_to_hex(colours[values.index(val)])
-
-        ind = bisect(values, val)
-
-        if ind == 0 or ind >= len(values):
-            return outlier_colour
-
-        prop = (val - values[ind - 1]) / (values[ind] - values[ind - 1])
-        res = rgb_interpolate(colours[ind - 1], colours[ind], prop)
-
-        return rgb_to_hex(res)
-
-    return spectrum
-
-def rgb_interpolate(low, high, prop):
-    """
-    Interpolate between two RGB tuples
-    """
-    return [rgb_clamp(y + (x - y) * prop) for x, y in zip(low, high)]
-
-
-def rgb_clamp(colour_value):
-    """
-    Clamp a value to integers on the RGB 0-255 range
-    """
-    return int(min(255, max(0, colour_value)))
-
-def rgb_to_hex(rgb):
-    """
-    Covert RGB tuple to Hex code
-    """
-    return f'0x{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}'
-
 def parse_args():
     """Process input arguments"""
     parser = argparse.ArgumentParser(description=__doc__,
@@ -169,9 +101,15 @@ def parse_args():
 
     parser.add_argument('pdb', metavar='P', help="Input PDB file")
 
+    parser.add_argument('property', metavar='R', help="Property to project onto the structure")
+
+    parser.add_argument('--scale', '-s', action='store_true',
+                        help=("Output the universal colour scale for this property "
+                              "instead of a projection"))
+
     parser.add_argument('--gene', '-g', help="Gene name (use the PDB file prefix by default)")
 
-    parser.add_argument('--structure_config', '-s',
+    parser.add_argument('--structure_yaml', '-y',
                         help="YAML config file describing structure regions",
                         default='meta/structures.yaml')
 
@@ -179,7 +117,7 @@ def parse_args():
                         default='data/combined_mutational_scans.tsv')
 
     parser.add_argument('--output_dir', '-o', help="Directory to output PNG files",
-                        default='figures/1_landscape/pdb')
+                        default='.')
 
     return parser.parse_args()
 
