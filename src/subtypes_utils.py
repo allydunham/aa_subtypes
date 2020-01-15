@@ -21,7 +21,7 @@ class SectionSelecter(Select):
 
         for section in self.sections:
             if not 'region' in section:
-                section['region'] = [0, float('inf')]
+                section['region'] = [float('-inf'), float('inf')]
 
     def accept_residue(self, residue):
         if self.drop_hetero and not residue.id[0] == ' ':
