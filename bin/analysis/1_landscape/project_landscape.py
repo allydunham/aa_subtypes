@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """
-Project mutational landscape metrics onto protein structures
+Project mutational landscape metrics onto protein structures and/or produce the corresponding
+colour scales.
 """
-# TODO way to determine colour scheme and midpoint per property?
-# TODO allow sequential execution on differnt PDBs as well as properties?
-# TODO refactor main
-# TODO make into more general PDB projection function?
-
 import os
 import argparse
 from pathlib import Path
@@ -21,43 +17,88 @@ from Bio.PDB.PDBIO import PDBIO
 from subtypes_utils import SectionSelecter, import_sections, gene_to_filename
 from colour_spectrum import ColourSpectrum
 
+# Give the scale and midpoint to use for various properties, default is (bwr, 0)
+PROPERTIES = {
+    'PC1': ('RdBu', 0), 'total_energy': ('PiYG', 0), 'mean_sift': ('PuRd', None)
+}
+
 def main(args):
     """Main script"""
+    # Process arguments
     try:
         os.mkdir(args.output_dir)
     except FileExistsError:
         pass # Don't mind if it already exists
 
-    # Cover the common case of FoldX adding _Repair
-    gene = args.gene or Path(args.pdb).stem.rsplit('_Repair', 1)[0]
-    sections = import_sections(args.structure_yaml, gene)
-    pdb_string = get_pdb_string(args.pdb, select=SectionSelecter(sections))
+    if not (args.colourbar or args.pdb):
+        raise ValueError('Provide input PDB files or plot colourbars (--colourbar)')
+
+    if args.gene:
+        if len(args.gene) != len(args.pdb):
+            raise ValueError(('--genes/-g and --pdb/-p lists must be the same length when '
+                              'using --genes'))
+        genes = args.genes
+    elif args.pdb:
+        # Cover the common case of FoldX adding _Repair
+        genes = [Path(i).stem.rsplit('_Repair', 1)[0] for i in args.pdb]
+
+    # import DMS data
     dms = pd.read_csv(args.data, sep='\t')
 
+    # Calculate (and optionally plot) global scales
+    if not args.local_scale:
+        colourers = [get_colourer(l, dms) for l in args.properties]
+        if args.colourbar:
+            for colour_scale in colourers:
+                fig, _ = colour_scale.plot()
+                fig.savefig(f'{args.output_dir}/{colour_scale.name}_colourbar{args.suffix}.pdf',
+                            bbox_inches='tight')
+
+    # Loop over PDBs/Properties and project, including determining local scales if needed
+    if args.pdb:
+        for gene, pdb_path in zip(genes, args.pdb):
+            pdb_string, pdb_dms = get_pdb_data(pdb_path, gene, args.structure_yaml, dms)
+            if args.local_scale:
+                colourers = {l: get_colourer(l, dms) for l in args.properties}
+                if args.colourbar:
+                    for colour_scale in colourers:
+                        fig, _ = colour_scale.plot()
+                        path = (f'{args.output_dir}/{gene}_{colour_scale.name}'
+                                f'_colourbar{args.suffix}.pdf')
+                        fig.savefig(path, bbox_inches='tight')
+
+            for landscape_property in args.properties:
+                colourer = colourers[landscape_property]
+                project_spectrum(f'{args.output_dir}/{gene}_{landscape_property}{args.suffix}.png',
+                                    pdb_string, pdb_dms.pdb_chain, pdb_dms.pdb_position,
+                                    pdb_dms[landscape_property], colourer)
+
+def get_colourer(landscape_property, dms):
+    """
+    Generate a ColourSpectrum.linear for a given column in the dms data, using
+    the colour scheme set in PROPERTIES with the default being RdBu with midpoint=0
+    """
+    minimum = min(dms[landscape_property])
+    maximum = max(dms[landscape_property])
+    spectrum, midpoint = PROPERTIES.get(landscape_property, ('bwr', 0))
+    return ColourSpectrum(minimum, maximum, midpoint=midpoint, name=landscape_property,
+                          colourmap=spectrum, na_colour='0xC0C0C0')
+
+def get_pdb_data(path, gene, section_yaml, dms_df):
+    """
+    Import PDB data from file and a matching deep scanning dataframe, filtering
+    to the desired regions.
+    """
+    sections = import_sections(section_yaml, gene)
+    pdb_string = get_pdb_string(path, select=SectionSelecter(sections))
+
     # Filter dms to only include the pdb region
-    pdb_dms = dms[[gene_to_filename(x) == gene for x in dms.gene]].copy()
-    pdb_dms['pdb_position'], pdb_dms['pdb_chain'] = position_offsetter(pdb_dms.position, sections)
+    pdb_dms = dms_df[[gene_to_filename(x) == gene for x in dms_df.gene]].copy()
+    pdb_dms['pdb_position'], pdb_dms['pdb_chain'] = position_offsetter(pdb_dms.position,
+                                                                       sections)
     pdb_dms = pdb_dms.dropna(subset=['pdb_position'])
 
-    for landscape_property in args.properties:
-        if args.global_scale:
-            minimum = min(dms[landscape_property])
-            maximum = max(dms[landscape_property])
-        else:
-            minimum = min(pdb_dms[landscape_property])
-            maximum = max(pdb_dms[landscape_property])
-
-        colourer = ColourSpectrum.linear(minimum, maximum, midpoint=0,
-                                         colours='RdBu', na_colour='0xC0C0C0')
-
-        if args.colourbar:
-            # TODO Add way to output the scale bar
-            pass
-
-        else:
-            project_spectrum(f'{args.output_dir}/{gene}_{landscape_property}.png',
-                             pdb_string, pdb_dms.pdb_chain, pdb_dms.pdb_position,
-                             pdb_dms[landscape_property], colourer)
+    return pdb_string, pdb_dms
 
 def get_pdb_string(pdb_path, select=None):
     """
@@ -98,8 +139,7 @@ def project_spectrum(output_file, pdb_string, chains, positions, values, coloure
     """
     with pymol2.PyMOL() as pymol:
         pymol.cmd.read_pdbstr(pdb_string, 'prot')
-        # give a values outside the range to get the NA colour - a bit hacky
-        pymol.cmd.color(colourer(max(values) + 1), 'prot')
+        pymol.cmd.color(colourer.na_colour, 'prot')
 
         for chn, pos, val in zip(chains, positions, values):
             pymol.cmd.color(colourer(val), f'prot and chain {chn} and resi {int(pos)}')
@@ -111,20 +151,22 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('pdb', metavar='P', help="Input PDB file")
+    parser.add_argument('properties', metavar='P', nargs='+',
+                         help="Property(s) to project")
 
-    parser.add_argument('properties', metavar='R', nargs='+',
-                        help="Properties to project onto the structure")
+    parser.add_argument('--pdb', '-p', nargs='+', help="Input PDB file(s)")
 
     parser.add_argument('--colourbar', '-c', action='store_true',
-                        help=("Output the universal colour scale for this property "
-                              "instead of a projection"))
+                        help=("Output the universal colour scale for this property."
+                              "Produce one spectrum per property per PDB if using --local_scale, "
+                              "otherwise one per property"))
 
-    parser.add_argument('--global_scale', '-s', action='store_true',
-                        help=("Define the scale based on all values of the property, not just in "
-                              "this structure"))
+    parser.add_argument('--local_scale', '-s', action='store_true',
+                        help="Define scales on values of the property in each structure")
 
-    parser.add_argument('--gene', '-g', help="Gene name (use the PDB file prefix by default)")
+    parser.add_argument('--gene', '-g', nargs='+',
+                        help=("Manual gene name(s) for each PDB file. If not provided"
+                              "the file stem, sans FoldXs _Repair suffix is used."))
 
     parser.add_argument('--structure_yaml', '-y',
                         help="YAML config file describing structure regions",
@@ -135,6 +177,9 @@ def parse_args():
 
     parser.add_argument('--output_dir', '-o', help="Directory to output PNG files",
                         default='.')
+
+    parser.add_argument('--suffix', '-u', help="Suffix to add to output plots",
+                        default='')
 
     return parser.parse_args()
 
