@@ -8,7 +8,8 @@ tsne_umap_plots <- function(tbl, x, y, name){
   p <- list(study = plot_dim_red_study(tbl, !!x, !!y),
             aa = plot_dim_red_aa(tbl, !!x, !!y),
             hydrophobicity = plot_dim_red_hydrophobicity(tbl, !!x, !!y),
-            surface_accessibility = plot_dim_red_surface_accessibility(tbl, !!x, !!y))
+            surface_accessibility = plot_dim_red_surface_accessibility(tbl, !!x, !!y),
+            mean_er = plot_dim_red_mean_er(tbl, !!x, !!y))
   names(p) <- str_c(name, '_', names(p))
   return(p)
 }
@@ -54,6 +55,17 @@ plot_dim_red_surface_accessibility <- function(tbl, x, y){
       geom_point() +
       scale_colour_viridis_c() +
       guides(colour = guide_colourbar(title = 'Surface Accessibility\n(All Atom Abs)'))) %>%
+    labeled_plot(units='cm', height = 10, width = 15)
+}
+
+plot_dim_red_mean_er <- function(tbl, x, y){
+  x <- enquo(x)
+  y <- enquo(y)
+  (drop_na(tbl, all_atom_abs) %>%
+      ggplot(aes(x=!!x, y=!!y, colour=mean_score)) +
+      geom_point() +
+      scale_colour_gradient2() +
+      guides(colour = guide_colourbar(title = 'Mean Norm. ER'))) %>%
     labeled_plot(units='cm', height = 10, width = 15)
 }
 
