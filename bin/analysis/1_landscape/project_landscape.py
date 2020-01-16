@@ -19,8 +19,13 @@ from colour_spectrum import ColourSpectrum
 
 # Give the scale and midpoint to use for various properties, default is (bwr, 0)
 PROPERTIES = {
-    'PC1': ('RdBu', 0), 'total_energy': ('PiYG', 0), 'mean_sift': ('PuRd', None)
+    'PC1': ('PC1', 'RdBu', 0), 'total_energy': ('Mean FoldX Energy', 'PiYG', 0),
+    'mean_sift': ('Mean log10 SIFT', 'PuRd', None),
 }
+PROPERTIES = dict(**PROPERTIES, **{aa: (aa, 'RdBu', 0) for aa in ['A', 'C', 'D', 'E', 'F',
+                                                                  'G', 'H', 'I', 'K', 'L',
+                                                                  'M', 'N', 'P', 'Q', 'R',
+                                                                  'S', 'T', 'V', 'W', 'Y']})
 
 def main(args):
     """Main script"""
@@ -47,11 +52,11 @@ def main(args):
 
     # Calculate (and optionally plot) global scales
     if not args.local_scale:
-        colourers = [get_colourer(l, dms) for l in args.properties]
+        colourers = {l: get_colourer(l, dms) for l in args.properties}
         if args.colourbar:
-            for colour_scale in colourers:
+            for name, colour_scale in colourers.items():
                 fig, _ = colour_scale.plot()
-                fig.savefig(f'{args.output_dir}/{colour_scale.name}_colourbar{args.suffix}.pdf',
+                fig.savefig(f'{args.output_dir}/{name}_colourbar{args.suffix}.pdf',
                             bbox_inches='tight')
 
     # Loop over PDBs/Properties and project, including determining local scales if needed
@@ -61,27 +66,27 @@ def main(args):
             if args.local_scale:
                 colourers = {l: get_colourer(l, dms) for l in args.properties}
                 if args.colourbar:
-                    for colour_scale in colourers:
+                    for name, colour_scale in colourers.items():
                         fig, _ = colour_scale.plot()
-                        path = (f'{args.output_dir}/{gene}_{colour_scale.name}'
+                        path = (f'{args.output_dir}/{gene}_{name}'
                                 f'_colourbar{args.suffix}.pdf')
                         fig.savefig(path, bbox_inches='tight')
 
             for landscape_property in args.properties:
                 colourer = colourers[landscape_property]
                 project_spectrum(f'{args.output_dir}/{gene}_{landscape_property}{args.suffix}.png',
-                                    pdb_string, pdb_dms.pdb_chain, pdb_dms.pdb_position,
-                                    pdb_dms[landscape_property], colourer)
+                                 pdb_string, pdb_dms.pdb_chain, pdb_dms.pdb_position,
+                                 pdb_dms[landscape_property], colourer)
 
 def get_colourer(landscape_property, dms):
     """
     Generate a ColourSpectrum.linear for a given column in the dms data, using
     the colour scheme set in PROPERTIES with the default being RdBu with midpoint=0
     """
-    minimum = min(dms[landscape_property])
-    maximum = max(dms[landscape_property])
-    spectrum, midpoint = PROPERTIES.get(landscape_property, ('bwr', 0))
-    return ColourSpectrum(minimum, maximum, midpoint=midpoint, name=landscape_property,
+    minimum = min(dms[landscape_property].dropna())
+    maximum = max(dms[landscape_property].dropna())
+    name, spectrum, midpoint = PROPERTIES.get(landscape_property, (landscape_property, 'bwr', 0))
+    return ColourSpectrum(minimum, maximum, midpoint=midpoint, name=name,
                           colourmap=spectrum, na_colour='0xC0C0C0')
 
 def get_pdb_data(path, gene, section_yaml, dms_df):
@@ -152,7 +157,7 @@ def parse_args():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('properties', metavar='P', nargs='+',
-                         help="Property(s) to project")
+                        help="Property(s) to project")
 
     parser.add_argument('--pdb', '-p', nargs='+', help="Input PDB file(s)")
 
