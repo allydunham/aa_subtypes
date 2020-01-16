@@ -65,6 +65,8 @@ rule all:
         rules.study_summary_plots.output,
         rules.summarise_standardised_data.output,
         rules.landscape_dimensionality_reduction.output,
+        #rules.project_landscape_colourbars.output,
+        #[f'figures/1_landscape/pdb/{gene}_PC1.png' for gene in GENES],
         rules.evaluate_kmeans_k.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
@@ -157,7 +159,7 @@ rule setup_directories:
                 'filter_pdb', 'foldx_combine', 'foldx_model', 'foldx_repair',
                 'foldx_split', 'foldx_variants', 'make_subtypes',
                 'make_gene_fasta', 'naccess', 'sift4g', 'standardise_study',
-                'within_a_profile', 'porter5']
+                'within_a_profile', 'porter5', 'project_landscape']
 
         for d in dirs:
             shell(f'mkdir logs/{d} && echo "mkdir logs/{d}" || true')

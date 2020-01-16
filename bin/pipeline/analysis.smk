@@ -19,10 +19,12 @@ rule landscape_dimensionality_reduction:
         'figures/1_landscape/pc2_pc4_surface_accessibility.pdf',
         'figures/1_landscape/pc2_vs_surface_accessibility.pdf',
         'figures/1_landscape/pc2_vs_hydrophobicity.pdf',
+        'figures/1_landscape/pc3_foldx_terms.pdf',
         'figures/1_landscape/foldx_pc_cor.pdf',
         'figures/1_landscape/tsne_study.pdf',
         'figures/1_landscape/tsne_aa.pdf',
         'figures/1_landscape/tsne_hydrophobicity.pdf',
+        'figures/1_landscape/tsne_mean_er.pdf',
         'figures/1_landscape/tsne_surface_accessibility.pdf',
         'figures/1_landscape/umap_study.pdf',
         'figures/1_landscape/umap_aa.pdf',
@@ -35,6 +37,41 @@ rule landscape_dimensionality_reduction:
 
     shell:
         'Rscript bin/analysis/1_landscape/dimensionality_reduction.R &> {log}'
+
+pdb_landscape_factors = ['PC1', 'total_energy', 'mean_sift']
+rule project_landscape:
+    """
+    Project landscape factors onto protein structures
+    """
+    input:
+        dms='data/combined_mutational_scans.tsv',
+        pdb='data/pdb/{gene}.pdb',
+        yaml=ancient('meta/structures.yaml')
+
+    output:
+        [f'figures/1_landscape/pdb/{{gene}}_{p}.png' for p in pdb_landscape_factors]
+
+    log:
+        'logs/project_landscape/{gene}.log'
+
+    shell:
+        f'python bin/analysis/1_landscape/project_landscape.py --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb --structure_yaml {{input.yaml}} --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
+
+rule project_landscape_colourbars:
+    """
+    Project landscape factors onto protein structures
+    """
+    input:
+        dms='data/combined_mutational_scans.tsv'
+
+    output:
+        [f'figures/1_landscape/pdb/{p}_colourbar.pdf' for p in pdb_landscape_factors]
+
+    log:
+        'logs/project_landscape_colourbar.log'
+
+    shell:
+        f'python bin/analysis/1_landscape/project_landscape.py --colourbar --output_dir figures/1_landscape/pdb --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
 
 #### Clustering ####
 diagnostic_plots = ['clustering.pdf', 'umap.pdf', 'tsne.pdf', 'global_silhouette.pdf',
