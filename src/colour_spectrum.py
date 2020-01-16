@@ -1,115 +1,95 @@
 """
 Module containing functions to support creation of simple, continuous colour spectra
 """
-from bisect import bisect
+import numpy as np
+from  matplotlib import pyplot as plt
+from matplotlib import cm
 
 # TODO classes for types of colours?
 # TODO way to determine output type to use
 # TODO allow fewer values than the number of defined spectrum colours to be passes?
 
 NA_COLOUR_DEFAULT = '0xC0C0C0'
-SPECTRA = {
-    'RdBu': [(178, 24, 43), (214, 96, 77), (244, 165, 130), (253, 219, 199),
-             (247, 247, 247), (209, 229, 240), (146, 197, 222), (67, 147, 195),
-             (33, 102, 172)]
-}
 
 class ColourSpectrum:
     """
-    Define a colour spectrum, which returns the appropriate Hex codes when called with
-    a numeric value. The base constructor provides a versatible but manual definition system,
-    but most uses are better suited to one of the alternate constructors (e.g. cls.linear()).
+    Wrap a matplotlib colourmap as a callable returning Hexcodes for given values, for
+    use in manual plotting (for instance colouring PyMOL structures)
 
-    values:    Iterable of numeric values giving the position of each colour
-    colours:   String spectrum name (as given in colour_spectrum.SPECTRA) or an iterable
-               of RGB tuples giving the colour at each value.
+    maximum:   Upper limit of the scale
+    minimum:   Lower limit of the scale
+    midpoint:  Midpoint to make the scale symmetric about, causing maximum or minimum to
+               be adjusted such that they are equidistant from midpoint
+    colourmap: Matplotlib colourmap defining the main spectrum
     na_colour: RGB tuple or Hex code of colour to return for out of range values
     """
-    def __init__(self, values, colours='RdBu', na_colour='0xC0C0C0'):
-        try:
-            # If colours doesn't index SPECTRA assume its an iterable of colours
-            spectrum = colours
-            colours = SPECTRA[colours]
-        except TypeError:
-            spectrum = None
+    def __init__(self, maximum, minimum, midpoint=None, colourmap=None, name='',
+                 na_colour='0xC0C0C0'):
+        self.maximum = maximum
+        self.minimum = minimum
 
-        self.spectrum = spectrum
+        self.midpoint = midpoint
+        if self.midpoint is not None:
+            diff = max(abs(self.maximum - self.midpoint), abs(self.minimum - self.midpoint))
+            self.maximum = self.midpoint + diff
+            self.minimum = self.midpoint - diff
+
+        if colourmap is None:
+            if midpoint is None:
+                self.colourmap = cm.get_cmap('plasma')
+            else:
+                self.colourmap = cm.get_cmap('bwr')
+        else:
+            self.colourmap = cm.get_cmap(colourmap)
 
         self.na_colour = na_colour
         if not isinstance(na_colour, str):
             self.na_colour = rgb_to_hex(self.na_colour)
 
-        self.max_value = max(values)
-        self.min_value = min(values)
-
-        if len(values) != len(colours):
-            raise ValueError(("values and colours must be the same length."
-                              "This means the appropriate number of values must be provided "
-                              f"when using a built-in scale. In this case {len(colours)} colours "
-                              "were given"))
-
-        # Sort values and colours so interpolation makes sense
-        values = sorted(list(zip(values, colours)), key=lambda x: x[0])
-        self.values, self.colours = zip(*values)
-
-    @classmethod
-    def linear(cls, minimum, maximum, midpoint=None, colours='RdBu', na_colour=NA_COLOUR_DEFAULT):
-        """
-        Create a linear spectrum interpolating between bounds, with optional symmetry about
-        a midpoint.
-
-        maximum: Upper limit of the scale
-        minimum: Lower limit of the scale
-        midpoint: Midpoint to make the scale symmetric about, causing maximum or minimum to
-                  be adjusted such that they are equidistant from midpoint
-        colour: String name of a spectrum (as given in colour_spectrum.SPECTRA) or an iterable of
-                RGB tuples to interpolate between
-        na_colour: RGB tuple or Hex code of colour to return for out of range values
-        """
-        if not maximum > minimum:
-            raise ValueError('maximum must be greater than minimum')
-
-        if colours in SPECTRA.keys():
-            colours = SPECTRA[colours]
-
-        n_colours = len(colours)
-
-        # Use midpoint to automatically adjust max and min
-        if midpoint is not None:
-            if n_colours % 2 == 0:
-                mid_colour = rgb_interpolate(colours[n_colours // 2 - 1],
-                                             colours[n_colours // 2],
-                                             0.5)
-                colours.insert(n_colours // 2, mid_colour)
-
-            diff = max(abs(maximum - midpoint), abs(minimum - midpoint))
-            maximum = midpoint + diff
-            minimum = midpoint - diff
-
-        colour_div = (maximum - minimum)/(n_colours - 1)
-        values = [minimum + colour_div * x for x in range(n_colours)]
-        return cls(values, colours, na_colour)
+        self.name = name
 
     def __call__(self, val):
-        if val in self.values:
-            return rgb_to_hex(self.colours[self.values.index(val)])
+        rgb = self.colourmap(val - self.minimum) / (self.maximum - self.minimum)
+        rgb = [rgb_clamp(x) for x in rgb[:3]]
+        return rgb_to_hex(rgb)
 
-        ind = bisect(self.values, val)
+    def plot(self, horizontal=False):
+        """
+        Plot a colourbar of the spectrum as a free plot
+        """
+        div = (self.maximum - self.minimum) / 100
+        image = np.arange(self.minimum, self.maximum + div, div)
+        if horizontal:
+            image = np.vstack([image, image])
+            size = (2, 0.5)
+            extent = (self.minimum, self.maximum, 0, 1)
+        else:
+            image = np.flip(image)
+            image = np.vstack([image, image]).T
+            size = (0.5, 2)
+            extent = (0, 1, self.minimum, self.maximum)
 
-        if ind == 0 or ind >= len(self.values):
-            return self.na_colour
+        fig, axis = plt.subplots(figsize=size)
+        axis.imshow(image, aspect='auto', cmap=self.colourmap, extent=extent)
+        axis.set_frame_on(False)
 
-        prop = (val - self.values[ind - 1]) / (self.values[ind] - self.values[ind - 1])
-        res = rgb_interpolate(self.colours[ind - 1], self.colours[ind], prop)
+        if horizontal:
+            axis.get_yaxis().set_visible(False)
+            axis.set_xlabel(self.name)
 
-        return rgb_to_hex(res)
+        else:
+            axis.get_xaxis().set_visible(False)
+            axis.get_yaxis().tick_right()
+            axis.get_yaxis().set_label_position("right")
+            axis.set_ylabel(self.name)
+
+        return fig, axis
 
 def rgb_interpolate(low, high, prop):
     """
     Interpolate between two RGB tuples
     """
     return [rgb_clamp(y + (x - y) * prop) for x, y in zip(low, high)]
-
 
 def rgb_clamp(colour_value):
     """
