@@ -695,6 +695,9 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     outliers <- c()
   }
   
+  # global outliers
+  global_outliers <- filter(data$summary, str_ends(cluster, '0'), n < outlier_size) %>% pull(cluster)
+  
   cluster_cols <- AA_COLOURS[str_sub(cluster_order, end=1)]
   
   # Summarise subtype sizes (always include outliers in the cluster list here, for reference)
@@ -728,7 +731,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           panel.spacing = unit(0.05, 'npc'))
   
   # Subtype secondary structure probability increases vs background
-  ss_lims <- filter(data$secondary_structure, cluster %in% cluster_order | global_scale) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
+  ss_lims <- filter(data$secondary_structure, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
   p_ss <- filter(data$secondary_structure, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x=cluster, y=ss, fill=rel_prob)) +
@@ -745,7 +748,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # Subtype mean ER profiles
-  er_lims <- filter(data$profiles, cluster %in% cluster_order | global_scale) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
+  er_lims <- filter(data$profiles, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
   p_profile <- filter(data$profiles, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = mut, fill = er)) +
@@ -762,7 +765,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # Subtype mean sift profiles
-  sift_lims <- filter(data$sift, cluster %in% cluster_order | global_scale) %>%  pull(log10_sift) %>% pretty_break(step = 1)
+  sift_lims <- filter(data$sift, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(log10_sift) %>% pretty_break(step = 1)
   p_sift <- filter(data$sift, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = aa, fill = log10_sift)) +
@@ -779,7 +782,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # Subtype mean foldx profiles
-  foldx_lims <- filter(data$foldx, cluster %in% cluster_order | global_scale) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
+  foldx_lims <- filter(data$foldx, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
   p_foldx <- filter(data$foldx, cluster %in% cluster_order, !term == 'Total Energy') %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = term, fill = rel_ddg)) +
@@ -797,7 +800,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # subtype mean chemical environment profiles
-  chem_env_lims <- filter(data$chem_env, cluster %in% cluster_order | global_scale) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
+  chem_env_lims <- filter(data$chem_env, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
   p_chem_env <- filter(data$chem_env, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = aa, fill = rel_count)) +
