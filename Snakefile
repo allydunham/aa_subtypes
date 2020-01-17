@@ -39,6 +39,10 @@ AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
 STANDARD_CLUSTERINGS = [Path(x).stem for x in os.listdir('meta/subtypes')]
 
+PDB_LANDSCAPE_FACTORS = ['PC1', 'PC2', 'PC3', 'PC4', 'total_energy', 'mean_sift', 'mean_score',
+                         'tSNE1', 'tSNE2', 'umap1', 'umap2']
+PDB_LANDSCAPE_FACTORS.extend(list(AA_ALPHABET))
+
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
 include: 'bin/pipeline/standardisation.smk'
@@ -65,8 +69,8 @@ rule all:
         rules.study_summary_plots.output,
         rules.summarise_standardised_data.output,
         rules.landscape_dimensionality_reduction.output,
-        rules.project_landscape_colourbars.output,
-        [f'figures/1_landscape/pdb/{gene}/{gene}_PC1.png' for gene in GENES],
+        [f'figures/1_landscape/pdb/{f}_colourbar.pdf' for f in PDB_LANDSCAPE_FACTORS],
+        [f'figures/1_landscape/pdb/{g}/{g}_{f}.png' for g in GENES for f in PDB_LANDSCAPE_FACTORS],
         rules.evaluate_kmeans_k.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
@@ -159,7 +163,7 @@ rule setup_directories:
                 'filter_pdb', 'foldx_combine', 'foldx_model', 'foldx_repair',
                 'foldx_split', 'foldx_variants', 'make_subtypes',
                 'make_gene_fasta', 'naccess', 'sift4g', 'standardise_study',
-                'within_a_profile', 'porter5', 'project_landscape']
+                'within_a_profile', 'porter5', 'project_landscape', 'project_landscape_colourbar']
 
         for d in dirs:
             shell(f'mkdir logs/{d} && echo "mkdir logs/{d}" || true')

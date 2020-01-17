@@ -15,6 +15,7 @@ rule landscape_dimensionality_reduction:
 
     output:
         'figures/1_landscape/pc1_vs_mean_score.pdf',
+        'figures/1_landscape/pc1_vs_mean_sift.pdf',
         'figures/1_landscape/pc1_pc2_mean_score.pdf',
         'figures/1_landscape/pc2_pc4_surface_accessibility.pdf',
         'figures/1_landscape/pc2_vs_surface_accessibility.pdf',
@@ -38,8 +39,6 @@ rule landscape_dimensionality_reduction:
     shell:
         'Rscript bin/analysis/1_landscape/dimensionality_reduction.R &> {log}'
 
-pdb_landscape_factors = ['PC1', 'total_energy', 'mean_sift']
-pdb_landscape_factors.extend(list(AA_ALPHABET))
 rule project_landscape:
     """
     Project landscape factors onto protein structures
@@ -50,15 +49,15 @@ rule project_landscape:
         yaml=ancient('meta/structures.yaml')
 
     output:
-        [f'figures/1_landscape/pdb/{{gene}}/{{gene}}_{p}.png' for p in pdb_landscape_factors]
+        'figures/1_landscape/pdb/{gene}/{gene}_{property}.png'
 
     log:
-        'logs/project_landscape/{gene}.log'
+        'logs/project_landscape/{gene}_{property}.log'
 
     shell:
-        f'python bin/analysis/1_landscape/project_landscape.py --pdb {{input.pdb}} --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb/{{wildcards.gene}} --structure_yaml {{input.yaml}} --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
+        'python bin/analysis/1_landscape/project_landscape.py --pdb {input.pdb} --gene {wildcards.gene} --output_dir figures/1_landscape/pdb/{wildcards.gene} --structure_yaml {input.yaml} --data {input.dms} {wildcards.property} &> {log}'
 
-rule project_landscape_colourbars:
+rule project_landscape_colourbar:
     """
     Project landscape factors onto protein structures
     """
@@ -66,13 +65,13 @@ rule project_landscape_colourbars:
         dms='data/combined_mutational_scans.tsv'
 
     output:
-        [f'figures/1_landscape/pdb/{p}_colourbar.pdf' for p in pdb_landscape_factors]
+        'figures/1_landscape/pdb/{property}_colourbar.pdf'
 
     log:
-        'logs/project_landscape_colourbar.log'
+        'logs/project_landscape_colourbar/{property}.log'
 
     shell:
-        f'python bin/analysis/1_landscape/project_landscape.py --colourbar --output_dir figures/1_landscape/pdb --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
+        'python bin/analysis/1_landscape/project_landscape.py --colourbar --output_dir figures/1_landscape/pdb --data {input.dms} {wildcards.property} &> {log}'
 
 #### Clustering ####
 diagnostic_plots = ['clustering.pdf', 'umap.pdf', 'tsne.pdf', 'global_silhouette.pdf',
