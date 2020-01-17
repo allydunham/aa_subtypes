@@ -10,7 +10,6 @@ from io import StringIO
 
 import pandas as pd
 import numpy as np
-from matplotlib import cm
 import pymol2
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBIO import PDBIO
@@ -19,14 +18,24 @@ from Bio.Alphabet.IUPAC import IUPACProtein
 from subtypes_utils import SectionSelecter, import_sections, gene_to_filename
 from colour_spectrum import ColourSpectrum
 
-# TODO don't use globals like this?
-# Give the scale and midpoint to use for various properties, default is (bwr, 0)
+# Give (name, scale, midpoint, na_colour) to use for various properties
+# default is ($property, 'bwr', 0, '0xDCDCDC')
 PROPERTIES = {
-    'PC1': ('PC1', 'coolwarm', 0), 'total_energy': ('Mean FoldX Energy', 'PiYG', 0),
-    'mean_sift': ('Mean log10 SIFT', 'PuRd_r', None),
+    'PC1': ('PC1', 'coolwarm', 0, '0xDCDCDC'),
+    'PC2': ('PC2', 'BrBG', 0, '0xDCDCDC'),
+    'PC3': ('PC3', 'PuOr', 0, '0xDCDCDC'),
+    'PC4': ('PC4', 'RdYlGn', 0, '0xDCDCDC'),
+    'tSNE1': ('tSNE1', 'viridis', 0, '0x29AF7F'),
+    'tSNE2': ('tSNE2', 'plasma', 0, '0xDE7065'),
+    'umap1': ('UMAP1', 'viridis', 0, '0x29AF7F'),
+    'umap2': ('UMAP1', 'plasma', 0, '0xDE7065'),
+    'total_energy': ('Mean FoldX Energy', 'PiYG', 0, '0xDCDCDC'),
+    'mean_sift': ('Mean log10 SIFT', 'PuRd_r', None, '0xDCDCDC'),
+    'mean_score': (f'Mean Norm. ER', 'RdBu', 0, '0xDCDCDC'),
 }
 PROPERTIES = dict(**PROPERTIES,
-                  **{aa: (f'Norm. ER ({aa})', 'RdBu', 0) for aa in IUPACProtein.letters})
+                  **{aa: (f'Norm. ER ({aa})', 'RdBu', 0, '0xDCDCDC') for
+                     aa in IUPACProtein.letters})
 
 # Exclude 1% outliers from scale (give same as max colour)
 OUTLIER_PROPERTIES = ['PC1', 'total_energy']
@@ -91,7 +100,8 @@ def get_colourer(landscape_property, dms):
     prop = dms[landscape_property].dropna()
     minimum = min(prop)
     maximum = max(prop)
-    name, spectrum, midpoint = PROPERTIES.get(landscape_property, (landscape_property, 'bwr', 0))
+    name, spectrum, midpoint, na_colour = PROPERTIES.get(landscape_property,
+                                                         (landscape_property, 'bwr', 0, '0xDCDCDC'))
     na_outside = True
 
     if landscape_property in OUTLIER_PROPERTIES:
@@ -101,7 +111,7 @@ def get_colourer(landscape_property, dms):
         na_outside = False
 
     return ColourSpectrum(minimum, maximum, midpoint=midpoint, name=name,
-                          colourmap=spectrum, na_colour='0xDEB887', na_outside_range=na_outside)
+                          colourmap=spectrum, na_colour=na_colour, na_outside_range=na_outside)
 
 def get_pdb_data(path, gene, section_yaml, dms_df):
     """
