@@ -19,9 +19,9 @@ plot_dim_red_study <- function(tbl, x, y){
   y <- enquo(y)
   (ggplot(tbl, aes(x=!!x, y=!!y, colour=study)) +
       geom_point() +
-      facet_wrap(~study, labeller = as_labeller(sapply(unique(dms_wide$study), format_study, max_width=30))) +
+      facet_wrap(~study, labeller = as_labeller(sapply(unique(dms_wide$study), format_study, max_width=18)), nrow = 4) +
       guides(colour=FALSE)) %>%
-    labeled_plot(units='cm', height = 25, width = 25)
+    labeled_plot(units='cm', height = 20, width = 32)
 }
 
 plot_dim_red_aa <- function(tbl, x, y){

@@ -14,6 +14,12 @@ plots$pc1_vs_mean_score <- (ggplot(dms_wide, aes(x = mean_score, y = PC1, colour
                               scale_color_gradient(low = 'black', high = 'red', guide = guide_colourbar(title = 'Mean log10(SIFT)'))) %>%
   labeled_plot(units = 'cm', height = 8, width = 12)
 
+plots$pc1_vs_mean_sift <- (ggplot(dms_wide, aes(x = PC1, y = mean_sift, colour = mean_score)) +
+                              geom_point() +
+                              labs(x = 'PC1', y = 'Mean log10(SIFT)') +
+                              scale_color_gradient(low = 'black', high = 'red', guide = guide_colourbar(title = 'Mean Norm. ER'))) %>%
+  labeled_plot(units = 'cm', height = 8, width = 12)
+
 plots$pc1_pc2_mean_score <- (ggplot(dms_wide, aes(x = PC1, y = PC2, colour = mean_score)) +
                                geom_point() +
                                labs(x = 'PC1', y = 'PC2') +
