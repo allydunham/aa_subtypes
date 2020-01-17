@@ -65,8 +65,8 @@ rule all:
         rules.study_summary_plots.output,
         rules.summarise_standardised_data.output,
         rules.landscape_dimensionality_reduction.output,
-        #rules.project_landscape_colourbars.output,
-        #[f'figures/1_landscape/pdb/{gene}_PC1.png' for gene in GENES],
+        rules.project_landscape_colourbars.output,
+        [f'figures/1_landscape/pdb/{gene}/{gene}_PC1.png' for gene in GENES],
         rules.evaluate_kmeans_k.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
@@ -148,7 +148,7 @@ rule setup_directories:
 
         # figures
         shell('mkdir figures && echo "mkdir figures" || true')
-        dirs = ['0_data', '1_landscape', '2_subtypes', '3_continuous']
+        dirs = ['0_data', '1_landscape', '1_landscape/pdb', '2_subtypes', '3_continuous']
 
         for d in dirs:
             shell(f'mkdir figures/{d} && echo "mkdir figures/{d}" || true')

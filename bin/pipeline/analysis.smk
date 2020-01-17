@@ -39,6 +39,7 @@ rule landscape_dimensionality_reduction:
         'Rscript bin/analysis/1_landscape/dimensionality_reduction.R &> {log}'
 
 pdb_landscape_factors = ['PC1', 'total_energy', 'mean_sift']
+pdb_landscape_factors.extend(list(AA_ALPHABET))
 rule project_landscape:
     """
     Project landscape factors onto protein structures
@@ -49,13 +50,13 @@ rule project_landscape:
         yaml=ancient('meta/structures.yaml')
 
     output:
-        [f'figures/1_landscape/pdb/{{gene}}_{p}.png' for p in pdb_landscape_factors]
+        [f'figures/1_landscape/pdb/{{gene}}/{{gene}}_{p}.png' for p in pdb_landscape_factors]
 
     log:
         'logs/project_landscape/{gene}.log'
 
     shell:
-        f'python bin/analysis/1_landscape/project_landscape.py --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb --structure_yaml {{input.yaml}} --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
+        f'python bin/analysis/1_landscape/project_landscape.py --pdb {{input.pdb}} --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb/{{wildcards.gene}} --structure_yaml {{input.yaml}} --data {{input.dms}} {" ".join(pdb_landscape_factors)} &> {{log}}'
 
 rule project_landscape_colourbars:
     """
