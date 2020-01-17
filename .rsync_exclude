@@ -5,5 +5,7 @@ fasta/**
 clustering/**
 structures.yaml
 README.md
+subtypes/*.yaml
+residue_hydrophobicity.tsv
 graveyard/*/*.yaml
 graveyard/*/*.R
