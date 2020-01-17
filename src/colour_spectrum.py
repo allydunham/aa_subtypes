@@ -22,15 +22,17 @@ class ColourSpectrum:
                be adjusted such that they are equidistant from midpoint
     colourmap: Matplotlib colourmap defining the main spectrum
     na_colour: RGB tuple or Hex code of colour to return for out of range values
+    na_outside_range: Use na_colour for values not between minimum or maximum, otherwise
+                      defer this to the colourmap.
     """
-    def __init__(self, maximum, minimum, midpoint=None, colourmap=None, name='',
-                 na_colour='0xC0C0C0'):
+    def __init__(self, minimum, maximum, midpoint=None, colourmap=None, name='',
+                 na_colour='0xC0C0C0', na_outside_range=True):
         self.maximum = maximum
         self.minimum = minimum
 
         self.midpoint = midpoint
         if self.midpoint is not None:
-            diff = max(abs(self.maximum - self.midpoint), abs(self.minimum - self.midpoint))
+            diff = max(abs(self.maximum - self.midpoint), abs(self.midpoint - self.minimum))
             self.maximum = self.midpoint + diff
             self.minimum = self.midpoint - diff
 
@@ -45,12 +47,16 @@ class ColourSpectrum:
         self.na_colour = na_colour
         if not isinstance(na_colour, str):
             self.na_colour = rgb_to_hex(self.na_colour)
+        self.na_outside_range = na_outside_range
 
         self.name = name
 
     def __call__(self, val):
-        rgb = self.colourmap(val - self.minimum) / (self.maximum - self.minimum)
-        rgb = [rgb_clamp(x) for x in rgb[:3]]
+        if self.na_outside_range and not self.minimum <= val <= self.maximum:
+            return self.na_colour
+
+        rgb = self.colourmap((val  - self.minimum) / (self.maximum - self.minimum))
+        rgb = [rgb_clamp(x * 255) for x in rgb[:3]]
         return rgb_to_hex(rgb)
 
     def plot(self, horizontal=False):

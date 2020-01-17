@@ -10,22 +10,27 @@ from io import StringIO
 
 import pandas as pd
 import numpy as np
+from matplotlib import cm
 import pymol2
 from Bio.PDB import PDBParser
 from Bio.PDB.PDBIO import PDBIO
+from Bio.Alphabet.IUPAC import IUPACProtein
 
 from subtypes_utils import SectionSelecter, import_sections, gene_to_filename
 from colour_spectrum import ColourSpectrum
 
+# TODO don't use globals like this?
 # Give the scale and midpoint to use for various properties, default is (bwr, 0)
 PROPERTIES = {
-    'PC1': ('PC1', 'RdBu', 0), 'total_energy': ('Mean FoldX Energy', 'PiYG', 0),
-    'mean_sift': ('Mean log10 SIFT', 'PuRd', None),
+    'PC1': ('PC1', 'coolwarm', 0), 'total_energy': ('Mean FoldX Energy', 'PiYG', 0),
+    'mean_sift': ('Mean log10 SIFT', 'PuRd_r', None),
 }
-PROPERTIES = dict(**PROPERTIES, **{aa: (aa, 'RdBu', 0) for aa in ['A', 'C', 'D', 'E', 'F',
-                                                                  'G', 'H', 'I', 'K', 'L',
-                                                                  'M', 'N', 'P', 'Q', 'R',
-                                                                  'S', 'T', 'V', 'W', 'Y']})
+PROPERTIES = dict(**PROPERTIES,
+                  **{aa: (f'Norm. ER ({aa})', 'RdBu', 0) for aa in IUPACProtein.letters})
+
+# Exclude 1% outliers from scale (give same as max colour)
+OUTLIER_PROPERTIES = ['PC1', 'total_energy']
+OUTLIER_PROPERTIES.extend(list(IUPACProtein.letters))
 
 def main(args):
     """Main script"""
@@ -42,7 +47,7 @@ def main(args):
         if len(args.gene) != len(args.pdb):
             raise ValueError(('--genes/-g and --pdb/-p lists must be the same length when '
                               'using --genes'))
-        genes = args.genes
+        genes = args.gene
     elif args.pdb:
         # Cover the common case of FoldX adding _Repair
         genes = [Path(i).stem.rsplit('_Repair', 1)[0] for i in args.pdb]
@@ -81,13 +86,22 @@ def main(args):
 def get_colourer(landscape_property, dms):
     """
     Generate a ColourSpectrum.linear for a given column in the dms data, using
-    the colour scheme set in PROPERTIES with the default being RdBu with midpoint=0
+    the colour scheme set in PROPERTIES with the default being bwr with midpoint=0
     """
-    minimum = min(dms[landscape_property].dropna())
-    maximum = max(dms[landscape_property].dropna())
+    prop = dms[landscape_property].dropna()
+    minimum = min(prop)
+    maximum = max(prop)
     name, spectrum, midpoint = PROPERTIES.get(landscape_property, (landscape_property, 'bwr', 0))
+    na_outside = True
+
+    if landscape_property in OUTLIER_PROPERTIES:
+        # Let all 1% outliers take the same colour, as they are likely measurement abnormalities
+        minimum = prop.quantile(0.01)
+        maximum = prop.quantile(0.99)
+        na_outside = False
+
     return ColourSpectrum(minimum, maximum, midpoint=midpoint, name=name,
-                          colourmap=spectrum, na_colour='0xC0C0C0')
+                          colourmap=spectrum, na_colour='0xDEB887', na_outside_range=na_outside)
 
 def get_pdb_data(path, gene, section_yaml, dms_df):
     """
