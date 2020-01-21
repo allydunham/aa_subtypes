@@ -52,6 +52,9 @@ class ColourSpectrum:
         self.name = name
 
     def __call__(self, val):
+        if np.isnan(val):
+            return self.na_colour
+            
         if self.na_outside_range and not self.minimum <= val <= self.maximum:
             return self.na_colour
 
