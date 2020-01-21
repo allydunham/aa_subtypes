@@ -28,8 +28,8 @@ PROPERTIES = {
     'tSNE1': ('tSNE1', 'viridis', 0, '0x29AF7F'),
     'tSNE2': ('tSNE2', 'plasma', 0, '0xDE7065'),
     'umap1': ('UMAP1', 'viridis', 0, '0x29AF7F'),
-    'umap2': ('UMAP1', 'plasma', 0, '0xDE7065'),
-    'total_energy': ('Mean FoldX Energy', 'PiYG', 0, '0xDCDCDC'),
+    'umap2': ('UMAP2', 'plasma', 0, '0xDE7065'),
+    'total_energy': ('Mean FoldX Energy', 'PiYG', 0, '0xDCDCDC'), # TODO need to clamp scale a bit - currently too wide
     'mean_sift': ('Mean log10 SIFT', 'PuRd_r', None, '0xDCDCDC'),
     'mean_score': (f'Mean Norm. ER', 'RdBu', 0, '0xDCDCDC'),
 }
