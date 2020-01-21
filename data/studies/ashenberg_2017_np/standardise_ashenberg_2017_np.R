@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/ashenberg_2017_np/ashenberg_2017_np.yaml')
-dm_data <- read_csv('data/studies/ashenberg_2017_np/raw/ashenberg_2017_flu_np.csv') %>%
+dm_data <- read_csv('data/studies/ashenberg_2017_np/raw/journal.ppat.1006288.s013.csv') %>%
   rename(position = site, raw_score = diffsel) %>%
   mutate(transformed_score = raw_score,
          score = normalise_score(transformed_score),

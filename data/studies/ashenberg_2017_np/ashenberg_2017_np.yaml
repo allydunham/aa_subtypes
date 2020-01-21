@@ -21,8 +21,8 @@ doi: '10.1371/journal.ppat.1006288'
 pmid: '28346537'
 url: 'https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1006288'
 input_files:
-  - 'ashenberg_2017_flu_np.csv' 
-source: 'SI'
+  - 'journal.ppat.1006288.s013.csv'
+source: 'SI - S3 File (https://doi.org/10.1371/journal.ppat.1006288.s013)'
 qc:
   filter: True 
   notes: "Only report relative selection when grown in cell with MxA and\
