@@ -5,12 +5,12 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/olson_2014_proteing/olson_2014_proteing.yaml')
-wt <- read_xlsx('data/studies/olson_2014_proteing/raw/olson_2014_protein_g_counts.xlsx', range = "U3:V4") %>%
+wt <- read_xlsx('data/studies/olson_2014_proteing/raw/1-s2.0-S0960982214012688-mmc2.xlsx', range = "U3:V4") %>%
   rename(input_count = `Input Count`,
          selection_count = `Selection Count`)
 E_wt <- wt$selection_count/wt$input_count
 
-dm_data <- read_xlsx('data/studies/olson_2014_proteing/raw/olson_2014_protein_g_counts.xlsx', range = cell_limits(ul = c(3, 14), lr = c(NA, 18))) %>%
+dm_data <- read_xlsx('data/studies/olson_2014_proteing/raw/1-s2.0-S0960982214012688-mmc2.xlsx', range = cell_limits(ul = c(3, 14), lr = c(NA, 18))) %>%
   rename(wt = `WT amino acid`,
          position = `Position`,
          mut = `Mutation`,

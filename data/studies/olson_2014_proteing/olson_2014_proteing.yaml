@@ -16,8 +16,8 @@ url: 'https://www.sciencedirect.com/science/article/pii/S0960982214012688'
 notes: "Uniprot ID is for the Protein G precurssor which has a slightly different sequence.\
         The sequence given here is just for the GB1 domain, as given in the paper."
 input_files:
-  - 'olson_2014_protein_g_counts.xlsx'
-source: 'SI'
+  - '1-s2.0-S0960982214012688-mmc2.xlsx'
+source: 'SI - Table S2'
 qc:
   filter: False
   notes:
