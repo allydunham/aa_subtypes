@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/starita_2015_brca1/starita_2015_brca1.yaml')
-dm_data <- read_xls('data/studies/starita_2015_brca1/raw/starita_2015_brca1_ring.xls', na = 'NA') %>%
+dm_data <- read_xls('data/studies/starita_2015_brca1/raw/genetics.115.175802-6.xls', na = 'NA') %>%
   rename_all(tolower) %>%
   rename(position = pos) %>%
   # Ref seq given by study has a mysterious, undocumented R at pos 175 where normal refs have K
