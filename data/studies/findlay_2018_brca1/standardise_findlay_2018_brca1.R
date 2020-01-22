@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/findlay_2018_brca1/findlay_2018_brca1.yaml')
-dm_data <- read_xlsx('data/studies/findlay_2018_brca1/raw/findlay_2018_brca1_ring_brct.xlsx', skip = 2, na = 'NA') %>%
+dm_data <- read_xlsx('data/studies/findlay_2018_brca1/raw/41586_2018_461_MOESM3_ESM.xlsx', skip = 2, na = 'NA') %>%
   rename_all(list( ~ gsub('[\\/ \\(\\)]+', '_', .))) %>%
   rename(wt_nuc = reference,
          mut_nuc = alt,

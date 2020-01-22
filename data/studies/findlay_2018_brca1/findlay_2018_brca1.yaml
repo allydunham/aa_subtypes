@@ -46,8 +46,8 @@ url: 'https://www.nature.com/articles/s41586-018-0461-z'
 notes: "Mutated nucleotides exhaustively rather than AAs, so only has \
         AAs that can be reached in a single substitution"
 input_files:
-  - 'findlay_2018_brca1_ring_brct.xlsx' 
-source: 'SI'
+  - '41586_2018_461_MOESM3_ESM.xlsx' 
+source: 'SI - Table S1'
 qc:
   filter: True 
   notes: "Low coverage (only made single nucleotide substitutions)"
