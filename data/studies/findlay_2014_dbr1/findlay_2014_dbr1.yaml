@@ -23,8 +23,8 @@ doi: 'doi:10.1038/nature13695'
 pmid: '25141179'
 url: 'https://www.nature.com/articles/nature13695'
 input_files:
-  - 'findlay_2014_dbr1_exon2_counts.xlsx' 
-source: 'SI'
+  - '41586_2014_BFnature13695_MOESM383_ESM.xlsx' 
+source: 'SI - Table S4'
 qc:
   filter: False
   notes:

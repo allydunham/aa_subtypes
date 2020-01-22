@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/findlay_2014_dbr1/findlay_2014_dbr1.yaml')
-dm_data <- read_xlsx('data/studies/findlay_2014_dbr1/raw/findlay_2014_dbr1_exon2_counts.xlsx', skip = 5, na = 'NA',
+dm_data <- read_xlsx('data/studies/findlay_2014_dbr1/raw/41586_2014_BFnature13695_MOESM383_ESM.xlsx', skip = 5, na = 'NA',
                      col_names = c('seq', 'log2_enrichment_score_day11_rep1', 'log2_enrichment_score_day11_rep2',
                                    'position', 'wt', 'mut', 'mut_type')) %>%
   mutate(position = as.integer(na_if(position, "3'SS")),
