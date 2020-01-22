@@ -70,6 +70,9 @@ rule project_landscape_colourbar:
     log:
         'logs/project_landscape_colourbar/{property}.log'
 
+    group:
+        'project_colourbars'
+
     shell:
         'python bin/analysis/1_landscape/project_landscape.py --colourbar --output_dir figures/1_landscape/pdb --data {input.dms} {wildcards.property} &> {log}'
 
