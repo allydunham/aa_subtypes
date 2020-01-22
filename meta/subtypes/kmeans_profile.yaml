@@ -2,5 +2,5 @@ desc: "Basic K-means clustering"
 method: 'kmeans'
 columns: 'A:Y'
 args:
-  k: 3
+  k: 4
   min_size: 5
