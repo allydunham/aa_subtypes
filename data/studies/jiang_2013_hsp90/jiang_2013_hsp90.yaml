@@ -27,8 +27,8 @@ doi: '10.1371/journal.pgen.1003600'
 pmid: '23825969'
 url: 'https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1003600'
 input_files:
-  - 'jiang_2013_hsp90.xlsx' 
-source: 'SI'
+  - 'journal.pgen.1003600.s014.xlsx' 
+source: 'SI - Table S3'
 qc:
   filter: False
   notes:

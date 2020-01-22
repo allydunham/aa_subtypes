@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/jiang_2013_hsp90/jiang_2013_hsp90.yaml')
-dm_data <- read_xlsx('data/studies/jiang_2013_hsp90/raw/jiang_2013_hsp90.xlsx', skip = 2) %>%
+dm_data <- read_xlsx('data/studies/jiang_2013_hsp90/raw/journal.pgen.1003600.s014.xlsx', skip = 2) %>%
   select(-...10) %>%
   rename_all(tolower) %>%
   rename(mut = `amino acid`,
