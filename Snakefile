@@ -20,10 +20,8 @@ localrules:
     filter_pdb, naccess
 
 # Hash of study IDs to their config
-STUDIES = {}
-for study in os.listdir('data/studies'):
-    with open(f'data/studies/{study}/{study}.yaml') as yaml_file:
-        STUDIES[study] = yaml.load(yaml_file)
+STUDIES = {s: yaml.load(Path(f'data/studies/{s}/{s}.yaml')) for
+           s in os.listdir('data/studies') if not s.startswith('.')}
 UNFILTERED_STUDIES = [s for s,v in STUDIES.items() if not v['qc']['filter']]
 
 # Hash linking genes to studies
@@ -32,8 +30,7 @@ for study, conf in STUDIES.items():
     GENES[sutil.gene_to_filename(conf['gene'])].append(study)
 UNFILTERED_GENES = [g for g, v in GENES.items() if any(s in UNFILTERED_STUDIES for s in v)]
 
-with open('meta/structures.yaml', 'r') as yaml_file:
-    STRUCTURES = yaml.load(yaml_file)
+STRUCTURES = yaml.load(Path('meta/structures.yaml'))
 
 AA_ALPHABET = 'ACDEFGHIKLMNPQRSTVWY'
 
