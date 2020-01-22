@@ -18,7 +18,7 @@ get_position <- function(x){
   }
 }
 
-dm_data <- read_xlsx('data/studies/lee_2018_ha/raw/lee_2018_influenza_ha.xlsx', sheet = 'avg_prefs') %>%
+dm_data <- read_xlsx('data/studies/lee_2018_ha/raw/pnas.1806133115.sd03.xlsx', sheet = 'avg_prefs') %>%
   rename(position = site) %>%
   gather(key = 'mut', value = 'raw_score', -position, -entropy, -neffective) %>%
   mutate(position = sapply(position, get_position),

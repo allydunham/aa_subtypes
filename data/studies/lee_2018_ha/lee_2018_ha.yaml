@@ -24,8 +24,8 @@ url: 'www.pnas.org/cgi/doi/10.1073/pnas.1806133115'
 notes: "Only gives per position frequencies, so cannot easily get comparable \
         scores across the protein  without re-running analysis."
 input_files:
-  - 'lee_2018_influenza_ha.xlsx' 
-source: 'SI'
+  - 'pnas.1806133115.sd03.xlsx' 
+source: 'SI - Table S3'
 qc:
   filter: False
   notes:
