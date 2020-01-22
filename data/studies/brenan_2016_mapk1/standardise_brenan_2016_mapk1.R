@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/brenan_2016_mapk1/brenan_2016_mapk1.yaml')
-dm_data <- read_xlsx('data/studies/brenan_2016_mapk1/raw/brenan_2016_erk2.xlsx', sheet = 'Supplemental_Table_1') %>%
+dm_data <- read_xlsx('data/studies/brenan_2016_mapk1/raw/1-s2.0-S2211124716313171-mmc2.xlsx', sheet = 'Supplemental_Table_1') %>%
   rename_all(list( ~ gsub(' ', '_', tolower(.)))) %>%
   rename(wt = wt_aa, mut = mutant_aa, position = erk2_residue) %>%
   mutate(raw_score = `lfc_(etp_vs._dox)`, # Only general condition, other two are for specific drugs
