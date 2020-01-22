@@ -26,8 +26,8 @@ doi: '10.1073/pnas.1016024108'
 pmid: '21464309'
 url: 'http://www.pnas.org/content/108/19/7896'
 input_files:
-  - 'hietpas_2011_pdz_ligands_fitness.csv' 
-source: 'SI'
+  - 'sd02.csv' 
+source: 'SI - Dataset S2'
 qc:
   filter: False
   notes:
