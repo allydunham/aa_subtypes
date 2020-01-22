@@ -7,16 +7,7 @@ aa_code <- structure(names(Biostrings::AMINO_ACID_CODE), names=Biostrings::AMINO
 
 # Import and process data
 meta <- read_yaml('data/studies/weile_2017_calm1/weile_2017_calm1.yaml')
-dm_data <- read_csv('data/studies/weile_2017_calm1/raw/weile_2017_calm_score_comp.csv', na = c('NA','','None')) %>%
-  mutate(mut = str_replace_all(hgvs_pro, aa_code)) %>%
-  tidyr::extract(mut, into = c('wt', 'position', 'mut'), "p\\.([A-Z]+)([0-9]*)([A-Z=]+)", convert=TRUE) %>%
-  mutate(mut = if_else(mut == '=', wt, mut),
-         raw_score = score,
-         transformed_score = transform_vamp_seq(raw_score),
-         score = normalise_score(transformed_score),
-         class = get_variant_class(wt, mut)) %>%
-  select(position, wt, mut, score, transformed_score, raw_score, class) %>%
-  arrange(position, mut)
+dm_data <- read_mavedb('data/studies/weile_2017_calm1/raw/urn_mavedb_00000001-c-2_scores.csv', score_transform = transform_vamp_seq)
 
 # Save output
 standardise_study(dm_data, meta$study, meta$transform)

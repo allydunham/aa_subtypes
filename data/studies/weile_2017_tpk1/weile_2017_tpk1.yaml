@@ -17,8 +17,9 @@ doi: '10.15252/msb.20177908'
 pmid: '29269382'
 url: 'http://msb.embopress.org/content/13/12/957'
 input_files:
-  - 'weile_2017_tpk1_score_comp.csv' 
-source: 'SI'
+  - 'urn_mavedb_00000001-d-2_scores.csv' 
+source: 'MaveDB'
+mavedb_urn: 'urn:mavedb:00000001-d'
 qc:
   filter: False
   notes:
