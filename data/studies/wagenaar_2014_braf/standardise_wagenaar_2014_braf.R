@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/wagenaar_2014_braf/wagenaar_2014_braf.yaml')
-dm_data <- read_xls('data/studies/wagenaar_2014_braf/raw/wagenaar_2014_braf.xls', skip = 3) %>%
+dm_data <- read_xls('data/studies/wagenaar_2014_braf/raw/pcmr12171-sup-0011-TableS1.xls', skip = 3) %>%
   rename(position = Position,
          mut = acid,
          median_enrichment = Median,

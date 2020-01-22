@@ -26,8 +26,8 @@ pmid: '24112705'
 url: 'https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12171'
 notes: 'Only retained variants they deemed significantly different from wt'
 input_files:
-  - 'wagenaar_2014_braf.xls' 
-source: 'SI'
+  - 'pcmr12171-sup-0011-TableS1.xls' 
+source: 'SI - Table S1'
 qc:
   filter: True
   notes: 'Selecting for drug resistance in oncogenic state - not exactly normal function'
