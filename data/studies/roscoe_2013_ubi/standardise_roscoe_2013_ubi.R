@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/roscoe_2013_ubi/roscoe_2013_ubi.yaml')
-dm_data <- read_xlsx('data/studies/roscoe_2013_ubi/raw/roscoe_2013_ubi_fitness.xlsx', skip = 4) %>%
+dm_data <- read_xlsx('data/studies/roscoe_2013_ubi/raw/1-s2.0-S0022283613000636-mmc3.xlsx', skip = 4) %>%
   rename(position = Position,
          mut = `Amino Acid`,
          selection_chr = Apparent,

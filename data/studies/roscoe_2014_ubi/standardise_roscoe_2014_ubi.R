@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml')
-dm_data <- read_xlsx('data/studies/roscoe_2014_ubi/raw/roscoe_2014_ubi_limiting_E1_reactivity.xlsx', skip = 3, na = 'NA') %>%
+dm_data <- read_xlsx('data/studies/roscoe_2014_ubi/raw/1-s2.0-S0022283614002587-mmc3.xlsx', skip = 3, na = 'NA') %>%
   rename(position = Position,
          mut = `Amino Acid`,
          raw_score = `log2 (E1react/display)`,

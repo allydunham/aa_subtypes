@@ -15,8 +15,8 @@ pmid: '23376099'
 url: 'https://www.sciencedirect.com/science/article/pii/S0022283613000636'
 notes: 'Uniprot ID is for UBI4, took first repeat of sequence from here as very conserved'
 input_files:
-  - 'roscoe_2013_ubi_fitness.xlsx' 
-source: 'SI'
+  - '1-s2.0-S0022283613000636-mmc3.xlsx' 
+source: 'SI - Table S2'
 qc:
   filter: False
   notes:
