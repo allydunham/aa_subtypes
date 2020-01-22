@@ -7,91 +7,91 @@
 #    offset: offset to add to match PDB and Uniprot coords
 #    region (optional) - which part of the PDB is valid, inclusive
 adrb2:
-  type: 'model'
+  type: 'Homology Model'
   id: '6e67.2.A'
   sections: [{chain: 'A', offset: 0}]
 amie:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '2uxy'
   sections: [{chain: 'A', offset: 0}]
 aph3ii:
-  type: 'model'
+  type: 'Homology Model'
   id: '3r87.2.A'
   sections: [{chain: 'A', offset: 0}]
 brca1:
-  type: 'x-ray'
-  id: '4igk'
-  sections: [{chain: 'A', offset: 1645}]
+  type: 'Solution NMR'
+  id: '1jm7'
+  sections: [{chain: 'A', offset: 0}]
 calm1:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3wfn'
   sections: [{chain: 'A', offset: -6, region: [7, 155]}]
 cbs:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '4l0d'
   sections: [{chain: 'B', offset: 0, region: [41, 515]}]
 ccr5:
-  type: 'cryo-EM'
+  type: 'Cryo-EM'
   id: '6met'
   sections: [{chain: 'C', offset: 0}]
 cp:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '1msc'
   sections: [{chain: 'A', offset: 1}]
 cxcr4:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3odu'
   sections: [{chain: 'A', offset: -10, region: [37, 239]}, {chain: 'A', offset: -174, region: [404, 493]}]
 dbr1:
-  type: 'model'
+  type: 'Homology Model'
   id: '4peg.1.A'
   sections: [{chain: 'A', offset: 0}]
 gal4:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3coq'
   sections: [{chain: 'C', offset: 7}]
 ha:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3hmg'
   sections: [{chain: 'A', offset: 16, region: [1, 328]}, {chain: 'B', offset: 345, region: [1, 175]}]
 hsp90:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '2cg9'
   sections: [{chain: 'A', offset: 0}]
 infa:
-  type: 'cryo-EM'
+  type: 'Cryo-EM'
   id: '1zo1'
   sections: [{chain: 'C', offset: 1}]
 mapk1:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3sa0'
   sections: [{chain: 'A', offset: 0}]
 np:
-  type: 'model'
+  type: 'Homology Model'
   id: '2q06.2.A'
   sections: [{chain: 'A', offset: 0}]
 pab1:
-  type: 'cryo-EM'
+  type: 'Cryo-EM'
   id: '6r5k'
   sections: [{chain: 'B', offset: -4}]
 proteing:
-  type: 'model'
+  type: 'Homology Model'
   id: '1pgx.1.A'
   sections: [{chain: 'A', offset: 0}]
 pten:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '1d5r'
   sections: [{chain: 'A', offset: 6, region: [8, 260]}, {chain: 'A', offset: 29, region: [281, 322]}]
 ras:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '6q21'
   sections: [{chain: 'A', offset: 0}]
 src:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '1fmk'
   sections: [{chain: 'A', offset: 84}]
 ste12:
-  type: 'model'
+  type: 'Homology Model'
   id: '6dmp.1.A'
   sections: [{chain: 'A', offset: 0}]
 sumo1:
@@ -99,46 +99,46 @@ sumo1:
   id: '2n1a'
   sections: [{chain: 'A', offset: -2, region: [3, 103]}]
 tem1:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '1m40'
   sections: [{chain: 'A', offset: 23}]
 tpk1:
-  type: 'model'
+  type: 'Homology Model'
   id: '2f17.1.A'
   sections: [{chain: 'A', offset: 0}]
 tp53:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '3q05'
   sections: [{chain: 'A', offset: 93, region: [1, 198]}, {chain: 'A', offset: 122, region: [200, 234]}]
 tpmt:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '2bzg'
   sections: [{chain: 'A', offset: 13}]
 ube2i:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '2pe6'
   sections: [{chain: 'A', offset: -3}]
 ube4b:
-  type: 'model'
+  type: 'Homology Model'
   id: '3m62.1.A'
   sections: [{chain: 'A', offset: 0}]
 ubi:
-  type: 'model'
+  type: 'Homology Model'
   id: '5b83.1.A'
   sections: [{chain: 'A', offset: 0}]
 yap1:
-  type: 'model'
+  type: 'Homology Model'
   id: '6jk1.1.A'
   sections: [{chain: 'A', offset: 0}]
 braf:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '4e26'
   sections: [{chain: 'A', offset: 419, region: [29, 304]}]
 gfp:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '5dtx'
   sections: [{chain: 'A', offset: -10, region: [11, 75]}]
 tdp43:
-  type: 'x-ray'
+  type: 'X-ray Crystallography'
   id: '5mdi'
   sections: [{chain: 'A', offset: -22, region: [23, 101]}]
