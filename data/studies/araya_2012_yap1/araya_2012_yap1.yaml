@@ -15,7 +15,7 @@ seq: "MDPGQQPPPQPAPQGQGQPPSQPPQGQGPPSGPGQPAPAATQAAPQAPPAGHQI\
       TLPSQQNRFPDYLEAIPGTNVDLGTLEGDGMNIEGEELMPSLQEALSSDILNDM\
       ESVLAATKLDKESFLTWL"
 experiment: 'ligand binding'
-transform: 'log2(x)'
+transform: 'None'
 authour: 'Araya et al.'
 year: 2012
 title: 'A fundamental protein property, thermodynamic stability, revealed solely from large-scale measurements of protein function'
@@ -24,8 +24,9 @@ pmid: '23035249'
 url: 'http://www.pnas.org/content/109/42/16858'
 notes: 'Positions from paper are offset by 9, so add 160 to reach same start of WW domain in sequence'
 input_files:
-  - 'araya_2012_hYAP65_ww.tsv' 
-source: 'SI'
+  - 'urn_mavedb_00000002-a-2_scores.csv' 
+source: 'MaveDB'
+mavedb_urn: 'urn:mavedb:00000002-a-2'
 qc:
   filter: False
   notes:
