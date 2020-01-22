@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/kitzman_2015_gal4/kitzman_2015_gal4.yaml')
-path <- 'data/studies/kitzman_2015_gal4/raw/kitzman_2015_gal4_enrichment.xlsx'
+path <- 'data/studies/kitzman_2015_gal4/raw/41592_2015_BFnmeth3223_MOESM306_ESM.xlsx'
 dm_data <- lapply(excel_sheets(path), read_kitzman_sheet, path = path) %>%
   bind_rows(.) %>%
   spread(key = 'label', value = 'log2_enrichment') %>%

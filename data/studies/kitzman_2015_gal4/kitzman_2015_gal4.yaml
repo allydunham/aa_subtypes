@@ -28,8 +28,8 @@ pmid: '25559584'
 url: 'https://www.nature.com/articles/nmeth.3223'
 notes: "Average of A (24h, 40h), B (40h) & C (40h, 64h) reps at different timepoints (since all timepoints correlate)"
 input_files:
-  - 'kitzman_2015_gal4_enrichment.xlsx' 
-source: 'SI'
+  - '41592_2015_BFnmeth3223_MOESM306_ESM.xlsx' 
+source: 'SI - Supplementary Data'
 qc:
   filter: False
   notes:
