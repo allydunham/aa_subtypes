@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/sarkisyan_2016_gfp/sarkisyan_2016_gfp.yaml')
-raw_data <- read_tsv('data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv', skip = 1,
+raw_data <- read_tsv('data/studies/sarkisyan_2016_gfp/raw/amino_acid_genotypes_to_brightness.tsv', skip = 1,
                     col_names = c('mut', 'barcodes', 'median_brightness', 'std'))
 
 wt_brightness <- filter(raw_data, is.na(mut)) %>% pull(median_brightness)

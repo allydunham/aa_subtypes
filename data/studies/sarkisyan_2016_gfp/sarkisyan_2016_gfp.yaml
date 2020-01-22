@@ -17,8 +17,8 @@ pmid: '27193686'
 url: 'https://www.nature.com/articles/nature17995'
 notes: "Used a GFP with F64L, which is reflected in the sequence we use"
 input_files:
-  - 'sarkisyan_2016_gfp_AAs.tsv' 
-source: 'SI'
+  - 'amino_acid_genotypes_to_brightness.tsv' 
+source: 'SI - Figshare (https://figshare.com/articles/Local_fitness_landscape_of_the_green_fluorescent_protein/3102154)'
 qc:
   filter: True 
   notes: "Low coverage"

@@ -6,7 +6,7 @@ source('src/study_standardising.R')
 dir.create('figures/0_data/per_study/sarkisyan_2016_gfp')
 
 # Import and process data
-raw_data <- read_tsv('data/studies/sarkisyan_2016_gfp/raw/sarkisyan_2016_gfp_AAs.tsv', skip = 1,
+raw_data <- read_tsv('data/studies/sarkisyan_2016_gfp/raw/amino_acid_genotypes_to_brightness.tsv', skip = 1,
                      col_names = c('mut', 'barcodes', 'median_brightness', 'std')) %>%
             mutate(n_mut = str_count(mut, ':') + 1)
 wt_brightness <- filter(raw_data, is.na(mut)) %>% pull(median_brightness)
