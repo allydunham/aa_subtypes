@@ -269,6 +269,7 @@ make_gmm_clusters <- function(tbl, cols, G=1:5, modelNames = 'VVV', ...){
 }
 
 # Expects a named list of outputs from make_gmm_clusters
+# TODO change this to showing BIC scores or similar?
 plot_clustering_gmm <- function(clusters){
   tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
     bind_rows()
