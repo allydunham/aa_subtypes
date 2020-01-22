@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/mishra_2016_hsp90/mishra_2016_hsp90.yaml')
-path <- 'data/studies/mishra_2016_hsp90/raw/mishra_2016_hsp90_enrichment.xlsx'
+path <- 'data/studies/mishra_2016_hsp90/raw/1-s2.0-S2211124716303175-mmc2.xlsx'
 dm_data <- map(excel_sheets(path), read_mishra_sheet, path = path) %>%
   bind_rows() %>%
   select(position, mut=aa, raw_score=avg) %>%

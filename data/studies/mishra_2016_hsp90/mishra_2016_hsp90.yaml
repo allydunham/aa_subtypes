@@ -24,8 +24,8 @@ doi: '10.1016/j.celrep.2016.03.046'
 pmid: '27068472'
 url: 'https://www.sciencedirect.com/science/article/pii/S2211124716303175'
 input_files:
-  - 'mishra_2016_hsp90_enrichment.xlsx' 
-source: 'SI'
+  - '1-s2.0-S2211124716303175-mmc2.xlsx' 
+source: 'SI - Table S1'
 qc:
   filter: False
   notes:
