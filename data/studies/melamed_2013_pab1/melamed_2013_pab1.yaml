@@ -24,7 +24,7 @@ doi: '10.1261/rna.040709.113'
 pmid: '24064791'
 url: 'https://rnajournal.cshlp.org/content/19/11/1537'
 input_files:
-  - 'melamed_2013_pab1_rrm_enrichment_ratios.xlsx' 
+  - 'Supplementary_Table_2.xlsx' 
 source: 'SI'
 qc:
   filter: False

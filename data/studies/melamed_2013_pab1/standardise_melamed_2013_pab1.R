@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/melamed_2013_pab1/melamed_2013_pab1.yaml')
-dm_data <- read_xlsx('data/studies/melamed_2013_pab1/raw/melamed_2013_pab1_rrm_enrichment_ratios.xlsx') %>%
+dm_data <- read_xlsx('data/studies/melamed_2013_pab1/raw/Supplementary_Table_2.xlsx') %>%
   rename(wt = WT_aa) %>%
   gather(key = 'mut', value = 'raw_score', -position, -wt) %>%
   mutate(transformed_score = raw_score,
