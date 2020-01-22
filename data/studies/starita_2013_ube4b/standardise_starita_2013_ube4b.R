@@ -5,7 +5,7 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml')
-dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/starita_2013_ube4b_ubox.xlsx', na = c('NA', '')) %>%
+dm_data <- read_xlsx('data/studies/starita_2013_ube4b/raw/sd01.xlsx', na = c('NA', '')) %>%
   filter(!seqID == 'NA-NA') %>% # Filter WT
   rename(raw_score = log2_ratio) %>%
   separate(seqID, into = c('position', 'mut'), sep='-') %>%

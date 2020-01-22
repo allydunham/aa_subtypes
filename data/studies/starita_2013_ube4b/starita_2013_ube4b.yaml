@@ -33,8 +33,8 @@ doi: '10.1073/pnas.1303309110'
 pmid: '23509263'
 url: 'http://www.pnas.org/content/110/14/E1263.long'
 input_files:
-  - 'starita_2013_ube4b_ubox.xlsx' 
-source: 'SI'
+  - 'sd01.xlsx' 
+source: 'SI - Dataset S1'
 qc:
   filter: False
   notes:
