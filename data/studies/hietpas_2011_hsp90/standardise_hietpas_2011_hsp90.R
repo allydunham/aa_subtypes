@@ -5,8 +5,8 @@ source('src/study_standardising.R')
 
 # Import and process data
 meta <- read_yaml('data/studies/hietpas_2011_hsp90/hietpas_2011_hsp90.yaml')
-dm_data <- read_csv('data/studies/hietpas_2011_hsp90/raw/hietpas_2011_pdz_ligands_fitness.csv') %>%
-  rename(mut = aa, raw_score = selection_coefficient) %>%
+dm_data <- read_csv('data/studies/hietpas_2011_hsp90/raw/sd02.csv', skip = 5) %>%
+  rename(mut = aa, raw_score = s) %>%
   mutate(wt = str_split(meta$seq, '')[[1]][position]) %>%
   group_by(position, wt, mut) %>% # Average over codons
   summarise(raw_score = mean(raw_score)) %>%
