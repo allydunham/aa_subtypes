@@ -269,17 +269,23 @@ make_gmm_clusters <- function(tbl, cols, G=1:5, modelNames = 'VVV', ...){
 }
 
 # Expects a named list of outputs from make_gmm_clusters
-# TODO change this to showing BIC scores or similar?
+get_mclustbic_matrix <- function(x){
+  class(x) <- 'matrix'
+  attributes(x) <- attributes(x)[c('dim', 'dimnames')]
+  return(x)
+}
+
 plot_clustering_gmm <- function(clusters){
-  tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
-    bind_rows()
+  bic <- map(clusters, .f = ~ as_tibble(get_mclustbic_matrix(.$gmm$BIC), rownames = 'n')) %>%
+    bind_rows(.id = 'aa') %>%
+    pivot_longer(c(-aa, -n), names_to = 'model', values_to = 'BIC')
   
-  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
-    geom_point(shape = 20) +
-    facet_wrap(~wt, nrow = 4) +
-    labs(x='UMAP1', y='UMAP2') +
-    guides(colour = guide_legend(title = 'Subtype')) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
+  ggplot(bic, aes(x=n, y=BIC, fill=model)) +
+    geom_col(position = 'dodge') +
+    facet_wrap(~aa, nrow = 4) +
+    labs(x='Number of Subtypes', y='BIC') +
+    guides(fill = guide_legend(title = 'Model')) +
+    scale_fill_brewer(type = 'qual', palette = 'Set1', na.value = 'grey')
 }
 ########
 
