@@ -165,7 +165,9 @@ rule evaluate_kmeans_k:
         "data/combined_mutational_scans.tsv"
 
     output:
-        "figures/2_subtypes/kmean_k_silhouettes.pdf"
+        "figures/2_subtypes/kmean_k_silhouettes.pdf",
+        "figures/2_subtypes/kmean_k_cosine.pdf",
+        "kmean_k_sd.pdf"
 
     log:
         "logs/evaluate_kmeans_k.log"

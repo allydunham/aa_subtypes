@@ -20,7 +20,6 @@ library(ggdendro)
 library(multipanelfigure)
 library(tools)
 
-
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)
 library(plotlistr)
@@ -51,6 +50,7 @@ AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
 CLUSTER_COLOURS <- list(type='qual', palette='Set3', direction = -1)
 ER_PROFILE_COLOURS <- list(type='div', palette='RdBu', direction = 1)
 ER_COR_COLOURS <- list(type='div', palette='RdYlBu', direction = 1)
+ER_DIST_COLOURS <- list(type='seq', palette='BuPu', direction = 1)
 SIFT_COLOURS <- list(type='seq', palette='PuRd', direction = -1)
 FOLDX_COLOURS <- list(type='div', palette='PiYG', direction = 1)
 SS_COLOURS <- list(type='div', palette='BrBG', direction = 1)

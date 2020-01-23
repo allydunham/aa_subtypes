@@ -61,6 +61,9 @@ cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
   return(s)
 }
 
+row_cosine_similarity <- function(x, y){
+  rowSums(x*y) / (sqrt(rowSums(x^2)) * sqrt(rowSums(y^2)))
+}
 ########
 
 #### k-means ####
@@ -98,7 +101,7 @@ plot_clustering_kmeans <- function(clusters){
     guides(colour = guide_legend(title = 'Subtype'))
 }
 
-evaluate_k <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
+evaluate_k_silhouette <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
   cols <- enquo(cols)
   dist_cols <- enquo(dist_cols)
   
@@ -123,6 +126,60 @@ evaluate_k <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
     summarise(silhouette_score = mean(silhouette_score, na.rm=TRUE))
     
   return(avg_sil)
+}
+
+evaluate_k_cosine <- function(tbl, cols, k, min_size = 1){
+  cols <- enquo(cols)
+  
+  # Make Clusters
+  clusters <- group_by(tbl, wt) %>%
+    group_map(~make_kmeans_clusters(., !!cols, k = k, min_size = min_size), keep = TRUE) %>%
+    set_names(sapply(., function(x){first(x$tbl$wt)}))
+  
+  cluster_profs <- map_dfr(clusters, .f = ~ .$tbl) %>%
+    mutate(cluster = str_c(wt, cluster)) %>%
+    arrange(study, position) %>%
+    select(cluster, study, position, wt, A:Y) %>%
+    cluster_mean_profiles(A:Y) %>%
+    tibble_to_matrix(-cluster, row_names = 'cluster')
+  
+  # Cosine Similarity
+  combs <- combn(nrow(cluster_profs), 2)
+  cosine_sim <- tibble(cluster1 = rownames(cluster_profs)[combs[1,]],
+                       cluster2 = rownames(cluster_profs)[combs[2,]],
+                       cosine_sim = row_cosine_similarity(cluster_profs[combs[1,],], cluster_profs[combs[2,],])) %>%
+    mutate(wt1 = str_sub(cluster1, end = 1),
+           wt2 = str_sub(cluster2, end = 1)) %>%
+    filter(wt1 == wt2) %>%
+    group_by(wt = wt1) %>%
+    summarise(cosine_sim = mean(cosine_sim))
+  
+  return(cosine_sim)
+}
+
+evaluate_k_sd <- function(tbl, cols, k, min_size = 1){
+  cols <- enquo(cols)
+  
+  # Make Clusters
+  clusters <- group_by(tbl, wt) %>%
+    group_map(~make_kmeans_clusters(., !!cols, k = k, min_size = min_size), keep = TRUE) %>%
+    set_names(sapply(., function(x){first(x$tbl$wt)}))
+  
+  cluster_profs <- map_dfr(clusters, .f = ~ .$tbl) %>%
+    mutate(cluster = str_c(wt, cluster)) %>%
+    arrange(study, position) %>%
+    select(cluster, study, position, wt, A:Y) %>%
+    cluster_mean_profiles(A:Y)
+  
+  # Cosine Similarity
+  cluster_sd <- pivot_longer(cluster_profs, -cluster, names_to = 'aa', values_to = 'er') %>%
+    group_by(cluster) %>%
+    summarise(sd = sd(er)) %>%
+    mutate(wt = str_sub(cluster, end = 1)) %>%
+    group_by(wt) %>%
+    summarise(sd = mean(sd))
+  
+  return(cluster_sd)
 }
 ########
 
@@ -435,7 +492,6 @@ plot_clustering <- function(clusters){
 }
 
 # Silhouette plots work directly on a tibble, with a clusters ID column and cols defining spatial positions
-# TODO refactor getting the silhouette score tbl out of these?
 plot_silhouette <- function(tbl, cols){
   cols <- enquo(cols)
   
@@ -577,6 +633,31 @@ plot_cluster_profile_correlation <- function(x){
           axis.title = element_blank(),
           axis.text.x = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster1), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
           axis.text.y = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster2), end = 1)]))
+}
+
+plot_cluster_profile_distances <- function(tbl, method='manhattan'){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$tbl
+  }
+  
+  distances <- cluster_mean_profiles(tbl, A:Y) %>%
+    tibble_to_matrix(!!cols, row_names = 'cluster') %>%
+    dist(method = method) %>%
+    as.matrix() %>%
+    as_tibble(rownames = 'cluster1') %>%
+    pivot_longer(cols = -cluster1, names_to = 'cluster2', values_to = 'dist')
+  
+  ggplot(distances, aes(x = cluster1, y = cluster2, fill=dist)) +
+    geom_tile() +
+    scale_fill_distiller(type = ER_DIST_COLOURS$type, palette = ER_DIST_COLOURS$palette, direction = ER_DIST_COLOURS$direction) +
+    coord_fixed() +
+    guides(fill = guide_colourbar(title = str_c(str_to_title(method), '\nDistance'))) +
+    theme(axis.ticks = element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(distances$cluster1)), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
+          axis.text.y = element_text(colour = AA_COLOURS[str_sub(sort(unique(distances$cluster2)), end = 1)]))
 }
 
 plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
