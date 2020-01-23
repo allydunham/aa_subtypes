@@ -1,6 +1,7 @@
 studies/*/*.yaml
 studies/*/*.R
 study_template.yaml
+pdb/*
 fasta/**
 clustering/**
 structures.yaml
