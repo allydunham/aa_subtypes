@@ -150,9 +150,7 @@ evaluate_k_cosine <- function(tbl, cols, k, min_size = 1){
                        cosine_sim = row_cosine_similarity(cluster_profs[combs[1,],], cluster_profs[combs[2,],])) %>%
     mutate(wt1 = str_sub(cluster1, end = 1),
            wt2 = str_sub(cluster2, end = 1)) %>%
-    filter(wt1 == wt2) %>%
-    group_by(wt = wt1) %>%
-    summarise(cosine_sim = mean(cosine_sim))
+    filter(wt1 == wt2)
   
   return(cosine_sim)
 }
@@ -635,13 +633,13 @@ plot_cluster_profile_correlation <- function(x){
           axis.text.y = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster2), end = 1)]))
 }
 
-plot_cluster_profile_distances <- function(tbl, method='manhattan'){
+plot_cluster_profile_distances <- function(x, method='manhattan'){
   if ('cluster_characterisation' %in% class(x)){
     x <- x$tbl
   }
   
-  distances <- cluster_mean_profiles(tbl, A:Y) %>%
-    tibble_to_matrix(!!cols, row_names = 'cluster') %>%
+  distances <- cluster_mean_profiles(x, A:Y) %>%
+    tibble_to_matrix(A:Y, row_names = 'cluster') %>%
     dist(method = method) %>%
     as.matrix() %>%
     as_tibble(rownames = 'cluster1') %>%

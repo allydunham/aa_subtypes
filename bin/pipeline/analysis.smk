@@ -167,7 +167,8 @@ rule evaluate_kmeans_k:
     output:
         "figures/2_subtypes/kmean_k_silhouettes.pdf",
         "figures/2_subtypes/kmean_k_cosine.pdf",
-        "kmean_k_sd.pdf"
+        "figures/2_subtypes/kmean_k_sd.pdf",
+        "figures/2_subtypes/kmean_k_abs_cosine.pdf"
 
     log:
         "logs/evaluate_kmeans_k.log"
