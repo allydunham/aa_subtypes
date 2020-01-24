@@ -2,6 +2,7 @@
 Rules for analysing combined data and calculating AA subtypes
 
 Expects global variables:
+- STANDARD_CLUSTERINGS: list of names for clusterings generated
 """
 
 #### Analyse whole dataset ####
@@ -175,3 +176,21 @@ rule evaluate_kmeans_k:
 
     shell:
         "Rscript bin/analysis/2_subtypes/evaluate_kmeans_k.R &> {log}"
+
+rule compare_subtypes:
+    """
+    Compare clustering performance across the tested methods
+    """
+    input:
+        [f"data/subtypes/{c}.tsv" for c in STANDARD_CLUSTERINGS],
+        "data/combined_mutational_scans.tsv"
+
+    output:
+        "figures/2_subtypes/method_silhouettes.pdf",
+        "figures/2_subtypes/method_cosine_sim.pdf"
+
+    log:
+        "logs/compare_subtypes.log"
+
+    shell:
+        "Rscript bin/analysis/2_subtypes/compare_subtypes.R &> {log}"
