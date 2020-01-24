@@ -54,7 +54,7 @@ p_avg_abs_cosine <- ggplot(avg_cosine, aes(x = k, y = abs_cosine_sim, colour = c
   geom_line() +
   scale_color_brewer(type = 'qual', palette = 'Set1', guide = guide_legend(title = '')) +
   labs(x = 'k', y = 'Mean Absolute Cosine Similarity (within AA)')
-ggsave('figures/2_subtypes/kmean_k_abs_cosine.pdf', p_avg_cosine, units = 'cm', height = 20, width = 28)
+ggsave('figures/2_subtypes/kmean_k_abs_cosine.pdf', p_avg_abs_cosine, units = 'cm', height = 20, width = 28)
 
 
 ### Cluster SD ###
