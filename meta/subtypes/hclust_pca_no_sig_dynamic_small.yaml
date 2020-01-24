@@ -4,5 +4,5 @@ columns: 'PC2:PC7'
 args:
   dist_method: 'manhattan'
   treecut_args:
-    deepSplit: 3
+    deepSplit: 2
 
