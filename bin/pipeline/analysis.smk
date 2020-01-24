@@ -182,8 +182,8 @@ rule compare_subtypes:
     Compare clustering performance across the tested methods
     """
     input:
-        [f"data/subtypes/{c}.tsv" for c in STANDARD_CLUSTERINGS],
-        "data/combined_mutational_scans.tsv"
+        subtypes=[f"data/subtypes/{c}.tsv" for c in STANDARD_CLUSTERINGS],
+        dms="data/combined_mutational_scans.tsv"
 
     output:
         "figures/2_subtypes/method_silhouettes.pdf",
@@ -193,4 +193,4 @@ rule compare_subtypes:
         "logs/compare_subtypes.log"
 
     shell:
-        "Rscript bin/analysis/2_subtypes/compare_subtypes.R &> {log}"
+        "Rscript bin/analysis/2_subtypes/compare_subtypes.R --dms {input.dms} --figures figures/2_subtypes --subtypes {input.subtypes} &> {log}"

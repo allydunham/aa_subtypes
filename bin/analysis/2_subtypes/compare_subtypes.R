@@ -6,7 +6,7 @@ library(argparser)
 
 ### Parse args and setup ###
 parser <- arg_parser(description = 'Compare AA subtypes', name = 'AA Subtype Comparison')
-parser <- add_argument(parser, arg = 'subtypes', help = 'TSV file(s) assigning positions to clusters', nargs = Inf)
+parser <- add_argument(parser, arg = '--subtypes', help = 'TSV file(s) assigning positions to clusters', nargs = Inf)
 parser <- add_argument(parser, arg = '--dms', help = 'Path to DMS data', default = 'data/combined_mutational_scans.tsv')
 parser <- add_argument(parser, arg = '--figures', help = 'Directory to save figures', default = '.')
 args <- parse_args(parser)
@@ -34,7 +34,7 @@ plots$method_silhouettes <- (ggplot(silhouette_scores, aes(x = method, y = silho
   guides(fill = guide_legend(title = 'Algorithm')) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.major.x = element_line(linetype = 'dotted', colour = 'grey'))) %>%
-  labeled_plot(units='cm', height=20, width=10)
+  labeled_plot(units='cm', height=20, width=20)
 
 ### Cosine Similarity ###
 get_cosine_sim <- function(tbl){
@@ -66,7 +66,7 @@ plots$method_cosine_sim <- (ggplot(cosine_sim, aes(x = method, y = abs(cosine_si
   guides(fill = guide_legend(title = 'Algorithm')) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.major.x = element_line(linetype = 'dotted', colour = 'grey'))) %>%
-  labeled_plot(units='cm', height=20, width=10)
+  labeled_plot(units='cm', height=20, width=20)
 
 ### Save plots ###
 save_plotlist(plots, args$figures)
