@@ -56,6 +56,10 @@ FOLDX_COLOURS <- list(type='div', palette='PiYG', direction = 1)
 SS_COLOURS <- list(type='div', palette='BrBG', direction = 1)
 CHEM_ENV_COLOURS <- list(type='div', palette='PRGn', direction = 1)
 
+ER_COSINE_COLOURS <- list(colours = c('#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#000000', 
+                                      '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7'),
+                          limits = c(-1.001, 1.001)) # Uses scale_x_gradientn instead of brewer
+
 ### Biological Data ###
 # Categories of amino acid
 # From Sigma-Aldrich website (https://www.sigmaaldrich.com/life-science/metabolomics/learning-center/amino-acid-reference-chart.html)

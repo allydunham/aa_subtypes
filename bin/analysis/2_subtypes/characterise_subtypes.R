@@ -26,6 +26,7 @@ plots$sizes <- labeled_plot(plot_cluster_sizes(full_characterisation), units='cm
 plots$er_profiles <- labeled_plot(plot_cluster_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$er_correlation <- labeled_plot(plot_cluster_profile_correlation(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
 plots$er_distance <- labeled_plot(plot_cluster_profile_distances(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
+plots$er_cosine <- labeled_plot(plot_cluster_profile_cosine_sim(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
 plots$foldx <- labeled_plot(plot_cluster_foldx_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$chem_env <- labeled_plot(plot_cluster_chem_env_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$ss_probability <- labeled_plot(plot_cluster_ss_profile(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)

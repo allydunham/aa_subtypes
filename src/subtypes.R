@@ -658,6 +658,34 @@ plot_cluster_profile_distances <- function(x, method='manhattan'){
           axis.text.y = element_text(colour = AA_COLOURS[str_sub(sort(unique(distances$cluster2)), end = 1)]))
 }
 
+plot_cluster_profile_cosine_sim <- function(x){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$tbl
+  }
+  
+  profs <- cluster_mean_profiles(x, A:Y) %>%
+    tibble_to_matrix(A:Y, row_names = 'cluster')
+  
+  cosine_sim <- outer(1:nrow(profs), 1:nrow(profs), function(x, y){row_cosine_similarity(profs[x,], profs[y,])}) %>%
+    set_colnames(rownames(profs)) %>%
+    set_rownames(rownames(profs)) %>%
+    as_tibble(rownames = 'cluster1') %>%
+    pivot_longer(-cluster1, names_to = 'cluster2', values_to = 'cosine_sim') %>%
+    filter(!str_ends(cluster1, '0'), !str_ends(cluster2, '0'))
+  
+  ggplot(cosine_sim, aes(x = cluster1, y = cluster2, fill=cosine_sim)) +
+    geom_tile() +
+    scale_fill_gradientn(colours = ER_COSINE_COLOURS$colours, limits = ER_COSINE_COLOURS$limits) +
+    coord_fixed() +
+    guides(fill = guide_colourbar(title = 'Cosine\nSimilarity')) +
+    theme(axis.ticks = element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(cosine_sim$cluster1)), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
+          axis.text.y = element_text(colour = AA_COLOURS[str_sub(sort(unique(cosine_sim$cluster2)), end = 1)]))
+}
+
 plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$foldx, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
