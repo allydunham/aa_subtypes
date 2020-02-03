@@ -26,7 +26,7 @@ def colour_residues(cmd, *args, base_colour=None):
     (chain, position index, hex code) tuple
     """
     if base_colour is not None:
-        cmd.color(base_colour, 'prot')
+        cmd.color(base_colour, 'polymer')
 
     for chn, pos, col in args:
-        cmd.color(col, f'prot and chain {chn} and resi {int(pos)}')
+        cmd.color(col, f'polymer and chain {chn} and resi {int(pos)}')
