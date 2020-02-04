@@ -5,19 +5,39 @@ Utility functions for the subtypes project
 
 from io import StringIO
 
-from numpy import nan, quantile
+import pandas as pd
+import numpy as np
 from Bio.PDB.PDBIO import PDBIO, Select
 from Bio.PDB import PDBParser
 from Bio.Alphabet.IUPAC import IUPACProtein
 from ruamel.yaml import YAML
 
-from colour_spectrum import ColourSpectrum
+from colour_spectrum import ColourSpectrum, ColourPalette
 
-class SubtypesColourSpectrum(ColourSpectrum):
+AMINO_ACID_COLOURS = {
+    'A': '0xFF0000', 'I': '0xFA8072', 'L': '0xB22222', 'M': '0xFF8C00', 'V': '0xFF6347',
+    'F':'0xFFD700', 'W': '0xyellow3', 'Y': '0xDAA520', 'N': '0xB8860B', 'C': '0x6495ED',
+    'Q': '0x00FFFF', 'S': '0x0000FF', 'T': '0x483D8B', 'R': '0x00FF00', 'H': '0x228B22',
+    'K': '0x98FB98', 'D': '0xBA55D3', 'E': '0xFFC0CB', 'G': '0xFAEBD7',
+    'P': '0x000000', 'X': '0x808080'
+}
+
+class SubtypesColourMap:
     """
-    Special colour spectra for deep mutational landscape properties, looking up spectra
+    Colour mappings for deep mutational landscape propertues, looking up colours
     and adjusting scales specifically for this projects factors
     """
+    # Discrete palettes. (name, colourmap, na colour)
+    palettes = {
+        'wt': ('WT AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
+        'mut': ('Mutant AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
+        'cluster_num': ('Subtype', {
+            0: '0xDCDCDC', 1: '0xE41A1C', 2: '0x377EB8', 3: '0x4DAF4A',
+            4: '0x984EA3', 5: '0xFF7F00', 6: '0xFFFF33', 7: '0xA65628',
+            8: '0xF781BF'
+        }, '0x808080', None)
+    }
+
     # (name, scale, midpoint, na_colour) for properties
     # default is ($property, 'bwr', 0, '0xDCDCDC')
     spectra = {
@@ -43,9 +63,34 @@ class SubtypesColourSpectrum(ColourSpectrum):
     # Explicitally clamp some properties with known interpretations (e.g. energy from FoldX)
     clamped_properties = {'total_energy': (-7.5, 7.5)}
 
+    @classmethod
+    def lookup_map(cls, landscape_property, values=None):
+        """
+        Fetch the appropriate map for a given property
+        """
+        if landscape_property in cls.palettes.keys():
+            return SubtypesColourPalette(landscape_property)
+
+        else:
+            return SubtypesColourSpectrum(landscape_property, values)
+
+class SubtypesColourPalette(ColourPalette, SubtypesColourMap):
+    """
+    Special colour palettes for deep mutational landscape properties
+    """
+    def __init__(self, landscape_property):
+        name, colourmap, na_colour, order = self.palettes[landscape_property]
+        super().__init__(colourmap=colourmap, name=name, na_colour=na_colour, order=order)
+
+class SubtypesColourSpectrum(ColourSpectrum, SubtypesColourMap):
+    """
+    Special colour spectra for deep mutational landscape properties, looking up spectra
+    and adjusting scales specifically for this projects factors
+    """
     def __init__(self, landscape_property, values):
         na_outside = True
-        values = values.dropna()
+        values = np.array(values)
+        values = values[~np.isnan(values)]
         minimum = min(values)
         maximum = max(values)
 
@@ -53,8 +98,8 @@ class SubtypesColourSpectrum(ColourSpectrum):
         name, spectrum, midpoint, na_colour = spec
 
         if landscape_property in self.outlier_properties:
-            minimum = quantile(values, 0.01)
-            maximum = quantile(values, 0.99)
+            minimum = np.quantile(values, 0.01)
+            maximum = np.quantile(values, 0.99)
             na_outside = False
 
         elif landscape_property in self.clamped_properties:
@@ -139,7 +184,7 @@ def offset_uniprot_position(position, sections):
         if reg[0] <= position - sec['offset'] <= reg[1]:
             return sec['chain'], position - sec['offset']
 
-    return nan, nan
+    return np.nan, np.nan
 
 def dms_pdb_positions(dms, sections):
     """
@@ -163,3 +208,21 @@ def dms_pdb_positions(dms, sections):
         pdb_positions.append(pos)
 
     return chains, pdb_positions
+
+def quick_load(cluster=None):
+    """
+    Helper function to load sections, dms, etc. for interactive session
+    """
+    yaml = YAML(typ='safe')
+    with open('meta/structures.yaml', 'r') as yaml_file:
+        sections = {k: v['sections'] for k, v in yaml.load(yaml_file).items()}
+
+    dms = pd.read_csv('data/combined_mutational_scans.tsv', sep='\t')
+    dms['pdb_chain'], dms['pdb_position'] = dms_pdb_positions(dms, sections)
+
+    if cluster is not None:
+        cluster = pd.read_csv(cluster, sep='\t')
+        dms = pd.merge(cluster, dms, how='left', on=['study', 'gene', 'position', 'wt'])
+        dms['cluster_num'] = dms['cluster'].slice(1).astype(int)
+
+    return sections, dms

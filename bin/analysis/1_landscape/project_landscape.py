@@ -72,7 +72,7 @@ def make_colourers(dms, properties, save=None, suffix=None):
     Generate a dictionary of colourers and optionally save images of them. If saving save should
     be set to the directory to output to
     """
-    colourers = {l: su.SubtypesColourSpectrum(l, dms[l]) for l in properties}
+    colourers = {l: su.SubtypesColourMap.lookup_map(l, dms[l]) for l in properties}
     if save:
         for name, colour_scale in colourers.items():
             fig, _ = colour_scale.plot()

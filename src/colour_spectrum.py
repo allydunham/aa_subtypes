@@ -1,15 +1,60 @@
 """
-Module containing functions to support creation of simple, continuous colour spectra
+Module containing functions to support creation of simple, colour spectra with continuous
+and discrete options. Currently setup to produce PyMol style hexcodes (0xRRGGBB)
 """
+import re
 import numpy as np
 from  matplotlib import pyplot as plt
 from matplotlib import cm
 
-# TODO classes for types of colours?
-# TODO way to determine output type to use
-# TODO allow fewer values than the number of defined spectrum colours to be passes?
+NA_COLOUR_DEFAULT = '0xDCDCDC'
 
-NA_COLOUR_DEFAULT = '0xC0C0C0'
+RE_HEXCODE = re.compile('[A-Za-z0-9]{6}$')
+
+class ColourPalette:
+    """
+    Simple map between categories and colours, with the same interface as ColourSpectrum.
+    Input colours can
+
+    colourmap: Dictionary of value: colour pairs
+    name:      Pallete name
+    na_colour: Colour to return when not in colourmap
+    """
+    def __init__(self, colourmap, name='', na_colour=NA_COLOUR_DEFAULT, order=None):
+        self.name = name
+        self.na_colour = make_hex(na_colour)
+
+        self.colourmap = {k: make_hex(v) for k, v in colourmap.items()}
+
+        self.order = order or sorted(self.colourmap.keys())
+
+    def __call__(self, value):
+        return self.colourmap.get(value, self.na_colour)
+
+    def plot(self, horizontal=False):
+        """
+        Plot the palette as a free legend
+        """
+        colours = [hex_to_rgb(self.colourmap[i]) for i in self.order]
+        height = [1 for _ in self.order]
+        size = (2, 0.5) if horizontal else (0.5, 2)
+
+        fig, axis = plt.subplots(figsize=size)
+        axis.set_frame_on(False)
+        axis.get_yaxis().set_visible(False)
+        axis.get_xaxis().set_visible(False)
+        axis.tick_params(axis='both', which='both', bottom=False,
+                         top=False, left=False, right=False)
+
+        if horizontal:
+            axis.set_xlabel(self.name)
+            axis.scatter(x=self.order, y=height, c=colours)
+        else:
+            axis.set_ylabel(self.name)
+            axis.get_yaxis().set_label_position("right")
+            axis.scatter(x=height, y=self.order, c=colours)
+
+        return fig, axis
 
 class ColourSpectrum:
     """
@@ -26,7 +71,7 @@ class ColourSpectrum:
                       defer this to the colourmap.
     """
     def __init__(self, minimum, maximum, midpoint=None, colourmap=None, name='',
-                 na_colour='0xC0C0C0', na_outside_range=True):
+                 na_colour=NA_COLOUR_DEFAULT, na_outside_range=True):
         self.maximum = maximum
         self.minimum = minimum
 
@@ -44,9 +89,7 @@ class ColourSpectrum:
         else:
             self.colourmap = cm.get_cmap(colourmap)
 
-        self.na_colour = na_colour
-        if not isinstance(na_colour, str):
-            self.na_colour = rgb_to_hex(self.na_colour)
+        self.na_colour = make_hex(na_colour)
         self.na_outside_range = na_outside_range
 
         self.name = name
@@ -54,7 +97,7 @@ class ColourSpectrum:
     def __call__(self, val):
         if np.isnan(val):
             return self.na_colour
-            
+
         if self.na_outside_range and not self.minimum <= val <= self.maximum:
             return self.na_colour
 
@@ -111,3 +154,29 @@ def rgb_to_hex(rgb):
     Covert RGB tuple to Hex code
     """
     return f'0x{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}'
+
+def hex_to_rgb(hexcode):
+    """
+    Convert Hex code to RGB tuple
+    """
+    return (int(hexcode[-6:-4], 16), int(hexcode[-4:-2], 16), int(hexcode[-2:], 16))
+
+def make_hex(value):
+    """
+    Convert to PyMOl style hexcodes
+    """
+    if isinstance(value, str):
+        if RE_HEXCODE.search(value):
+            value = f'0x{value.upper()[-6:]}'
+        else:
+            raise ValueError(f'Unrecognised string number: {value}. Enter a hexcode or rgb triplet')
+
+    elif isinstance(value, (tuple, list)) and len(value) == 3:
+        if all(0 < x < 1 for x in value):
+            value = [rgb_clamp(x * 255) for x in value]
+        value = rgb_to_hex(value)
+
+    else:
+        raise ValueError(f'Unrecognised number format: {value}. Enter a hexcode or rgb triplet')
+
+    return value
