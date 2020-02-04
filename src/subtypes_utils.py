@@ -223,6 +223,6 @@ def quick_load(cluster=None):
     if cluster is not None:
         cluster = pd.read_csv(cluster, sep='\t')
         dms = pd.merge(cluster, dms, how='left', on=['study', 'gene', 'position', 'wt'])
-        dms['cluster_num'] = dms['cluster'].slice(1).astype(int)
+        dms['cluster_num'] = dms['cluster'].str.slice(1).astype(int)
 
     return sections, dms
