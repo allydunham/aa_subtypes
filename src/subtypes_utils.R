@@ -76,3 +76,27 @@ clamp <- function(x, upper=Inf, lower=-Inf){
   x[x < lower] <- lower
   return(x)
 }
+
+# Offset Uniprot positions to PDB positions
+offset_uniprot_position <- function(position, sections){
+  for (sec in sections){
+    if ('region' %in% names(sec)){
+      reg <- sec$region
+    } else {
+      reg <- c(-Inf, Inf)
+    }
+    pos <- position - sec$offset
+    if (pos > reg[1] & pos < reg[2]){
+      return(list(sec$chain, pos))
+    }
+  }
+  return(list(NA, NA))
+}
+
+# Get PDB positions for all positions in a deep scanning tbl
+dms_pdb_positions <- function(tbl, sections){
+  x <- map2(tbl$position, tbl$gene, ~offset_uniprot_position(.x, sections[[gene_to_filename(.y)]]))
+  chn <- map_chr(x, extract2, 1)
+  pos <- as.integer(map_dbl(x, extract2, 2))
+  return(list(chain=chn, position=pos))
+}
