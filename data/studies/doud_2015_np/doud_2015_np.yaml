@@ -22,6 +22,7 @@ pmid: '26226986'
 url: 'https://academic.oup.com/mbe/article/32/11/2944/982113'
 input_files:
   - "Supp_file_2_mean_aichi1968_prefs.txt"
+source: 'SI - Supplementary data ZIP file'
 qc:
   filter: False
   notes:
