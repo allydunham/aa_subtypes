@@ -15,8 +15,8 @@ amie:
   id: '2uxy'
   sections: [{chain: 'A', offset: 0}]
 aph3ii:
-  type: 'Homology Model'
-  id: '3r87.2.A'
+  type: 'X-ray Crystallography'
+  id: '1nd4'
   sections: [{chain: 'A', offset: 0}]
 brca1:
   type: 'Solution NMR'
