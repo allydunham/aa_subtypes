@@ -66,7 +66,7 @@ rule foldx_repair:
         "data/foldx/{gene}/{gene}_Repair.fxout"
 
     resources:
-        mem_mb = 8000
+        mem_mb = 4000
 
     log:
         "logs/foldx_repair/{gene}.log"
@@ -89,7 +89,7 @@ rule foldx_model:
         "data/foldx/{gene}/processing/PdbList_{n}_{gene}_Repair.fxout"
 
     resources:
-        mem_mb = 16000
+        mem_mb = 4000
 
     log:
         "logs/foldx_model/{gene}_{n}.log"
