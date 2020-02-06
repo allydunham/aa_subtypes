@@ -2,7 +2,25 @@
 Library for visualising data in PyMOL, paticularly projecting arbitary values onto proteins.
 """
 from itertools import cycle
+
 from colour_spectrum import ColourSpectrum
+import subtypes_utils as su
+
+def quick_highlight(cmd, dms, gene, factor='cluster_num', res=None, root='data/pdb'):
+    """
+    Load a new protein and highlight a given factor.
+    """
+    cmd.delete('all')
+    cmd.load(f'{root}/{gene}.pdb')
+
+    if res:
+        pdb_dms = dms[(dms.gene == gene) & (dms.wt == res)]
+    else:
+        pdb_dms = dms[dms.gene == gene]
+
+    colourer = su.SubtypesColourMap.lookup_map(factor, dms[factor])
+    project_landscape(cmd, pdb_dms.pdb_chain, pdb_dms.pdb_position, pdb_dms.cluster_num, colourer)
+    return pdb_dms
 
 def project_landscape(cmd, chain, position, value, colourer=None, na_colour=None):
     """
