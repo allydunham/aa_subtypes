@@ -16,7 +16,7 @@ from colour_spectrum import ColourSpectrum, ColourPalette
 
 AMINO_ACID_COLOURS = {
     'A': '0xFF0000', 'I': '0xFA8072', 'L': '0xB22222', 'M': '0xFF8C00', 'V': '0xFF6347',
-    'F':'0xFFD700', 'W': '0xyellow3', 'Y': '0xDAA520', 'N': '0xB8860B', 'C': '0x6495ED',
+    'F': '0xFFD700', 'W': '0xcdcd00', 'Y': '0xDAA520', 'N': '0xB8860B', 'C': '0x6495ED',
     'Q': '0x00FFFF', 'S': '0x0000FF', 'T': '0x483D8B', 'R': '0x00FF00', 'H': '0x228B22',
     'K': '0x98FB98', 'D': '0xBA55D3', 'E': '0xFFC0CB', 'G': '0xFAEBD7',
     'P': '0x000000', 'X': '0x808080'
@@ -24,7 +24,7 @@ AMINO_ACID_COLOURS = {
 
 class SubtypesColourMap:
     """
-    Colour mappings for deep mutational landscape propertues, looking up colours
+    Colour mappings for deep mutational landscape properties, looking up colours
     and adjusting scales specifically for this projects factors
     """
     # Discrete palettes. (name, colourmap, na colour)
@@ -60,7 +60,7 @@ class SubtypesColourMap:
     # Exclude 1% outliers from scale (give same as max colour)
     outlier_properties = ['PC1'] + list(IUPACProtein.letters)
 
-    # Explicitally clamp some properties with known interpretations (e.g. energy from FoldX)
+    # Explicitly clamp some properties with known interpretations (e.g. energy from FoldX)
     clamped_properties = {'total_energy': (-7.5, 7.5)}
 
     @classmethod
@@ -135,7 +135,7 @@ def import_sections(path_or_str, gene):
 
 class SectionSelecter(Select):
     """
-    Bio.PDBIO Selecter based on section input in the sytle of meta/structures.yaml
+    Bio.PDBIO Selector based on section input in the style of meta/structures.yaml
     """
     def __init__(self, sections, drop_hetero=False):
         self.sections = sections
