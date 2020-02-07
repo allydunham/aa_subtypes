@@ -3,6 +3,16 @@
 # TODO break down into smaller modules
 
 #### Utility ####
+# Reassign cluster numbers by size
+order_cluster_labels <- function(x){
+  counts <- table(x)
+  counts <- counts[names(counts) != '0']
+  hash <- structure(as.character(1:length(counts)), names=names(counts)[order(counts, decreasing = TRUE)])
+  hash['0'] <- '0'
+  
+  unname(hash[as.character(x)])
+}
+
 # Drop unused integer cluster labels
 compress_cluster_labels <- function(x){
   unq <- unique(x)
@@ -83,7 +93,7 @@ make_kmeans_clusters <- function(tbl, cols, k=3, min_size=1, ...){
   
   tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster))
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
   
   return(list(tbl=tbl, kmeans=km))
 }
@@ -198,7 +208,7 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
   
   tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
   
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster))
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
   
   return(list(tbl = tbl, hclust = hc))
 }
@@ -213,7 +223,7 @@ make_dynamic_hclust_clusters <- function(tbl, cols, dist_method = 'euclidean',
   hc <- do.call(hclust, c(list(d=d), hclust_args))
   clus <- do.call(cutreeHybrid, c(list(dendro=hc, distM=as.matrix(d)), treecut_args))
   
-  tbl <- mutate(tbl, cluster = as.character(clus$labels)) %>%
+  tbl <- mutate(tbl, cluster = as.character(clus$labels)) %>% # Already has cluster labels ordered by size
     select(cluster, everything())
   
   return(list(tbl = tbl, hclust = hc))
@@ -252,7 +262,7 @@ make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=1
   dis <- dist(mat, method = dist_method)
   hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
   
-  tbl <- mutate(tbl, cluster = as.character(hdb$cluster)) %>% 
+  tbl <- mutate(tbl, cluster = as.character(hdb$cluster) %>% order_cluster_labels()) %>% 
     select(cluster, everything())
   
   return(list(tbl = tbl, hdbscan = hdb))
@@ -291,7 +301,7 @@ make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minP
   dis <- dist(mat, method = dist_method)
   db <- dbscan(dis, eps=eps, minPts = minPts, ...)
   
-  tbl <- mutate(tbl, cluster = as.character(db$cluster)) %>% 
+  tbl <- mutate(tbl, cluster = as.character(db$cluster) %>% order_cluster_labels()) %>% 
     select(cluster, everything())
   
   return(list(tbl = tbl, dbscan = db))
@@ -317,7 +327,7 @@ make_gmm_clusters <- function(tbl, cols, G=1:5, modelNames = 'VVV', ...){
   mat <- tibble_to_matrix(tbl, !!cols)
   gmm <- Mclust(mat, G, modelNames = modelNames)
   
-  tbl <- mutate(tbl, cluster = as.character(gmm$classification)) %>% 
+  tbl <- mutate(tbl, cluster = as.character(gmm$classification) %>% order_cluster_labels()) %>% 
     select(cluster, everything())
   
   return(list(tbl = tbl, gmm = gmm))
