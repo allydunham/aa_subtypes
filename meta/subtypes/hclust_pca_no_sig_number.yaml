@@ -1,8 +1,0 @@
-desc: "Hierarchical clustering using PCs excluding positional significance"
-method: 'hclust'
-columns: 'PC2:PC20'
-args:
-  k: 5
-  min_size: 5
-  dist_method: 'manhattan'
-
