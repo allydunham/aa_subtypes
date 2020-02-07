@@ -50,13 +50,13 @@ rule project_landscape:
         yaml=ancient('meta/structures.yaml')
 
     output:
-        'figures/1_landscape/pdb/{gene}/{gene}_{property}.png'
+        [f'figures/1_landscape/pdb/{{gene}}/{{gene}}_{property}.png' for property in PDB_LANDSCAPE_FACTORS]
 
     log:
         'logs/project_landscape/{gene}_{property}.log'
 
     shell:
-        'python bin/analysis/1_landscape/project_landscape.py --pdb {input.pdb} --gene {wildcards.gene} --output_dir figures/1_landscape/pdb/{wildcards.gene} --structure_yaml {input.yaml} --data {input.dms} {wildcards.property} &> {log}'
+        f"python bin/analysis/1_landscape/project_landscape.py --pdb {{input.pdb}} --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb/{{wildcards.gene}} --structure_yaml {{input.yaml}} --data {{input.dms}} {' '.join(PDB_LANDSCAPE_FACTORS)} &> {{log}}"
 
 rule project_landscape_colourbar:
     """
