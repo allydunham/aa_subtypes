@@ -4,3 +4,4 @@ columns: 'PC2:PC20'
 args:
   k: 4
   min_size: 5
+  nstart: 10
