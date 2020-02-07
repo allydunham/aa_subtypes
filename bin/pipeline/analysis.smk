@@ -53,7 +53,7 @@ rule project_landscape:
         [f'figures/1_landscape/pdb/{{gene}}/{{gene}}_{property}.png' for property in PDB_LANDSCAPE_FACTORS]
 
     log:
-        'logs/project_landscape/{gene}_{property}.log'
+        'logs/project_landscape/{gene}.log'
 
     shell:
         f"python bin/analysis/1_landscape/project_landscape.py --pdb {{input.pdb}} --gene {{wildcards.gene}} --output_dir figures/1_landscape/pdb/{{wildcards.gene}} --structure_yaml {{input.yaml}} --data {{input.dms}} {' '.join(PDB_LANDSCAPE_FACTORS)} &> {{log}}"
