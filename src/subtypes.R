@@ -191,6 +191,53 @@ evaluate_k_sd <- function(tbl, cols, k, min_size = 1){
 }
 ########
 
+#### PAM ####
+make_pam_clusters <- function(tbl, cols, k=3, min_size=1, distance_method='cosine', ...){
+  cols <- enquo(cols)
+  
+  mat <- tibble_to_matrix(tbl, !!cols)
+  
+  if (distance_method == 'cosine'){
+    combs <- combn(1:nrow(mat), 2)
+    d <- row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])
+  } else {
+    d <- dist(mat, method = distance_method)
+  }
+  
+  pm <- pam(d, k = k, diss=TRUE, ...)
+  
+  tbl <- mutate(tbl, cluster = pm$clustering) %>%
+    select(cluster, everything())
+  
+  small_clusters <- count(tbl, cluster) %>%
+    filter(n < min_size) %>%
+    pull(cluster)
+  
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
+  
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
+  
+  return(list(tbl=tbl, pam=pm))
+}
+
+plot_clustering_pam <- function(clusters){
+  tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
+    bind_rows()
+  
+  medoids <- map(clusters, ~select(.$tbl, cluster, wt, umap1, umap2)[.$pam$medoids,]) %>%
+    bind_rows()
+  
+  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
+    geom_point(shape = 20) +
+    geom_point(data = medoids, aes(x=umap1, y=umap2, fill=cluster), colour='black', shape=23, size=3) +
+    facet_wrap(~wt, nrow = 4) +
+    labs(x='UMAP1', y='UMAP2') +
+    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
+    scale_fill_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
+    guides(colour = guide_legend(title = 'Subtype'))
+}
+########
+
 #### hclust clustering ####
 make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, dist_method = 'euclidean', method = 'average'){
   cols <- enquo(cols)
@@ -494,6 +541,8 @@ plot_clustering <- function(clusters){
     p <- plot_clustering_hdbscan(clusters)
   } else if ('gmm' %in% names(clusters[[1]])){
     p <- plot_clustering_gmm(clusters)
+  } else if ('pam' %in% names(clusters[[1]])){
+    p <- plot_clustering_pam(clusters)
   } else {
     stop('Unrecognised clusters list')
   }
@@ -856,7 +905,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   
   # Subtype secondary structure probability increases vs background
   ss_lims <- filter(data$secondary_structure, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
-  p_ss <- filter(data$secondary_structure, cluster %in% cluster_order) %>%
+  p_ss <- filter(data$secondary_structure, cluster %in% cluster_order, !ss=='i') %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x=cluster, y=ss, fill=rel_prob)) +
     geom_raster() +

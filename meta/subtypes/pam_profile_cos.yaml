@@ -1,0 +1,7 @@
+desc: "Basic PAM clustering"
+method: 'pam'
+columns: 'A:Y'
+args:
+  k: 4
+  min_size: 5
+  distance_method: 'cosine'

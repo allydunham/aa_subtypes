@@ -15,7 +15,7 @@ subtypes <- sapply(args$subtypes, read_tsv, simplify = FALSE) %>%
   bind_rows(.id = 'method') %>%
   mutate(method = file_path_sans_ext(basename(method))) %>%
   tidyr::extract(method, into = c('algorithm', 'columns'), 
-                 regex = "(dbscan|gmm|hclust|hdbscan|kmeans)_(pca_no_sig|pca|profile)[[:alnum:]]*",
+                 regex = "(dbscan|gmm|hclust|hdbscan|kmeans|pam)_(pca_no_sig|pca|profile)[[:alnum:]]*",
                  remove = FALSE)
 
 dms <- read_tsv(args$dms) %>%

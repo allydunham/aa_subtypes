@@ -19,6 +19,7 @@ library(dbscan)
 library(ggdendro)
 library(multipanelfigure)
 library(tools)
+library(cluster)
 
 # Custom packages, available at github.com/allydunham/XXX
 library(tblhelpr)
