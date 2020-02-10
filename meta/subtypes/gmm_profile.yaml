@@ -1,0 +1,6 @@
+desc: "Basic Gaussian Mixture Model, using BIC to select cluster number"
+method: 'gmm'
+columns: 'A:Y'
+args:
+  G: [ 2, 3, 4, 5 ]
+  modelNames: [ 'VII', 'EVI', 'VEV', 'EVV', 'VVV' ] 

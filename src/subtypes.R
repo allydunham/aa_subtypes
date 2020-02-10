@@ -199,7 +199,7 @@ make_pam_clusters <- function(tbl, cols, k=3, min_size=1, distance_method='cosin
   
   if (distance_method == 'cosine'){
     combs <- combn(1:nrow(mat), 2)
-    d <- row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])
+    d <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
   } else {
     d <- dist(mat, method = distance_method)
   }
@@ -239,11 +239,22 @@ plot_clustering_pam <- function(clusters){
 ########
 
 #### hclust clustering ####
-make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, dist_method = 'euclidean', method = 'average'){
+make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, distance_method = 'euclidean', method = 'average'){
   cols <- enquo(cols)
 
   mat <- tibble_to_matrix(tbl, !!cols)
-  hc <- hclust(dist(mat, method = dist_method), method = method)
+  
+  if (distance_method == 'cosine'){
+    combs <- combn(1:nrow(mat), 2)
+    c <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
+    d <- matrix(0, nrow = nrow(mat), ncol = nrow(mat))
+    d[lower.tri(d, diag = FALSE)] <- c
+    d <- as.dist(d)
+  } else {
+    d <- dist(mat, method = distance_method)
+  }
+  
+  hc <- hclust(d, method = method)
   clus <- cutree(hc, h = h, k = k)
   
   tbl <- mutate(tbl, cluster = clus) %>%
@@ -260,13 +271,23 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
   return(list(tbl = tbl, hclust = hc))
 }
 
-make_dynamic_hclust_clusters <- function(tbl, cols, dist_method = 'euclidean',
+make_dynamic_hclust_clusters <- function(tbl, cols, distance_method = 'euclidean',
                                          hclust_args = list(method='average'),
                                          treecut_args = list()){
   cols <- enquo(cols)
   
   mat <- tibble_to_matrix(tbl, !!cols)
-  d <- dist(mat, method = dist_method)
+  
+  if (distance_method == 'cosine'){
+    combs <- combn(1:nrow(mat), 2)
+    c <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
+    d <- matrix(0, nrow = nrow(mat), ncol = nrow(mat))
+    d[lower.tri(d, diag = FALSE)] <- c
+    d <- as.dist(d)
+  } else {
+    d <- dist(mat, method = distance_method)
+  }
+  
   hc <- do.call(hclust, c(list(d=d), hclust_args))
   clus <- do.call(cutreeHybrid, c(list(dendro=hc, distM=as.matrix(d)), treecut_args))
   

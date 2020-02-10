@@ -2,7 +2,7 @@ desc: "Hierarchical clustering using ER profiles with dynamic cuts"
 method: 'hclust_dynamic'
 columns: 'A:Y'
 args:
-  distance_method: 'manhattan'
+  distance_method: 'cosine'
   treecut_args:
     deepSplit: 2
 

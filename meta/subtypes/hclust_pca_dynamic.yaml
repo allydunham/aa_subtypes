@@ -2,5 +2,5 @@ desc: "Hierarchical clustering using PCs with dynamic cuts"
 method: 'hclust_dynamic'
 columns: 'PC1:PC20'
 args:
-  dist_method: 'manhattan'
+  distance_method: 'manhattan'
 
