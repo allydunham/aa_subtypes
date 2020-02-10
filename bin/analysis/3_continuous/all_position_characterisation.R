@@ -26,3 +26,41 @@ p_er_cors <- ggplot(mean_er_cors, aes(x = wt, y = term, fill = cor)) +
         axis.title = element_blank(),
         axis.text.x = element_text(colour = AA_COLOURS[levels(mean_er_cors$wt)]))
 ggsave('figures/3_continuous/mean_er_correlations.pdf', p_er_cors, units = 'cm', width = 25, height = 30)
+
+### Per AA PCA ###
+aa_pcas <- group_by(dms, wt)
+aa_pcas <- group_map(aa_pcas, ~tibble_pca(., A:Y)) %>%
+  set_names(group_keys(aa_pcas)$wt)
+
+## PC Loadings
+aa_pca_rotations <- map(aa_pcas, ~as_tibble(t(.$rotation), rownames = 'pc')) %>%
+  bind_rows(.id = 'wt') %>%
+  pivot_longer(A:Y, names_to = 'mut', values_to = 'rotation') %>%
+  mutate(pc = factor(pc, levels = str_c('PC', 20:1)))
+
+plot_aa_pca_loadings <- function(x, ...){
+  breaks <- pretty_break(x$rotation, rough_n = 5, sym = 0)
+  (ggplot(x, aes(x = mut, y = pc, fill = rotation)) +
+      geom_raster() +
+      scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                           limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
+      coord_fixed() +
+      guides(fill=guide_colourbar(title = 'Rotation')) +
+      theme(axis.ticks = element_blank(),
+            panel.background = element_blank(),
+            panel.grid.major.y = element_blank(),
+            axis.title = element_blank(),
+            axis.text.x = element_text(colour = AA_COLOURS[sort(unique(x$mut))]))) %>%
+    labeled_plot(units = 'cm', width = 10, height = 10)
+}
+
+p_aa_pca <- group_by(aa_pca_rotations, wt)
+p_aa_pca <- group_map(p_aa_pca, plot_aa_pca_loadings) %>%
+  set_names(group_keys(p_aa_pca)$wt)
+save_plotlist(p_aa_pca, root = 'figures/3_continuous/per_aa_pca_loadings')  
+
+## PC levels
+dms_aa_pca <- map(unique(dms$wt), ~bind_cols(filter(dms, wt == .), as_tibble(aa_pcas[[.]]$x) %>% rename_all(~str_c('aa', .)))) %>%
+  bind_rows() %>%
+  arrange(study, position)
+
