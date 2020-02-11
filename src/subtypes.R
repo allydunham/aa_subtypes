@@ -934,7 +934,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   # plus have to add secondary tiebreaker anyway (so e.g. 9 and 10 are sorted as numbers not strings)
   cluster_order <- filter(data$summary, cluster %in% clusters) %>%
     mutate(cluster_num = as.integer(str_sub(cluster, start = 2))) %>%
-    arrange(desc(n), desc(cluster_num)) %>%
+    arrange(desc(n), cluster_num) %>%
     pull(cluster)
   
   # If only outliers exist just plot them, otherwise exclude clusters marked as outliers (X0) and under a given size
