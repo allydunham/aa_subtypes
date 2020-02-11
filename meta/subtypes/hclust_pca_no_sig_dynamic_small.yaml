@@ -1,8 +1,0 @@
-desc: "Hierarchical clustering using PCs excluding positional significance, with dynamic cuts"
-method: 'hclust_dynamic'
-columns: 'PC2:PC7'
-args:
-  distance_method: 'manhattan'
-  treecut_args:
-    deepSplit: 2
-
