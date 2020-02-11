@@ -25,15 +25,26 @@ plots <- list()
 
 ### Silhouette Scores ###
 silhouette_scores <- group_by(dms, method, wt) %>%
-  group_modify(~mutate(., silhouette_score = cluster_silhouette(., A:Y)))
+  group_modify(~mutate(.,
+                       silhouette_score_man = cluster_silhouette(., A:Y, 'manhattan'), 
+                       silhouette_score_cosine = cluster_silhouette(., A:Y, 'cosine')))
 
-plots$method_silhouettes <- (ggplot(silhouette_scores, aes(x = method, y = silhouette_score, fill = algorithm)) +
+plots$method_silhouettes <- (ggplot(silhouette_scores, aes(x = method, y = silhouette_score_man, fill = algorithm)) +
   geom_boxplot() +
   coord_flip() +
-  labs(y = 'Silhouette Score (within AA)', x = 'Clustering Method') +
+  labs(y = 'Silhouette Score (manhattan, within AA)', x = 'Clustering Method') +
   guides(fill = guide_legend(title = 'Algorithm')) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.major.x = element_line(linetype = 'dotted', colour = 'grey'))) %>%
+  labeled_plot(units='cm', height=20, width=20)
+
+plots$method_silhouettes_cosine <- (ggplot(silhouette_scores, aes(x = method, y = silhouette_score_cosine, fill = algorithm)) +
+                                      geom_boxplot() +
+                                      coord_flip() +
+                                      labs(y = 'Silhouette Score (cosine, within AA)', x = 'Clustering Method') +
+                                      guides(fill = guide_legend(title = 'Algorithm')) +
+                                      theme(panel.grid.major.y = element_blank(),
+                                            panel.grid.major.x = element_line(linetype = 'dotted', colour = 'grey'))) %>%
   labeled_plot(units='cm', height=20, width=20)
 
 ### Cosine Similarity ###

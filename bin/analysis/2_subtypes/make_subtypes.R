@@ -28,7 +28,8 @@ make_cluster_func <- function(func){
   return(function(tbl, ...){func(tbl, !!cols, ...)})
 }
 
-cluster_funcs <- list(kmeans=make_kmeans_clusters, hclust=make_hclust_clusters, hclust_dynamic=make_dynamic_hclust_clusters,
+cluster_funcs <- list(kmeans=make_kmeans_clusters, kmeans_multi=make_multi_kmeans_clusters,
+                      hclust=make_hclust_clusters, hclust_dynamic=make_dynamic_hclust_clusters,
                       dbscan=make_dbscan_clusters, hdbscan=make_hdbscan_clusters, gmm=make_gmm_clusters, pam=make_pam_clusters)
 
 if (conf$method %in% names(cluster_funcs)){

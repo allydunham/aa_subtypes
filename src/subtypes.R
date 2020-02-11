@@ -36,9 +36,12 @@ cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
   }
   
   # Calculate distance between all points
-  distance <- tibble_to_matrix(tbl, !!cols) %>%
-    dist(method = distance_method) %>%
-    as.matrix()
+  mat <- tibble_to_matrix(tbl, !!cols)
+  if (distance_method == 'cosine'){
+    distance <- cosine_distance_matrix(mat)
+  } else {
+    distance <- as.matrix(dist(mat, method = distance_method))
+  }
   diag(distance) <- NA
   
   # Calculate mean distance each point and all clusters
@@ -72,7 +75,17 @@ cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
 }
 
 row_cosine_similarity <- function(x, y){
-  rowSums(x*y) / (sqrt(rowSums(x^2)) * sqrt(rowSums(y^2)))
+  rowSums(x*y) / (sqrt(rowSums(x^2) * rowSums(y^2)))
+}
+
+cosine_similarity_matrix <- function(mat){
+  combs <- expand.grid(1:nrow(mat), 1:nrow(mat))
+  cosine <- row_cosine_similarity(mat[combs$Var1,], mat[combs$Var2,])
+  return(matrix(cosine, nrow = nrow(mat), ncol = nrow(mat)))
+}
+
+cosine_distance_matrix <- function(mat){
+  acos(cosine_similarity_matrix(mat)) / pi
 }
 ########
 
@@ -96,6 +109,53 @@ make_kmeans_clusters <- function(tbl, cols, k=3, min_size=1, ...){
   tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
   
   return(list(tbl=tbl, kmeans=km))
+}
+
+make_multi_kmeans_clusters  <- function(tbl, cols, k=3, min_size=1, min_k=2, reps=100){
+  cols <- enquo(cols)
+  
+  mat <- tibble_to_matrix(tbl, !!cols)
+  
+  km_reps <- replicate(reps, get_kmeans_rep(mat, k, min_size, min_k), simplify = FALSE)
+  mean_abs_cosim <- map_dbl(km_reps, ~mean(.$cosim))
+  
+  km <- km_reps[[which.min(mean_abs_cosim)]]$km
+  
+  tbl <- mutate(tbl, cluster = km$cluster) %>%
+    select(cluster, everything())
+  
+  small_clusters <- count(tbl, cluster) %>%
+    filter(n < min_size) %>%
+    pull(cluster)
+  
+  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
+  
+  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
+  
+  return(list(tbl=tbl, kmeans=km))
+}
+
+get_kmeans_rep <- function(mat, k, min_size=1, min_k=2){
+  km <- kmeans(mat, centers = k)
+  
+  sizes <- table(km$cluster)
+  large_clusters <- as.integer(names(sizes[sizes > min_size]))
+  
+  if (length(large_clusters) < min_k){
+    return(list(km=km, cosim=Inf))
+  }
+  
+  com <- combn(large_clusters, 2)
+  
+  if (length(large_clusters) == 2){
+    x <- km$centers[com[1,],]
+    y <- km$centers[com[2,],]
+    cosim <- abs(sum(x*y) / (sqrt(sum(x^2) * sum(y^2))))
+  } else {
+    cosim <- abs(row_cosine_similarity(km$centers[com[1,],], km$centers[com[2,],]))
+  }
+  
+  return(list(km=km, cosim=cosim))
 }
 
 # Expects named list of outputs from make_kmeans_clusters
@@ -245,11 +305,7 @@ make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, di
   mat <- tibble_to_matrix(tbl, !!cols)
   
   if (distance_method == 'cosine'){
-    combs <- combn(1:nrow(mat), 2)
-    c <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
-    d <- matrix(0, nrow = nrow(mat), ncol = nrow(mat))
-    d[lower.tri(d, diag = FALSE)] <- c
-    d <- as.dist(d)
+    d <- as.dist(cosine_distance_matrix(mat))
   } else {
     d <- dist(mat, method = distance_method)
   }
@@ -279,11 +335,7 @@ make_dynamic_hclust_clusters <- function(tbl, cols, distance_method = 'euclidean
   mat <- tibble_to_matrix(tbl, !!cols)
   
   if (distance_method == 'cosine'){
-    combs <- combn(1:nrow(mat), 2)
-    c <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
-    d <- matrix(0, nrow = nrow(mat), ncol = nrow(mat))
-    d[lower.tri(d, diag = FALSE)] <- c
-    d <- as.dist(d)
+    d <- as.dist(cosine_distance_matrix(mat))
   } else {
     d <- dist(mat, method = distance_method)
   }
@@ -542,9 +594,10 @@ plot_cluster_diagnostics <- function(clusters, cols){
   plots$clustering <- labeled_plot(plot_clustering(clusters), units='cm', height = 40, width = 50)
   plots$umap <- labeled_plot(plot_cluster_umap(tbl), units = 'cm', height = 20, width = 20)
   plots$tsne <- labeled_plot(plot_cluster_tsne(tbl), units = 'cm', height = 20, width = 20)
-  plots$global_silhouette <- labeled_plot(plot_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  plots$per_aa_silhouette <- labeled_plot(plot_per_aa_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  plots$clustering_silhouette <- labeled_plot(plot_per_aa_silhouette(tbl, !!cols), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+  plots$silhouette_global <- labeled_plot(plot_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+  plots$silhouette_per_aa <- labeled_plot(plot_per_aa_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+  plots$silhouette_per_aa_cosine <- labeled_plot(plot_per_aa_silhouette(tbl, A:Y, 'cosine'), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+  plots$silhouette_clustering_vars <- labeled_plot(plot_per_aa_silhouette(tbl, !!cols), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
   return(plots)
 }
 
@@ -570,11 +623,11 @@ plot_clustering <- function(clusters){
 }
 
 # Silhouette plots work directly on a tibble, with a clusters ID column and cols defining spatial positions
-plot_silhouette <- function(tbl, cols){
+plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
   cols <- enquo(cols)
   
   tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
-    mutate(silhouette_score = cluster_silhouette(., !!cols)) %>%
+    mutate(silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method)) %>%
     select(cluster, study, position, wt, silhouette_score)
   
   ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
@@ -587,12 +640,12 @@ plot_silhouette <- function(tbl, cols){
           axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
 }
 
-plot_per_aa_silhouette <- function(tbl, cols){
+plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
   cols <- enquo(cols)
   
   tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
     group_by(wt) %>%
-    group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols))) %>%
+    group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method))) %>%
     select(cluster, study, position, wt, silhouette_score) %>%
     ungroup()
   
@@ -877,8 +930,11 @@ plot_cluster_ss_density <- function(x){
 
 # Generates a single combined plot for a set of clusters
 plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, global_scale=TRUE, outlier_size=10){
+  # Clusters should all be sorted already in this workflow (1 largest etc.) but double check here as cheap to do,
+  # plus have to add secondary tiebreaker anyway (so e.g. 9 and 10 are sorted as numbers not strings)
   cluster_order <- filter(data$summary, cluster %in% clusters) %>%
-    arrange(desc(n)) %>%
+    mutate(cluster_num = as.integer(str_sub(cluster, start = 2))) %>%
+    arrange(desc(n), desc(cluster_num)) %>%
     pull(cluster)
   
   # If only outliers exist just plot them, otherwise exclude clusters marked as outliers (X0) and under a given size
@@ -1013,7 +1069,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   text_theme <- theme(text = element_text(size = 9))
   legend_theme <- theme(legend.key.height = unit(0.5, 'cm'), legend.key.width = unit(0.5, 'cm'))
   
-  p_overall <- multi_panel_figure(width = 21, height = 21, columns = 7, rows = 4, unit = 'cm', 
+  p_overall <- multi_panel_figure(width = 23, height = 23, columns = 7, rows = 4, unit = 'cm', 
                                   row_spacing = 0.3, column_spacing = 0.3, panel_label_type = 'upper-alpha') %>%
     fill_panel(p_sizes + text_theme, row = 1, column = c(1, 2)) %>%
     fill_panel(p_ss + text_theme + legend_theme, row = 2, column = c(1, 2, 3)) %>%
