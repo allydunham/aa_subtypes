@@ -1,18 +1,16 @@
-# Subtype Descriptions for Kmeans PC2:20
+# Cysteine Subtype Overview
 
-Analysis of the subtypes produced by Kmeans clustering on PC2:20, identifying and
+Notes on cysteine subtypes based on a particularly nice Kmeans clustering on PC2:20, identifying and
 explaining the characteristics of each.
 
-## A - Alanine
-
-## C - Cysteine
-
-Summary:
+## Summary
 
 * C1 - Hydrophobic
 * C2 - Permissive positions
 * C3 - Disulphide bonding
 * C4 - Aromatic (and Hydrophobic)
+
+## Details
 
 There appear to be three physical factors involved - disulphide bonding, hydrophobicity
 and potentially aromatic-sulphur interactions.
@@ -31,39 +29,3 @@ residue (can also be seen in the surface accessibility/chemical environment).
 * TPMT 133 - Residue is on the exterior but the side chain faces inwards into a hydrophobic pocket
 * UBE2I 43/75 - Near each other in 3D space, both side chains face into the protein and there are hydrophobic and aromatic residues nearby, although not directly conjugating like in some examples.
 * APH3II - 3 residues, FoldX not run on correct structure yet
-
-## D - Aspartate
-
-## E - Glutamate
-
-## F - Phenylalanine
-
-## G - Glycine
-
-## H - Histidine
-
-## I - Isoleucine
-
-## K - Lysine
-
-## L - Leucine
-
-## M - Methionine
-
-## N - Asparagine
-
-## P - Proline
-
-## Q - Glutamine
-
-## R - Arginine
-
-## S - Serine
-
-## T - Threonine
-
-## V - Valine
-
-## W - Tryptophan
-
-## Y - Tyrosine
