@@ -79,7 +79,7 @@ rule project_landscape_colourbar:
 
 #### Clustering ####
 diagnostic_plots = ['clustering.pdf', 'umap.pdf', 'tsne.pdf',
-                    'silhouette_global.pdf', 'silhouette_clustering_vars.pdf'
+                    'silhouette_global.pdf', 'silhouette_clustering_vars.pdf',
                     'silhouette_per_aa.pdf', 'silhouette_per_aa_cosine.pdf']
 rule make_subtypes:
     """
