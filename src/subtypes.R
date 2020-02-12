@@ -372,6 +372,92 @@ plot_clustering_hclust <- function(clusters){
     guides(colour = guide_legend(title = 'Subtype')) +
     scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
 }
+
+# Add cluster labels to dendrogram d, based on position in c
+add_clusters_to_dend <- function(d, c){
+  dendrapply(d, function(x){attr(x, 'cluster') <- c[attr(x, 'label')]; x})
+}
+
+# Function to combine all nodes of the same cluster in a dendrogram
+compress_dend <- function(d){
+  # If we've recursed down to an individual leaf
+  if (!is.null(attr(d, 'leaf'))){
+    attr(d, 'label') <- str_c(attr(d, 'cluster'), ' (1)')
+    return(d)
+  }
+  
+  c <- squash(dendrapply(d, function(x){attr(x, 'cluster')}))
+  
+  # If all of the same cluster return a leaf
+  if (all(map_lgl(c, ~. == c[[1]]))){
+    leaf <- list()
+    attributes(leaf) <- list(members=1, height=0, leaf=TRUE,
+                             label=str_c(c[[1]], ' (', attr(d, 'members'), ')'),
+                             cluster=c[[1]])
+    return(leaf)
+  } else {
+    d[[1]] <- compress_dend(d[[1]])
+    d[[2]] <- compress_dend(d[[2]])
+    attr(d, 'members') <- attr(d[[1]], 'members') + attr(d[[2]], 'members')
+    
+    # Both leaves
+    if (!is.null(attr(d[[1]], 'leaf')) & !is.null(attr(d[[2]], 'leaf'))){
+      attr(d, 'midpoint') <- 0.5
+      
+      # Left leaf only
+    } else if (!is.null(attr(d[[1]], 'leaf'))) {
+      attr(d, 'midpoint') <- (1 + attr(d[[2]], 'midpoint'))/2
+      
+      # Right leaf only
+    } else if (!is.null(attr(d[[2]], 'leaf'))) {
+      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'midpoint') + 1)/2
+      
+      # Both branches
+    } else {
+      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'members') + attr(d[[2]], 'midpoint') + 1 - attr(d[[1]], 'midpoint'))/2
+    }
+    
+    return(d)
+  }
+}
+
+# Generic plot of a dendrogram from dendro_data type data (branches - tibble of branch data, leaves - tibble of leaf data with cluster assignment)
+plot_dend <- function(branches, leaves){
+  (ggplot() +
+     geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+     geom_text(data = leaves, aes(x=x, y=y, label=label, colour=cluster), angle=90, hjust=1.2) +
+     geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape=19) +
+     scale_y_continuous(expand = expand_scale(mult = 0.15)) +
+     theme(axis.line = element_blank(),
+           axis.ticks = element_blank(),
+           axis.text = element_blank(),
+           axis.title = element_blank(),
+           panel.grid.major.y = element_blank()) +
+     guides(colour = guide_legend(title = 'Subtype', override.aes = list(label='', shape=15, size=3))) +
+     scale_colour_brewer(type = 'qual', palette = 'Dark2', na.value = 'grey', direction = -1)) %>%
+    labeled_plot(units='cm', height = 20, width = 20)
+}
+
+# Plot version of dendrograms with leaves combined together where a node is a single cluster
+plot_compressed_dendrograms <- function(clusters, dms){
+  dends <- map(names(clusters), ~add_clusters_to_dend(as.dendrogram(clusters[[.]]$hclust), filter(dms, wt == .) %>% pull(cluster))) %>%
+    set_names(names(clusters))
+  
+  compressed_dends <- sapply(dends, compress_dend, simplify = FALSE)
+  compressed_dend_data <- map(compressed_dends, dendro_data)
+  
+  branches <- map(compressed_dend_data,
+                  ~as_tibble(.$segments) %>% 
+                    mutate(yend = pmax(yend - 0.9 * min(y), 0),
+                           y = pmax(y - 0.9 * min(y), 0)))
+  
+  leaves <- map(compressed_dend_data,
+                ~as_tibble(.$labels) %>% 
+                  mutate(label=as.character(label)) %>%
+                  tidyr::extract(label, 'cluster', "([A-Z][0-9]*) \\([0-9]*\\)", remove = FALSE))
+  
+  map2(branches, leaves, plot_dend)
+}
 ########
 
 #### hdbscan clustering ####

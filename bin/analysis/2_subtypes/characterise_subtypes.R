@@ -6,12 +6,14 @@ library(argparser)
 
 ### Parse args and setup ###
 parser <- arg_parser(description = 'Characterise AA subtypes', name = 'AA Subtype Characerisation')
-parser <- add_argument(parser, arg = 'subtypes', help = 'TSV file assigning positions to clusters')
+parser <- add_argument(parser, arg = 'subtypes', help = 'Root filename assigning positions to subtypes. Should have a tsv (subtype per position) and rds (list of cluster objects) file.')
 parser <- add_argument(parser, arg = '--dms', help = 'Path to DMS data', default = 'data/combined_mutational_scans.tsv')
 parser <- add_argument(parser, arg = '--figures', help = 'Directory to save figures', default = '.')
 args <- parse_args(parser)
 
-subtypes <- read_tsv(args$subtypes)
+subtypes <- read_tsv(str_c(args$subtypes, '.tsv'))
+clusters <- readRDS(str_c(args$subtypes, '.rds'))
+
 dms <- read_tsv(args$dms) %>%
   left_join(subtypes, ., by = c('study', 'gene', 'position', 'wt'))
 plots <- list()
@@ -65,6 +67,11 @@ plots$er_vs_size <- (filter(full_characterisation$summary, !str_ends(cluster, '0
 plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
   group_map(~labeled_plot(plot_cluster_ss_density(.), units = 'cm', height = 20, width = 20), keep = TRUE) %>%
   set_names(sort(unique(full_characterisation$tbl$wt)))
+
+### Plot compressed dendrograms for hclust ###
+if ('hclust' %in% clusters$A){
+  plots$minimal_dends <- plot_compressed_dendrograms(clusters, dms)
+}
 
 ### Save Plots ###
 save_plotlist(plots, args$figures, verbose = 2)
