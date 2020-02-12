@@ -48,7 +48,8 @@ dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
 write_tsv(select(dms, cluster, study, gene, position, wt), str_c(args$out, '.tsv'))
-save(clusters, file = str_c(args$out, '.rds'))
+saveRDS(clusters, file = str_c(args$out, '.rds'))
+
 
 ### Save diagnostic plots ###
 if (!is.na(args$figures)){
