@@ -9,13 +9,13 @@ parser <- arg_parser(description = 'Make and analyse AA subtypes', name = 'AA Su
 parser <- add_argument(parser, arg = 'yaml', help = 'YAML file parameterising clustering')
 parser <- add_argument(parser, arg = '--figures', help = 'Directory to save figures', default = NA)
 parser <- add_argument(parser, arg = '--dms', help = 'DMS data path', default = 'data/combined_mutational_scans.tsv')
-parser <- add_argument(parser, arg = '--out', help = 'Patht to output classifications', default = NA)
+parser <- add_argument(parser, arg = '--out', help = 'Root path to output classifications', default = NA)
 args <- parse_args(parser)
 
 conf <- read_yaml(args$yaml)
 
 if (is.na(args$out)){
-  args$out <- str_c(str_split(basename(args$yaml), '\\.', simplify = TRUE)[1], '.tsv')
+  args$out <- str_split(basename(args$yaml), '\\.', simplify = TRUE)[1]
 }
 
 cols <- eval(parse(text = str_c('quo(', conf$columns,')')))
@@ -47,7 +47,8 @@ clusters <- group_by(dms, wt) %>%
 dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
-write_tsv(select(dms, cluster, study, gene, position, wt), args$out)
+write_tsv(select(dms, cluster, study, gene, position, wt), str_c(args$out, '.tsv'))
+save(clusters, file = str_c(args$out, '.rds'))
 
 ### Save diagnostic plots ###
 if (!is.na(args$figures)){

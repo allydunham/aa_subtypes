@@ -91,6 +91,7 @@ rule make_subtypes:
 
     output:
         'data/subtypes/{name}.tsv',
+        'data/subtypes/{name}.rds',
         [f'figures/2_subtypes/{{name}}/{x}' for x in diagnostic_plots]
 
     log:
@@ -99,7 +100,7 @@ rule make_subtypes:
     shell:
         """
         mkdir figures/2_subtypes/{wildcards.name} &> {log} || true
-        Rscript bin/analysis/2_subtypes/make_subtypes.R --figures figures/2_subtypes/{wildcards.name} {input.yaml} --out 'data/subtypes/{wildcards.name}.tsv' &> {log}
+        Rscript bin/analysis/2_subtypes/make_subtypes.R --figures figures/2_subtypes/{wildcards.name} {input.yaml} --out 'data/subtypes/{wildcards.name}' &> {log}
         """
 
 characterisation_plots = ['ramachandran_angles.pdf', 'sizes.pdf', 'er_profiles.pdf',
