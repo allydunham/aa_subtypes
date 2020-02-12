@@ -1,0 +1,8 @@
+desc: "Hierarchical clustering using ER profiles with dynamic cuts"
+method: 'hclust_dynamic'
+columns: 'PC2:PC20'
+args:
+  distance_method: 'cosine'
+  treecut_args:
+    deepSplit: 0
+
