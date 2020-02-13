@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Determine optimal k for k-means clustering
 source('src/config.R')
-source('src/subtypes.R')
+source('src/subtype_characterisation.R')
 
 dms <- read_tsv('data/combined_mutational_scans.tsv')
 

@@ -100,3 +100,69 @@ dms_pdb_positions <- function(tbl, sections){
   pos <- as.integer(map_dbl(x, extract2, 2))
   return(list(chain=chn, position=pos))
 }
+
+# Calculate silhouette data for a clustering
+# expects a tibble with columns cluster and cols, with cols giving the position
+cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
+  cols <- enquo(cols)
+  
+  if (n_distinct(tbl$cluster) == 1){
+    warning('Silhouette undefined for a single cluster, returning NA')
+    return(rep(NA, nrow(tbl)))
+  }
+  
+  # Calculate distance between all points
+  mat <- tibble_to_matrix(tbl, !!cols)
+  if (distance_method == 'cosine'){
+    distance <- cosine_distance_matrix(mat)
+  } else {
+    distance <- as.matrix(dist(mat, method = distance_method))
+  }
+  diag(distance) <- NA
+  
+  # Calculate mean distance each point and all clusters
+  get_silhouette_distance <- function(x){
+    ind <- tbl$cluster == x
+    if (sum(ind) == 1){
+      return(distance[,ind])
+    } else {
+      return(rowMeans(distance[,tbl$cluster == x], na.rm = TRUE))
+    }
+  }
+  mean_dists <- sapply(unique(tbl$cluster), get_silhouette_distance)
+  
+  # Calculate mean dist within cluster
+  same_cluster <- cbind(1:nrow(mean_dists), match(tbl$cluster, colnames(mean_dists)))
+  a <- mean_dists[same_cluster]
+  
+  # Calculate mean dist to other clusters
+  mean_dists[same_cluster] <- NA
+  b <- apply(mean_dists, 1, min, na.rm=TRUE)
+  
+  # Calculate silhouette score
+  s <- (b - a)/(pmax(a, b))
+  
+  singlton_clusters <- table(tbl$cluster)
+  singlton_clusters <- names(singlton_clusters)[singlton_clusters == 1]
+  
+  s[tbl$cluster %in% singlton_clusters] <- 0
+  
+  return(s)
+}
+
+row_cosine_similarity <- function(x, y){
+  rowSums(x*y) / (sqrt(rowSums(x^2) * rowSums(y^2)))
+}
+
+cosine_similarity_matrix <- function(mat){
+  combs <- expand.grid(1:nrow(mat), 1:nrow(mat))
+  cosine <- row_cosine_similarity(mat[combs$Var1,], mat[combs$Var2,])
+  m <- matrix(cosine, nrow = nrow(mat), ncol = nrow(mat))
+  rownames(m) <- rownames(mat)
+  colnames(m) <- rownames(mat)
+  return(m)
+}
+
+cosine_distance_matrix <- function(mat){
+  acos(cosine_similarity_matrix(mat)) / pi
+}

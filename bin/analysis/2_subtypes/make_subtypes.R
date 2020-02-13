@@ -1,7 +1,7 @@
 #!/ussr/bin/env Rscript
 # Perform a clustering of AA subtypes, based on a YAML config
 source('src/config.R')
-source('src/subtypes.R')
+source('src/subtype_clustering.R')
 library(argparser)
 
 ### Parse args and setup ###

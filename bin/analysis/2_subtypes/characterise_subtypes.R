@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Characterise generated clusters
 source('src/config.R')
-source('src/subtypes.R')
+source('src/subtype_characterisation.R')
 library(argparser)
 
 ### Parse args and setup ###
@@ -69,9 +69,18 @@ plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
   set_names(sort(unique(full_characterisation$tbl$wt)))
 
 ### Plot compressed dendrograms for hclust ###
-if ('hclust' %in% clusters$A){
+if ('hclust' %in% names(clusters[[1]])){
   plots$minimal_dends <- plot_compressed_dendrograms(clusters, dms)
 }
+
+### Plot profile dendograms ###
+profiles <- cluster_mean_profiles(dms) 
+plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
+
+grouped_profiles <- mutate(profiles, aa = str_sub(cluster, end = 1)) %>%
+  group_by(aa)
+plots$aa_dends <- group_map(grouped_profiles, ~plot_profile_dendogram(., A:Y, distance_method = 'cosine')) %>% 
+  set_names(group_keys(grouped_profiles)$aa)
 
 ### Save Plots ###
 save_plotlist(plots, args$figures, verbose = 2)

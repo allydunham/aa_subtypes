@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Compare properties between various different clustering schemes
 source('src/config.R')
-source('src/subtypes.R')
+source('src/subtype_characterisation.R')
 library(argparser)
 
 ### Parse args and setup ###

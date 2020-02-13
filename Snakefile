@@ -46,7 +46,8 @@ include: 'bin/pipeline/standardisation.smk'
 include: 'bin/pipeline/sequence_statistics.smk'
 include: 'bin/pipeline/foldx.smk'
 include: 'bin/pipeline/structure_statistics.smk'
-include: 'bin/pipeline/analysis.smk'
+include: 'bin/pipeline/landscape.smk'
+include: 'bin/pipeline/subtypes.smk'
 
 #### Global rules ####
 rule all:
@@ -72,7 +73,7 @@ rule all:
         rules.compare_subtypes.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
-        rules.all_position_characterisation.output
+        rules.continuous_characterisation.output
 
 # Only remove rapidly generated results
 def quick_clean_files():

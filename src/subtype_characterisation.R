@@ -1,176 +1,8 @@
 #!/usr/bin/env Rscript
-# Functions for AA subtypes clustering
-# TODO break down into smaller modules
+# Functions for AA subtypes characterisation
+source('src/subtype_clustering.R')
 
-#### Utility ####
-# Reassign cluster numbers by size
-order_cluster_labels <- function(x){
-  counts <- table(x)
-  counts <- counts[names(counts) != '0']
-  hash <- structure(as.character(1:length(counts)), names=names(counts)[order(counts, decreasing = TRUE)])
-  hash['0'] <- '0'
-  
-  unname(hash[as.character(x)])
-}
-
-# Drop unused integer cluster labels
-compress_cluster_labels <- function(x){
-  unq <- unique(x)
-  if (0 %in% unq){
-    hash <- structure(as.character(0:(length(unq)-1)), names=as.character(sort(unq)))
-  } else {
-    hash <- structure(as.character(1:length(unq)), names=as.character(sort(unq)))
-  }
-  
-  unname(hash[as.character(x)])
-}
-
-# Calculate silhouette data for a clustering
-# expects a tibble with columns cluster and cols, with cols giving the position
-cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
-  cols <- enquo(cols)
-  
-  if (n_distinct(tbl$cluster) == 1){
-    warning('Silhouette undefined for a single cluster, returning NA')
-    return(rep(NA, nrow(tbl)))
-  }
-  
-  # Calculate distance between all points
-  mat <- tibble_to_matrix(tbl, !!cols)
-  if (distance_method == 'cosine'){
-    distance <- cosine_distance_matrix(mat)
-  } else {
-    distance <- as.matrix(dist(mat, method = distance_method))
-  }
-  diag(distance) <- NA
-  
-  # Calculate mean distance each point and all clusters
-  get_silhouette_distance <- function(x){
-    ind <- tbl$cluster == x
-    if (sum(ind) == 1){
-      return(distance[,ind])
-    } else {
-      return(rowMeans(distance[,tbl$cluster == x], na.rm = TRUE))
-    }
-  }
-  mean_dists <- sapply(unique(tbl$cluster), get_silhouette_distance)
-  
-  # Calculate mean dist within cluster
-  same_cluster <- cbind(1:nrow(mean_dists), match(tbl$cluster, colnames(mean_dists)))
-  a <- mean_dists[same_cluster]
-  
-  # Calculate mean dist to other clusters
-  mean_dists[same_cluster] <- NA
-  b <- apply(mean_dists, 1, min, na.rm=TRUE)
-  
-  # Calculate silhouette score
-  s <- (b - a)/(pmax(a, b))
-  
-  singlton_clusters <- table(tbl$cluster)
-  singlton_clusters <- names(singlton_clusters)[singlton_clusters == 1]
-  
-  s[tbl$cluster %in% singlton_clusters] <- 0
-  
-  return(s)
-}
-
-row_cosine_similarity <- function(x, y){
-  rowSums(x*y) / (sqrt(rowSums(x^2) * rowSums(y^2)))
-}
-
-cosine_similarity_matrix <- function(mat){
-  combs <- expand.grid(1:nrow(mat), 1:nrow(mat))
-  cosine <- row_cosine_similarity(mat[combs$Var1,], mat[combs$Var2,])
-  return(matrix(cosine, nrow = nrow(mat), ncol = nrow(mat)))
-}
-
-cosine_distance_matrix <- function(mat){
-  acos(cosine_similarity_matrix(mat)) / pi
-}
-########
-
-#### k-means ####
-make_kmeans_clusters <- function(tbl, cols, k=3, min_size=1, ...){
-  cols <- enquo(cols)
-
-  mat <- tibble_to_matrix(tbl, !!cols)
-  
-  km <- kmeans(mat, centers = k, ...)
-  
-  tbl <- mutate(tbl, cluster = km$cluster) %>%
-    select(cluster, everything())
-  
-  small_clusters <- count(tbl, cluster) %>%
-    filter(n < min_size) %>%
-    pull(cluster)
-  
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
-  
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
-  
-  return(list(tbl=tbl, kmeans=km))
-}
-
-make_multi_kmeans_clusters  <- function(tbl, cols, k=3, min_size=1, min_k=2, reps=100){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  
-  km_reps <- replicate(reps, get_kmeans_rep(mat, k, min_size, min_k), simplify = FALSE)
-  mean_abs_cosim <- map_dbl(km_reps, ~mean(.$cosim))
-  
-  km <- km_reps[[which.min(mean_abs_cosim)]]$km
-  
-  tbl <- mutate(tbl, cluster = km$cluster) %>%
-    select(cluster, everything())
-  
-  small_clusters <- count(tbl, cluster) %>%
-    filter(n < min_size) %>%
-    pull(cluster)
-  
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
-  
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
-  
-  return(list(tbl=tbl, kmeans=km))
-}
-
-get_kmeans_rep <- function(mat, k, min_size=1, min_k=2){
-  km <- kmeans(mat, centers = k)
-  
-  sizes <- table(km$cluster)
-  large_clusters <- as.integer(names(sizes[sizes > min_size]))
-  
-  if (length(large_clusters) < min_k){
-    return(list(km=km, cosim=Inf))
-  }
-  
-  com <- combn(large_clusters, 2)
-  
-  if (length(large_clusters) == 2){
-    x <- km$centers[com[1,],]
-    y <- km$centers[com[2,],]
-    cosim <- abs(sum(x*y) / (sqrt(sum(x^2) * sum(y^2))))
-  } else {
-    cosim <- abs(row_cosine_similarity(km$centers[com[1,],], km$centers[com[2,],]))
-  }
-  
-  return(list(km=km, cosim=cosim))
-}
-
-# Expects named list of outputs from make_kmeans_clusters
-plot_clustering_kmeans <- function(clusters){
-  tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
-    bind_rows()
-  
-  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
-    geom_point(shape = 20) +
-    facet_wrap(~wt, nrow = 4) +
-    labs(x='UMAP1', y='UMAP2') +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
-    guides(colour = guide_legend(title = 'Subtype'))
-}
-
+#### Kmeans ####
 evaluate_k_silhouette <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
   cols <- enquo(cols)
   dist_cols <- enquo(dist_cols)
@@ -194,7 +26,7 @@ evaluate_k_silhouette <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
     group_by(wt) %>%
     group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!dist_cols))) %>%
     summarise(silhouette_score = mean(silhouette_score, na.rm=TRUE))
-    
+  
   return(avg_sil)
 }
 
@@ -248,315 +80,6 @@ evaluate_k_sd <- function(tbl, cols, k, min_size = 1){
     summarise(sd = mean(sd))
   
   return(cluster_sd)
-}
-########
-
-#### PAM ####
-make_pam_clusters <- function(tbl, cols, k=3, min_size=1, distance_method='cosine', ...){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  
-  if (distance_method == 'cosine'){
-    combs <- combn(1:nrow(mat), 2)
-    d <- acos(row_cosine_similarity(mat[combs[1,],], mat[combs[2,],])) / pi
-  } else {
-    d <- dist(mat, method = distance_method)
-  }
-  
-  pm <- pam(d, k = k, diss=TRUE, ...)
-  
-  tbl <- mutate(tbl, cluster = pm$clustering) %>%
-    select(cluster, everything())
-  
-  small_clusters <- count(tbl, cluster) %>%
-    filter(n < min_size) %>%
-    pull(cluster)
-  
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
-  
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
-  
-  return(list(tbl=tbl, pam=pm))
-}
-
-plot_clustering_pam <- function(clusters){
-  tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
-    bind_rows()
-  
-  medoids <- map(clusters, ~select(.$tbl, cluster, wt, umap1, umap2)[.$pam$medoids,]) %>%
-    bind_rows()
-  
-  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
-    geom_point(shape = 20) +
-    geom_point(data = medoids, aes(x=umap1, y=umap2, fill=cluster), colour='black', shape=23, size=3) +
-    facet_wrap(~wt, nrow = 4) +
-    labs(x='UMAP1', y='UMAP2') +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
-    scale_fill_brewer(type = 'qual', palette = 'Set3', na.value = 'grey') +
-    guides(colour = guide_legend(title = 'Subtype'))
-}
-########
-
-#### hclust clustering ####
-make_hclust_clusters <- function(tbl, cols, h = NULL, k = NULL, min_size = 1, distance_method = 'euclidean', method = 'average'){
-  cols <- enquo(cols)
-
-  mat <- tibble_to_matrix(tbl, !!cols)
-  
-  if (distance_method == 'cosine'){
-    d <- as.dist(cosine_distance_matrix(mat))
-  } else {
-    d <- dist(mat, method = distance_method)
-  }
-  
-  hc <- hclust(d, method = method)
-  clus <- cutree(hc, h = h, k = k)
-  
-  tbl <- mutate(tbl, cluster = clus) %>%
-    select(cluster, everything())
-  
-  small_clusters <- count(tbl, cluster) %>%
-    filter(n < min_size) %>%
-    pull(cluster)
-  
-  tbl[tbl$cluster %in% small_clusters, 'cluster'] <- 0
-  
-  tbl <- mutate(tbl, cluster = compress_cluster_labels(cluster) %>% order_cluster_labels())
-  
-  return(list(tbl = tbl, hclust = hc))
-}
-
-make_dynamic_hclust_clusters <- function(tbl, cols, distance_method = 'euclidean',
-                                         hclust_args = list(method='average'),
-                                         treecut_args = list()){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  
-  if (distance_method == 'cosine'){
-    d <- as.dist(cosine_distance_matrix(mat))
-  } else {
-    d <- dist(mat, method = distance_method)
-  }
-  
-  hc <- do.call(hclust, c(list(d=d), hclust_args))
-  clus <- do.call(cutreeHybrid, c(list(dendro=hc, distM=as.matrix(d)), treecut_args))
-  
-  tbl <- mutate(tbl, cluster = as.character(clus$labels)) %>% # Already has cluster labels ordered by size
-    select(cluster, everything())
-  
-  return(list(tbl = tbl, hclust = hc))
-}
-
-# Expects named list of outputs from make_(dynamic_)hclust_clusters
-plot_clustering_hclust <- function(clusters){
-  dend_data <- sapply(clusters, function(x){dendro_data(x$hclust)}, simplify = FALSE)
-  
-  branches <- sapply(dend_data, extract2, 'segments', simplify = FALSE) %>%
-    bind_rows(.id = 'wt') %>%
-    as_tibble()
-  
-  leaves <- sapply(dend_data, function(x){mutate(as_tibble(x$labels), label = as.character(label))}, simplify = FALSE) %>%
-    map2(clusters, function(x, y){bind_cols(x, y$tbl[as.integer(x$label),'cluster'])}) %>%
-    bind_rows(.id = 'wt')
-  
-  ggplot() +
-    geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
-    geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape = 20) +
-    facet_wrap(~wt, nrow = 4, scales = 'free_x') +
-    theme(axis.line.x = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.text.x = element_blank(),
-          axis.title = element_blank()) +
-    guides(colour = guide_legend(title = 'Subtype')) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
-}
-
-# Add cluster labels to dendrogram d, based on position in c
-add_clusters_to_dend <- function(d, c){
-  dendrapply(d, function(x){attr(x, 'cluster') <- c[attr(x, 'label')]; x})
-}
-
-# Function to combine all nodes of the same cluster in a dendrogram
-compress_dend <- function(d){
-  # If we've recursed down to an individual leaf
-  if (!is.null(attr(d, 'leaf'))){
-    attr(d, 'label') <- str_c(attr(d, 'cluster'), ' (1)')
-    return(d)
-  }
-  
-  c <- squash(dendrapply(d, function(x){attr(x, 'cluster')}))
-  
-  # If all of the same cluster return a leaf
-  if (all(map_lgl(c, ~. == c[[1]]))){
-    leaf <- list()
-    attributes(leaf) <- list(members=1, height=0, leaf=TRUE,
-                             label=str_c(c[[1]], ' (', attr(d, 'members'), ')'),
-                             cluster=c[[1]])
-    return(leaf)
-  } else {
-    d[[1]] <- compress_dend(d[[1]])
-    d[[2]] <- compress_dend(d[[2]])
-    attr(d, 'members') <- attr(d[[1]], 'members') + attr(d[[2]], 'members')
-    
-    # Both leaves
-    if (!is.null(attr(d[[1]], 'leaf')) & !is.null(attr(d[[2]], 'leaf'))){
-      attr(d, 'midpoint') <- 0.5
-      
-      # Left leaf only
-    } else if (!is.null(attr(d[[1]], 'leaf'))) {
-      attr(d, 'midpoint') <- (1 + attr(d[[2]], 'midpoint'))/2
-      
-      # Right leaf only
-    } else if (!is.null(attr(d[[2]], 'leaf'))) {
-      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'midpoint') + 1)/2
-      
-      # Both branches
-    } else {
-      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'members') + attr(d[[2]], 'midpoint') + 1 - attr(d[[1]], 'midpoint'))/2
-    }
-    
-    return(d)
-  }
-}
-
-# Generic plot of a dendrogram from dendro_data type data (branches - tibble of branch data, leaves - tibble of leaf data with cluster assignment)
-plot_dend <- function(branches, leaves){
-  (ggplot() +
-     geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
-     geom_text(data = leaves, aes(x=x, y=y, label=label, colour=cluster), angle=90, hjust=1.2) +
-     geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape=19) +
-     scale_y_continuous(expand = expand_scale(mult = 0.15)) +
-     theme(axis.line = element_blank(),
-           axis.ticks = element_blank(),
-           axis.text = element_blank(),
-           axis.title = element_blank(),
-           panel.grid.major.y = element_blank()) +
-     guides(colour = guide_legend(title = 'Subtype', override.aes = list(label='', shape=15, size=3))) +
-     scale_colour_brewer(type = 'qual', palette = 'Dark2', na.value = 'grey', direction = -1)) %>%
-    labeled_plot(units='cm', height = 20, width = 20)
-}
-
-# Plot version of dendrograms with leaves combined together where a node is a single cluster
-plot_compressed_dendrograms <- function(clusters, dms){
-  dends <- map(names(clusters), ~add_clusters_to_dend(as.dendrogram(clusters[[.]]$hclust), filter(dms, wt == .) %>% pull(cluster))) %>%
-    set_names(names(clusters))
-  
-  compressed_dends <- sapply(dends, compress_dend, simplify = FALSE)
-  compressed_dend_data <- map(compressed_dends, dendro_data)
-  
-  branches <- map(compressed_dend_data,
-                  ~as_tibble(.$segments) %>% 
-                    mutate(yend = pmax(yend - 0.9 * min(y), 0),
-                           y = pmax(y - 0.9 * min(y), 0)))
-  
-  leaves <- map(compressed_dend_data,
-                ~as_tibble(.$labels) %>% 
-                  mutate(label=as.character(label)) %>%
-                  tidyr::extract(label, 'cluster', "([A-Z][0-9]*) \\([0-9]*\\)", remove = FALSE))
-  
-  map2(branches, leaves, plot_dend)
-}
-########
-
-#### hdbscan clustering ####
-make_hdbscan_clusters <- function(tbl, cols, dist_method = 'euclidean', minPts=10, ...){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  dis <- dist(mat, method = dist_method)
-  hdb <- hdbscan(mat, minPts = minPts, xdist = dis, ...)
-  
-  tbl <- mutate(tbl, cluster = as.character(hdb$cluster) %>% order_cluster_labels()) %>% 
-    select(cluster, everything())
-  
-  return(list(tbl = tbl, hdbscan = hdb))
-}
-
-# Expects a named list of outputs from make_hdbscan_clusters
-plot_clustering_hdbscan <- function(clusters){
-  dend_data <- sapply(clusters, function(x){dendro_data(x$hdbscan$hc)}, simplify = FALSE)
-  
-  branches <- sapply(dend_data, extract2, 'segments', simplify = FALSE) %>%
-    bind_rows(.id = 'wt') %>%
-    as_tibble()
-  
-  leaves <- sapply(dend_data, function(x){mutate(as_tibble(x$labels), label = as.character(label))}, simplify = FALSE) %>%
-    map2(clusters, function(x, y){bind_cols(x, y$tbl[as.integer(x$label),'cluster'])}) %>%
-    bind_rows(.id = 'wt')
-  
-  ggplot() +
-    geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
-    geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape = 20) +
-    facet_wrap(~wt, nrow = 4, scales = 'free_x') +
-    theme(axis.line.x = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.text.x = element_blank(),
-          axis.title = element_blank()) +
-    guides(colour = guide_legend(title = 'Subtype')) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
-}
-########
-
-#### dbscan clustering ####
-make_dbscan_clusters <- function(tbl, cols, eps, dist_method = 'euclidean', minPts=5, ...){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  dis <- dist(mat, method = dist_method)
-  db <- dbscan(dis, eps=eps, minPts = minPts, ...)
-  
-  tbl <- mutate(tbl, cluster = as.character(db$cluster) %>% order_cluster_labels()) %>% 
-    select(cluster, everything())
-  
-  return(list(tbl = tbl, dbscan = db))
-}
-# Expects a named list of outputs from make_dbscan_clusters
-plot_clustering_dbscan <- function(clusters){
-  tbls <- map_dfr(clusters, .f = ~ .$tbl) %>%
-    bind_rows()
-  
-  ggplot(tbls, aes(x=umap1, y=umap2, colour=cluster)) +
-    geom_point(shape = 20) +
-    facet_wrap(~wt, nrow = 4) +
-    labs(x='UMAP1', y='UMAP2') +
-    guides(colour = guide_legend(title = 'Subtype')) +
-    scale_colour_brewer(type = 'qual', palette = 'Set3', na.value = 'grey')
-}
-########
-
-#### GMM clustering ####
-make_gmm_clusters <- function(tbl, cols, G=1:5, modelNames = 'VVV', ...){
-  cols <- enquo(cols)
-  
-  mat <- tibble_to_matrix(tbl, !!cols)
-  gmm <- Mclust(mat, G, modelNames = modelNames)
-  
-  tbl <- mutate(tbl, cluster = as.character(gmm$classification) %>% order_cluster_labels()) %>% 
-    select(cluster, everything())
-  
-  return(list(tbl = tbl, gmm = gmm))
-}
-
-# Expects a named list of outputs from make_gmm_clusters
-get_mclustbic_matrix <- function(x){
-  class(x) <- 'matrix'
-  attributes(x) <- attributes(x)[c('dim', 'dimnames')]
-  return(x)
-}
-
-plot_clustering_gmm <- function(clusters){
-  bic <- map(clusters, .f = ~ as_tibble(get_mclustbic_matrix(.$gmm$BIC), rownames = 'n')) %>%
-    bind_rows(.id = 'aa') %>%
-    pivot_longer(c(-aa, -n), names_to = 'model', values_to = 'BIC')
-  
-  ggplot(bic, aes(x=n, y=BIC, fill=model)) +
-    geom_col(position = 'dodge') +
-    facet_wrap(~aa, nrow = 4) +
-    labs(x='Number of Subtypes', y='BIC') +
-    guides(fill = guide_legend(title = 'Model')) +
-    scale_fill_brewer(type = 'qual', palette = 'Set1', na.value = 'grey')
 }
 ########
 
@@ -665,121 +188,140 @@ full_cluster_characterisation <- function(tbl){
 }
 ########
 
-#### Plot/Analyse Cluster Characterisation ####
-# Wrapper function
-# Expects tbl to be in the format generated by make_dms_wide in subtypes_utils.R, with an additional clusters column
-plot_cluster_diagnostics <- function(clusters, cols){
-  cols <- enquo(cols)
-  tbl <- map_dfr(clusters, .f = ~ .$tbl) %>%
-    mutate(cluster = str_c(wt, cluster)) %>%
-    arrange(study, position)
-  
-  n_clusters <- n_distinct(tbl$cluster)
-  
-  plots <- list()
-  plots$clustering <- labeled_plot(plot_clustering(clusters), units='cm', height = 40, width = 50)
-  plots$umap <- labeled_plot(plot_cluster_umap(tbl), units = 'cm', height = 20, width = 20)
-  plots$tsne <- labeled_plot(plot_cluster_tsne(tbl), units = 'cm', height = 20, width = 20)
-  plots$silhouette_global <- labeled_plot(plot_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  plots$silhouette_per_aa <- labeled_plot(plot_per_aa_silhouette(tbl, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  plots$silhouette_per_aa_cosine <- labeled_plot(plot_per_aa_silhouette(tbl, A:Y, 'cosine'), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  plots$silhouette_clustering_vars <- labeled_plot(plot_per_aa_silhouette(tbl, !!cols), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-  return(plots)
+#### Dendograms ####
+# Add cluster labels to dendrogram d, based on position in c
+add_clusters_to_dend <- function(d, c){
+  dendrapply(d, function(x){attr(x, 'cluster') <- c[attr(x, 'label')]; x})
 }
 
-# Expects clusters as a list whose entries each have tbl and cluster items, as output by make_xx_clusters
-plot_clustering <- function(clusters){
-  # Dispatch to specific plot functions based on first entry of clusters list
-  # (assume all will be the same as generated in this pipeline)
-  if ('kmeans' %in% names(clusters[[1]])){
-    p <- plot_clustering_kmeans(clusters)
-  } else if ('hclust' %in% names(clusters[[1]])){
-    p <- plot_clustering_hclust(clusters)
-  } else if ('dbscan' %in% names(clusters[[1]])){
-    p <- plot_clustering_dbscan(clusters)
-  } else if ('hdbscan' %in% names(clusters[[1]])){
-    p <- plot_clustering_hdbscan(clusters)
-  } else if ('gmm' %in% names(clusters[[1]])){
-    p <- plot_clustering_gmm(clusters)
-  } else if ('pam' %in% names(clusters[[1]])){
-    p <- plot_clustering_pam(clusters)
+# Function to combine all nodes of the same cluster in a dendrogram
+compress_dend <- function(d){
+  # If we've recursed down to an individual leaf
+  if (!is.null(attr(d, 'leaf'))){
+    attr(d, 'label') <- str_c(attr(d, 'cluster'), ' (1)')
+    return(d)
+  }
+  
+  c <- squash(dendrapply(d, function(x){attr(x, 'cluster')}))
+  
+  # If all of the same cluster return a leaf
+  if (all(map_lgl(c, ~. == c[[1]]))){
+    leaf <- list()
+    attributes(leaf) <- list(members=1, height=0, leaf=TRUE,
+                             label=str_c(c[[1]], ' (', attr(d, 'members'), ')'),
+                             cluster=c[[1]])
+    return(leaf)
   } else {
-    stop('Unrecognised clusters list')
+    d[[1]] <- compress_dend(d[[1]])
+    d[[2]] <- compress_dend(d[[2]])
+    attr(d, 'members') <- attr(d[[1]], 'members') + attr(d[[2]], 'members')
+    
+    # Both leaves
+    if (!is.null(attr(d[[1]], 'leaf')) & !is.null(attr(d[[2]], 'leaf'))){
+      attr(d, 'midpoint') <- 0.5
+      
+      # Left leaf only
+    } else if (!is.null(attr(d[[1]], 'leaf'))) {
+      attr(d, 'midpoint') <- (1 + attr(d[[2]], 'midpoint'))/2
+      
+      # Right leaf only
+    } else if (!is.null(attr(d[[2]], 'leaf'))) {
+      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'midpoint') + 1)/2
+      
+      # Both branches
+    } else {
+      attr(d, 'midpoint') <- attr(d[[1]], 'midpoint') + (attr(d[[1]], 'members') + attr(d[[2]], 'midpoint') + 1 - attr(d[[1]], 'midpoint'))/2
+    }
+    
+    return(d)
   }
 }
 
-# Silhouette plots work directly on a tibble, with a clusters ID column and cols defining spatial positions
-plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
+# Generic plot of a dendrogram from dendro_data type data (branches - tibble of branch data, leaves - tibble of leaf data with cluster assignment)
+plot_dend <- function(branches, leaves){
+  (ggplot() +
+     geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+     geom_text(data = leaves, aes(x=x, y=y, label=label, colour=cluster), angle=90, hjust=1.2) +
+     geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape=19) +
+     scale_y_continuous(expand = expand_scale(mult = 0.15)) +
+     theme(axis.line = element_blank(),
+           axis.ticks = element_blank(),
+           axis.text = element_blank(),
+           axis.title = element_blank(),
+           panel.grid.major.y = element_blank()) +
+     guides(colour = guide_legend(title = 'Subtype', override.aes = list(label='', shape=15, size=3))) +
+     scale_colour_brewer(type = 'qual', palette = 'Dark2', na.value = 'grey', direction = -1)) %>%
+    labeled_plot(units='cm', height = 20, width = 20)
+}
+
+# Plot version of dendrograms with leaves combined together where a node is a single cluster
+plot_compressed_dendrograms <- function(clusters, dms){
+  dends <- map(names(clusters), ~add_clusters_to_dend(as.dendrogram(clusters[[.]]$hclust), filter(dms, wt == .) %>% pull(cluster))) %>%
+    set_names(names(clusters))
+  
+  compressed_dends <- sapply(dends, compress_dend, simplify = FALSE)
+  compressed_dend_data <- map(compressed_dends, dendro_data)
+  
+  branches <- map(compressed_dend_data,
+                  ~as_tibble(.$segments) %>% 
+                    mutate(yend = pmax(yend - 0.9 * min(y), 0),
+                           y = pmax(y - 0.9 * min(y), 0)))
+  
+  leaves <- map(compressed_dend_data,
+                ~as_tibble(.$labels) %>% 
+                  mutate(label=as.character(label)) %>%
+                  tidyr::extract(label, 'cluster', "([A-Z][0-9]*) \\([0-9]*\\)", remove = FALSE))
+  
+  map2(branches, leaves, plot_dend)
+}
+
+# Produce a dendogram from a given set of profiles, expected in wide format with cols cluster and A:Y
+plot_profile_dendogram <- function(profiles, cols, distance_method='cosine'){
   cols <- enquo(cols)
   
-  tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
-    mutate(silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method)) %>%
-    select(cluster, study, position, wt, silhouette_score)
-  
-  ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
-    geom_boxplot() +
-    geom_hline(yintercept = 0) +
-    scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
-    labs(x = '', y = 'Silhouette Score (global)') +
-    coord_flip() +
-    theme(panel.grid.major.y = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
-}
-
-plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
-  cols <- enquo(cols)
-  
-  tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
-    group_by(wt) %>%
-    group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method))) %>%
-    select(cluster, study, position, wt, silhouette_score) %>%
-    ungroup()
-  
-  ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
-    geom_boxplot() +
-    geom_hline(yintercept = 0) +
-    scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
-    labs(x = '', y = 'Silhouette Score (within AA)') +
-    coord_flip() +
-    theme(panel.grid.major.y = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
-}
-
-# Other functions utilise a part of a clustering full_characterisation, and can take either the subsection directly or full list
-plot_cluster_umap <- function(x){
-  if ('cluster_characterisation' %in% class(x)){
-    x <- x$tbl
+  if (nrow(profiles) == 1){
+    return(plot_dend(tibble(x=0, y=1, xend=0, yend=0),
+                     tibble(x=0, y=0, label=profiles$cluster[1], cluster=profiles$cluster[1])))
   }
   
-  mutate(x, cluster_sym = str_sub(cluster, start = -1)) %>%
-    ggplot(aes(x=umap1, y=umap2, colour=cluster_sym)) +
-    geom_point() +
-    facet_wrap(~wt) +
-    labs(x='UMAP1', y='UMAP2') +
-    scale_colour_brewer(type = CLUSTER_COLOURS$type, palette = CLUSTER_COLOURS$palette, direction = CLUSTER_COLOURS$direction, na.value = 'grey') +
-    guides(colour = guide_legend(title = 'Subtype'))
-}
-
-plot_cluster_tsne <- function(x){
-  if ('cluster_characterisation' %in% class(x)){
-    x <- x$tbl
+  if (distance_method == 'cosine'){
+    distance <- tibble_to_matrix(profiles, !!cols, row_names = 'cluster') %>% cosine_distance_matrix() %>% as.dist()
+  } else {
+    distance <- tibble_to_matrix(profiles, !!cols, row_names = 'cluster') %>% dist(method = distance_method)
   }
   
-  mutate(x, cluster_sym = str_sub(cluster, start = -1)) %>%
-    ggplot(aes(x=tSNE1, y=tSNE2, colour=cluster_sym)) +
-    geom_point() +
-    facet_wrap(~wt) +
-    scale_colour_brewer(type = CLUSTER_COLOURS$type, palette = CLUSTER_COLOURS$palette, direction = CLUSTER_COLOURS$direction, na.value = 'grey') +
-    guides(colour = guide_legend(title = 'Subtype'))
+  hc <- hclust(distance)
+  dend_data <- dendro_data(hc)
+  branches <- dend_data$segments
+  leaves <- dend_data$labels
+  
+  multi_aa <- n_distinct(str_sub(leaves$label, end = 1)) > 1
+  
+  # Colour (cluster col in leaves) by AA if multiple AAs, otherwise by cluster
+  if (multi_aa) {
+    leaves <- mutate(leaves, cluster = str_sub(label, end = 1))
+  } else {
+    leaves <- mutate(leaves, cluster = label)
+  }
+  
+  p <- plot_dend(branches, leaves)
+  
+  if (multi_aa){
+    p <- p + scale_colour_manual(values = AA_COLOURS)
+  }
+  
+  return(p)
 }
+########
 
+#### Characterisation Plots ####
 plot_cluster_ramachandran_angles <- function(x){
   if ('cluster_characterisation' %in% class(x)){
     x <- x$tbl
   }
   
   mutate(x, cluster_num = str_sub(cluster, start = -1)) %>%
-  ggplot(aes(x=phi, y=psi, colour=cluster_num)) +
+    ggplot(aes(x=phi, y=psi, colour=cluster_num)) +
     geom_point() +
     facet_wrap(~wt) +
     scale_x_continuous(breaks = c(-180, -90, 0, 90, 180)) +
@@ -1013,7 +555,9 @@ plot_cluster_ss_density <- function(x){
     scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
     labs(x = expression(italic(P)(SS~"|"~"Cluster")), y = 'Density')
 }
+########
 
+#### Full Characterisation Plot ####
 # Generates a single combined plot for a set of clusters
 plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, global_scale=TRUE, outlier_size=10){
   # Clusters should all be sorted already in this workflow (1 largest etc.) but double check here as cheap to do,
@@ -1174,4 +718,5 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   return(list(overall=p_overall, sizes=p_sizes, secondary_structure=p_ss, profile=p_profile,
               sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))
 }
+
 ########
