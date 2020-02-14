@@ -119,6 +119,16 @@ I5 - Selective against charged residues (both positive and negative), but not po
 
 ## K - Lysine
 
+K1 - Weakly selective against everything except arginine, strongly selective against proline
+
+K2 - Nonselective
+
+K3 - Everything but proline
+
+K4 - Selective against threonine and glutamine only
+
+K5 - Substitutions generally improve fitness
+
 ## L - Leucine
 
 ## M - Methionine
