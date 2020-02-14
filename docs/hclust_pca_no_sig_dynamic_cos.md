@@ -153,6 +153,15 @@ L10 - Strong selection against proline and arginine. Weak selection against nega
 
 ## M - Methionine
 
+M0 - Outliers, nonselective
+
+M1 - Tolerates leucine, isoleucine, valine and threonine (longer aliphatic chains?).
+Strongly intolerant to negative charge and proline
+
+M2 - Moderately selection against everything, strong selection against cysteine
+
+M3 - Strong selection against proline, weak selection against negative charge
+
 ## N - Asparagine
 
 ## P - Proline
