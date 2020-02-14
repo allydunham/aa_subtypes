@@ -69,7 +69,31 @@ E2 and E7 appear similar (generally permissive) but since E7 is slightly positiv
 
 ## F - Phenylalanine
 
+F0 -  Small group of outliers, seems to want to mutate to aliphatic hydrophobic residues.
+
+F1 - Selective against charged/polar residues, tolerates aromatic and hydrophobic.
+
+F2 - Most selective, tolerates tyrosine. Least tolerant to charged and proline.
+
+F3 - Broadly tolerant, somewhat selective against cysteine and valine?
+
+F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's.
+
 ## G - Glycine
+
+G0 - Outliers, on average non-selective
+
+G1 - Seems selective against everything but the smallest AAs.
+
+G2 - Highly selective against everything, potentially needs to be small
+
+G3 - Nonselective
+
+G4 - Selective against larger hydrophobic residues and aromatics, otherwise nonselective.
+
+G5 - Strong selection against proline, weak selection against aromatics and isoleucine.
+
+All glycine residues appear enriched in turn and bend secondary structures.
 
 ## H - Histidine
 
