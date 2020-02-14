@@ -131,6 +131,26 @@ K5 - Substitutions generally improve fitness
 
 ## L - Leucine
 
+L1 - Only tolerates hydrophobic residues and phenylalanine
+
+L2 - Selective against everything but isoleucine, methionine and valine (inc. alanine, oddly)
+
+L3 - Nonselective
+
+L4 - Selective against charged, weakly selective against polar
+
+L5 - Weak selection against isoleucine (?) and arginine
+
+L6 - Strong selection against aspartate only (only weak against glutamate)
+
+L7 - Tolerates aromatic and larger hydrophobic residues
+
+L8 - Weak selection against aromatics only
+
+L9 - Anything but proline
+
+L10 - Strong selection against proline and arginine. Weak selection against negative charge, lysine and Y/W
+
 ## M - Methionine
 
 ## N - Asparagine
