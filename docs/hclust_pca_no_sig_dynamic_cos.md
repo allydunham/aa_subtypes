@@ -97,6 +97,14 @@ All glycine residues appear enriched in turn and bend secondary structures.
 
 ## H - Histidine
 
+H1 - Selective, strong against proline and glycine, tolerant of Q, N and Y (all have polar groups)
+
+H2 - Mostly nonselective, with weak selection against A, M, N and W (not a clear trend in these)
+
+H3 - Other than proline, most substitutions improve fitness
+
+Minimal clustering dendrogram and profile dendrogram are the same.
+
 ## I - Isoleucine
 
 ## K - Lysine
