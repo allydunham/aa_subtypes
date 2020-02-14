@@ -208,10 +208,57 @@ R4 - Intolerant to negative charge, proline, and hydrophobic residues
 
 ## S - Serine
 
+S1 - Strongly selective, tolerates threonine, alanine and glycine.
+Least tolerant to aromatics and hydrophobic residues
+
+S2 - Nonselective
+
+S3 - Selective against charged (both polarities) and proline
+
+S4 - Anything by alanine (weak selection)
+
+S5 - Anything but proline (strong selection)
+
+S6 - Selective against negative charge and glutamine
+
+S7 - Selective against aromatics and proline
+
 ## T - Threonine
+
+T1 - Nonselective
+
+T2 - Strongly selection, tolerates serine and alanine
+
+T3 - Selective against negative charge and aromatics
+
+T4 - Anything but proline
+
+T5 - Selective against negative charge, proline and glycine
+
+T6 - Tolerates hydrophobic residues
+
+T7 - Strong selection against lysine and arginine
+
+T8 - Fitness increases with other polar/charged residues
+
+T9 - Strong selection against asparagine, weak selection against charged and aromatic
 
 ## V - Valine
 
+V1 - Tolerates hydrophobic residues and threonine
+
+V2 - Similar to V1 but doesn't tolerate threonine and weaker tolerance of non-valine hydrophobic residues
+
+V3 - Nonselective
+
+V4 - Intolerant of positive charge, proline and polar residues with NH2 groups (Q and N, which possibly tend to have positive partial charges on N?
+
+V5 - Intolerant of aromatics and charged residues
+
+V6 - Anything but proline
+
 ## W - Tryptophan
+
+
 
 ## Y - Tyrosine
