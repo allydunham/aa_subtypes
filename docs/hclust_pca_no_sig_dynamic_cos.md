@@ -32,7 +32,7 @@ C1 - Highly selective, FoldX/chemical environment suggests disulphide bonds gene
 Possibly also contains other positions where only C functions.
 Least selected against group is aromatics - maybe because the aromatic/sulphur interaction partially makes up for the disulphide bond?
 
-C2 - Selective for hydrophobic amino acids, and generally not surface accessible. These positions likely rely on cysteine's hydrophobicity and possibly contains the group of sulphur/aromatic interactions, as their characteristic pattern occurs in the mean profile and somewhat in the chemical environment.
+C2 - Selective for hydrophobic amino acids, and generally not surface accessible. These positions likely rely on cysteine's hydrophobicity and possibly contains the group of sulphur/aromatic interactions, as their characteristic pattern occurs in the mean profile and somewhat in the chemical environment
 
 ## D - Aspartate
 
@@ -59,7 +59,7 @@ E3 - Anything but proline
 E4 - Everything is tolerated apart from large aromatics
 
 E5 - Weak selection against some hydrophobic and basic residues, strong selection against proline and tyrosine.
-Tolerates smaller hydrophobic residues (G, A, etc.) and polar side-chains as well as D.
+Tolerates smaller hydrophobic residues (G, A, etc.) and polar side-chains as well as D
 
 E6 - Mutations appear to improve
 
@@ -69,15 +69,15 @@ E2 and E7 appear similar (generally permissive) but since E7 is slightly positiv
 
 ## F - Phenylalanine
 
-F0 -  Small group of outliers, seems to want to mutate to aliphatic hydrophobic residues.
+F0 -  Small group of outliers, seems to want to mutate to aliphatic hydrophobic residues
 
-F1 - Selective against charged/polar residues, tolerates aromatic and hydrophobic.
+F1 - Selective against charged/polar residues, tolerates aromatic and hydrophobic
 
-F2 - Most selective, tolerates tyrosine. Least tolerant to charged and proline.
+F2 - Most selective, tolerates tyrosine. Least tolerant to charged and proline
 
 F3 - Broadly tolerant, somewhat selective against cysteine and valine?
 
-F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's.
+F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's
 
 ## G - Glycine
 
@@ -89,11 +89,11 @@ G2 - Highly selective against everything, potentially needs to be small
 
 G3 - Nonselective
 
-G4 - Selective against larger hydrophobic residues and aromatics, otherwise nonselective.
+G4 - Selective against larger hydrophobic residues and aromatics, otherwise nonselective
 
-G5 - Strong selection against proline, weak selection against aromatics and isoleucine.
+G5 - Strong selection against proline, weak selection against aromatics and isoleucine
 
-All glycine residues appear enriched in turn and bend secondary structures.
+All glycine residues appear enriched in turn and bend secondary structures
 
 ## H - Histidine
 
@@ -103,9 +103,19 @@ H2 - Mostly nonselective, with weak selection against A, M, N and W (not a clear
 
 H3 - Other than proline, most substitutions improve fitness
 
-Minimal clustering dendrogram and profile dendrogram are the same.
+Minimal clustering dendrogram and profile dendrogram are the same
 
 ## I - Isoleucine
+
+I1 - Intolerant towards charged and polar residues, and proline. Tolerates hydrophobic substitutions
+
+I2 - Highly selective, most tolerant to valine, leucine and methionine
+
+I3 - Nonselective
+
+I4 - Selective against negative charge and proline only
+
+I5 - Selective against charged residues (both positive and negative), but not polar.
 
 ## K - Lysine
 
