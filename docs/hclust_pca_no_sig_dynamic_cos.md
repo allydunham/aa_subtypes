@@ -182,9 +182,29 @@ P2 - Mostly nonselective, some selection against arginine and glutamine
 
 ## Q - Glutamine
 
+Q1 - Nonselective
 
+Q2 - Weakly selective, tolerates basic and polar.
+Particularly selective against aromatics
+
+Q3 - Anything but proline
+
+Q4 - Strong selection, only really tolerates H, K & E.
+Strongest selection against proline and glycine
+
+Q5 - Weak effects, mostly small improvement on substitution
+
+Q6 - Strong selection against negative charge
 
 ## R - Arginine
+
+R1 - Most selective, only tolerates lysine
+
+R2 - Strongly selective against proline, weakly selective against negative charge
+
+R3 - Nonselective
+
+R4 - Intolerant to negative charge, proline, and hydrophobic residues
 
 ## S - Serine
 
