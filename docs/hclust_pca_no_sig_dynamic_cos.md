@@ -259,6 +259,17 @@ V6 - Anything but proline
 
 ## W - Tryptophan
 
+W1 - Tolerates other aromatics
 
+W2 - Tolerates cysteine, glycine, leucine, arginine and serine (no clear pattern?)
 
 ## Y - Tyrosine
+
+Y0 - Outliers, nonselective
+
+Y1 - Generally selective, tolerates phenylalanine and histidine
+
+Y2 - Tolerates aromatics and hydrophobic aliphatics
+
+Subtypes are fairly intermixed in the original hierarchical clustering dendrogram.
+
