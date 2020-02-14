@@ -164,9 +164,25 @@ M3 - Strong selection against proline, weak selection against negative charge
 
 ## N - Asparagine
 
+N0 - Outliers, on average seems to prefer being hydrophobic
+
+N1 - Moderately selective against everything
+
+N2 - Nonselective
+
+N3 - Anything but proline
+
 ## P - Proline
 
+P0 - Substitutions generally improve fitness
+
+P1 - Selective against everything, strongest against aromatics
+
+P2 - Mostly nonselective, some selection against arginine and glutamine
+
 ## Q - Glutamine
+
+
 
 ## R - Arginine
 
