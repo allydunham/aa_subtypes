@@ -272,4 +272,3 @@ Y1 - Generally selective, tolerates phenylalanine and histidine
 Y2 - Tolerates aromatics and hydrophobic aliphatics
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram.
-
