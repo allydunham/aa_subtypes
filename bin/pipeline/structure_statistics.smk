@@ -93,3 +93,20 @@ rule within_a_profile:
 
     shell:
         'python bin/data_processing/get_chem_env_profiles.py --angstroms {wildcards.a} --yaml {input.yaml} {input.pdb} > {output} 2> {log}'
+
+rule aa_distance_profile:
+    """
+    Produce distance to nearest X profiles from regions of interest in a PDB
+    """
+    input:
+        pdb='data/pdb/{gene}.pdb',
+        yaml=ancient('meta/structures.yaml')
+
+    output:
+        'data/chemical_environment/{gene}_aa_distance.tsv'
+
+    log:
+        'logs/aa_distance_profile/{gene}.log'
+
+    shell:
+        'python bin/data_processing/get_chem_env_profiles.py -d --yaml {input.yaml} {input.pdb} > {output} 2> {log}'

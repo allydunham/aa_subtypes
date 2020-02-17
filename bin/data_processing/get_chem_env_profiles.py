@@ -35,10 +35,15 @@ def main(args):
     if args.k_nearest:
         prof_func = lambda x: ce.k_nearest_residues(x, k=args.k_nearest)
         profile_cols = [f'nearest_{args.k_nearest}_{aa}' for aa in protein_alphabet.letters]
+
     elif args.angstroms:
         prof_func = lambda x: ce.within_distance(x, max_dist=args.angstroms)
         profile_cols = [f'within_{args.angstroms}_{aa}'.replace('.', '_') for aa in
                         protein_alphabet.letters]
+
+    elif args.distance:
+        prof_func = ce.distance_to_nearest
+        profile_cols = [f'angstroms_to_{aa}' for aa in protein_alphabet.letters]
 
     print('chain', 'position', 'wt', *profile_cols, sep='\t', file=sys.stdout)
     for residue, profile in zip(residues, prof_func(residues)):
@@ -62,13 +67,17 @@ def parse_args():
     parser.add_argument('--angstroms', '-a', type=float,
                         help='Profile based on count of residues within a angstroms')
 
+    parser.add_argument('--distance', '-d', action='store_true',
+                        help='Profile based on the distance to the nearest of each residue')
+
+
     args = parser.parse_args()
 
-    if not (args.k_nearest or args.angstroms):
-        raise ValueError('Please select a profile method (--k_nearest or --angstroms)')
+    if not (args.k_nearest or args.angstroms or args.distance):
+        raise ValueError('Select a profile method (--k_nearest, --angstroms or --distance)')
 
     elif args.k_nearest and args.angstroms:
-        raise ValueError('Use either --k_nearest or --angstroms, not both')
+        raise ValueError('Only use one of --k_nearest, --angstroms or --distance')
 
     return args
 

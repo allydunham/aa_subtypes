@@ -32,9 +32,11 @@ def k_nearest_residues(residues, k=10, distance_matrix=None):
 
     for res_index in range(len(residues)):
         dists = distance_matrix[res_index,]
-        dists[res_index] = dists.max() + 1 # don't want the residue itself
 
-        nearest_k = [residues[i] for i in np.argpartition(dists, k)[:k]]
+        non_self = np.ones_like(dists, dtype=bool)
+        non_self[res_index] = False
+
+        nearest_k = [residues[i] for i in np.argpartition(dists[non_self], k)[:k]]
 
         counts = defaultdict(lambda: 0)
         for i in nearest_k:
@@ -61,15 +63,42 @@ def within_distance(residues, max_dist=10, distance_matrix=None):
 
     for res_index in range(len(residues)):
         dists = distance_matrix[res_index,]
-        dists[res_index] = max_dist + 1 # ignore residue itself
 
-        res_within_dist = [residues[i] for i in np.argwhere(dists < max_dist)[:, 0]]
+        res_within_dist = [residues[i] for i in np.argwhere(dists < max_dist)[:, 0]
+                           if not i == res_index]
 
         counts = defaultdict(lambda: 0)
         for i in res_within_dist:
             counts[seq1(i.get_resname())] += 1
 
         yield np.array([counts[aa] for aa in protein_alphabet.letters])
+
+def distance_to_nearest(residues, distance_matrix=None):
+    """
+    Yeilds chemical environments parameterised as the distance to the nearest residue
+    of each type. Hetero atoms are included so must be dropped separately if desired.
+
+    residues: list of residues to consider
+    distance_matrix: numpy matrix of distances between residues, with rows/columns in
+                     that order. Calculated if not supplied
+
+    yields: chemical environment profiles (np.array)
+    """
+
+    if distance_matrix is None:
+        distance_matrix = residue_distance_matrix(residues)
+
+    residue_indices = [np.array([seq1(r.get_resname()) == aa for r in residues]) for
+                       aa in protein_alphabet.letters]
+
+    for res_index in range(len(residues)):
+        dists = distance_matrix[res_index,]
+
+        non_self = np.ones_like(dists, dtype=bool)
+        non_self[res_index] = False
+
+        yield np.array([min(dists[aa & non_self]) if any(aa & non_self) else np.nan for
+                        aa in residue_indices])
 
 def residue_distance_matrix(residues, ref_atom='CA'):
     """
@@ -90,4 +119,3 @@ def residue_distance_matrix(residues, ref_atom='CA'):
             dist[i, j + i + 1] = dist[j + i + 1, i] = res1[ref_atom] - res2[ref_atom]
 
     return dist
-    

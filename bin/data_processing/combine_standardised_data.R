@@ -44,13 +44,18 @@ surface_accessibility <- sapply(unique(dms$gene), import_nacc_gene, simplify = F
   select(-chain)
 
 # Import chemical environment profiles
-import_chem_env_gene <- function(x){
+import_chem_env_gene <- function(x, chem_env='within_10.0'){
   x <- gene_to_filename(x)
-  import_chem_env(str_c('data/chemical_environment/', x, '_within_10.0.tsv'), structure_config[[x]]$sections)
+  import_chem_env(str_c('data/chemical_environment/', x, '_', chem_env, '.tsv'), structure_config[[x]]$sections)
 }
-chemical_environments <- sapply(unique(dms$gene), import_chem_env_gene, simplify = FALSE) %>%
-  bind_rows(.id = 'gene') %>%
-  select(-chain)
+chemical_environments <- full_join(
+  sapply(unique(dms$gene), import_chem_env_gene, chem_env='within_10.0', simplify = FALSE) %>%
+    bind_rows(.id = 'gene') %>%
+    select(-chain),
+  sapply(unique(dms$gene), import_chem_env_gene, chem_env='aa_distance', simplify = FALSE) %>%
+    bind_rows(.id = 'gene') %>%
+    select(-chain)
+)
 
 # Import residue hydrophpbicity
 hydrophobicity <- read_tsv('meta/residue_hydrophobicity.tsv', comment = '#') %>%

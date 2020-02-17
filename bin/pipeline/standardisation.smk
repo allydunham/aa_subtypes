@@ -108,6 +108,7 @@ rule combine_dms_data:
         expand('data/backbone_angles/{gene}.tsv', gene=UNFILTERED_GENES),
         expand('data/surface_accessibility/{gene}.rsa', gene=UNFILTERED_GENES),
         expand('data/chemical_environment/{gene}_within_10.0.tsv', gene=UNFILTERED_GENES),
+        expand('data/chemical_environment/{gene}_aa_distance.tsv', gene=UNFILTERED_GENES),
         expand('data/porter5/{gene}.ss8', gene=UNFILTERED_GENES),
         'meta/residue_hydrophobicity.tsv'
 
