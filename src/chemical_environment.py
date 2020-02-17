@@ -90,3 +90,4 @@ def residue_distance_matrix(residues, ref_atom='CA'):
             dist[i, j + i + 1] = dist[j + i + 1, i] = res1[ref_atom] - res2[ref_atom]
 
     return dist
+    
