@@ -55,7 +55,8 @@ ER_DIST_COLOURS <- list(type='seq', palette='BuPu', direction = 1)
 SIFT_COLOURS <- list(type='seq', palette='PuRd', direction = -1)
 FOLDX_COLOURS <- list(type='div', palette='PiYG', direction = 1)
 SS_COLOURS <- list(type='div', palette='BrBG', direction = 1)
-CHEM_ENV_COLOURS <- list(type='div', palette='PRGn', direction = 1)
+CHEM_ENV_COLOURS <- list(type='seq', palette='GnBu', direction = 1)
+AA_DISTANCE_COLOURS <- list(type='seq', palette='YlOrRd', direction = -1)
 
 ER_COSINE_COLOURS <- list(colours = c('#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#000000', 
                                       '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7'),

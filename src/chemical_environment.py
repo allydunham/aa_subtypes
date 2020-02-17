@@ -97,7 +97,7 @@ def distance_to_nearest(residues, distance_matrix=None):
         non_self = np.ones_like(dists, dtype=bool)
         non_self[res_index] = False
 
-        yield np.array([min(dists[aa & non_self]) if any(aa & non_self) else np.nan for
+        yield np.array([min(dists[aa & non_self]) if any(aa & non_self) else np.inf for
                         aa in residue_indices])
 
 def residue_distance_matrix(residues, ref_atom='CA'):

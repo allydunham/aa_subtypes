@@ -127,12 +127,12 @@ cluster_foldx_profiles <- function(tbl, normalise=FALSE){
             by = 'cluster')
 }
 
-cluster_chem_env_profiles <- function(tbl, cols, normalise=FALSE){
+cluster_chem_env_profiles <- function(tbl, cols, normalise=NULL){
   cols <- enquo(cols)
   col_names <- colnames(select(tbl, !!cols))
   
-  if (normalise){
-    tbl <- mutate_at(tbl, vars(!!cols), ~log2((. + min(.[. > 0], na.rm = TRUE)/10)/mean(., na.rm=TRUE)), na.rm = TRUE)
+  if (!is.null(normalise)){
+    tbl <- mutate_at(tbl, vars(!!cols), as_mapper(normalise))
   }
   
   full_join(group_by(tbl, cluster) %>% summarise_at(vars(!!cols), mean, na.rm=TRUE),
@@ -170,9 +170,18 @@ full_cluster_characterisation <- function(tbl){
            cluster = as.character(cluster)) %>%
     select(-n, -n_foldx)
   
-  chem_env_profiles <- cluster_chem_env_profiles(tbl, within_10_0_A:within_10_0_Y, normalise = TRUE) %>%
+  chem_env_profiles <- cluster_chem_env_profiles(tbl, within_10_0_A:within_10_0_Y, normalise = ~./max(., na.rm=TRUE)) %>%
     select(-n, -n_chem_env) %>%
     pivot_longer(within_10_0_A:within_10_0_Y, names_to = 'aa', names_prefix = 'within_10_0_', values_to = 'rel_count')
+  
+  aa_dist_normaliser <- function(x){
+    x <- ifelse(is.finite(x), x, max(x[is.finite(x)]))
+    x / max(x, na.rm = TRUE)
+  }
+  
+  aa_distance_profiles <- cluster_chem_env_profiles(tbl, angstroms_to_A:angstroms_to_Y, normalise = aa_dist_normaliser) %>%
+    select(-n, -n_chem_env) %>%
+    pivot_longer(angstroms_to_A:angstroms_to_Y, names_to = 'aa', names_prefix = 'angstroms_to_', values_to = 'distance')
   
   sift_profiles <- cluster_sift_profiles(tbl) %>%
     pivot_longer(log10_sift_A:log10_sift_Y, names_to = 'aa', names_prefix = 'log10_sift_', values_to = 'log10_sift')
@@ -182,7 +191,8 @@ full_cluster_characterisation <- function(tbl){
   sa_profiles <- cluster_sa_profile(tbl)
   
   l <- list(tbl=tbl, summary=cluster_summary, profiles=mean_profiles, sift=sift_profiles, foldx=foldx_profiles, 
-            chem_env=chem_env_profiles, secondary_structure=ss_profiles, surface_accessibility=sa_profiles)
+            chem_env=chem_env_profiles, secondary_structure=ss_profiles, surface_accessibility=sa_profiles,
+            aa_distance=aa_distance_profiles)
   class(l) <- c('cluster_characterisation', class(l))
   return(l)
 }
@@ -495,7 +505,7 @@ plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
   cluster_labs <- levels(x$cluster)
   prop_labs <- structure(x$prop, names = as.character(x$cluster))[cluster_labs]
   
-  breaks <- pretty_break(x$rel_count, rough_n = 5, sig_figs = 3, sym = 0)
+  breaks <- pretty_break(x$rel_count, rough_n = 5, sig_figs = 3)
   
   ggplot(x, aes(x=as.numeric(cluster), y=aa, fill=rel_count)) +
     geom_raster() +
@@ -504,14 +514,48 @@ plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
     scale_x_continuous(breaks = 1:length(cluster_labs), labels = cluster_labs,
                        sec.axis = sec_axis(~., breaks = 1:length(prop_labs), labels = prop_labs)) +
     coord_fixed() +
-    guides(fill = guide_colourbar(title = expression('log'[2]*frac('count', 'mean(count)')))) + 
+    guides(fill = guide_colourbar(title = expression('log'[2]*frac('count', 'max(count)')))) + 
     theme(plot.title = element_text(hjust = 0.5, size=8),
           axis.ticks = element_blank(),
           panel.background = element_blank(),
           panel.grid.major.y = element_blank(),
           axis.title = element_blank(),
           axis.text.y = element_text(colour = AA_COLOURS[sort(unique(x$aa))]),
-          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(sort(unique(x$cluster)), end = 1)]),
+          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(cluster_labs, end = 1)]),
+          axis.text.x.top = element_text(angle = 90, vjust = 0.5, hjust = 0),
+          legend.title.align = 0.5)
+}
+
+plot_cluster_aa_distances <- function(x, filter_outliers=5){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- left_join(x$aa_distance, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
+      mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
+  }
+  
+  if (filter_outliers > 0){
+    x <- filter(x, !str_ends(cluster, '0'), n_structure > filter_outliers)
+  }
+  
+  cluster_labs <- levels(x$cluster)
+  prop_labs <- structure(x$prop, names = as.character(x$cluster))[cluster_labs]
+  
+  breaks <- pretty_break(x$distance, rough_n = 5, sig_figs = 3)
+  
+  ggplot(x, aes(x=as.numeric(cluster), y=aa, fill=distance)) +
+    geom_tile() +
+    scale_fill_distiller(type = AA_DISTANCE_COLOURS$type, palette = AA_DISTANCE_COLOURS$palette, direction = AA_DISTANCE_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
+    scale_x_continuous(breaks = 1:length(cluster_labs), labels = cluster_labs,
+                       sec.axis = sec_axis(~., breaks = 1:length(prop_labs), labels = prop_labs)) +
+    coord_fixed() +
+    guides(fill = guide_colourbar(title = expression(frac('||'~'Nearest X'~'||', '||'~'Nearest X'~'||'['max'])))) + 
+    theme(plot.title = element_text(hjust = 0.5, size=8),
+          axis.ticks = element_blank(),
+          panel.background = element_blank(),
+          panel.grid.major.y = element_blank(),
+          axis.title = element_blank(),
+          axis.text.y = element_text(colour = AA_COLOURS[sort(unique(x$aa))]),
+          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(cluster_labs, end = 1)]),
           axis.text.x.top = element_text(angle = 90, vjust = 0.5, hjust = 0),
           legend.title.align = 0.5)
 }
@@ -680,14 +724,14 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # subtype mean chemical environment profiles
-  chem_env_lims <- filter(data$chem_env, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(step = 1, sym = 0)
+  chem_env_lims <- filter(data$chem_env, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(rough_n = 4)
   p_chem_env <- filter(data$chem_env, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = aa, fill = rel_count)) +
     geom_raster() +
     coord_equal() +
     labs(y = '', x = '') +
-    guides(fill = guide_colourbar(title = expression("log"[2]~frac('#AA', symbol("\341")~'#AA'~symbol("\361"))))) +
+    guides(fill = guide_colourbar(title = expression(frac('#AA', '#AA'[italic(max)])))) +
     scale_fill_distiller(type = CHEM_ENV_COLOURS$type, palette = CHEM_ENV_COLOURS$palette, direction = CHEM_ENV_COLOURS$direction,
                          limits = chem_env_lims$limits, breaks = chem_env_lims$breaks, labels = chem_env_lims$labels) +
     theme(axis.ticks = element_blank(),
