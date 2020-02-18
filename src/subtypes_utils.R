@@ -120,16 +120,16 @@ cluster_silhouette <- function(tbl, cols, distance_method = 'manhattan'){
   }
   diag(distance) <- NA
   
-  # Calculate mean distance each point and all clusters
+  # Calculate mean distance all points and a cluster (x)
   get_silhouette_distance <- function(x){
     ind <- tbl$cluster == x
     if (sum(ind) == 1){
       return(distance[,ind])
     } else {
-      return(rowMeans(distance[,tbl$cluster == x], na.rm = TRUE))
+      return(rowMeans(distance[,ind], na.rm = TRUE))
     }
   }
-  mean_dists <- sapply(unique(tbl$cluster), get_silhouette_distance)
+  mean_dists <- sapply(as.character(unique(tbl$cluster)), get_silhouette_distance)
   
   # Calculate mean dist within cluster
   same_cluster <- cbind(1:nrow(mean_dists), match(tbl$cluster, colnames(mean_dists)))
