@@ -342,7 +342,7 @@ plot_cluster_diagnostics <- function(clusters, cols){
 plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
   cols <- enquo(cols)
   
-  tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
+  tbl <- filter(tbl, !str_detect(cluster, '^[A-Z]0$')) %>%
     mutate(silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method)) %>%
     select(cluster, study, position, wt, silhouette_score)
   
@@ -359,7 +359,7 @@ plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
 plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
   cols <- enquo(cols)
   
-  tbl <- filter(tbl, !str_ends(cluster, '0')) %>%
+  tbl <- filter(tbl, !str_detect(cluster, '^[A-Z]0$')) %>%
     group_by(wt) %>%
     group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method))) %>%
     select(cluster, study, position, wt, silhouette_score) %>%

@@ -48,7 +48,7 @@ plots$aa_profiles <- map(plots_global, extract2, 'overall')
 plots$aa_profiles_relative <- map(plots_relative, extract2, 'overall')
 
 ### Plot all-subtype summaries ###
-plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str_ends(cluster, '0')) %>%
+plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str_detect(cluster, '^[A-Z]0$')) %>%
                                         ggplot(aes(x = mean_er, y = mean_sa, label = cluster, colour = aa)) +
                                         facet_wrap(~aa) + 
                                         geom_text() +
@@ -57,7 +57,7 @@ plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str
                                         labs(x = 'Mean Norm. ER', y = 'Mean Surface Accessibility')) %>%
   labeled_plot(width = 20, height = 15, units = 'cm')
 
-plots$er_vs_size <- (filter(full_characterisation$summary, !str_ends(cluster, '0')) %>%
+plots$er_vs_size <- (filter(full_characterisation$summary, !str_detect(cluster, '^[A-Z]0$')) %>%
                        ggplot(aes(x = mean_er, y = n, label = cluster, colour = aa)) +
                        facet_wrap(~aa) + 
                        geom_text() +
