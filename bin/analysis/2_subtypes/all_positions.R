@@ -12,18 +12,28 @@ dms <- mutate(clusters$tbl, cluster = factor(str_c('X', cluster), levels = str_c
 
 ### Analyse clusters ###
 n_clusters <- n_distinct(dms$cluster)
-
 plots <- list()
-plots$umap <- labeled_plot(plot_cluster_umap(dms), units = 'cm', height = 20, width = 20)
-plots$tsne <- labeled_plot(plot_cluster_tsne(dms), units = 'cm', height = 20, width = 20)
-plots$silhouette_global <- labeled_plot(plot_silhouette(dms, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-plots$silhouette_per_aa <- labeled_plot(plot_per_aa_silhouette(dms, A:Y), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
-plots$silhouette_per_aa_cosine <- labeled_plot(plot_per_aa_silhouette(dms, A:Y, 'cosine'), units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+
+plots$umap <- (ggplot(dms, aes(x=umap1, y=umap2, colour=wt)) +
+                 facet_wrap(~cluster) +
+                 scale_colour_manual(values = AA_COLOURS) +
+                 geom_point() +
+                 labs(x = 'UMAP1', y = 'UMAP2')) %>%
+  labeled_plot(units='cm', height=25, width=25)
+
+plots$tsne <- (ggplot(dms, aes(x=tSNE1, y=tSNE2, colour=wt)) +
+                 facet_wrap(~cluster) +
+                 geom_point() +
+                 scale_colour_manual(values = AA_COLOURS)) %>%
+  labeled_plot(units='cm', height=25, width=25)
+
+plots$silhouette <- labeled_plot(plot_silhouette(dms, A:Y, 'cosine'),
+                                 units='cm', height = n_clusters*0.33 + 2, width = 15, limitsize=FALSE)
+
 
 cluster_occupancy <- group_by(dms, cluster, wt) %>%
   tally() %>%
   mutate(rel_n = n / sum(n))
-
 plots$cluster_occupancy <- filter(cluster_occupancy, !str_ends(cluster, '0')) %>%
   ggplot(aes(x = wt, y = cluster, fill = rel_n)) +
   geom_raster() +
@@ -35,7 +45,9 @@ plots$cluster_occupancy <- filter(cluster_occupancy, !str_ends(cluster, '0')) %>
         panel.grid.major.y = element_blank())
 
 ### Save results ###
-write_tsv(select(dms, cluster, study, gene, position, wt), 'data/clustering/a.tsv')
-root <- 'figures/2_clustering/hclust_profile_dynamic_all_positions'
+write_tsv(select(dms, cluster, study, gene, position, wt), 'data/subtypes/all_positions.tsv')
+saveRDS(clusters, 'data/subtypes/all_positions.rds')
+
+root <- 'figures/2_clustering/all_positions'
 dir.create(root)
 save_plotlist(plots, root)

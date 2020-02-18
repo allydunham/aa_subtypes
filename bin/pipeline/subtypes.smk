@@ -27,9 +27,12 @@ rule all_position_subtypes:
         "data/combined_mutational_scans.tsv"
 
     output:
-        "data/clustering/hclust_profile_dynamic_all_positions.tsv",
-        [f"figures/2_subtypes/hclust_profile_dynamic_all_positions/{x}" for x in diagnostic_plots],
-        "figures/2_subtypes/hclust_profile_dynamic_all_positions/cluster_occupancy.pdf"
+        "data/subtypes/all_positions.tsv",
+        "data/subtypes/all_positions.rds",
+        "figures/2_subtypes/all_positions/umap.pdf",
+        "figures/2_subtypes/all_positions/tsne.pdf",
+        "figures/2_subtypes/all_positions/silhouette.pdf",
+        "figures/2_subtypes/all_positions/cluster_occupancy.pdf"
 
     log:
         "logs/all_position_subtypes.log"
