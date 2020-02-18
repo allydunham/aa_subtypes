@@ -48,6 +48,6 @@ plots$cluster_occupancy <- filter(cluster_occupancy, !str_ends(cluster, '0')) %>
 write_tsv(select(dms, cluster, study, gene, position, wt), 'data/subtypes/all_positions.tsv')
 saveRDS(clusters, 'data/subtypes/all_positions.rds')
 
-root <- 'figures/2_clustering/all_positions'
+root <- 'figures/2_subtypes/all_positions'
 dir.create(root)
 save_plotlist(plots, root)
