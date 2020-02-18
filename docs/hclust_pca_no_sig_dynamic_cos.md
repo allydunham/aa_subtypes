@@ -7,7 +7,7 @@ The deepSplit=0 clustering is used as the primary dataset, with additional subty
 
 Summary:
 
-* A1 - Selects against anything larger than alanine, buried
+* A1 - Nothing larger than alanine, buried
 * A2 - Selection against strong charge (and proline), buried
 * A3 - Weak selection against aromatic and (iso)leucine - large hydrophobic AAs? More surface accessible
 * A4 - Anything but proline
@@ -15,6 +15,14 @@ Summary:
 * A6 - Appears to improve with mutation, very surface accessible
 * A7 - Strong selection against tyrosine, weak selection against arginine, histidine, lysine, cysteine & glutamate.
 * A8 - Not methionine, otherwise weak selection against glycine & phenylalanine.
+
+### A1
+
+Appears to select against any residues more bulky than alanine, tolerating cysteine,
+glycine etc.
+It generally has a low surface accessibility.
+
+* NP 411 - very buried in the middle of a lobe, reasonably packed with some bulky residues nearby (several aromatics)
 
 ## C - Cysteine
 
