@@ -379,6 +379,22 @@ plot_cluster_profiles <- function(x, filter_outliers=5){
           axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(x$cluster)), end = 1)]))
 }
 
+plot_cluster_profile_variation <- function(x){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$tbl
+  }
+  
+  select(x, cluster, study, gene, position, wt, A:Y) %>%
+    pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+    filter(!mut == wt) %>%
+    ggplot(aes(x=er, colour=mut)) +
+    geom_density() +
+    scale_colour_manual(values = AA_COLOURS) +
+    guides(colour=FALSE) +
+    facet_grid(rows = vars(cluster), cols = vars(mut)) +
+    labs(x = 'Normalised Score', y = 'Density')
+}
+
 plot_cluster_profile_correlation <- function(x){
   if ('cluster_characterisation' %in% class(x)){
     x <- x$tbl

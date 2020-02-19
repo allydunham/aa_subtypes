@@ -17,6 +17,7 @@ characterisation_plots.extend([f"aa_profiles/{x}.pdf" for x in AA_ALPHABET])
 characterisation_plots.extend([f"aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET])
 characterisation_plots.extend([f"ss_probabilities/{x}.pdf" for x in AA_ALPHABET])
 characterisation_plots.extend([f"aa_dends/{x}.pdf" for x in AA_ALPHABET])
+characterisation_plots.extend([f"profile_variance/{x}.pdf" for x in AA_ALPHABET])
 
 #### General Rules ####
 rule all_position_subtypes:

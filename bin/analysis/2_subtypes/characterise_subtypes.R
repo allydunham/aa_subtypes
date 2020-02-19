@@ -33,6 +33,9 @@ plots$foldx <- labeled_plot(plot_cluster_foldx_profiles(full_characterisation), 
 plots$chem_env <- labeled_plot(plot_cluster_chem_env_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$aa_distance <- labeled_plot(plot_cluster_aa_distances(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$ss_probability <- labeled_plot(plot_cluster_ss_profile(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+plots$profile_variance <- group_by(full_characterisation$tbl, wt)
+plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_cluster_profile_variation(.), units='cm', height=20, width=30), keep = TRUE) %>%
+  set_names(group_keys(plots$profile_variance)$wt)
 
 ### Plot Per AA characterisations ###
 get_aa_plot <- function(x, global_scale=TRUE){
