@@ -22,7 +22,27 @@ Appears to select against any residues more bulky than alanine, tolerating cyste
 glycine etc.
 It generally has a low surface accessibility.
 
-* NP 411 - very buried in the middle of a lobe, reasonably packed with some bulky residues nearby (several aromatics)
+* ADRB2 - 181 is inwards facing towards a phenylalanine (potential clash),and 76 & 78 are in the transmembrane helix bundle, although not obviously lacking space.
+* amiE - 35, 39, 90, 94 are on the interface between two helices, all others are in a buried cluster of sheets and helices.
+* APH3II - all internal to the globule, appear reasonably cramped
+* CALM1 - 74 & 129 are internal, 47 & 104 are not, but maybe in the protein complex that CALM1 is part of.
+* CBS - generally internal, often in secondary structure interfaces but not obviously cramped.
+* CCR5 - All in helix interfaces
+* CP - 31, 108 are near larger residues, all are internal and somewhat cramped based on spheres representation.
+* CXCR4 - 162 is in a cramped helix interface, but others actually seem to be external, although as CXCR4 is a 7TM receptor they are membrane facing.
+* HA - 85 is near a bulky aromatic, some others are buried and in helix interfaces although not all
+* HSP90 - 41 is buried and cramped, but other positions less so
+* MAPK1 - 171 is buried and cramped, 219 is in a helix adjacent to a tryptophan
+* NP - Often between alpha helices, although one (218) is external to the structure (but maybe part of an interface in the full NP super-structure). 411 is very buried in the middle of a lobe, reasonably packed with some bulky residues nearby (several aromatics).
+The lobe is actually in the middle of a different monomer, so this residue is likely part of the interaction stabilising the nucleoprotein multimer.
+* PAB1 - Only position appears external and non-cramped
+* Ras - 18 & 155 are buried in cramped helices, 66 & 122 appear exposed and unrestricted
+* Src - Both positions, in particular 433, are cramped and buried.
+* TEM1 - 133 is buried and cramped
+* TP53 - 276 interfaces with DNA, 159 & 161 are in a cramped, buried strand
+* TPK1 - 145 appears to be in a kink in a helix, potentially requiring small size. 39 is in a cramped area, 45 is buried
+* TPMT - neither are that buried or cramped
+* UBE2I - 133 is buried near a bulky aromatic, 106 appears exposed.
 
 ## C - Cysteine
 
