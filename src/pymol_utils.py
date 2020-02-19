@@ -17,6 +17,7 @@ def quick_highlight(cmd, dms, gene, factor='cluster_num', res=None, root='data/p
         pdb_dms = dms[(dms.gene == gene) & (dms.wt == res)]
     else:
         pdb_dms = dms[dms.gene == gene]
+    pdb_dms = pdb_dms.dropna(subset=['pdb_position'])
 
     colourer = su.SubtypesColourMap.lookup_map(factor, dms[factor])
     project_landscape(cmd, pdb_dms.pdb_chain, pdb_dms.pdb_position, pdb_dms.cluster_num, colourer)
