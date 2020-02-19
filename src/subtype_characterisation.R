@@ -615,6 +615,59 @@ plot_cluster_ss_density <- function(x){
     scale_fill_manual(values = AA_COLOURS, guide = FALSE) +
     labs(x = expression(italic(P)(SS~"|"~"Cluster")), y = 'Density')
 }
+
+# Assumes only ever two of each position (as in my collection of studies)
+plot_cluster_multiple_experiment_consistency <- function(x){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$tbl
+  }
+  
+  cluster_order <- tibble(c = unique(x$cluster)) %>%
+    tidyr::extract(c, c('c', 'n'), "([A-Z])([0-9]*)", convert=TRUE) %>%
+    arrange(c, n) %>%
+    unite(c, c, n, sep='') %>%
+    pull(c)
+  
+  dupes <- group_by(x, gene, position, wt) %>%
+    filter(n() > 1) %>%
+    summarise(clusters = str_c(cluster, collapse = ',')) %>%
+    ungroup() %>%
+    separate(clusters, c('cluster1', 'cluster2'), sep = ',') %>%
+    mutate(same = if_else(cluster1 == cluster2, 'Match', 'Mismatch'))
+  
+  p_overview <- ggplot(dupes, aes(x = same, fill=same)) +
+    geom_bar(width=0.5) +
+    scale_fill_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
+    guides(fill=FALSE) +
+    labs(x = '', y = 'Count') +
+    coord_flip() +
+    theme(panel.grid.major.y = element_blank())
+  
+  dupe_counts <- group_by(dupes, cluster1, cluster2) %>%
+    tally() %>%
+    ungroup() %>%
+    mutate(cluster1 = factor(cluster1, levels = cluster_order),
+           cluster2 = factor(cluster2, levels = cluster_order)) %>%
+    complete(cluster1, cluster2) %>%
+    mutate(n = ifelse(is.na(n), 0, n),
+           wt = str_sub(cluster1, end = 1),
+           match = if_else(cluster1 == cluster2, 'Match', 'Mismatch')) %>%
+    filter(str_sub(cluster2, end = 1) == wt)
+    
+  p_detail <- ggplot(dupe_counts, aes(x=cluster1, y=cluster2, size=n, colour=match)) +
+    facet_wrap(~wt, scales = 'free') +
+    geom_point() +
+    scale_colour_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
+    scale_size_area() +
+    scale_x_discrete() +
+    scale_y_discrete() +
+    labs(x='', y='') +
+    theme(panel.grid.major.y = element_blank(),
+          legend.position = 'bottom') +
+    guides(size = guide_legend(title = ''), colour = guide_legend(title = ''))
+  
+  ggarrange( p_detail, p_overview,ncol = 1, heights = c(3, 1))
+}
 ########
 
 #### Full Characterisation Plot ####
