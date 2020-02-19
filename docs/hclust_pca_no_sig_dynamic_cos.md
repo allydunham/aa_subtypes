@@ -55,9 +55,21 @@ Somewhat more likely to occur in helices compared to other subtypes?
 
 ### C1
 
-FoldX and chemical environment results suggest disulphide bonds generally go here, although not exclusively.
-The subtype likely also contains other positions where only C functions.
-The subtype is least selected against aromatics - maybe because the aromatic/sulphur interaction partially makes up for the disulphide bond?
+FoldX and chemical environment results suggest disulphide bonds generally go here, although not exclusively (24/73 positions vs 3/37 in C2).
+The subtype likely also contains other positions where only C functions, such as ion conjugation, and potentially includes similar aromatic interactions to C2 where the interaction is highly important.
+The subtype is least selected against aromatics - maybe because the aromatic/sulphur interaction partially makes up for the disulphide bond, or also fulfils some of the other functions.
+
+Examples without disulphide bond:
+
+* NP - 44 & 279 are adjacent to each other with a tyrosine ring between them - potentially some interaction through the aromatic? 223 is near a tyrosine, potentially having an aromatic interaction.
+* TP53 - 176, 238 & 242 all appear to be conjugating a Z ion (Pace and Weerapana, 2014). Others unclear
+* CCR5 - 224 is on the receptor surface, potentially with an active role
+* DRB2 - Several membrane facing cysteine residues on the transmembrane helices?
+* GAL4 - 4 residues (14, 21, 28, 38) conjugating two zinc ions
+* APH3II - 131 appears to be interacting with a tryptophan residue
+* BRCA1 - 39 & 64 and 27 & 47 each conjugate a zinc ion
+* CBS - 52 is bonded to the Fe of a haem group in the crystal structure (which is a known binding in the native protein)
+* SUMO1 - 52 is directed at a phenylalanine
 
 ### C2
 
