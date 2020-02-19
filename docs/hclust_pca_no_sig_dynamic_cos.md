@@ -105,6 +105,19 @@ Summary:
 
 D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
 
+### D1
+
+Often appear to have a specific role (see examples), although not always.
+In other cases it could simply be we cannot easily see the role.
+
+Examples:
+
+* HA - 93 is directly adjacent to an arginine (likely ionic interaction?)
+* CBS - 221 is directly adjacent to an arginine. 49, 309 & 198 are all grouped around a phenylalanine aromatic group; possibly they induce a dipole? 388 is near an arginine
+* TEM1 - 189, 208 neighbour a K ion
+* HSP90 - All four (40, 79, 113, 143) all border an apparent ATP binding pocket, as do 3 D3 positions
+* PAB1 - 184 possibly bonding to lysine 180, 138 has a similar arrangement with lysine 140
+
 ## E - Glutamate
 
 Summary:
@@ -120,16 +133,39 @@ Tolerates smaller hydrophobic residues (G, A, etc.) and polar side-chains as wel
 
 E2 and E7 appear similar (generally permissive) but since E7 is slightly positive it is grouped with E6 and E2 within the main cluster.
 
+### E1
+
+As with D1, E1 positions often seem to have a recognisable role utilising the charge properties of glutamate, although in many cases it is less obvious too.
+
+Examples:
+
+* ADRB2 - Not clear what role they play but 188 and 306 are both near the extracellular binding site
+* amiE - 105 & 108 both extend towards a similar pair of lysine and arginines. 248, 249 & 250 are arrayed at the interface between subunits, next to the equivalent residues on the other subunit, creating a very negative pocket. Are many other positions where role isn't clear
+* APH3II - 262 is in the cleft where kanamycin is bound (APH3II is a kanamycin resistance protein). 182 is at the negative end of an alpha helix, possible stabilising its dipole (Sali et al. 1988).
+* UBE4B - 1083 and 1084 are on a very polar exterior helix face (2 other E, 2 K and 1 R)
+
 ## F - Phenylalanine
 
 Summary:
 
-* F0 -  Small group of outliers, seems to want to mutate to aliphatic hydrophobic residues
+* F0 - Small group of outliers, seems to want to mutate to aliphatic hydrophobic residues
 * F1 - Selective against charged/polar residues, tolerates aromatic and hydrophobic
 * F2 - Most selective, tolerates tyrosine. Least tolerant to charged and proline
 * F3 - Broadly tolerant, somewhat selective against cysteine and valine?
 
 F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's
+
+### F2
+
+Seems to utilise specific aromatic properties as well as hydrophobicity.
+They occur relatively frequently in groups.
+
+Examples:
+
+* BRCA1 - 43 surrounded by hydrophobic residues and filling a ring shaped space
+* CALM1 - 17 & 69 are potentially pi-stacking
+* CBS - 332, 385 & 396 are positioned in a cleft together, along with several other aromatic residues; more potential pi-stacking? 197 & 310 are also adjacent to each other
+* TP53 - 270 & 113 are adjacent and face one another. 134 is near them but in the middle of an apparently polar pocket?
 
 ## G - Glycine
 
@@ -198,6 +234,12 @@ Summary:
 Strongly intolerant to negative charge and proline
 * M2 - Moderately selection against everything, strong selection against cysteine
 * M3 - Strong selection against proline, weak selection against negative charge
+
+### M1
+
+Examples:
+
+* HSP90 - 84 is in a binding pocket for ATP, 116 fills a hydrophobic cleft, 16 looks to interact with a phenylalanine ring, 589 is near to a tryptophan residue (interestingly the 589 position is classified M1 from the profile in Hietpas et al. 2011 and M3 when from Jiang et al. 2013).
 
 ## N - Asparagine
 
