@@ -240,6 +240,25 @@ Strongly intolerant to negative charge and proline
 Examples:
 
 * HSP90 - 84 is in a binding pocket for ATP, 116 fills a hydrophobic cleft, 16 looks to interact with a phenylalanine ring, 589 is near to a tryptophan residue (interestingly the 589 position is classified M1 from the profile in Hietpas et al. 2011 and M3 when from Jiang et al. 2013).
+* MAPK1 - 221 & 293 appear to be filling hydrophobic space
+* NP - series of positions in a helix bundle
+* TP53 - 243 faces towards bound DNA, 133 is in a space near two aromatics, 160 seems to fill a large hole
+* Src - both fill holes near aromatics
+
+### M2
+
+Examples:
+
+* Src - 317 in a hydrophobic pocket near two aromatics
+* Ras - 72 in a pocket near a phenylalanine
+* NP - Clustered in a different helix bundle to M1 positions, but not obvious what the difference is other than potentially more aromatics
+* HA - 460 in a fairly tight looking pocket near a tyrosine.
+* CBS - 464 is in a tight pocket, 458 in a similar pocket but with two aromatics, 337 is near two aromatics in an exposed cleft
+* CALM1 - 72 & 73 are in a helix helix interface adjacent to two M1 positions
+
+The physical difference between M1 and M2 is not completely clear.
+They have similar distributions of distance to the nearest aromatic.
+To some extent M1 positions appear to physically group together in some proteins and M2 positions group separately, potentially due to physical characteristics or the importance of the two domains.
 
 ## N - Asparagine
 
