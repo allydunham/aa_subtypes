@@ -44,6 +44,15 @@ The lobe is actually in the middle of a different monomer, so this residue is li
 * TPMT - neither are that buried or cramped
 * UBE2I - 133 is buried near a bulky aromatic, 106 appears exposed.
 
+### A4
+
+Tolerates any substitution apart from proline.
+
+Examples:
+
+* MAPK1 - 3 positions (143, 309 & 352) are at the C terminus of alpha helices, where the proline kink likely destabilises the helix. 281 is in the turn between two helices. 174 is in an apparently free coil.
+* TP53 - 3 position (119, 129 & 138) are in the turns of a beta-sheet. 347 is in the middle of an alpha-helix
+
 ## C - Cysteine
 
 Summary:
