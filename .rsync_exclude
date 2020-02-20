@@ -10,4 +10,4 @@ subtypes/*.yaml
 residue_hydrophobicity.tsv
 graveyard/*/*.yaml
 graveyard/*/*.R
-kmeans_pca_no_sig_subtype_descriptions.md
+hclust_pca_no_sig_dynamic_cos.md
