@@ -36,7 +36,7 @@ plots$ss_probability <- labeled_plot(plot_cluster_ss_profile(full_characterisati
 plots$profile_variance <- group_by(full_characterisation$tbl, wt)
 plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_cluster_profile_variation(.), units='cm', height=20, width=30), keep = TRUE) %>%
   set_names(group_keys(plots$profile_variance)$wt)
-plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(x), units='cm', height = 20, width=20)
+plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(full_characterisation), units='cm', height = 20, width=20)
 
 ### Plot Per AA characterisations ###
 get_aa_plot <- function(x, global_scale=TRUE){
