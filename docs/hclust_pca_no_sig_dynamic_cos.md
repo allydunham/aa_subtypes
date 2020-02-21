@@ -127,6 +127,16 @@ Examples:
 * HSP90 - All four (40, 79, 113, 143) all border an apparent ATP binding pocket, as do 3 D3 positions
 * PAB1 - 184 possibly bonding to lysine 180, 138 has a similar arrangement with lysine 140
 
+### D4
+
+Tolerates any substitution other than proline.
+
+Examples:
+
+* APH3II - 118 & 238 are in helices, 23 & 52 at the start and end of beta strand turns
+* PAB1 - 144 is in a helix, 136 & 160 are in coils around this helix
+* TPMT - 31 & 162 are both in helices
+
 ## E - Glutamate
 
 Summary:
