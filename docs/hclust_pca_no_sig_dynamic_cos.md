@@ -163,6 +163,19 @@ Examples:
 * APH3II - 262 is in the cleft where kanamycin is bound (APH3II is a kanamycin resistance protein). 182 is at the negative end of an alpha helix, possible stabilising its dipole (Sali et al. 1988).
 * UBE4B - 1083 and 1084 are on a very polar exterior helix face (2 other E, 2 K and 1 R)
 
+### E3
+
+Tolerates any substitution apart from proline.
+
+Examples:
+
+* ADRB2 - 180 & 225 are both at the end of helices (quite common in general for E though) and 237 is in an intracellular loop, although this part of the protein seems to vary between structures.
+* CALM1 - All three positions are in helices
+* CBS - 399 is on the end of a helix and 436 in the middle of a short helix
+* MAPK1 - 33 is on the end of a beta sheet, 250 near the end of a short helix and 186 in a coil
+* Ras - 91 & 98 are in a single helix, 162 in a helix, 76 in the coil at the end of a sheet and 62 & 63 in a fairly tight turn in a beta sheet structure
+* TPMT - 205 is in a curved beta sheet (saddle point like curve) and 203 in a small alpha helix
+
 ## F - Phenylalanine
 
 Summary:
@@ -219,6 +232,17 @@ Summary:
 * I4 - Selective against negative charge and proline only
 * I5 - Selective against charged residues (both positive and negative), but not polar.
 
+### I4
+
+Selective against negative charge and proline
+
+Examples:
+
+* ADRB2 - Many positions in the transmembrane helices, both inside the helix bundle and facing the membrane
+* APH3II - 254 & 246 are on the end of a helix and in the turn to the previous helix, facing into a hydrophobic pocket.29 is on a beta turn, externally facing.
+* HSP90 - 147, 137, 172, 64 & 205 are all on one end of the strands making a beta sheet. Sharp turns or charge likely disrupt it. 90 is in a small alpha helix
+* Ras - 84 is in the turn between a helix and sheet, 36 in the turn at the end of a strand, 46 & 55 at the c-terminal ends of stands
+
 ## K - Lysine
 
 Summary:
@@ -228,6 +252,18 @@ Summary:
 * K3 - Everything but proline
 * K4 - Selective against threonine and glutamine only
 * K5 - Substitutions generally improve fitness
+
+### K5
+
+Generally has positive ER scores, although positions in this subtype have more variable ER profile than most.
+
+Examples:
+
+* Ras - 147 is at the mouth of a pocket where GCP (methylated GTP?) is bound in the structure. Possibly an experimental artefact as they select for the presence of Ras-GTP, without selecting for proper Ras activity so some binding site changes might be beneficial in this context but not more broadly.
+* MAPK1 - 11 positions spread broadly across (mainly) the surface of the protein
+* TP53 - A collection of positions in the region where subunits of the tetramer interact
+* ADRB2 - 147 is at the end of a helix on the cytoplasmic side, and its real ER profile suggests that in fact many substitutions are actually negative, with a few positive scores likely putting it in this group
+* APH3II - 175 is in a surface facing alpha helix. It actually does have mostly positive ER scores (all but Y). They select towards drug resistance in a range of drugs, so possibly this residue is a target in some cases?
 
 ## L - Leucine
 
