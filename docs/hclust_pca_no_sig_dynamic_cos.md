@@ -406,4 +406,36 @@ Summary:
 * Y1 - Generally selective, tolerates phenylalanine and histidine
 * Y2 - Tolerates aromatics and hydrophobic aliphatics
 
-Subtypes are fairly intermixed in the original hierarchical clustering dendrogram.
+Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
+
+### Y1
+
+Tolerates phenylalanine and histidine, the other two amino acids with a single aromatic ring.
+The intolerance of tryptophan potentially means they are in spaces where it is too bulky.
+The requirement for an aromatic ring suggest pi interactions or similar.
+
+Examples:
+
+* amiE - Many positions in a cluster, large number of aromatics maybe means tryptophan is too bulky?
+* CBS - Again a group appears in a sort of cluster (4 along a line), with another two independent: 233 is part of a haem binding pocket and 163 appears alone in a reasonably large pocket (potentially needing the size of the aromatic ring)
+* CCR5 - A number of positions on the inner faces of the helix bundle (not adjacent to each other however), then two pairs of nearby residues (184/187 & 14/15) plus 10 is sulphated and near to an N-Acetyl-2-Deoxy-2-Amino-Galactose ligand (at least in the cryoEM structure), so potentially has an active role.
+* CP - 3 positions in the beta sheet. 86 facing externally and the other two buried. As this is a bacteriophage coat protein it is likely that 86 actually faces other complex subunits.
+* HA - many positions, somewhat clustered? 502 & 507 seem to be potentially stacking?
+* MAPK1 - not a clear pattern, some internal in large-ish pockets, a few on the surface.
+* TP53 - 327 externally facing, other positions clumped in a lobe but not immediately next to one another. 126 is near two other aromatics, potentially interacting, others appear to be in simple hydrophobic pockets.
+* UBE2I - 137 & 144 are adjacent, potentially interacting. 68 is near a phenylalanine, with another potential interaction.
+
+### Y2
+
+Tolerant of all aromatic and hydrophobic substitutions
+
+Examples:
+
+* ADRB2 - 209 & 132 face outwards in the transmembrane domain
+* amiE - 255 is buried on the face of a beta sheet, but doesn't seem to be hugely hydrophobic
+* APH3II - both are internal, in hydrophobic pockets but also are predicted to make h-bonds to the backbone
+* CBS - 484 is buried but also has a predicted h-bond
+* HSP90 - 125 is internal, 47 externally facing, although with the aliphatic ring surrounded
+* PTEN - 6 positions are near the surface but not really accessible. Generally seem to be in reasonably hydrophobic positions, but not entirely.
+* Src - 329 is buried although not in a hydrophobic region (makes polar contacts with 2 glutamine residues), 439 & 482 are on the surface.
+* TPMT - 131 is somewhat exposed and contacts a ligand in the crystal structure. 180 & 240 are on a beta sheet, in apparently hydrophobic conditions.
