@@ -47,8 +47,13 @@ plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_c
   set_names(group_keys(plots$profile_variance)$wt)
 plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(full_characterisation), units='cm', height = 20, width=20)
 
-plots$er_correlation_selective <- labeled_plot(plot_cluster_profile_correlation(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
-plots$er_cosine_selective <- labeled_plot(plot_cluster_profile_cosine_sim(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+if (n_clusters_selective > 1){
+  plots$er_correlation_selective <- labeled_plot(plot_cluster_profile_correlation(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+  plots$er_cosine_selective <- labeled_plot(plot_cluster_profile_cosine_sim(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+} else {
+  plots$er_correlation_selective <- ggplot()
+  plots$er_cosine_selective <- ggplot()
+}
 
 ### Plot Per AA characterisations ###
 get_aa_plot <- function(x, global_scale=TRUE){
@@ -94,8 +99,12 @@ if ('hclust' %in% names(clusters[[1]])){
 profiles <- cluster_mean_profiles(dms) 
 plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
 
-profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% permissive_clusters)) 
-plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
+if (n_clusters_selective > 1){
+  profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% permissive_clusters)) 
+  plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
+} else {
+  plots$overall_dend_selective <- ggplot()
+}
 
 grouped_profiles <- mutate(profiles, aa = str_sub(cluster, end = 1)) %>%
   group_by(aa)
