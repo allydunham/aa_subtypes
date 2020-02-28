@@ -26,17 +26,18 @@ outlier_profiles <- filter(dms, str_detect(cluster_ds0, '^[A-Z]0$')) %>%
          id = as.factor(id))
 
 plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = er)) +
-                             facet_grid(rows=vars(wt), space='free_y', scales = 'free_y') +
+                             facet_grid(rows=vars(wt), space='free_y', scales = 'free') +
                              geom_raster() +
                              scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction) +
-                             labs(caption = 'Note: outliers (|ER| > 2) have been clamped, affecting a few positions near to 2 and two extreme values (|ER| > 4)') +
+                             labs(caption = str_wrap('Note: outliers (|ER| > 2) have been clamped, affecting a few positions near to 2 and two extreme values (|ER| > 4)', width = 60)) +
                              theme(axis.ticks = element_blank(),
                                    axis.text.x = element_text(colour = AA_COLOURS[sort(unique(outlier_profiles$mut))]),
-                                   axis.title.y = element_blank(),
+                                   axis.title = element_blank(),
                                    strip.placement = 'outside',
+                                   strip.text.y = element_text(angle = 0),
                                    panel.grid.major.y = element_blank(),
                                    plot.title = element_text(hjust = 0))) %>%
   labeled_plot(units = 'cm', width = 15, height = 100)
 
 ### Save figures ###
-save_plotlist(plots, root = 'figures/2_subtypes/final_subtypes/')
+save_plotlist(plots, root = 'figures/2_subtypes/final_subtypes/', overwrite = 'all')
