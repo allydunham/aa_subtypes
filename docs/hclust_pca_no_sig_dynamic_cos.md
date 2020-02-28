@@ -395,8 +395,21 @@ Summary:
 
 Summary:
 
-* W1 - Tolerates other aromatics
+* W1 - Tolerates phenylalanine and tyrosine, and is less intolerant other large residues.
 * W2 - Tolerates cysteine, glycine, leucine, arginine and serine (no clear pattern?)
+
+### W1
+
+Tolerates phenylalanine and tyrosine as well as being less intolerant of methionine, leucine, isoleucine and histidine (all also reasonably large)
+
+Examples:
+
+* ADRB2 - 4 positions face into the membrane (32, 105, 158 & 173), 99 & 109 look to potentially be interacting via pi orbitals, 313 fills a large-ish space in the helix bundle and 286 is in the bundle at the base of a ligand binding site.
+* amiE - 209 is buried deep in the core, potentially interacting with a histidine nearby (although it is positioned perpendicularly)
+
+### W2
+
+Tolerates aromatics and some other (rather discordant) substitutions.
 
 ## Y - Tyrosine
 
