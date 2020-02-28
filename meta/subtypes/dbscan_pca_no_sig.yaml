@@ -1,7 +1,0 @@
-desc: "DBSCAN clustering on PCs excluding positional significance"
-method: 'dbscan'
-columns: 'PC2:PC20'
-args:
-  eps: 1.5
-  dist_method: 'manhattan'
-  minPts: 11

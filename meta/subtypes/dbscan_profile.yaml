@@ -1,7 +1,0 @@
-desc: "DBSCAN clustering on ER profiles"
-method: 'dbscan'
-columns: 'A:Y'
-args:
-  eps: 3
-  dist_method: 'manhattan'
-  minPts: 11

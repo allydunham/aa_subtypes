@@ -1,7 +1,0 @@
-desc: "DBSCAN clustering on PCs"
-method: 'dbscan'
-columns: 'PC1:PC20'
-args:
-  eps: 2
-  dist_method: 'manhattan'
-  minPts: 11
