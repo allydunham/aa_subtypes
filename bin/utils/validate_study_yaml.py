@@ -23,7 +23,7 @@ DEFAULT_STUDIES = f'{PROJECT_ROOT}/data/studies'
 DEFAULT_FASTA = f'{PROJECT_ROOT}/meta/fasta'
 
 REQUIRED_FIELDS = ('study', 'gene', 'uniprot_id', 'gene_type', 'species', 'seq',
-                   'experiment', 'transform', 'authour', 'year', 'title', 'doi',
+                   'experiment', 'transform', 'authour', 'year', 'title', 'lab', 'doi',
                    'pmid', 'url', 'qc', 'input_files', 'source')
 
 OPTIONAL_FIELDS = ('notes', 'mavedb_urn', 'strain', 'domain')

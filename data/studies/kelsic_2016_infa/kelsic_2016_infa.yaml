@@ -10,6 +10,7 @@ transform: 'VAMP-seq'
 authour: 'Kelsic et al.'
 year: 2016
 title: 'RNA Structural Determinants of Optimal Codons Revealed by MAGE-Seq'
+lab: ['Kishony']
 doi: '10.1016/j.cels.2016.11.004'
 pmid: '28009265'
 url: 'https://www.sciencedirect.com/science/article/pii/S2405471216303684'

@@ -19,6 +19,7 @@ transform: 'None'
 authour: 'Araya et al.'
 year: 2012
 title: 'A fundamental protein property, thermodynamic stability, revealed solely from large-scale measurements of protein function'
+lab: ['Fields', 'Fowler']
 doi: '10.1073/pnas.1209751109'
 pmid: '23035249'
 url: 'http://www.pnas.org/content/109/42/16858'

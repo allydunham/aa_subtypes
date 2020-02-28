@@ -11,6 +11,7 @@ transform: 'VAMP-seq'
 authour: 'Weile et al.'
 year: 2017
 title: 'A framework for exhaustively mapping functional missense variants'
+lab: ['Roth', 'Fowler']
 doi: '10.15252/msb.20177908'
 pmid: '29269382'
 url: 'http://msb.embopress.org/content/13/12/957'

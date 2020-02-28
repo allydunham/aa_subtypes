@@ -41,6 +41,7 @@ transform: 'log2(x_e3)'
 authour: 'Starita et al.'
 year: 2015
 title: 'Massively Parallel Functional Analysis of BRCA1 RING Domain Variants'
+lab: ['Fields', 'Shendure', 'Fowler']
 doi: '10.1534/genetics.115.175802'
 pmid: '25823446'
 url: 'http://www.genetics.org/content/200/2/413'

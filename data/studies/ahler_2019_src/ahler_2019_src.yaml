@@ -18,6 +18,7 @@ transform: '-x'
 authour: 'Ahler et al.'
 year: 2019
 title: 'A Combined Approach Reveals a Regulatory Mechanism Coupling Src’s Kinase Activity, Localization, and Phosphotransferase-Independent Functions'
+lab: ['Fowler', 'Maly']
 doi: '10.1016/j.molcel.2019.02.003'
 pmid: '30956043'
 url: 'https://www.sciencedirect.com/science/article/pii/S1097276519300930'

@@ -16,6 +16,7 @@ transform: "log2(x/mean(x_{subs with blosum62 >= 2}))"
 authour: 'Jones et al'
 year: 2019
 title: 'Structural and Functional Characterization of G Protein-Coupled Receptors with Deep Mutational Scanning'
+lab: ['Kosuri', 'Dror', 'Babu']
 doi: 'https://doi.org/10.1101/623108'
 pmid: 
 url: 'https://www.biorxiv.org/content/10.1101/623108v2.full'

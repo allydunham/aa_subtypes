@@ -13,6 +13,7 @@ transform: 'log2(x)'
 authour: 'Firnberg et al.'
 year: 2014
 title: 'A Comprehensive, High-Resolution Map of a Gene’s Fitness Landscape'
+lab: ['Ostermeier']
 doi: '10.1093/molbev/msu081'
 pmid: '24567513'
 url: 'https://academic.oup.com/mbe/article/31/6/1581/2925654'

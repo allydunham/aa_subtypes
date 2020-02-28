@@ -17,6 +17,7 @@ transform: 'log2(x_mut_i/x_wt_i)'
 authour: 'Doud et al.'
 year: 2015
 title: 'Site-Specific Amino Acid Preferences Are Mostly Conserved in Two Closely Related Protein Homologs'
+lab: ['Bloom']
 doi: '10.1093/molbev/msv167'
 pmid: '26226986'
 url: 'https://academic.oup.com/mbe/article/32/11/2944/982113'

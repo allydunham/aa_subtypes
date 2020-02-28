@@ -21,6 +21,7 @@ transform: '-log2(x)'
 authour: 'Wagenaar et al.'
 year: 2014
 title: 'Resistance to vemurafenib resulting from a novel mutation in the BRAFV600E kinase domain'
+lab: ['Green', 'Bolon']
 doi: '10.1111/pcmr.12171'
 pmid: '24112705'
 url: 'https://onlinelibrary.wiley.com/doi/full/10.1111/pcmr.12171'

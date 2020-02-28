@@ -16,6 +16,7 @@ transform: '-x/ln(2)'
 authour: 'Bolognesi et al.'
 year: 2019
 title: 'The mutational landscape of a prion-like domain'
+lab: ['Lehner']
 doi: '10.1038/s41467-019-12101-z'
 pmid: '31519910'
 url: 'http://www.nature.com/articles/s41467-019-12101-z'

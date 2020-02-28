@@ -10,6 +10,7 @@ transform: 'None (Processed from counts)'
 authour: 'Olson et al.'
 year: 2014
 title: 'A Comprehensive Biophysical Description of Pairwise Epistasis throughout an Entire Protein Domain'
+lab: ['Sun']
 doi: '10.1016/j.cub.2014.09.072'
 pmid: '25455030'
 url: 'https://www.sciencedirect.com/science/article/pii/S0960982214012688'

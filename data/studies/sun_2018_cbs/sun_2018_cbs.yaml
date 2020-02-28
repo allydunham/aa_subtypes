@@ -18,6 +18,7 @@ transform: 'VAMP-seq'
 authour: 'Sun et al.'
 year: 2018
 title: 'A proactive genotype-to-patient-phenotype map for cystathionine beta-synthase'
+lab: ['Roth']
 doi: '10.1101/473983'
 pmid: ''
 url: 'https://www.biorxiv.org/content/10.1101/473983v3'

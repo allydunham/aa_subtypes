@@ -15,6 +15,7 @@ transform: '-x'
 authour: 'Giacomelli et al.'
 year: 2018
 title: 'Mutational processes shape the landscape of TP53 mutations in human cancer'
+lab: ['Hahn', 'Root', 'Johannessen']
 doi: '10.1038/s41588-018-0204-y'
 pmid: '30224644'
 url: 'https://www.nature.com/articles/s41588-018-0204-y'

@@ -20,6 +20,7 @@ transform: 'None'
 authour: 'Melamed et al.'
 year: 2013
 title: 'Deep mutational scanning of an RRM domain of the Saccharomyces cerevisiae poly(A)-binding protein'
+lab: ['Fields']
 doi: '10.1261/rna.040709.113'
 pmid: '24064791'
 url: 'https://rnajournal.cshlp.org/content/19/11/1537'

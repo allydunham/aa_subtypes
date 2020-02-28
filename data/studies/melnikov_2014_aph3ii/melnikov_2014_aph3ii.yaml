@@ -13,6 +13,7 @@ transform: 'None (processed from counts)'
 authour: 'Melnikov et al.'
 year: 2014
 title: 'Comprehensive mutational scanning of a kinase in vivo reveals substrate-dependent fitness landscapes'
+lab: ['Mikkelsen']
 doi: '10.1093/nar/gku511'
 pmid: '24914046'
 url: 'https://academic.oup.com/nar/article/42/14/e112/1266940'

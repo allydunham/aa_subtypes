@@ -40,6 +40,7 @@ transform: 'None'
 authour: 'Findlay et al.'
 year: 2018
 title: 'Accurate classification of BRCA1 variants with saturation genome editing'
+lab: ['Shendure', 'Starita']
 doi: '10.1038/s41586-018-0461-z'
 pmid: '30209399'
 url: 'https://www.nature.com/articles/s41586-018-0461-z'

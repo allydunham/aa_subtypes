@@ -12,6 +12,7 @@ transform: 'x/ln(2)'
 authour: 'Bandaru et al.'
 year: 2017
 title: 'Deconstruction of the Ras switching cycle through saturation mutagenesis'
+lab: ['Kuriyan', 'Valencia']
 doi: '10.7554/eLife.27810'
 pmid: '28686159'
 url: 'https://elifesciences.org/articles/27810'

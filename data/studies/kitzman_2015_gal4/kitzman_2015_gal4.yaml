@@ -23,6 +23,7 @@ transform: 'log2(x)'
 authour: 'Kitzman et al.'
 year: 2015
 title: 'Massively parallel single amino-acid mutagenesis'
+lab: ['Shendure', 'Fields']
 doi: '10.1038/nmeth.3223'
 pmid: '25559584'
 url: 'https://www.nature.com/articles/nmeth.3223'

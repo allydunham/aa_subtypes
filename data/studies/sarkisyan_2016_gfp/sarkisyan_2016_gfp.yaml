@@ -12,6 +12,7 @@ transform: 'log2(x/F_wt)'
 authour: 'Sarkisyan et al.'
 year: 2016
 title: 'Local fitness landscape of the green fluorescent protein'
+lab: ['Kondrashov']
 doi: '10.1038/nature17995'
 pmid: '27193686'
 url: 'https://www.nature.com/articles/nature17995'
