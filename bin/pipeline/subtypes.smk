@@ -81,6 +81,26 @@ rule compare_subtypes:
     shell:
         "Rscript bin/analysis/2_subtypes/compare_subtypes.R --dms {input.dms} --figures figures/2_subtypes --subtypes {input.subtypes} &> {log}"
 
+rule final_subtypes:
+    """
+    Additional analysis of the final chosen subtypes
+    """
+    input:
+        sections=ancient("meta/structures.yaml"),
+        dms="data/combined_mutational_scans.tsv",
+        subtypes="data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_0.tsv",
+        alt_subtypes="data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1.tsv",
+
+    output:
+        "figures/2_subtypes/final_subtypes/outlier_profiles.pdf"
+
+    log:
+        "logs/final_subtypes.log"
+
+    shell:
+        "Rscript bin/analysis/2_subtypes/final_subtypes.R &> {log}"
+
+
 #### Clustering and Analysing aach cluster method ####
 ## Kmeans
 rule make_subtypes_kmeans:
