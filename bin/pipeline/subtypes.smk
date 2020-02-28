@@ -11,8 +11,11 @@ diagnostic_plots = ['umap.pdf', 'tsne.pdf', 'silhouette_global.pdf',
                     'silhouette_per_aa_cosine.pdf']
 
 characterisation_plots = ['ramachandran_angles.pdf', 'sizes.pdf', 'er_profiles.pdf',
-                          'er_correlation.pdf', 'foldx.pdf', 'chem_env.pdf', 'ss_probability.pdf',
-                          'er_vs_surface_accessibility.pdf', 'er_vs_size.pdf', 'overall_dend.pdf', 'multi_position_subtype_consistency.pdf']
+                          'er_correlation.pdf', 'er_correlation_selective.pdf',
+                          'foldx.pdf', 'chem_env.pdf', 'ss_probability.pdf',
+                          'er_cosine.pdf', 'er_cosine_selective.pdf',
+                          'er_vs_surface_accessibility.pdf', 'er_vs_size.pdf', 'overall_dend.pdf', 'overall_dend_selective.pdf',
+                          'multi_position_subtype_consistency.pdf']
 characterisation_plots.extend([f"aa_profiles/{x}.pdf" for x in AA_ALPHABET])
 characterisation_plots.extend([f"aa_profiles_relative/{x}.pdf" for x in AA_ALPHABET])
 characterisation_plots.extend([f"ss_probabilities/{x}.pdf" for x in AA_ALPHABET])

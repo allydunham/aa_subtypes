@@ -22,6 +22,15 @@ plots <- list()
 full_characterisation <- full_cluster_characterisation(dms)
 n_clusters <- nrow(full_characterisation$summary)
 
+# Make profiles with permissive clusters excluded
+permissive_cutoff <- 0.3
+permissive_clusters <- group_by(full_characterisation$profiles, cluster) %>%
+  summarise(permissive = all(abs(er) < permissive_cutoff)) %>%
+  filter(permissive) %>%
+  pull(cluster)
+selective_characterisation <- full_cluster_characterisation(filter(dms, !cluster %in% permissive_clusters))
+n_clusters_selective <- nrow(full_characterisation$summary)
+
 ### Plot all cluster characterisation ###
 plots$ramachandran_angles <- labeled_plot(plot_cluster_ramachandran_angles(full_characterisation), units='cm', width=20, height=20)
 plots$sizes <- labeled_plot(plot_cluster_sizes(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
@@ -37,6 +46,9 @@ plots$profile_variance <- group_by(full_characterisation$tbl, wt)
 plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_cluster_profile_variation(.), units='cm', height=20, width=30), keep = TRUE) %>%
   set_names(group_keys(plots$profile_variance)$wt)
 plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(full_characterisation), units='cm', height = 20, width=20)
+
+plots$er_correlation_selective <- labeled_plot(plot_cluster_profile_correlation(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+plots$er_cosine_selective <- labeled_plot(plot_cluster_profile_cosine_sim(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
 
 ### Plot Per AA characterisations ###
 get_aa_plot <- function(x, global_scale=TRUE){
@@ -81,6 +93,9 @@ if ('hclust' %in% names(clusters[[1]])){
 ### Plot profile dendograms ###
 profiles <- cluster_mean_profiles(dms) 
 plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
+
+profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% permissive_clusters)) 
+plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
 
 grouped_profiles <- mutate(profiles, aa = str_sub(cluster, end = 1)) %>%
   group_by(aa)
