@@ -26,7 +26,7 @@ outlier_profiles <- filter(dms, str_detect(cluster_ds0, '^[A-Z]0$')) %>%
          id = as.factor(id))
 
 plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = er)) +
-                             facet_grid(rows=vars(wt), space='free_y', scales = 'free') +
+                             lemon::facet_rep_grid(rows=vars(wt), space='free_y', scales = 'free', repeat.tick.labels = TRUE) +
                              geom_raster() +
                              scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction) +
                              labs(caption = str_wrap('Note: outliers (|ER| > 2) have been clamped, affecting a few positions near to 2 and two extreme values (|ER| > 4)', width = 60)) +
