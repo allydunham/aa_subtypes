@@ -455,10 +455,23 @@ Examples:
 
 * ADRB2 - 4 positions face into the membrane (32, 105, 158 & 173), 99 & 109 look to potentially be interacting via pi orbitals, 313 fills a large-ish space in the helix bundle and 286 is in the bundle at the base of a ligand binding site.
 * amiE - 209 is buried deep in the core, potentially interacting with a histidine nearby (although it is positioned perpendicularly)
+* CBS - 7 positions, generally in positions where they fill a large space. 408 and 410 are part of a tryptophan triplet, with a W2 position in between, which seems to fill a big space and potentially create pi orbital interactions.
+* CXCR4 - 161 is on the exterior of a helix bundle. 252 faces into the helix bundle into a region with many aromatics. 195 is at the edge of the bundle in the interface with a second subunit (in the homodimer structure), close to two other aromatics.
+* HA - 196 & 250 are in the internal pocket of the binding domain, various other positions are buried in the binding domain with several buried in the transmembrane helix domains.
+* MAPK1 - Two positions in generically hydrophobic positions.
+* TEM1 - 226 & 287 are in a pair facing each other with their sides on the protein surface, 163 is directly facing the surface and 208 is buried near a disulphide bond, several charged residues, a leucine and an isoleucine.
 
 ### W2
 
 Tolerates aromatics and some other (rather discordant) substitutions.
+
+Examples:
+
+* amiE - 5 positions, generally buried and surrounded by a range of different residue types.
+* APH3II - 69 faces into the protein towards various hydrophobic residues.
+* CCR5 - 5 positions face into the core of a helix bundle, with a number of other aromatic residues. 190 is on the outside of the bundle, facing into the membrane.
+* TPMT - 29 and 33 face the binding pocket of SAH (in this structure), 230 conjugates pi orbitals with a histidine, 78 is on the protein surface
+* CXCR4 - 94 is near various other aromatics, 102 is in the helix bundle and 283 faces out from it (into the membrane)
 
 ## Y - Tyrosine
 
