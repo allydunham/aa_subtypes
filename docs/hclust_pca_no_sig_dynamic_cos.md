@@ -3,6 +3,9 @@
 Analysis of the subtypes produced by hierarchical clustering on PC2:20, using cosine distance and dynamic tree cutting.
 The deepSplit=0 clustering is used as the primary dataset, with additional subtypes created by deepSplit=1 noted.
 
+Many of the positive ER positions come from the Brennan et al (2016) study of MAPK1, and are likely partly due to it's experimental setup: gain of function variants are +ve.
+While some of these might be genuine improvements many gain of function variants are likely deleterious in an actual organism.
+
 ## A - Alanine
 
 Summary:
@@ -57,10 +60,16 @@ Examples:
 
 Summary:
 
-* C0 - Outliers, generally permissive with some selection against aromatics and proline.
-Somewhat more likely to occur in helices compared to other subtypes?
+* C0 - Outliers
 * C1 - Highly selective, cysteine only functions such as disulphide bonds
 * C2 - Selective for hydrophobic amino acids, generally buried, includes cysteine/aromatic interactions.
+
+### C0
+
+Two general categories; some pattern of negative substitutions and permissive positions that tend to be somewhat improved on mutation.
+Positions with positive ER largely come from MAPK1.
+Among positions with selective substitutions there doesn't appear to be any particular pattern.
+Outliers are somewhat more likely to occur in helices compared to other subtype.
 
 ### C1
 
@@ -113,6 +122,11 @@ Summary:
 * D5 - Appears to improve with substitution
 
 D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
+
+### D0
+
+A single position in ADRB2 (29), which appears to prefer being a serine.
+This is potentially because there's a repulsive charge interaction with a nearby glutamate, although that wouldn't explain why serine specifically and not any other residue.
 
 ### D1
 
@@ -187,6 +201,11 @@ Summary:
 
 F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's
 
+### F0
+
+Generally have a mixture of positive substitutions (again largely in MAPK1) and permissive.
+Two positions have mostly permissive substitutions with a few somewhat selected against.
+
 ### F2
 
 Seems to utilise specific aromatic properties as well as hydrophobicity.
@@ -211,6 +230,11 @@ Summary:
 * G5 - Strong selection against proline, weak selection against aromatics and isoleucine
 
 All glycine residues appear enriched in turn and bend secondary structures
+
+### G0
+
+Outliers split into 3 broad types: positive ER (often in MAPK1 again, but not exclusively); permissive positions; and positions where a few substitutions are strongly selected against.
+Four positions have a single very strongly deleterious substitution.
 
 ## H - Histidine
 
@@ -290,6 +314,10 @@ Strongly intolerant to negative charge and proline
 * M2 - Moderately selection against everything, strong selection against cysteine
 * M3 - Strong selection against proline, weak selection against negative charge
 
+### M0
+
+Outliers are generally permissive with a few exceptions, for example ADRB2 96 is very selective against asparagine, Src 286 prefers glycine & UBE2I 1 is somewhat selective.
+
 ### M1
 
 Examples:
@@ -319,10 +347,15 @@ To some extent M1 positions appear to physically group together in some proteins
 
 Summary:
 
-* N0 - Outliers, on average seems to prefer being hydrophobic
+* N0 - Outliers
 * N1 - Moderately selective against everything
 * N2 - Nonselective
 * N3 - Anything but proline
+
+### N0
+
+Outliers are all positive ER positions from MAPK1, with a particular preference for hydrophobic residues.
+This suggests addition of hydrophobic residues here creates a GoF phenotype in MAPK1, but no other asparagine's have this property.
 
 ## P - Proline
 
@@ -331,6 +364,10 @@ Summary:
 * P0 - Substitutions generally improve fitness
 * P1 - Selective against everything, strongest against aromatics
 * P2 - Mostly nonselective, some selection against arginine and glutamine
+
+### P0
+
+Generally nonselective outliers as well as some positive ER MAPK1 positions
 
 ## Q - Glutamine
 
@@ -352,6 +389,10 @@ Summary:
 * R2 - Strongly selective against proline, weakly selective against negative charge
 * R3 - Nonselective
 * R4 - Intolerant to negative charge, proline, and hydrophobic residues
+
+### R0
+
+Four outliers; 2 nonselective and 2 in ADRB2 with some selection, in particular 228 which strongly selects against lysine and proline.
 
 ## S - Serine
 
@@ -391,12 +432,20 @@ Summary:
 * V5 - Intolerant of aromatics and charged residues
 * V6 - Anything but proline
 
+### V0
+
+Four MAPK1 outliers with somewhat positive ER scores and one nonselective CP position.
+
 ## W - Tryptophan
 
 Summary:
 
 * W1 - Tolerates phenylalanine and tyrosine, and is less intolerant other large residues.
 * W2 - Tolerates cysteine, glycine, leucine, arginine and serine (no clear pattern?)
+
+### W0
+
+Two positions in Src, one of which has most substitutions strongly favoured particularly for hydrophobic residues and one position that is nonselective apart from preferring to be lysine.
 
 ### W1
 
@@ -420,6 +469,12 @@ Summary:
 * Y2 - Tolerates aromatics and hydrophobic aliphatics
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
+
+### Y0
+
+Most positions are nonselective or only weakly selective, with MAPK1 positions having weakly positive ER scores.
+ADRB2 141 strongly selects against aspartate.
+CXCR4 121 is somewhat selective against polar residues.
 
 ### Y1
 
