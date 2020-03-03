@@ -116,7 +116,7 @@ Summary:
 
 * D1 - Generally selective, most permissive to E and N (both somewhat similar to D)
 * D2 - Fully permissive, very accessible
-* D4 - Anything but proline, very accessible
+* D3 - Anything but proline, very accessible
 
 D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
 
