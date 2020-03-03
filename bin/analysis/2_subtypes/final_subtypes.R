@@ -35,9 +35,42 @@ plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = 
                                    axis.title = element_blank(),
                                    strip.placement = 'outside',
                                    strip.text.y = element_text(angle = 0),
-                                   panel.grid.major.y = element_blank(),
-                                   plot.title = element_text(hjust = 0))) %>%
+                                   panel.grid.major.y = element_blank())) %>%
   labeled_plot(units = 'cm', width = 15, height = 100)
+
+### Plot clusters ###
+plot_cluster <- function(tbl, cluster, breaks){
+  tbl <- mutate(tbl, id = str_c(gene, position, sep = ' ')) %>%
+    select(id, A:Y) %>%
+    pivot_longer(A:Y, names_to = 'mut', values_to = 'er')
+  
+  (ggplot(tbl, aes(x = mut, y = id, fill = er)) +
+     geom_raster() +
+     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                          limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
+     labs(title = cluster,
+          caption = str_wrap('Note: outliers (|ER| > 1.5) have been clamped, mainly affecting a small number of extreme values (|ER| > 3)', width = 60)) +
+     theme(axis.ticks = element_blank(),
+           axis.text.x = element_text(colour = AA_COLOURS[sort(unique(outlier_profiles$mut))]),
+           axis.title = element_blank(),
+           strip.placement = 'outside',
+           strip.text.y = element_text(angle = 0),
+           panel.grid.major.y = element_blank(),
+           plot.title = element_text(hjust = 0.5))) %>%
+    labeled_plot(units = 'cm', width = 20, height = 30)
+}
+
+cluster_positions <- select(dms, cluster=cluster_ds0, gene, position, wt, A:Y) %>%
+  filter(!str_detect(cluster, '^[A-Z]0$')) %>%
+  mutate_at(vars(A:Y), ~clamp(., 1.5, -1.5)) %>%
+  group_by(cluster)
+
+breaks <- pivot_longer(cluster_positions, A:Y, names_to = 'mut', values_to = 'er') %>% 
+  pull(er) %>% 
+  pretty_break(rough_n = 3, sym = 0)
+
+plots$cluster_heatmaps <- group_map(cluster_positions, ~plot_cluster(., cluster = .y, breaks = breaks)) %>%
+  set_names(group_keys(cluster_positions)$cluster)
 
 ### Save figures ###
 save_plotlist(plots, root = 'figures/2_subtypes/final_subtypes/', overwrite = 'all')
