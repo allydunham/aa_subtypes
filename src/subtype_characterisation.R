@@ -623,8 +623,9 @@ plot_cluster_multiple_experiment_consistency <- function(x){
   }
   
   cluster_order <- tibble(c = unique(x$cluster)) %>%
-    tidyr::extract(c, c('c', 'n'), "([A-Z])([0-9]*)", convert=TRUE) %>%
-    arrange(c, n) %>%
+    tidyr::extract(c, c('c', 'n'), "([A-Z])([0-9]*)", convert=FALSE) %>%
+    mutate(ni = as.integer(n)) %>%
+    arrange(c, ni, n) %>%
     unite(c, c, n, sep='') %>%
     pull(c)
   
