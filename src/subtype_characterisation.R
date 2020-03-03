@@ -680,6 +680,11 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     arrange(desc(n), cluster_num) %>%
     pull(cluster)
   
+  # Force outliers (X0) and designated permissive positions (X00) to the bottom of the order
+  outliers <- cluster_order[str_detect(cluster_order, '^[A-Z]0$')]
+  permissive <- cluster_order[str_detect(cluster_order, '^[A-Z]00$')]
+  cluster_order <- c(cluster_order[!str_detect(cluster_order, '^[A-Z]0?0$')], permissive, outliers)
+  
   # If only outliers exist just plot them, otherwise exclude clusters marked as outliers (X0) and under a given size
   if (exclude_outliers & !all(str_detect(cluster_order, '^[A-Z]0$'))){
     outliers <- filter(data$summary, cluster %in% clusters, str_detect(cluster, '^[A-Z]0$'), n < outlier_size) %>% pull(cluster)
