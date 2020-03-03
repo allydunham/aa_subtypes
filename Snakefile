@@ -74,6 +74,7 @@ rule all:
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
         rules.final_subtypes.output,
+        rules.all_position_subtypes.output,
         rules.continuous_characterisation.output
 
 # Only remove rapidly generated results

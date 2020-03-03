@@ -22,6 +22,18 @@ cols <- eval(parse(text = str_c('quo(', conf$columns,')')))
 
 dms <- read_tsv(args$dms)
 
+if ('filter_permissive' %in% names(conf)){
+  permissive_positions <- tibble_to_matrix(dms, A:Y) %>%
+    abs() %>%
+    is_less_than(conf$filter_permissive) %>%
+    apply(1, all)
+  
+  dms_permissive <- filter(dms, permissive_positions) %>%
+    mutate(cluster = str_c(wt, '00'))
+  
+  dms <- filter(dms, !permissive_positions)
+}
+
 ### Setup function to pass arguments to cluster function ###
 # need to use ... construct 
 make_cluster_func <- function(func){
@@ -47,9 +59,13 @@ clusters <- group_by(dms, wt) %>%
 dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
   mutate(cluster = str_c(wt, cluster)) %>%
   arrange(study, position)
+
+if ('filter_permissive' %in% names(conf)){
+  dms <- bind_rows(dms, dms_permissive)
+}
+
 write_tsv(select(dms, cluster, study, gene, position, wt), str_c(args$out, '.tsv'))
 saveRDS(clusters, file = str_c(args$out, '.rds'))
-
 
 ### Save diagnostic plots ###
 if (!is.na(args$figures)){
