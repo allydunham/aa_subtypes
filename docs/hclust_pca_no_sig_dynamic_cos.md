@@ -10,14 +10,13 @@ While some of these might be genuine improvements many gain of function variants
 
 Summary:
 
-* A1 - Nothing larger than alanine, buried
-* A2 - Selection against strong charge (and proline), buried
-* A3 - Weak selection against aromatic and (iso)leucine - large hydrophobic AAs? More surface accessible
-* A4 - Anything but proline
-* A5 - Highly conserved, generally buried
-* A6 - Appears to improve with mutation, very surface accessible
-* A7 - Strong selection against tyrosine, weak selection against arginine, histidine, lysine, cysteine & glutamate.
-* A8 - Not methionine, otherwise weak selection against glycine & phenylalanine.
+* A0 - Nonselective outliers
+* A1 - Selects against large residues, buried
+* A2 - Generally conserved, most strongly against aspartate
+* A3 - Selection against polar residues and proline, somewhat buried
+* A4 - Weak selection against aromatic and (iso)leucine - large hydrophobic AAs? More surface accessible
+* A5 - Anything but proline, with non proline substitutions being mildly positive on average
+* A6 - Strongly selects against proline and isoleucine, weaker selection against valine, arginine and lysine.
 
 ### A1
 
@@ -62,7 +61,7 @@ Summary:
 
 * C0 - Outliers
 * C1 - Highly selective, cysteine only functions such as disulphide bonds
-* C2 - Selective for hydrophobic amino acids, generally buried, includes cysteine/aromatic interactions.
+* C2 - Selective against hydrophilic amino acids, more buried buried, includes cysteine/aromatic interactions.
 
 ### C0
 
@@ -115,11 +114,9 @@ The identified aromatic interactions are:
 
 Summary:
 
-* D1 - Highly selective, most permissive to E and N (both somewhat similar to D)
-* D2 - Selects against basic groups and larger side chains
-* D3 - Fully permissive, very accessible
-* D4 - Anything but proline
-* D5 - Appears to improve with substitution
+* D1 - Generally selective, most permissive to E and N (both somewhat similar to D)
+* D2 - Fully permissive, very accessible
+* D4 - Anything but proline, very accessible
 
 D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
 
