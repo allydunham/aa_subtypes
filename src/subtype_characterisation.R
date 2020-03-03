@@ -741,7 +741,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
           plot.title = element_text(hjust = 0))
   
   # Subtype mean ER profiles
-  er_lims <- filter(data$profiles, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%   pull(er) %>% pretty_break(step = 0.5, sym = 0)
+  er_lims <- filter(data$profiles, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>% pull(er) %>% pretty_break(step = 0.5, sym = 0)
   p_profile <- filter(data$profiles, cluster %in% cluster_order) %>%
     mutate(cluster = factor(cluster, levels = cluster_order)) %>%
     ggplot(aes(x = cluster, y = mut, fill = er)) +
