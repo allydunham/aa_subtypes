@@ -23,5 +23,7 @@ input_files:
   - '1-s2.0-S2211124716313171-mmc2.xlsx' 
 source: 'SI - Table S1'
 qc:
-  filter: False
-  notes:
+  filter: True 
+  notes: "Experimental setup leads to many substitutions with positive ER values, which\
+          are thought to be GOF variants. However in real organisms many GOF changes\
+          are still deleterious"
