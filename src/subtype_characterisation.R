@@ -22,7 +22,7 @@ evaluate_k_silhouette <- function(tbl, cols, k, dist_cols = NULL, min_size = 1){
     select(cluster, study, position, wt, !!dist_cols)
   
   # Average silhouette
-  avg_sil <- filter(cluster_tbl, !str_detect(cluster, '^[A-Z]0$')) %>%
+  avg_sil <- filter(cluster_tbl, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
     group_by(wt) %>%
     group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!dist_cols))) %>%
     summarise(silhouette_score = mean(silhouette_score, na.rm=TRUE))
@@ -148,7 +148,7 @@ cluster_ss_profile <- function(tbl){
     add_factor_order(cluster, ss, prob) %>%
     mutate(cluster = as.character(cluster)) %>%
     group_by(ss) %>%
-    mutate(rel_prob = log2(prob / mean(prob[!str_detect(cluster, '^[A-Z]0$')])))
+    mutate(rel_prob = log2(prob / mean(prob[!str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$"))])))
 }
 
 cluster_sa_profile <- function(tbl){
@@ -280,7 +280,7 @@ plot_compressed_dendrograms <- function(clusters, dms){
   leaves <- map(compressed_dend_data,
                 ~as_tibble(.$labels) %>% 
                   mutate(label=as.character(label)) %>%
-                  tidyr::extract(label, 'cluster', "([A-Z][0-9]*) \\([0-9]*\\)", remove = FALSE))
+                  tidyr::extract(label, 'cluster', str_c("(", CLUSTER_RE, ") \\([0-9]*\\)"), remove = FALSE))
   
   map2(branches, leaves, plot_dend)
 }
@@ -361,7 +361,7 @@ plot_cluster_profiles <- function(x, filter_outliers=5){
   }
   
   if (filter_outliers > 0){
-    x <- filter(x, !str_detect(cluster, '^[A-Z]0$'), n > filter_outliers)
+    x <- filter(x, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n > filter_outliers)
   }
   
   breaks <- pretty_break(x$er, rough_n = 5, sig_figs = 3, sym = 0)
@@ -401,8 +401,8 @@ plot_cluster_profile_correlation <- function(x){
   }
   
   cors <- cluster_profile_correlation(x, A:Y) %>%
-    filter(!str_detect(cluster1, '^[A-Z]0$'),
-           !str_detect(cluster2, '^[A-Z]0$')) %>%
+    filter(!str_detect(cluster1, str_c("^", CLUSTER_OUTLIER_RE, "$")),
+           !str_detect(cluster2, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
     mutate(cluster1 = droplevels(cluster1), cluster2 = droplevels(cluster2))
   
   breaks <- pretty_break(cors$cor, rough_n = 5, sig_figs = 3, sym = 0)
@@ -458,7 +458,7 @@ plot_cluster_profile_cosine_sim <- function(x){
     set_rownames(rownames(profs)) %>%
     as_tibble(rownames = 'cluster1') %>%
     pivot_longer(-cluster1, names_to = 'cluster2', values_to = 'cosine_sim') %>%
-    filter(!str_detect(cluster1, '^[A-Z]0$'), !str_detect(cluster2, '^[A-Z]0$'))
+    filter(!str_detect(cluster1, str_c("^", CLUSTER_OUTLIER_RE, "$")), !str_detect(cluster2, str_c("^", CLUSTER_OUTLIER_RE, "$")))
   
   ggplot(cosine_sim, aes(x = cluster1, y = cluster2, fill=cosine_sim)) +
     geom_tile() +
@@ -480,7 +480,7 @@ plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
   }
   
   if (filter_outliers > 0){
-    x <- filter(x, !str_detect(cluster, '^[A-Z]0$'), n_structure > filter_outliers)
+    x <- filter(x, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n_structure > filter_outliers)
   }
   
   cluster_labs <- levels(x$cluster)
@@ -515,7 +515,7 @@ plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
   }
   
   if (filter_outliers > 0){
-    x <- filter(x, !str_detect(cluster, '^[A-Z]0$'), n_structure > filter_outliers)
+    x <- filter(x, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n_structure > filter_outliers)
   }
   
   cluster_labs <- levels(x$cluster)
@@ -549,7 +549,7 @@ plot_cluster_aa_distances <- function(x, filter_outliers=5){
   }
   
   if (filter_outliers > 0){
-    x <- filter(x, !str_detect(cluster, '^[A-Z]0$'), n_structure > filter_outliers)
+    x <- filter(x, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n_structure > filter_outliers)
   }
   
   cluster_labs <- levels(x$cluster)
@@ -582,7 +582,7 @@ plot_cluster_ss_profile <- function(x, filter_outliers=5){
   }
   
   if (filter_outliers > 0){
-    x <- filter(x, !str_detect(cluster, '^[A-Z]0$'), n > filter_outliers)
+    x <- filter(x, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n > filter_outliers)
   }
   
   breaks <- pretty_break(x$rel_prob, rough_n = 5, sig_figs = 3, sym = 0)
@@ -622,12 +622,7 @@ plot_cluster_multiple_experiment_consistency <- function(x){
     x <- x$tbl
   }
   
-  cluster_order <- tibble(c = unique(x$cluster)) %>%
-    tidyr::extract(c, c('c', 'n'), "([A-Z])([0-9]*)", convert=FALSE) %>%
-    mutate(ni = as.integer(n)) %>%
-    arrange(c, ni, n) %>%
-    unite(c, c, n, sep='') %>%
-    pull(c)
+  cluster_order <- sort_clusters(unique(x$cluster))
   
   dupes <- group_by(x, gene, position, wt) %>%
     filter(n() > 1) %>%
@@ -667,35 +662,25 @@ plot_cluster_multiple_experiment_consistency <- function(x){
           legend.position = 'bottom') +
     guides(size = guide_legend(title = ''), colour = guide_legend(title = ''))
   
-  ggarrange( p_detail, p_overview,ncol = 1, heights = c(3, 1))
+  ggarrange( p_detail, p_overview, ncol = 1, heights = c(3, 1))
 }
 ########
 
 #### Full Characterisation Plot ####
 # Generates a single combined plot for a set of clusters
 plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, global_scale=TRUE, outlier_size=10){
-  # Clusters should all be sorted already in this workflow (1 largest etc.) but double check here as cheap to do,
-  # plus have to add secondary tiebreaker anyway (so e.g. 9 and 10 are sorted as numbers not strings)
-  cluster_order <- filter(data$summary, cluster %in% clusters) %>%
-    mutate(cluster_num = as.integer(str_sub(cluster, start = 2))) %>%
-    arrange(desc(n), cluster_num) %>%
-    pull(cluster)
-  
-  # Force outliers (X0) and designated permissive positions (X00) to the bottom of the order
-  outliers <- cluster_order[str_detect(cluster_order, '^[A-Z]0$')]
-  permissive <- cluster_order[str_detect(cluster_order, '^[A-Z]00$')]
-  cluster_order <- c(cluster_order[!str_detect(cluster_order, '^[A-Z]0?0$')], permissive, outliers)
+  cluster_order <- sort_clusters(clusters)
   
   # If only outliers exist just plot them, otherwise exclude clusters marked as outliers (X0) and under a given size
-  if (exclude_outliers & !all(str_detect(cluster_order, '^[A-Z]0$'))){
-    outliers <- filter(data$summary, cluster %in% clusters, str_detect(cluster, '^[A-Z]0$'), n < outlier_size) %>% pull(cluster)
+  if (exclude_outliers & !all(str_detect(cluster_order, str_c("^", CLUSTER_OUTLIER_RE, "$")))){
+    outliers <- filter(data$summary, cluster %in% clusters, str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n < outlier_size) %>% pull(cluster)
     cluster_order <- cluster_order[!cluster_order %in% outliers]
   } else {
     outliers <- c()
   }
   
   # global outliers
-  global_outliers <- filter(data$summary, str_detect(cluster, '^[A-Z]0$'), n < outlier_size) %>% pull(cluster)
+  global_outliers <- filter(data$summary, str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n < outlier_size) %>% pull(cluster)
   
   cluster_cols <- AA_COLOURS[str_sub(cluster_order, end=1)]
   
