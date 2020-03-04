@@ -93,3 +93,14 @@ FOLDX_TERMS_PLOTMATH['cis_bond'] <- "italic(cis)*'-Peptide Bonds'"
 # DSSP Classes
 DSSP_CLASSES <- c(g="3_10 Helix", h="Alpha Helix", i="Pi Helix", e="Beta Strand", b="Beta Bridge", c="Coil", s="Bend", t="Turn")
 DSSP_CLASSES_PLOTMATH <- c(g="3[10]*'-helix'", h="alpha*'-helix'", i="pi*'-helix'", e="beta*'-strand'", b="beta*'-bridge'", c="'Coil'", s="'Bend'", t="'Turn'")
+
+# Clusters
+# Clusters are named X1, X2, ... for regular subtypes, XO for outliers and XP for designated 'permissive' subtypes
+# This scheme is applied after the main algorithm has been run, with permissive positions designated separatly and simple integer encoding (0 = outlier) used
+# during the algorithm itself
+CLUSTER_OUTLIER_CHAR <- 'O'
+CLUSTER_PERMISSIVE_CHAR <- 'P'
+
+CLUSTER_RE <- str_c('[A-Y](?:[0-9]*|', CLUSTER_OUTLIER_CHAR,'|', CLUSTER_PERMISSIVE_CHAR,')')
+CLUSTER_OUTLIER_RE <- str_c('[A-Y]', CLUSTER_OUTLIER_CHAR)
+CLUSTER_PERMISSIVE_RE <- str_c('[A-Y]', CLUSTER_PERMISSIVE_CHAR)
