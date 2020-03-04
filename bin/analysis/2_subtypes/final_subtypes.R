@@ -18,7 +18,7 @@ dms <- mutate(dms, pdb_position = pdb_pos$position, pdb_chain = pdb_pos$chain)
 full_characterisation <- full_cluster_characterisation(select(dms, cluster = cluster_ds0, everything()))
 
 ### Analyse Outliers ###
-outlier_profiles <- filter(dms, str_detect(cluster_ds0, '^[A-Z]0$')) %>%
+outlier_profiles <- filter(dms, str_detect(cluster_ds0, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
   mutate(id = str_c(gene, position, sep = ' ')) %>%
   select(id, wt, A:Y) %>%
   pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
@@ -61,7 +61,7 @@ plot_cluster <- function(tbl, cluster, breaks){
 }
 
 cluster_positions <- select(dms, cluster=cluster_ds0, gene, position, wt, A:Y) %>%
-  filter(!str_detect(cluster, '^[A-Z]0$')) %>%
+  filter(!str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
   mutate_at(vars(A:Y), ~clamp(., 1.5, -1.5)) %>%
   group_by(cluster)
 

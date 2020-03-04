@@ -7,7 +7,9 @@ dms <- read_tsv('data/combined_mutational_scans.tsv')
 
 ### Make Dynamic Hclust Clusters ###
 clusters <- make_dynamic_hclust_clusters(dms, PC2:PC20, distance_method = 'cosine', treecut_args = list(deepSplit=0))
-dms <- mutate(clusters$tbl, cluster = factor(str_c('X', cluster), levels = str_c('X', c(1:(n_distinct(cluster) - 1), 0)))) %>% # -1 as includes 0
+dms <- mutate(clusters$tbl,
+              cluster = str_c('X', cluster) %>% relabel_outlier_clusters(),
+              cluster = factor(cluster, levels = sort_clusters(cluster))) %>% # -1 as includes 0
   select(cluster, everything())
 
 ### Analyse clusters ###

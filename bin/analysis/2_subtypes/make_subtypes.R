@@ -29,7 +29,7 @@ if ('filter_permissive' %in% names(conf)){
     apply(1, all)
   
   dms_permissive <- filter(dms, permissive_positions) %>%
-    mutate(cluster = str_c(wt, '00'))
+    mutate(cluster = str_c(wt, CLUSTER_PERMISSIVE_CHAR))
   
   dms <- filter(dms, !permissive_positions)
 }
@@ -57,7 +57,7 @@ clusters <- group_by(dms, wt) %>%
 
 ### Save Clusters ###
 dms <- map_dfr(clusters, .f = ~ .$tbl) %>%
-  mutate(cluster = str_c(wt, cluster)) %>%
+  mutate(cluster = str_c(wt, cluster) %>% relabel_outlier_clusters()) %>%
   arrange(study, position)
 
 if ('filter_permissive' %in% names(conf)){
@@ -69,6 +69,6 @@ saveRDS(clusters, file = str_c(args$out, '.rds'))
 
 ### Save diagnostic plots ###
 if (!is.na(args$figures)){
-  plots <- plot_cluster_diagnostics(clusters, cols = !!cols)
+  plots <- plot_cluster_diagnostics(dms, clusters, cols = !!cols)
   save_plotlist(plots, root = args$figures, overwrite = 'all')
 }
