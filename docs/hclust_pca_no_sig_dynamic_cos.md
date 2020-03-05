@@ -17,7 +17,7 @@ Summary:
 
 ### A1
 
-Appears to select against any residues more bulky than alanine, tolerating cysteine,
+<!-- Appears to select against any residues more bulky than alanine, tolerating cysteine,
 glycine etc.
 It generally has a low surface accessibility.
 
@@ -41,16 +41,16 @@ The lobe is actually in the middle of a different monomer, so this residue is li
 * TP53 - 276 interfaces with DNA, 159 & 161 are in a cramped, buried strand
 * TPK1 - 145 appears to be in a kink in a helix, potentially requiring small size. 39 is in a cramped area, 45 is buried
 * TPMT - neither are that buried or cramped
-* UBE2I - 133 is buried near a bulky aromatic, 106 appears exposed.
+* UBE2I - 133 is buried near a bulky aromatic, 106 appears exposed. -->
 
 ### A4
 
-Tolerates any substitution apart from proline.
+<!-- Tolerates any substitution apart from proline.
 
 Examples:
 
 * MAPK1 - 3 positions (143, 309 & 352) are at the C terminus of alpha helices, where the proline kink likely destabilises the helix. 281 is in the turn between two helices. 174 is in an apparently free coil.
-* TP53 - 3 position (119, 129 & 138) are in the turns of a beta-sheet. 347 is in the middle of an alpha-helix
+* TP53 - 3 position (119, 129 & 138) are in the turns of a beta-sheet. 347 is in the middle of an alpha-helix -->
 
 ## C - Cysteine
 
@@ -60,16 +60,16 @@ Summary:
 * C2 - Selective against hydrophilic amino acids, more buried buried, includes cysteine/aromatic interactions.
 * CO - Outliers
 
-### C0
+### CO
 
-Two general categories; some pattern of negative substitutions and permissive positions that tend to be somewhat improved on mutation.
+<!-- Two general categories; some pattern of negative substitutions and permissive positions that tend to be somewhat improved on mutation.
 Positions with positive ER largely come from MAPK1.
 Among positions with selective substitutions there doesn't appear to be any particular pattern.
-Outliers are somewhat more likely to occur in helices compared to other subtype.
+Outliers are somewhat more likely to occur in helices compared to other subtype. -->
 
 ### C1
 
-FoldX and chemical environment results suggest disulphide bonds generally go here, although not exclusively (24/73 positions vs 3/37 in C2).
+<!-- FoldX and chemical environment results suggest disulphide bonds generally go here, although not exclusively (24/73 positions vs 3/37 in C2).
 The subtype likely also contains other positions where only C functions, such as ion conjugation, and potentially includes similar aromatic interactions to C2 where the interaction is highly important.
 The subtype is least selected against aromatics - maybe because the aromatic/sulphur interaction partially makes up for the disulphide bond, or also fulfils some of the other functions.
 
@@ -83,11 +83,11 @@ Examples without disulphide bond:
 * APH3II - 131 appears to be interacting with a tryptophan residue
 * BRCA1 - 39 & 64 and 27 & 47 each conjugate a zinc ion
 * CBS - 52 is bonded to the Fe of a haem group in the crystal structure (which is a known binding in the native protein)
-* SUMO1 - 52 is directed at a phenylalanine
+* SUMO1 - 52 is directed at a phenylalanine -->
 
 ### C2
 
-This subtypes appears to use cysteine's hydrophobicity as well as the sulphur/aromatic interaction that allows cysteine to create stabilising interactions with aromatics (Orabi & English 2016)
+<!-- This subtypes appears to use cysteine's hydrophobicity as well as the sulphur/aromatic interaction that allows cysteine to create stabilising interactions with aromatics (Orabi & English 2016)
 The characteristic aromatic interaction pattern occurs in the subtypes mean profile and somewhat in the chemical environment, although the enrichment for aromatic neighbours is weaker than when it was an exclusive group (likely because it is swamped by residues without the interaction).
 In some sense this subtype could be manually split into two, although that is generally not identified algorithmically (apart from a single lucky run of kmeans)
 
@@ -105,7 +105,7 @@ The identified aromatic interactions are:
 * APH3II 209 - In a cleft with a NA ion and an aromatic drug in the crystal structure
 * CCR5 213 - directly conjugates a tyrosine ring
 * TPK1 104 - Directly conjugates a phenylalanine ring
-* TPK1 88 - Near but not directly adjacent to a tyrosine ring
+* TPK1 88 - Near but not directly adjacent to a tyrosine ring -->
 
 ## D - Aspartate
 
@@ -118,14 +118,14 @@ Summary:
 
 D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
 
-### D0
+### DO
 
-A single position in ADRB2 (29), which appears to prefer being a serine.
-This is potentially because there's a repulsive charge interaction with a nearby glutamate, although that wouldn't explain why serine specifically and not any other residue.
+<!-- A single position in ADRB2 (29), which appears to prefer being a serine.
+This is potentially because there's a repulsive charge interaction with a nearby glutamate, although that wouldn't explain why serine specifically and not any other residue. -->
 
 ### D1
 
-Often appear to have a specific role (see examples), although not always.
+<!-- Often appear to have a specific role (see examples), although not always.
 In other cases it could simply be we cannot easily see the role.
 
 Examples:
@@ -134,17 +134,17 @@ Examples:
 * CBS - 221 is directly adjacent to an arginine. 49, 309 & 198 are all grouped around a phenylalanine aromatic group; possibly they induce a dipole? 388 is near an arginine
 * TEM1 - 189, 208 neighbour a K ion
 * HSP90 - All four (40, 79, 113, 143) all border an apparent ATP binding pocket, as do 3 D3 positions
-* PAB1 - 184 possibly bonding to lysine 180, 138 has a similar arrangement with lysine 140
+* PAB1 - 184 possibly bonding to lysine 180, 138 has a similar arrangement with lysine 140 -->
 
 ### D4
 
-Tolerates any substitution other than proline.
+<!-- Tolerates any substitution other than proline.
 
 Examples:
 
 * APH3II - 118 & 238 are in helices, 23 & 52 at the start and end of beta strand turns
 * PAB1 - 144 is in a helix, 136 & 160 are in coils around this helix
-* TPMT - 31 & 162 are both in helices
+* TPMT - 31 & 162 are both in helices -->
 
 ## E - Glutamate
 
@@ -162,18 +162,18 @@ E2 and E7 appear similar (generally permissive) but since E7 is slightly positiv
 
 ### E1
 
-As with D1, E1 positions often seem to have a recognisable role utilising the charge properties of glutamate, although in many cases it is less obvious too.
+<!-- As with D1, E1 positions often seem to have a recognisable role utilising the charge properties of glutamate, although in many cases it is less obvious too.
 
 Examples:
 
 * ADRB2 - Not clear what role they play but 188 and 306 are both near the extracellular binding site
 * amiE - 105 & 108 both extend towards a similar pair of lysine and arginines. 248, 249 & 250 are arrayed at the interface between subunits, next to the equivalent residues on the other subunit, creating a very negative pocket. Are many other positions where role isn't clear
 * APH3II - 262 is in the cleft where kanamycin is bound (APH3II is a kanamycin resistance protein). 182 is at the negative end of an alpha helix, possible stabilising its dipole (Sali et al. 1988).
-* UBE4B - 1083 and 1084 are on a very polar exterior helix face (2 other E, 2 K and 1 R)
+* UBE4B - 1083 and 1084 are on a very polar exterior helix face (2 other E, 2 K and 1 R) -->
 
 ### E3
 
-Tolerates any substitution apart from proline.
+<!-- Tolerates any substitution apart from proline.
 
 Examples:
 
@@ -182,7 +182,7 @@ Examples:
 * CBS - 399 is on the end of a helix and 436 in the middle of a short helix
 * MAPK1 - 33 is on the end of a beta sheet, 250 near the end of a short helix and 186 in a coil
 * Ras - 91 & 98 are in a single helix, 162 in a helix, 76 in the coil at the end of a sheet and 62 & 63 in a fairly tight turn in a beta sheet structure
-* TPMT - 205 is in a curved beta sheet (saddle point like curve) and 203 in a small alpha helix
+* TPMT - 205 is in a curved beta sheet (saddle point like curve) and 203 in a small alpha helix -->
 
 ## F - Phenylalanine
 
@@ -194,14 +194,14 @@ Summary:
 
 F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile is more similar to F3's
 
-### F0
+### FO
 
-Generally have a mixture of positive substitutions (again largely in MAPK1) and permissive.
-Two positions have mostly permissive substitutions with a few somewhat selected against.
+<!-- Generally have a mixture of positive substitutions (again largely in MAPK1) and permissive.
+Two positions have mostly permissive substitutions with a few somewhat selected against. -->
 
 ### F2
 
-Seems to utilise specific aromatic properties as well as hydrophobicity.
+<!-- Seems to utilise specific aromatic properties as well as hydrophobicity.
 They occur relatively frequently in groups.
 
 Examples:
@@ -209,7 +209,7 @@ Examples:
 * BRCA1 - 43 surrounded by hydrophobic residues and filling a ring shaped space
 * CALM1 - 17 & 69 are potentially pi-stacking
 * CBS - 332, 385 & 396 are positioned in a cleft together, along with several other aromatic residues; more potential pi-stacking? 197 & 310 are also adjacent to each other
-* TP53 - 270 & 113 are adjacent and face one another. 134 is near them but in the middle of an apparently polar pocket?
+* TP53 - 270 & 113 are adjacent and face one another. 134 is near them but in the middle of an apparently polar pocket? -->
 
 ## G - Glycine
 
@@ -224,10 +224,10 @@ Summary:
 
 All glycine residues appear enriched in turn and bend secondary structures
 
-### G0
+### GO
 
-Outliers split into 3 broad types: positive ER (often in MAPK1 again, but not exclusively); permissive positions; and positions where a few substitutions are strongly selected against.
-Four positions have a single very strongly deleterious substitution.
+<!-- Outliers split into 3 broad types: positive ER (often in MAPK1 again, but not exclusively); permissive positions; and positions where a few substitutions are strongly selected against.
+Four positions have a single very strongly deleterious substitution. -->
 
 ## H - Histidine
 
@@ -249,14 +249,14 @@ Summary:
 
 ### I4
 
-Selective against negative charge and proline
+<!-- Selective against negative charge and proline
 
 Examples:
 
 * ADRB2 - Many positions in the transmembrane helices, both inside the helix bundle and facing the membrane
 * APH3II - 254 & 246 are on the end of a helix and in the turn to the previous helix, facing into a hydrophobic pocket.29 is on a beta turn, externally facing.
 * HSP90 - 147, 137, 172, 64 & 205 are all on one end of the strands making a beta sheet. Sharp turns or charge likely disrupt it. 90 is in a small alpha helix
-* Ras - 84 is in the turn between a helix and sheet, 36 in the turn at the end of a strand, 46 & 55 at the c-terminal ends of stands
+* Ras - 84 is in the turn between a helix and sheet, 36 in the turn at the end of a strand, 46 & 55 at the c-terminal ends of stands -->
 
 ## K - Lysine
 
@@ -292,23 +292,23 @@ Strongly intolerant to negative charge and proline
 * M3 - Moderately selection against everything, strong selection against cysteine
 * MO - Outlier, nonselective
 
-### M0
+### MO
 
-Outliers are generally permissive with a few exceptions, for example ADRB2 96 is very selective against asparagine, Src 286 prefers glycine & UBE2I 1 is somewhat selective.
+<!-- Outliers are generally permissive with a few exceptions, for example ADRB2 96 is very selective against asparagine, Src 286 prefers glycine & UBE2I 1 is somewhat selective. -->
 
 ### M1
 
-Examples:
+<!-- Examples:
 
 * HSP90 - 84 is in a binding pocket for ATP, 116 fills a hydrophobic cleft, 16 looks to interact with a phenylalanine ring, 589 is near to a tryptophan residue (interestingly the 589 position is classified M1 from the profile in Hietpas et al. 2011 and M3 when from Jiang et al. 2013).
 * MAPK1 - 221 & 293 appear to be filling hydrophobic space
 * NP - series of positions in a helix bundle
 * TP53 - 243 faces towards bound DNA, 133 is in a space near two aromatics, 160 seems to fill a large hole
-* Src - both fill holes near aromatics
+* Src - both fill holes near aromatics -->
 
 ### M2
 
-Examples:
+<!-- Examples:
 
 * Src - 317 in a hydrophobic pocket near two aromatics
 * Ras - 72 in a pocket near a phenylalanine
@@ -319,7 +319,7 @@ Examples:
 
 The physical difference between M1 and M2 is not completely clear.
 They have similar distributions of distance to the nearest aromatic.
-To some extent M1 positions appear to physically group together in some proteins and M2 positions group separately, potentially due to physical characteristics or the importance of the two domains.
+To some extent M1 positions appear to physically group together in some proteins and M2 positions group separately, potentially due to physical characteristics or the importance of the two domains. -->
 
 ## N - Asparagine
 
@@ -330,10 +330,10 @@ Summary:
 * N3 - Anything but proline
 * N4 - Selective against positive charge and proline
 
-### N0
+### NO
 
-Outliers are all positive ER positions from MAPK1, with a particular preference for hydrophobic residues.
-This suggests addition of hydrophobic residues here creates a GoF phenotype in MAPK1, but no other asparagine's have this property.
+<!-- Outliers are all positive ER positions from MAPK1, with a particular preference for hydrophobic residues.
+This suggests addition of hydrophobic residues here creates a GoF phenotype in MAPK1, but no other asparagine's have this property. -->
 
 ## P - Proline
 
@@ -346,9 +346,9 @@ Summary:
 * P5 - Selects against glutamine and (less so) threonine
 * PO - Outliers, on average weakly improved by substitution
 
-### P0
+### PO
 
-Generally nonselective outliers as well as some positive ER MAPK1 positions
+<!-- Generally nonselective outliers as well as some positive ER MAPK1 positions -->
 
 ## Q - Glutamine
 
@@ -370,9 +370,9 @@ Summary:
 * R4 - Intolerant to negative charge, proline, and aromatic residues
 * RO - Outliers, nonselective
 
-### R0
+### RO
 
-Four outliers; 2 nonselective and 2 in ADRB2 with some selection, in particular 228 which strongly selects against lysine and proline.
+<!-- Four outliers; 2 nonselective and 2 in ADRB2 with some selection, in particular 228 which strongly selects against lysine and proline. -->
 
 ## S - Serine
 
@@ -411,9 +411,9 @@ Summary:
 * V6 - Anything but proline
 * VO - Outliers
 
-### V0
+### VO
 
-Four MAPK1 outliers with somewhat positive ER scores and one nonselective CP position.
+<!-- Four MAPK1 outliers with somewhat positive ER scores and one nonselective CP position. -->
 
 ## W - Tryptophan
 
@@ -423,13 +423,13 @@ Summary:
 * W2 - Tolerates cysteine, glycine, leucine, arginine and serine (no clear pattern?). Less intolerant of other aromatics
 * WO - Outliers
 
-### W0
+### WO
 
-Two positions in Src, one of which has most substitutions strongly favoured particularly for hydrophobic residues and one position that is nonselective apart from preferring to be lysine.
+<!-- Two positions in Src, one of which has most substitutions strongly favoured particularly for hydrophobic residues and one position that is nonselective apart from preferring to be lysine. -->
 
 ### W1
 
-Tolerates phenylalanine and tyrosine as well as being less intolerant of methionine, leucine, isoleucine and histidine (all also reasonably large)
+<!-- Tolerates phenylalanine and tyrosine as well as being less intolerant of methionine, leucine, isoleucine and histidine (all also reasonably large)
 
 Examples:
 
@@ -439,11 +439,11 @@ Examples:
 * CXCR4 - 161 is on the exterior of a helix bundle. 252 faces into the helix bundle into a region with many aromatics. 195 is at the edge of the bundle in the interface with a second subunit (in the homodimer structure), close to two other aromatics.
 * HA - 196 & 250 are in the internal pocket of the binding domain, various other positions are buried in the binding domain with several buried in the transmembrane helix domains.
 * MAPK1 - Two positions in generically hydrophobic positions.
-* TEM1 - 226 & 287 are in a pair facing each other with their sides on the protein surface, 163 is directly facing the surface and 208 is buried near a disulphide bond, several charged residues, a leucine and an isoleucine.
+* TEM1 - 226 & 287 are in a pair facing each other with their sides on the protein surface, 163 is directly facing the surface and 208 is buried near a disulphide bond, several charged residues, a leucine and an isoleucine. -->
 
 ### W2
 
-Tolerates aromatics and some other (rather discordant) substitutions.
+<!-- Tolerates aromatics and some other (rather discordant) substitutions.
 
 Examples:
 
@@ -451,7 +451,7 @@ Examples:
 * APH3II - 69 faces into the protein towards various hydrophobic residues.
 * CCR5 - 5 positions face into the core of a helix bundle, with a number of other aromatic residues. 190 is on the outside of the bundle, facing into the membrane.
 * TPMT - 29 and 33 face the binding pocket of SAH (in this structure), 230 conjugates pi orbitals with a histidine, 78 is on the protein surface
-* CXCR4 - 94 is near various other aromatics, 102 is in the helix bundle and 283 faces out from it (into the membrane)
+* CXCR4 - 94 is near various other aromatics, 102 is in the helix bundle and 283 faces out from it (into the membrane) -->
 
 ## Y - Tyrosine
 
@@ -464,15 +464,15 @@ Summary:
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
 
-### Y0
+### YO
 
-Most positions are nonselective or only weakly selective, with MAPK1 positions having weakly positive ER scores.
+<!-- Most positions are nonselective or only weakly selective, with MAPK1 positions having weakly positive ER scores.
 ADRB2 141 strongly selects against aspartate.
-CXCR4 121 is somewhat selective against polar residues.
+CXCR4 121 is somewhat selective against polar residues. -->
 
 ### Y1
 
-Tolerates phenylalanine and histidine, the other two amino acids with a single aromatic ring.
+<!-- Tolerates phenylalanine and histidine, the other two amino acids with a single aromatic ring.
 The intolerance of tryptophan potentially means they are in spaces where it is too bulky.
 The requirement for an aromatic ring suggest pi interactions or similar.
 
@@ -485,11 +485,11 @@ Examples:
 * HA - many positions, somewhat clustered? 502 & 507 seem to be potentially stacking?
 * MAPK1 - not a clear pattern, some internal in large-ish pockets, a few on the surface.
 * TP53 - 327 externally facing, other positions clumped in a lobe but not immediately next to one another. 126 is near two other aromatics, potentially interacting, others appear to be in simple hydrophobic pockets.
-* UBE2I - 137 & 144 are adjacent, potentially interacting. 68 is near a phenylalanine, with another potential interaction.
+* UBE2I - 137 & 144 are adjacent, potentially interacting. 68 is near a phenylalanine, with another potential interaction. -->
 
 ### Y2
 
-Tolerant of all aromatic and hydrophobic substitutions
+<!-- Tolerant of all aromatic and hydrophobic substitutions
 
 Examples:
 
@@ -500,4 +500,4 @@ Examples:
 * HSP90 - 125 is internal, 47 externally facing, although with the aliphatic ring surrounded
 * PTEN - 6 positions are near the surface but not really accessible. Generally seem to be in reasonably hydrophobic positions, but not entirely.
 * Src - 329 is buried although not in a hydrophobic region (makes polar contacts with 2 glutamine residues), 439 & 482 are on the surface.
-* TPMT - 131 is somewhat exposed and contacts a ligand in the crystal structure. 180 & 240 are on a beta sheet, in apparently hydrophobic conditions.
+* TPMT - 131 is somewhat exposed and contacts a ligand in the crystal structure. 180 & 240 are on a beta sheet, in apparently hydrophobic conditions. -->
