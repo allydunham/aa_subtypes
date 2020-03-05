@@ -1,10 +1,7 @@
 # Subtype Descriptions
 
 Analysis of the subtypes produced by hierarchical clustering on PC2:20, using cosine distance and dynamic tree cutting.
-The deepSplit=0 clustering is used as the primary dataset, with additional subtypes created by deepSplit=1 noted.
-
-Many of the positive ER positions come from the Brennan et al (2016) study of MAPK1, and are likely partly due to it's experimental setup: gain of function variants are +ve.
-While some of these might be genuine improvements many gain of function variants are likely deleterious in an actual organism.
+The deepSplit=0 clustering is used as the primary dataset, with additional subtypes created by deepSplit=1 noted (WIP).
 
 ## A - Alanine
 
