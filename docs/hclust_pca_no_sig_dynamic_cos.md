@@ -105,7 +105,7 @@ The identified aromatic interactions are:
 * TPMT 133 - Residue is on the exterior but the side chain faces inwards into a hydrophobic pocket
 * UBE2I 43/75 - Near each other in 3D space, both side chains face into the protein and there are hydrophobic and aromatic residues nearby, although not directly conjugating like in some examples.
 * APH3II 209 - near to a phenylalanine
-* APH3II 209 - In a cleft with a NA ion and an aromatic drug in the crystal structure
+* APH3II 192 - In a cleft with a NA ion and an aromatic drug in the crystal structure
 * CCR5 213 - directly conjugates a tyrosine ring
 * TPK1 104 - Directly conjugates a phenylalanine ring
 * TPK1 88 - Near but not directly adjacent to a tyrosine ring -->
