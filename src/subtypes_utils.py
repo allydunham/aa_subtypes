@@ -32,10 +32,10 @@ class SubtypesColourMap:
         'wt': ('WT AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
         'mut': ('Mutant AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
         'cluster_num': ('Subtype', {
-            0: '0xDCDCDC', 1: '0xE41A1C', 2: '0x377EB8', 3: '0x4DAF4A',
-            4: '0x984EA3', 5: '0xFF7F00', 6: '0xFFFF33', 7: '0xA65628',
-            8: '0xF781BF', 9: '0x08f0f6', 10: '0x09ff00', 11: '0x9f3131',
-            12: '0x2e00fb'
+            'O': '0xDCDCDC', 'P': '0xFFD700', '1': '0xE41A1C', '2': '0x377EB8',
+            '3': '0x4DAF4A', '4': '0x984EA3', '5': '0xFF7F00', '6': '0xFFFF33',
+            '7': '0xA65628', '8': '0xF781BF', '9': '0x08f0f6', '10': '0x09ff00',
+            '11': '0x9f3131', '12': '0x2e00fb'
         }, '0x808080', None)
     }
 
@@ -224,6 +224,6 @@ def quick_load(cluster=None):
     if cluster is not None:
         cluster = pd.read_csv(cluster, sep='\t')
         dms = pd.merge(cluster, dms, how='left', on=['study', 'gene', 'position', 'wt'])
-        dms['cluster_num'] = dms['cluster'].str.slice(1).astype(int)
+        dms['cluster_num'] = dms['cluster'].str.slice(1)
 
     return sections, dms
