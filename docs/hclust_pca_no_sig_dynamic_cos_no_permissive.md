@@ -17,17 +17,36 @@ Summary:
 
 ### A1
 
+These positions tolerate smaller residues, generally being buried in the protein and tending to be near other hydrophobic residues.
+
 ### A2
+
+These positions select for hydrophobic residues, as well as tolerating serine, threonine and cysteine, all of which are small and likely don't disrupt the structure with polarity (potentially h-bonding to the backbone to resolve dipoles).
+They are also usually buried.
 
 ### A3
 
+Spread throughout proteins these positions are only selective against proline.
+THey are less conserved than other subtypes.
+
 ### A4
+
+These positions select against aromatics and larger hydrophobic residues.
+Often surface accessible they likely interact badly with the solvent/prefer to be buried and disrupt the structure when a larger hydrophobic group is added.
 
 ### A5
 
+Highly selective, these positions only tolerate glycine and serine.
+They are often buried, although not as strongly as A1/2
+
 ### AP
 
+Permissive positions, very depleted in beta strands compared to other subtypes.
+They are very surface accessible
+
 ### AO
+
+Outliers
 
 ## C - Cysteine
 
@@ -61,6 +80,7 @@ Examples without disulphide bond:
 This subtypes appears to use cysteine's hydrophobicity as well as the sulphur/aromatic interaction that allows cysteine to create stabilising interactions with aromatics (Orabi & English 2016)
 The characteristic aromatic interaction pattern occurs in the subtypes mean profile and somewhat in the chemical environment, although the enrichment for aromatic neighbours is weaker than when it was an exclusive group (likely because it is swamped by residues without the interaction).
 In some sense this subtype could be manually split into two, although that is generally not identified algorithmically (apart from a single lucky run of kmeans)
+These positions tend to be more strongly buried than C1 positions, although both generally are.
 
 The identified aromatic interactions are:
 
@@ -77,7 +97,11 @@ The identified aromatic interactions are:
 
 ### CP
 
+Three permissive positions, which are weakly conserved and with low structural impact.
+
 ### CO
+
+Outliers
 
 ## D - Aspartate
 
