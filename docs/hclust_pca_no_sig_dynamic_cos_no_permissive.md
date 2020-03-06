@@ -7,11 +7,11 @@ The deepSplit=0 clustering is used as the primary dataset, with additional subty
 
 Summary:
 
-* A1 -
-* A2 -
-* A3 -
-* A4 -
-* A5 -
+* A1 - Tolerates smaller residues
+* A2 - Selects against (most) polar, charged & aromatic
+* A3 - (Weak) anything but proline
+* A4 - Selects against aromatic and larger hydrophobic
+* A5 - Strong selection, tolerates glycine & serine
 * AP - Permissive positions
 * AO - Outliers
 
@@ -91,12 +91,10 @@ Outliers are somewhat more likely to occur in helices compared to other subtype.
 
 Summary:
 
-* D1 -
-* D2 -
+* D1 - Selects for negative charge
+* D2 - Anything but proline
 * DP - Fully permissive, very accessible
-* DO - Outliers
-
-D4 and D5 are both in the overall permissive subcluster, which seems to be subdivided into "anything but proline" and very permissive/improving subclusters.
+* DO - Outliers, often improves
 
 ### D1
 
@@ -132,10 +130,10 @@ This is potentially because there's a repulsive charge interaction with a nearby
 
 Summary:
 
-* E1 -
-* E2 -
-* E3 -
-* EP -
+* E1 - (Weak) selection for negative charge
+* E2 - Anything but proline
+* E3 - Selects against aromatics and larger hydrophobic residues
+* EP - Permissive positions
 * EO - Outliers
 
 ### E1
@@ -172,8 +170,8 @@ Examples:
 
 Summary:
 
-* F1 -
-* F2 -
+* F1 - Strong selection against charge & polarity
+* F2 - Strong selection against non-aromatics
 * FP - Permissive positions
 * FO - Outliers
 
@@ -204,11 +202,11 @@ Two positions have mostly permissive substitutions with a few somewhat selected 
 
 Summary:
 
-* G1 -
-* G2 -
-* G3 -
-* G4 -
-* G5 -
+* G1 - Strong selection against all
+* G2 - Selects for smaller hydrophobic residues
+* G3 - Selects against larger hydrophobic/aromatics
+* G4 - Anything but proline or isoleucine
+* G5 - Selects against charge and polarity
 * GP - Permissive positions
 * GO - Outliers
 
@@ -235,9 +233,9 @@ Four positions have a single very strongly deleterious substitution. -->
 
 Summary:
 
-* H1 -
+* H1 - Overall strong selection, most tolerant of tyrosine, glutamine and asparagine
 * HP - Permissive positions
-* HO - Strong improvement when replaced with methionine or alanine, otherwise mix of weak  selection/improvement
+* HO - Strong improvement when replaced with methionine or alanine, otherwise mix of weak positive and negative effects
 
 ### H1
 
@@ -249,9 +247,9 @@ Summary:
 
 Summary:
 
-* I1 -
-* I2 -
-* I3 -
+* I1 - Selects for hydrophobicity
+* I2 - Selects for larger hydrophobic residues
+* I3 - Strong selection against proline, weaker selection against leucine and lysine (?)
 * IP - Permissive positions
 * IO - Outliers
 
@@ -269,9 +267,9 @@ Summary:
 
 Summary:
 
-* K1 -
-* K2 -
-* K3 -
+* K1 - Weak selection for polarity
+* K2 - Anything but proline
+* K3 - Selects against threonine, glutamine & glutamate
 * KP - Permissive positions
 * KO - Outliers
 
@@ -279,14 +277,14 @@ Summary:
 
 Summary:
 
-* L1 -
-* L2 -
-* L3 -
-* L4 -
-* L5 -
-* L6 -
-* L7 -
-* L8 -
+* L1 - Selects against charge and polarity
+* L2 - Only tolerates methionine and isoleucine
+* L3 - Selects for hydrophobic residues
+* L4 - Strong selection against lysine, weaker against other charge
+* L5 - Selection against negative charge (much weaker against positive)
+* L6 - Anything but proline
+* L7 - Weak selection against isoleucine, proline, tyrosine & tryptophan
+* L8 - Strong selection against arginine
 * LP - Permissive positions
 * LO - Outliers
 
@@ -355,9 +353,15 @@ Outliers are generally permissive with a few exceptions, for example ADRB2 96 is
 Summary:
 
 * N1 - Moderately selective against everything, weakest against serine and threonine
-* N2 - Nonselective
-* N3 - Anything but proline
-* N4 - Selective against positive charge and proline
+* N2 - Anything but proline
+* NP - Permissive positions
+* NO - Outliers
+
+### N1
+
+### N2
+
+### NP
 
 ### NO
 
@@ -368,12 +372,19 @@ This suggests addition of hydrophobic residues here creates a GoF phenotype in M
 
 Summary:
 
-* P1 - Moderately selective against everything
-* P2 - Selective against aromatics
-* P3 - Tolerates alanine, leucine, glutamine, serine and threonine, strong selection against negative charge and methionine
-* P4 - Selects against negative charge and asparagine
-* P5 - Selects against glutamine and (less so) threonine
+* P1 - Selects against everything
+* P2 - Tolerates some polar residues and alanine
+* P3 - Strong selection against aromatic
+* PP - Permissive positions
 * PO - Outliers, on average weakly improved by substitution
+
+### P1
+
+### P2
+
+### P3
+
+### PP
 
 ### PO
 
@@ -383,62 +394,108 @@ Summary:
 
 Summary:
 
-* Q1 - Moderately selective for basic and polar
+* Q1 - Selects for polarity or charge, strongest against aromatics
 * Q2 - Anything but proline
-* Q3 - Nonselective
-* Q4 - Weak improvement with threonine/serine and hydrophobic substitutions
-* QO - Outliers, weak selection against negative charge, strong selection against lysine and histidine
+* Q3 - Strong selection against negative charge
+* QP - Permissive positions
+
+### Q1
+
+### Q2
+
+### Q3
+
+### QP
 
 ## R - Arginine
 
 Summary:
 
-* R1 - Most selective, only tolerates lysine
-* R2 - Strongly selective against proline, weakly selective against negative charge
-* R3 - Nonselective
-* R4 - Intolerant to negative charge, proline, and aromatic residues
+* R1 - intolerant of everything apart from lysine
+* R2 - Anything but proline
+* RP - Nonselective
 * RO - Outliers, nonselective
 
-### RO
+### R1
 
-<!-- Four outliers; 2 nonselective and 2 in ADRB2 with some selection, in particular 228 which strongly selects against lysine and proline. -->
+### R2
+
+### RP
+
+### RO
 
 ## S - Serine
 
 Summary:
 
-* S1 - Strongly selective, tolerates threonine and somewhat alanine and glycine.
-* S2 - Nonselective
-* S3 - Selective against negative charge and aromatic
-* S4 - Anything by proline
-* S5 - Selection against positive charge and proline, and less so negative charge
-* S6 - Anything but alanine
-* S7 - Selective against tryptophan and proline
+* S1 - Only tolerates threonine
+* S2 - Anything but proline
+* S3 - Selects against negative charge
+* S4 - Weak selection against polar
+* S5 - Anything but alanine
+* SP - Permissive positions
 * SO - Outliers
+
+### S1
+
+### S2
+
+### S3
+
+### S4
+
+### S5
+
+### SP
+
+### SO
 
 ## T - Threonine
 
 Summary:
 
-* T1 - Tolerates serine only, strongest selection against aromatic and proline
+* T1 - Only tolerates serine
 * T2 - Anything but proline
-* T3 - Nonselective
-* T4 - Selects against negative charge and aromatics
-* T5 - Selective against negative charge, proline and glycine
-* T6 - Mostly nonselective, weak selection against tyrosine, tryptophan and asparagine
-* T7 - Intolerant to charge
+* T3 - Selects against negative charge, glycine and proline
+* T4 - Strong selection against asparagine, weaker selection against other positive charge, aromatics and cysteine
+* TP - Permissive positions
+* TO - Outliers0
+
+### T1
+
+### T2
+
+### T3
+
+### T4
+
+### TP
+
+### TO
 
 ## V - Valine
 
 Summary:
 
-* V1 - Tolerates hydrophobic residues and threonine
-* V2 - Similar to V1 but doesn't tolerate threonine and weaker tolerance of non-valine hydrophobic residues
-* V3 - Intolerant of positive charge, proline and polar residues with NH2 groups (Q and N, which possibly tend to have positive partial charges on N?
-* V4 - Nonselective
-* V5 - Weaker selection against aromatics and lysine
-* V6 - Anything but proline
+* V1 - Selects for hydrophobic residues and threonine
+* V2 - Only tolerates isoleucine
+* V3 - Selects against charged (apart from glutamate) and some polar, particularly histidine
+* V4 - Similar to V3 but selects against glutamate instead of aspartate and particularly disfavours glutamine
+* V5 - Anything but proline
+* VP - Permissive positions
 * VO - Outliers
+
+### V1
+
+### V2
+
+### V3
+
+### V4
+
+### V5
+
+### VP
 
 ### VO
 
@@ -450,11 +507,8 @@ Summary:
 
 * W1 - Tolerates phenylalanine and tyrosine, and is less intolerant other large residues.
 * W2 - Tolerates cysteine, glycine, leucine, arginine and serine (no clear pattern?). Less intolerant of other aromatics
+* WP - Permissive positions
 * WO - Outliers
-
-### WO
-
-<!-- Two positions in Src, one of which has most substitutions strongly favoured particularly for hydrophobic residues and one position that is nonselective apart from preferring to be lysine. -->
 
 ### W1
 
@@ -482,22 +536,22 @@ Examples:
 * TPMT - 29 and 33 face the binding pocket of SAH (in this structure), 230 conjugates pi orbitals with a histidine, 78 is on the protein surface
 * CXCR4 - 94 is near various other aromatics, 102 is in the helix bundle and 283 faces out from it (into the membrane) -->
 
+### WP
+
+### WO
+
+<!-- Two positions in Src, one of which has most substitutions strongly favoured particularly for hydrophobic residues and one position that is nonselective apart from preferring to be lysine. -->
+
 ## Y - Tyrosine
 
 Summary:
 
 * Y1 - Generally selective, tolerates phenylalanine and histidine
 * Y2 - Intolerant of charged and polar residues, most tolerates phenylalanine, histidine and hydrophobic residues
-* Y3 - anything but proline
-* YO - Outliers
+* Y3 - Anything but proline
+* YP - Permissive positions
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
-
-### YO
-
-<!-- Most positions are nonselective or only weakly selective, with MAPK1 positions having weakly positive ER scores.
-ADRB2 141 strongly selects against aspartate.
-CXCR4 121 is somewhat selective against polar residues. -->
 
 ### Y1
 
@@ -530,3 +584,11 @@ Examples:
 * PTEN - 6 positions are near the surface but not really accessible. Generally seem to be in reasonably hydrophobic positions, but not entirely.
 * Src - 329 is buried although not in a hydrophobic region (makes polar contacts with 2 glutamine residues), 439 & 482 are on the surface.
 * TPMT - 131 is somewhat exposed and contacts a ligand in the crystal structure. 180 & 240 are on a beta sheet, in apparently hydrophobic conditions. -->
+
+### Y3
+
+### YO
+
+<!-- Most positions are nonselective or only weakly selective, with MAPK1 positions having weakly positive ER scores.
+ADRB2 141 strongly selects against aspartate.
+CXCR4 121 is somewhat selective against polar residues. -->
