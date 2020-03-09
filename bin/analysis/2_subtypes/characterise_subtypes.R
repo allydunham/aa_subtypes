@@ -22,13 +22,11 @@ plots <- list()
 full_characterisation <- full_cluster_characterisation(dms)
 n_clusters <- nrow(full_characterisation$summary)
 
-# Make profiles with permissive clusters excluded
-permissive_cutoff <- 0.3
-permissive_clusters <- group_by(full_characterisation$profiles, cluster) %>%
-  summarise(permissive = all(abs(er) < permissive_cutoff)) %>%
-  filter(permissive) %>%
-  pull(cluster)
-selective_characterisation <- full_cluster_characterisation(filter(dms, !cluster %in% permissive_clusters))
+# Make profiles with permissive/outlier clusters excluded
+outlier_clusters <- filter(full_characterisation$profiles, str_detect(cluster, CLUSTER_PERMISSIVE_RE) | str_detect(cluster, CLUSTER_OUTLIER_RE)) %>%
+  pull(cluster) %>%
+  unique()
+selective_characterisation <- full_cluster_characterisation(filter(dms, !cluster %in% outlier_clusters))
 n_clusters_selective <- nrow(full_characterisation$summary)
 
 ### Plot all cluster characterisation ###
@@ -100,7 +98,7 @@ profiles <- cluster_mean_profiles(dms)
 plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
 
 if (n_clusters_selective > 1){
-  profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% permissive_clusters)) 
+  profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% outlier_clusters)) 
   plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
 } else {
   plots$overall_dend_selective <- ggplot()
