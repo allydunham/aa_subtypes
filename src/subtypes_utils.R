@@ -166,3 +166,44 @@ cosine_similarity_matrix <- function(mat){
 cosine_distance_matrix <- function(mat){
   acos(cosine_similarity_matrix(mat)) / pi
 }
+
+# Plot gene data heatmaps
+plot_gene_er <- function(dms, target_gene){
+  dms_gene <- filter(dms, gene == target_gene) %>% 
+    select(position, wt, A:Y) %>% 
+    pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>% 
+    mutate(er = clamp(er, 2, -2))
+  breaks <- pretty_break(dms_gene$er, rough_n = 5, sig_figs = 3, sym = 0)
+  
+  ggplot(dms_gene, aes(x=mut, y=position, fill=er)) + 
+    geom_tile() +
+    geom_tile(data = filter(dms_gene, wt==mut), fill='grey') +
+    scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) + 
+    guides(fill=guide_colourbar(title = 'ER')) + 
+    labs(title = target_gene, caption = 'Nb. |ER| clamped to < 2') + 
+    theme(axis.ticks = element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(colour = AA_COLOURS[sort(unique(dms_gene$mut))]),
+          plot.caption = element_text(hjust = 0.5))
+}
+
+plot_gene_pcs <- function(dms, target_gene){
+  dms_gene <- filter(dms, gene == target_gene) %>% 
+    select(position, wt, PC1:PC20) %>% 
+    pivot_longer(PC1:PC20, names_to = 'PC', values_to = 'val', names_prefix = 'PC') %>%
+    mutate(PC = as.integer(PC))
+  breaks <- pretty_break(dms_gene$val, rough_n = 5, sig_figs = 3, sym = 0)
+  
+  ggplot(dms_gene, aes(x=PC, y=position, fill=val)) + 
+    geom_tile() +
+    scale_fill_distiller(type = 'div', palette = 'PuOr', direction = -1,
+                         limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) + 
+    guides(fill=guide_colourbar(title = 'PC Value')) + 
+    labs(title = target_gene, x='PC', y='') + 
+    theme(axis.ticks = element_blank(),
+          panel.grid.major.y = element_blank(),
+          panel.background = element_blank())
+}
