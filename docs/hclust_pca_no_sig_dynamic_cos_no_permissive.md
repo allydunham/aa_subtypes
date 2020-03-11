@@ -85,7 +85,7 @@ These positions tend to be more strongly buried than C1 positions, although both
 The identified aromatic interactions are:
 
 * Src 501 - In a helix bundle surrounded by hydrophobic residues, with an aromatic nearby but not adjacent
-* TEM1 75 - Also in a bundle and near an aromatic ring, but also one half of a disulphide bond (the other half is not in C4)
+* TEM1 75 - Also in a bundle and near an aromatic ring, but also one half of a disulphide bond (the other half is not in C2)
 * ADRB2 327 - Semi-buried residue near hydrophobic residues and an aromatic
 * TPMT 133 - Residue is on the exterior but the side chain faces inwards into a hydrophobic pocket
 * UBE2I 43/75 - Near each other in 3D space, both side chains face into the protein and there are hydrophobic and aromatic residues nearby, although not directly conjugating like in some examples.
