@@ -70,6 +70,7 @@ rule all:
         [f'figures/1_landscape/pdb/{f}_colourbar.pdf' for f in PDB_LANDSCAPE_FACTORS],
         [f'figures/1_landscape/pdb/{g}/{g}_{f}.png' for g in GENES for f in PDB_LANDSCAPE_FACTORS],
         rules.evaluate_kmeans_k.output,
+        rules.compare_hclust_dynamic_deep_split.output,
         rules.compare_subtypes.output,
         [f'data/subtypes/{x}.tsv' for x in STANDARD_CLUSTERINGS],
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],

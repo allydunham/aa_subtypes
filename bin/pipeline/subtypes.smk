@@ -63,6 +63,25 @@ rule evaluate_kmeans_k:
     shell:
         "Rscript bin/analysis/2_subtypes/evaluate_kmeans_k.R &> {log}"
 
+rule compare_hclust_dynamic_deep_split:
+    """
+    Assess different values of the cutreeHybrid deepSplit parameter
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_0_no_permissive.tsv",
+        "data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1_no_permissive.tsv"
+
+    output:
+        "figures/2_subtypes/hclust_dynamic_deep_split_mean_corelation.pdf"
+
+    log:
+        "logs/compare_hclust_dynamic_deep_split.log"
+
+    shell:
+        "Rscript bin/analysis/2_subtypes/compare_hclust_dynamic_deep_split.R &> {log}"
+
+
 rule compare_subtypes:
     """
     Compare clustering performance across the tested methods
