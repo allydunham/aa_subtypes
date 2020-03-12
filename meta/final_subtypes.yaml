@@ -1,0 +1,27 @@
+desc: "Final subtypes assembly \
+       The final subtypes set is assembled by combining two runs, \
+       both using hybrid dynamic treecutting on the dendrogram produced \
+       by hierarchical clustering. The cosine distance is used along with \
+       filtering positions where all |ER| < 0.4. Two runs are combined with \
+       deepSplit treecutting parameters chosen varying for each AA, as below."
+deepSplit:
+  A: 0
+  C: 0
+  D: 1
+  E: 0
+  F: 1
+  G: 1
+  H: 0
+  I: 0
+  K: 1
+  L: 0
+  M: 0
+  N: 0
+  P: 1
+  Q: 1
+  R: 1
+  S: 0
+  T: 1
+  V: 0
+  W: 0
+  Y: 1

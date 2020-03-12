@@ -1,20 +1,29 @@
 #!/usr/bin/env Rscript
-# Analyse the final set of chosen subtypes
+# Assemble and Analyse the final set of subtypes, combining different values of deepSplit for different AAs
 source('src/config.R')
 source('src/subtype_characterisation.R')
 plots <- list()
 
 ### Import Data ###
-sections <- map(read_yaml('meta/structures.yaml'), extract2, 'sections')
-dms <- left_join(rename(read_tsv('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_0_no_permissive.tsv'), cluster_ds0 = cluster),
-                 rename(read_tsv('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1_no_permissive.tsv'), cluster_ds1 = cluster),
-                 by = c("study", "gene", "position", "wt")) %>%
-  left_join(read_tsv('data/combined_mutational_scans.tsv'), by = c("study", "gene", "position", "wt")) %>%
-  select(cluster_ds0, cluster_ds1, everything())
+config <- read_yaml('meta/final_subtypes.yaml')
 
+# Import base data
+dms <- read_tsv('data/combined_mutational_scans.tsv')
+sections <- map(read_yaml('meta/structures.yaml'), extract2, 'sections')
 pdb_pos <- dms_pdb_positions(dms, sections)
 dms <- mutate(dms, pdb_position = pdb_pos$position, pdb_chain = pdb_pos$chain)
 
+# Import clusterings
+clusters_ds0 <- readRDS('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_0_no_permissive.rds')
+clusters_ds1 <- readRDS('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1_no_permissive.rds')
+
+cluster_tbl_ds0 <- read_tsv('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_0_no_permissive.tsv')
+cluster_tbl_ds1 <- read_tsv('data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1_no_permissive.tsv')
+
+# Assemble choosen clusters
+
+
+# Calculate characterisation
 full_characterisation <- full_cluster_characterisation(select(dms, cluster = cluster_ds0, everything()))
 
 ### Analyse Outliers ###
