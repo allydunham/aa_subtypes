@@ -1,9 +1,11 @@
 # Subtype Descriptions
 
 Analysis of the subtypes produced by hierarchical clustering on PC2:20, using cosine distance, dynamic tree cutting and with permissive positions (all |ER| < 0.4) excluded into their own subtype before the main clustering step.
-The deepSplit=0 clustering is used as the primary dataset, with additional subtypes created by deepSplit=1 noted (WIP).
+The deepSplit parameter for dynamic tree cutting is selected for each AA qualitatively, looking at the clusterings produced by both 0 and 1 and the mean rank correlation of position profiles within clusters.
 
 ## A - Alanine
+
+deepSplit = 0
 
 Summary:
 
@@ -49,6 +51,8 @@ They are very surface accessible
 Outliers
 
 ## C - Cysteine
+
+deepSplit = 0
 
 Summary:
 
@@ -105,10 +109,13 @@ Outliers
 
 ## D - Aspartate
 
+deepSplit = 1
+
 Summary:
 
 * D1 - Selects for negative charge
-* D2 - Anything but proline
+* D2 - Selects for negative charge or polarity
+* D3 - Anything but proline
 * DP - Fully permissive, very accessible
 * DO - Outliers, often improves
 
@@ -122,9 +129,17 @@ Examples:
 * HA - 93 is directly adjacent to an arginine (likely ionic interaction?)
 * CBS - 221 is directly adjacent to an arginine. 49, 309 & 198 are all grouped around a phenylalanine aromatic group; possibly they induce a dipole? 388 is near an arginine
 * TEM1 - 212, 231 neighbour a K ion
-* HSP90 - All three (40, 79, 143) all border an apparent ATP binding pocket, as do 3 D3 positions
+* HSP90 - 40 & 143 all border an apparent ATP binding pocket, as do 3 DP positions and a D2 position
 
 ### D2
+
+Generally tolerates some polarity as well as negative charge.
+
+Examples:
+
+* HSP90 - 79 is near the ATP binding pocket
+
+### D3
 
 Tolerates any substitution other than proline.
 
@@ -139,6 +154,8 @@ Examples:
 ### D0
 
 ## E - Glutamate
+
+deepSplit = 0
 
 Summary:
 
@@ -180,10 +197,13 @@ Examples:
 
 ## F - Phenylalanine
 
+deepSplit = 1
+
 Summary:
 
 * F1 - Strong selection against charge & polarity
 * F2 - Strong selection against non-aromatics
+* F3 - Tolerates Cysteine, isoleucine, leucine, serine valine and tyrosine?
 * FP - Permissive positions
 * FO - Outliers
 
@@ -199,9 +219,14 @@ They occur relatively frequently in groups.
 Examples:
 
 * BRCA1 - 43 surrounded by hydrophobic residues and filling a ring shaped space
-* CALM1 - 17 & 69 are potentially pi-stacking
 * CBS - 332, 385 & 396 are positioned in a cleft together, along with several other aromatic residues; more potential pi-stacking? 197 & 310 are also adjacent to each other
 * TP53 - 270 & 113 are adjacent and face one another. 134 is near them but in the middle of an apparently polar pocket?
+
+### F3
+
+Examples:
+
+* CALM1 - 17 & 69 are potentially pi-stacking
 
 ### FP
 
@@ -209,13 +234,17 @@ Examples:
 
 ## G - Glycine
 
+deepSplit = 1
+
 Summary:
 
 * G1 - Strong selection against all
 * G2 - Selects for smaller hydrophobic residues
 * G3 - Selects against larger hydrophobic/aromatics
 * G4 - Anything but proline or isoleucine
-* G5 - Selects against charge and polarity
+* G5 - Selects against polarity, but sometimes only weakly
+* G6 - Largely permissive, on average
+* G7 - Strong selection against aspartate and lysine, with weaker selection against other charge/polarity
 * GP - Permissive positions
 * GO - Outliers
 
@@ -231,11 +260,17 @@ All glycine residues appear enriched in turn and bend secondary structures
 
 ### G5
 
+### G6
+
+### G7
+
 ### GP
 
 ### GO
 
 ## H - Histidine
+
+deepSplit = 0
 
 Summary:
 
@@ -250,6 +285,8 @@ Summary:
 ### HO
 
 ## I - Isoleucine
+
+deepSplit = 0
 
 Summary:
 
@@ -271,6 +308,8 @@ Summary:
 
 ## K - Lysine
 
+deepSplit = 1
+
 Summary:
 
 * K1 - Weak selection for polarity
@@ -279,7 +318,19 @@ Summary:
 * KP - Permissive positions
 * KO - Outliers
 
+### K1
+
+### K2
+
+### K3
+
+### KP
+
+### KO
+
 ## L - Leucine
+
+deepSplit = 0
 
 Summary:
 
@@ -316,6 +367,8 @@ Summary:
 
 ## M - Methionine
 
+deepSplit = 0
+
 Summary:
 
 * M1 - Tolerates leucine, isoleucine, valine and threonine (longer aliphatic chains?). Strongly intolerant to negative charge and proline
@@ -350,6 +403,8 @@ Outliers are generally permissive with a few exceptions, for example ADRB2 96 is
 
 ## N - Asparagine
 
+deepSplit = 0
+
 Summary:
 
 * N1 - Moderately selective against everything, weakest against serine and threonine
@@ -370,11 +425,14 @@ This suggests addition of hydrophobic residues here creates a GoF phenotype in M
 
 ## P - Proline
 
+deepSplit = 1
+
 Summary:
 
-* P1 - Selects against everything
-* P2 - Tolerates some polar residues and alanine
-* P3 - Strong selection against aromatic
+* P1 - Selects moderately against everything
+* P2 - Tolerates serine, threonine, glutamine, leucine and alanine
+* P3 - Strong selection against aromatic, weaker against other large hydrophobic residues
+* P4 - Selects against charge and polarity
 * PP - Permissive positions
 * PO - Outliers, on average weakly improved by substitution
 
@@ -384,17 +442,23 @@ Summary:
 
 ### P3
 
+### P4
+
 ### PP
 
 ### PO
 
 ## Q - Glutamine
 
+deepSplit = 1
+
 Summary:
 
-* Q1 - Selects for polarity or charge, strongest against aromatics
+* Q1 - Generally selective, most tolerant to polarity or charge, strongest against aromatics
 * Q2 - Anything but proline
-* Q3 - Strong selection against negative charge
+* Q3 - Weak selection against hydrophobic residues
+* Q4 - Strong selection against negative charge
+* Q5 - Improves on average, apart from lysine
 * QP - Permissive positions
 
 ### Q1
@@ -403,14 +467,23 @@ Summary:
 
 ### Q3
 
+### Q4
+
+### Q5
+
 ### QP
 
 ## R - Arginine
+
+deepSplit = 1
 
 Summary:
 
 * R1 - intolerant of everything apart from lysine
 * R2 - Anything but proline
+* R3 - Selects against negative charge and proline
+* R4 - Weak selectiong
+* R5 - Selects against negative charge, aromatics and proline
 * RP - Nonselective
 * RO - Outliers, nonselective
 
@@ -418,11 +491,19 @@ Summary:
 
 ### R2
 
+### R3
+
+### R4
+
+### R5
+
 ### RP
 
 ### RO
 
 ## S - Serine
+
+deepSplit = 0
 
 Summary:
 
@@ -450,12 +531,16 @@ Summary:
 
 ## T - Threonine
 
+deepSplit = 1
+
 Summary:
 
 * T1 - Only tolerates serine
 * T2 - Anything but proline
-* T3 - Selects against negative charge, glycine and proline
-* T4 - Strong selection against asparagine, weaker selection against other positive charge, aromatics and cysteine
+* T3 - Selects against aromatics and (less so) negative charge
+* T4 - Selects against negative charge, glycine and proline
+* T5 - Weak selection against cysteine only
+* T6 - Strong selection against asparagine, weaker selection against other positive charge, negative charge, aromatics and cysteine
 * TP - Permissive positions
 * TO - Outliers0
 
@@ -467,11 +552,17 @@ Summary:
 
 ### T4
 
+### T5
+
+### T6
+
 ### TP
 
 ### TO
 
 ## V - Valine
+
+deepSplit = 0
 
 Summary:
 
@@ -498,6 +589,8 @@ Summary:
 ### VO
 
 ## W - Tryptophan
+
+deepSplit = 0
 
 Summary:
 
@@ -537,11 +630,14 @@ Examples:
 
 ## Y - Tyrosine
 
+deepSplit = 1
+
 Summary:
 
-* Y1 - Generally selective, tolerates phenylalanine and histidine
+* Y1 - Tolerates aromatics, particularly intolerant of charge (other than aspartate) and glycine (?)
 * Y2 - Intolerant of charged and polar residues, most tolerates phenylalanine, histidine and hydrophobic residues
-* Y3 - Anything but proline
+* Y3 - Generally selective, somewhat tolerates phenylalanine and histidine
+* Y4 - Anything but proline
 * YP - Permissive positions
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
@@ -555,11 +651,11 @@ The requirement for an aromatic ring suggest pi interactions or similar.
 Examples:
 
 * amiE - Many positions in a cluster, large number of aromatics maybe means tryptophan is too bulky?
-* CBS - Again a group appears in a sort of cluster (223, 308, 301 & 381) along a line, with another three independent: 233 is part of a haem binding pocket,  163 appears alone in a reasonably large pocket (potentially needing the size of the aromatic ring) and 484 fills a pocket near a pair of aromatics (phenylalanine/histidine)
+* CBS - 233 is part of a haem binding pocket
 * CCR5 - A number of positions on the inner faces of the helix bundle (not adjacent to each other however), then two pairs of nearby residues (184/187 & 14/15) plus 10 is sulphated and near to an N-Acetyl-2-Deoxy-2-Amino-Galactose ligand (at least in the cryoEM structure), so potentially has an active role.
-* HA - many positions, somewhat clustered at either in the binding domain lobe. 502 & 507 seem to be potentially stacking?
-* TP53 - 327 externally facing, other positions clumped in a lobe but not immediately next to one another. 126 is near two other aromatics, potentially interacting, others appear to be in simple hydrophobic pockets.
-* UBE2I - 134 & 144 are adjacent, potentially interacting.
+* HA - 502 & 507 seem to be potentially stacking?
+* TP53 - 327 externally facing, 126 is near two other aromatics, potentially interacting
+* UBE2I - 134 is adjacent to a Y3 position (144), potentially interacting
 
 ### Y2
 
@@ -571,10 +667,17 @@ Examples:
 * amiE - 255 is buried on the face of a beta sheet, but doesn't seem to be hugely hydrophobic
 * APH3II - 218 & 244 are internal, in hydrophobic pockets but also are predicted to make h-bonds to the backbone. 22 is near the surface although not truly accessible, and again makes h-bonds
 * HSP90 - 125 & 24 are internal and near to one another
-* PTEN - 7 positions are near the surface but not really accessible. Generally seem to be in reasonably hydrophobic positions, but not entirely.
+* PTEN - 6 positions are near the surface but not really accessible. Generally seem to be in reasonably hydrophobic positions, but not entirely.
 * Src - 482 is on the surface.
 * TPMT - 131 is somewhat exposed and contacts a ligand in the crystal structure. 180 & 240 are on a beta sheet, in apparently hydrophobic conditions.
 
 ### Y3
+
+Examples:
+
+* CBS - Again a group appears in a sort of cluster (223, 308, 301) along a line, with a Y1 position (381) as well. 163 appears alone in a reasonably large pocket (potentially needing the size of the aromatic ring) and 484 fills a pocket near a pair of aromatics (phenylalanine/histidine)
+* HA - many positions, somewhat clustered at either in the binding domain lobe.
+
+### Y4
 
 ### YO
