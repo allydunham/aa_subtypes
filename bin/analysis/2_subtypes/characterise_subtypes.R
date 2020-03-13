@@ -30,6 +30,7 @@ selective_characterisation <- full_cluster_characterisation(filter(dms, !cluster
 n_clusters_selective <- nrow(full_characterisation$summary)
 
 ### Plot all cluster characterisation ###
+#TODO refactor all this to a function if more is added or at least update final_subtypes too
 plots$ramachandran_angles <- labeled_plot(plot_cluster_ramachandran_angles(full_characterisation), units='cm', width=20, height=20)
 plots$sizes <- labeled_plot(plot_cluster_sizes(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
 plots$er_profiles <- labeled_plot(plot_cluster_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
