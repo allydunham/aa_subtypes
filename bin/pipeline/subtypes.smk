@@ -111,8 +111,12 @@ rule final_subtypes:
         alt_subtypes="data/subtypes/hclust_pca_no_sig_dynamic_cos_deep_1.tsv",
 
     output:
+        "data/subtypes/final_subtypes.tsv",
+        "data/subtypes/final_subtypes.rds",
         "figures/2_subtypes/final_subtypes/outlier_profiles.pdf",
-        directory("figures/2_subtypes/final_subtypes/cluster_heatmaps")
+        directory("figures/2_subtypes/final_subtypes/cluster_heatmaps"),
+        [f'figures/2_subtypes/final_subtypes/{x}' for x in diagnostic_plots],
+        [f'figures/2_subtypes/final_subtypes/{x}' for x in characterisation_plots]
 
     log:
         "logs/final_subtypes.log"
