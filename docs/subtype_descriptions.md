@@ -21,34 +21,77 @@ Summary:
 
 These positions tolerate smaller residues, generally being buried in the protein and tending to be near other hydrophobic residues.
 
+Examples:
+
+* ADRB2 - Several positions in the core of the transmembrane helices (76, 78 & 118), two residues in the cytoplasm side (13 & 19), plus various others.
+* amiE - cluster of residues in the core of a fold and some between two alpha helices (35, 39, 90 & 94)
+* TP53 - 276 faces towards the DNA, 159 & 161 face into the protein core from a beta sheet and 189 is unclear
+* PTEN - 72 is in a fairly tight turn
+* Src - 433 is in a turn between two short alpha helices, 374 is in the core of a helix bundle
+
 ### A2
 
 These positions select for hydrophobic residues, as well as tolerating serine, threonine and cysteine, all of which are small and likely don't disrupt the structure with polarity (potentially h-bonding to the backbone to resolve dipoles).
 They are also usually buried.
 
+Examples:
+
+* APH3II - 4 positions in the core of a helix bundle
+* CALM1 - Most positions are core facing, with one (104) facing outside
+* CXCR4 - generally found within the helix bundles, difference with A1 is not clear
+* Ras - 18 & 146 face each other, several other positions on the interior of a fold,
+
 ### A3
 
 Spread throughout proteins these positions are only selective against proline.
-THey are less conserved than other subtypes.
+They are less conserved than other subtypes.
+
+Examples:
+
+* ADRB2 - All four positions are at the start and end or the transmembrane helices
+* APH3II - many positions, many at start/end of secondary structures with some in the turns between them
+* GAL4 - Both positions are at the start of helices
+* TEM1 - 4 positions in helices, one in a loop in between a helix and sheet
 
 ### A4
 
 These positions select against aromatics and larger hydrophobic residues.
 Often surface accessible they likely interact badly with the solvent/prefer to be buried and disrupt the structure when a larger hydrophobic group is added.
 
+Examples:
+
+* CBS - Many positions, mixture between surface residues and buried ones, with some seemingly cramped
+* TPK1 - 4 & 84 face outwards, 43 & 129 are internal and could potentially clash if they were larger
+* UBE2I - 2 positions, both external
+* NP - Many positions, almost all exposed
+
 ### A5
 
 Highly selective, these positions only tolerate glycine and serine.
 They are often buried, although not as strongly as A1/2
+
+Examples:
+
+* NP - many positions, generally buried. Most don't look unusually cramped
+* TPK1 - Buried, but doesn't appear cramped
+* UBE2I - 152 is buried and near to two large aromatics, 44 is buried but not cramped, 129 is on the surface
+* Src - 314 is buried with a phenylalanine nearby
 
 ### AP
 
 Permissive positions, very depleted in beta strands compared to other subtypes.
 They are very surface accessible
 
+Examples:
+
+* amiE - all on the protein surface
+* CXCR4 - three positions on the cytoplasmic end of two alpha helices and the loop between them
+* TEM1 - many positions all surface accessible
+* HSP90 - five positions, all near each other on the surface
+
 ### AO
 
-Outliers
+Two outlier positions, TP53 83/84, both of which are generally permissive (presumably one or two substitution ERs just over the threshold of being a permissive position).
 
 ## C - Cysteine
 
@@ -482,7 +525,7 @@ Summary:
 * R1 - intolerant of everything apart from lysine
 * R2 - Anything but proline
 * R3 - Selects against negative charge and proline
-* R4 - Weak selectiong
+* R4 - Weak selection
 * R5 - Selects against negative charge, aromatics and proline
 * RP - Nonselective
 * RO - Outliers, nonselective
