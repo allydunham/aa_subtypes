@@ -48,4 +48,6 @@ def colour_residues(cmd, *args, base_colour=None):
         cmd.color(base_colour, 'polymer')
 
     for chn, pos, col in args:
-        cmd.color(col, f'polymer and chain {chn} and resi {int(pos)}')
+        pos = int(pos)
+        pos = f'\{pos}' if pos < 0 else pos # Negative indices must be escaped
+        cmd.color(col, f'polymer and chain {chn} and resi {pos}')
