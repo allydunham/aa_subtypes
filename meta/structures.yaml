@@ -125,7 +125,7 @@ ube4b:
 ubi:
   type: 'Homology Model'
   id: '5b83.1.A'
-  sections: [{chain: 'A', offset: 0}]
+  sections: [{chain: 'A', offset: -76}]
 yap1:
   type: 'Homology Model'
   id: '6jk1.1.A'
