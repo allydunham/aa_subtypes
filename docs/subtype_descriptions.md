@@ -290,6 +290,14 @@ F1 and F2 are very intermixed in the true dendrogram, although F2's mean profile
 
 ### F1
 
+Strong selection against charge and polarity, generally buried.
+
+Examples:
+
+* ADRB2 - 290 & 193 are in the extracellular binding pocket. A number of positions are in the transmembrane helices, most facing out into the membrane as well as some facing into the core of the helix bundle. 10 is on the intracellular domain, likely in the G-protein binding domain.
+* amiE - many positions, all buried and in largely in hydrophobic pockets
+* CBS - 443 is partially exposed, 112 and 334 are both near to another phenylalanine (both F2). 112 is very buried but 334 is partially exposed.
+
 ### F2
 
 Seems to utilise specific aromatic properties as well as hydrophobicity.
@@ -303,13 +311,22 @@ Examples:
 
 ### F3
 
+Tolerates Cysteine, isoleucine, leucine, serine valine and tyrosine
+
 Examples:
 
+* ADRB2 - Two positions, one in the intracellular end of the transmembrane helix (223) and one in the G-protein binding domain (240). Both are accessible, although 223 might be exposed to the membrane.
 * CALM1 - 17 & 69 are potentially pi-stacking
+* CCR5 - many positions in the transmembrane helices, largely facing into the membrane
+* TPK1 - A number of positions, all buried in generally hydrophobic pockets
 
 ### FP
 
+Only ten phenylalanine positions are permissive.
+
 ### FO
+
+Two outliers: APH3II 20 is generally improved by substitution (although weakly) and TEM1 17 is broadly permissive.
 
 ## G - Glycine
 
