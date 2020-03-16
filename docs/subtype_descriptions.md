@@ -148,7 +148,7 @@ Three permissive positions, which are weakly conserved and with low structural i
 
 ### CO
 
-Outliers
+Nine outlier positions, most of which have a different selection of weakly selective substitutions
 
 ## D - Aspartate
 
@@ -176,11 +176,15 @@ Examples:
 
 ### D2
 
-Generally tolerates some polarity as well as negative charge.
+Generally tolerates some polarity as well as negative charge. Often surface accessible
 
 Examples:
 
 * HSP90 - 79 is near the ATP binding pocket
+* amiE - Many positions, generally near a polar residue. E.g. 167 faces a glutamine and 239 is near a glutamine and arginine
+* CALM1 - 94 is near a serine, mostly surface accessible
+* TEM1 - three surface accessible positions
+* TPMT - two surface accessible positions
 
 ### D3
 
@@ -194,7 +198,17 @@ Examples:
 
 ### DP
 
+Reasonably large number of positions (51), mostly surface accessible.
+
+Examples:
+
+* HSP90 - in one lobe of the protein, mostly in loops between secondary structures and all accessible
+* PAB1 - Again clustered together, with 3 of 4 in loops and 1 in a helix. All accessible
+* UBI - All aspartate positions in UBI are found to be permissive, which is likely incorrect
+
 ### D0
+
+Ten positions, generally largely permissive
 
 ## E - Glutamate
 
@@ -227,16 +241,38 @@ Examples:
 
 * Ras - 91 & 98 are in a single helix, 162 in a helix and 76 in the coil at the end of a sheet
 * TPMT - 203 in a small alpha helix
+* UBI - 34 is at the end of an alpha helix
+* TEM1 - Two positions in an alpha helix (270 & 277) and 210 is at the start of another, 56 is in a beta sheet and 61 & 87 are in loops
+* GAL4 - three positions (56, 62 & 65) are in an alpha helix involved in DNA binding
 
 ### E3
+
+Selects against aromatics and larger hydrophobic residues
 
 Examples:
 
 * APH3II - 182 is at the negative end of an alpha helix, possible stabilising its dipole (Sali et al. 1988)
+* ADRB2 - various positions in on the intracellular domain, exposed to the cytoplasm. Some are potentially involved with binding to the coupled G-protein.
+* NP - four positions all surface accessible.
+* TEM1 - two surface accessible residues (119 & 195) and one semi buried (35) in a cramped position, likely interacting with a nearby arginine but also surrounded by hydrophobic residues.
+* TPMT - 205 is surface accessible in a helix, 237 is in a cleft with the side chain partially exposed
 
 ### EP
 
+Permissive positions, generally very surface accessible
+
+Examples:
+
+* HSP90 - many very accessible positions in one lobe of the protein. Mixture of loops and secondary structure elements.
+* TPMT - Two positions, both accessible
+* TP53 - Two positions, both accessible and far from the DNA binding site
+
 ### EO
+
+Outlier positions, generally largely permissive, but a few positions that don't tolerate aspartate substitutions, all in ADRB2.
+One is on the extracellular side of ADRB2 (17), although not particularly near the binding site.
+A second is on the other end of the same helix on the intracellular side, although again not near the G-protein binding region.
+THe other two are not in the structure, but likely in the G-protein binding domain.
 
 ## F - Phenylalanine
 
