@@ -5,6 +5,7 @@ pdb/*
 fasta/**
 clustering/**
 structures.yaml
+final_subtypes.yaml
 README.md
 subtypes/*.yaml
 residue_hydrophobicity.tsv
