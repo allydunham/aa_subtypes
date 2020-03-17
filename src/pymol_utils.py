@@ -11,7 +11,7 @@ def quick_highlight(cmd, dms, gene, factor='cluster_num', res=None, root='data/p
     Load a new protein and highlight a given factor.
     """
     cmd.delete('all')
-    cmd.load(f'{root}/{gene}.pdb')
+    cmd.load(f'{root}/{su.gene_to_filename(gene)}.pdb')
 
     if res:
         pdb_dms = dms[(dms.gene == gene) & (dms.wt == res)]
