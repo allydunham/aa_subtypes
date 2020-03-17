@@ -75,8 +75,8 @@ pab1:
   id: '6r5k'
   sections: [{chain: 'B', offset: -4}]
 proteing:
-  type: 'Homology Model'
-  id: '1pgx.1.A'
+  type: 'Solution NMR'
+  id: '2oed'
   sections: [{chain: 'A', offset: 0}]
 pten:
   type: 'X-ray Crystallography'
