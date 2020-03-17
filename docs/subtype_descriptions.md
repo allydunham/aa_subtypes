@@ -348,6 +348,17 @@ All glycine residues appear enriched in turn and bend secondary structures
 
 ### G1
 
+Strong overall selection, often near to other glycine residues and often appears at the ends of helices/sheets or in tight turns, like an extreme version of the 'anything but proline' positions.
+
+Examples:
+
+* ADRB2 - 315 is in a transmembrane helix, 83 is at the kink in another helix, 255 is in a tight turn
+* CALM1 - 99 is in a tight turn
+* CBS - 139, 162, 185, 345 are all in tight turns at the end of helices, various other positions in looser loops and in helices/strands
+* HA - Many positions, lots at the start/end of helices/sheets or in tight loops near these ends, plus various other positions in looser loops or the middle of secondary structural features
+* HSP90 - 94 is in a tight turn at the end of a helix, 118, 121 & 123 all near each other in the loop at the end of an alpha helix and 81 is at the apex of the loop in a fold
+* 
+
 ### G2
 
 ### G3
