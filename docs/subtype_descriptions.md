@@ -357,23 +357,81 @@ Examples:
 * CBS - 139, 162, 185, 345 are all in tight turns at the end of helices, various other positions in looser loops and in helices/strands
 * HA - Many positions, lots at the start/end of helices/sheets or in tight loops near these ends, plus various other positions in looser loops or the middle of secondary structural features
 * HSP90 - 94 is in a tight turn at the end of a helix, 118, 121 & 123 all near each other in the loop at the end of an alpha helix and 81 is at the apex of the loop in a fold
-* 
+* Protein G - 9 & 41 are both shortly after beta strands and 14 is at the start of a strand.
+* TP53 - 226 is in a tight loop, 266 at the start of a strand and 108 just before a hairpin loop.
+* UBI - 75 & 76 are on the C-terminus, which are used to link into other ubiquitin molecules in polyubiquitin chains. These are therefore very functionally important
 
 ### G2
 
+Selects for smaller hydrophobic residues
+
+Examples:
+
+* CP - in three loops and an alpha helix, near the edges of the protein, but likely not exposed as this is where the virus capsid monomers join.
+* HSP90 - 83 is in the base of the ATP binding pocket, which also contains many other glycine residues. The side where an R group would protrude is cramped
+* Ras - 138 is in a tight turn after a helix, 75 is in a cramped space, 115 is at the end of a beta sheet in a reasonably cramped space (several aromatics nearby)
+* TEM1 - A number of positions on a beta sheet sandwiched between helices, potentially where there is not space between the secondary structure for larger residues
+* UBI - 10 is next to a lysine used in polyubiquitination, which may be blocked by bulky residues. 35 is in a loop after a helix
+
 ### G3
+
+Selects against larger hydrophobic/aromatics
+
+Examples:
+
+* CBS - a collection of buried positions
+* HSP90 - 100 is at the mouth of the ATP binding pocket, potentially blocking it if it were larger. 153 is on the interface between HSP90 monomers, potentially interfering with this binding if mutated to a bulky residue.
+* CBS - Various buried positions and some on the surface
+* TPK1 - Mixture of surface and buried positions, not clear pattern
+* Ubi - 47 is next to lysine 48, where binding can occur in ubiquitination. This position is mostly open, but it likely blocked by bulky aromatics
 
 ### G4
 
+Anything but proline or isoleucine
+
+Examples:
+
+* APH3II - many positions in loops
+* HSP90 - 170 is at the end of a beta strand
+* Src - 392 is at the end of a beta strand, 440 is in the loop at the end of a helix and 347 in a free looking loop
+
 ### G5
+
+Selects against polarity, but sometimes only weakly
+
+Examples:
+
+* ADRB2 - 320 is on the interface of two transmembrane helices, 257 is in the intracellular domain where the G-protein binds and 16 is in the extracellular domain
+* CALM1 - 24, 26 & 62 are in loops on one end of the protein, 41 is in a loop between helices and 97 is between a helix and strand
+* TPK1 - 15 is in an exterior loop and 47 at the end of a helix
 
 ### G6
 
+Largely permissive, on average
+
+Examples:
+
+* ADRB2 - 35 & 276 are in transmembrane helices facing the membrane, several other positions are in the extra/intracellular domain regions not in the structure.
+* APH3II - 10 & 21 are in surface loops, 234 is on the end of an alpha helix
+* TPMT - 161 is at the end of a helix and 45 is in a loop
+
 ### G7
+
+Strong selection against aspartate and lysine, with weaker selection against other charge/polarity
+
+Examples:
+
+* infA - three positions in a lobe near to, but not adjacent to the bound DNA
+* TEM1 - two positions on helices facing into the core, but into fairly large spaces
+* CXCR4 - Two positions in transmembrane helices, one facing the membrane (57) and one into the helix bundle (258). 273 is in an extracellular loop, away from the binding site.
 
 ### GP
 
+38 positions, spread over many proteins.
+
 ### GO
+
+One, largely permissive, outlier position (CXCR4 306)
 
 ## H - Histidine
 
