@@ -445,9 +445,30 @@ Summary:
 
 ### H1
 
+Overall strong selection, most tolerant of tyrosine, glutamine and asparagine. The cluster appears somewhat under-split, looking at the actual position profiles
+
+Examples:
+
+* ADRB2 - Positions in the intracellular and extracellular domains, but none in the transmembrane helices. Looking at the actual profile all these positions have strong selection pressures beyond the subtype pattern. Four positions (92, 172, 178 & 296) are around the binding pocket
+* amiE - 3, 232 & 275 are deeply buried, 281 is on the surface adjacent to a phenylalanine, 107 is just below the surface next to a tyrosine, 26 is on the surface
+* BRCA1 - 41 is next to a Zn+ ion, which is also coordinated by 3 cysteines. This is a known interaction - Zhou et al. 013
+* HSP90 - 197 is in a very positive pocket near two arginines
+* UBE2I - 20 is in an open cleft in the protein, 83 is buried near various, with two tyrosines somewhat nearby.
+
 ### HP
 
+16 permissive positions across a range of proteins, generally much more accessible than H1 positions.
+
+Examples:
+
+* Ras - 166 is partially exposed at the end of an alpha helix
+* SUMO1 - Two positions (43 & 98) both project out of the protein
+* TEM1 - 24 & 156 are near to H1 positions, potentially able to interact. 94 projects out of the protein, but near a K+ ion.
+* TPMT - 227 points into the core, but into a reasonably large void.
+
 ### HO
+
+Most outliers are broadly permissive, two positions in CXCR4 (228 & 232) are intolerant to asparagine, proline, glutamine and threonine.
 
 ## I - Isoleucine
 
@@ -463,13 +484,52 @@ Summary:
 
 ### I1
 
+Selects for hydrophobicity
+
+Examples:
+
+* ADRB2 - Many positions in the transmembrane helices, mostly facing out into the membrane but a few also face into the helix bundle
+* BRCA1 - 15 & 90 face into a helix bundle, 42 & 68 are general hydrophobic positions
+* CBS - A range of internal hydrophobic core positions
+* CP - 105 & 61 are in interfaces between secondary structural features, 34 is on the edge of the monomer, likely interfacing with other capsid subunits
+* HSP90 - Many positions facing into the core
+
 ### I2
+
+Selects for larger hydrophobic residues
+
+Examples:
+
+* ADRB2 - again a collection of positions in the transmembrane helices, but this time all facing into the core of the bundle
+* CBS - Many internal positions, potentially in larger spaces than I1 positions. For example, 143 & 166 are in a beta sheet, projecting onto one side while their neighbours 142 & 167 (I1 positions) project onto the other side. The I2 side appears to be more open.
+* CXCR4 - Many positions in the transmembrane helices, not clearly distributed differently yo I1 positions however.
+* HA - many core residues, especially in the lower lobe
+* TPK1 - 153-156 are a run of four I2 positions in a row on a beta sheet, seeming to have a lot of space above and below the strand. There are various other internal positions too
 
 ### I3
 
+Strong selection against proline, weaker selection against leucine and lysine, which is odd.
+
+Examples:
+
+* CXCR4 - many transmembrane helix positions, generally facing out into the membrane
+* HSP90 - three positions near the start of an alpha helix (20) and two beta strands (147 & 172)
+* Protein G - near the end of a beta strand (n.b. is a valine in the structure)
+* ADRB2 - 58 is at the end of a transmembrane helix, 205 is at the kink in a transmembrane helix and 154 is just in the middle of a helix
+
 ### IP
 
+22 permissive positions, less buried than other isoleucines
+
+Examples:
+
+* HSP90 - A number of positions, without a particular pattern
+* CCR5 - one transmembrane helix position (54), fairly near the extracellular side
+* BRCA1 - three positions, no strong pattern
+
 ### IO
+
+9 outlier positions, some trend for selecting against methionine, particularly TPK1 122, but not a strong pattern of profiles
 
 ## K - Lysine
 
