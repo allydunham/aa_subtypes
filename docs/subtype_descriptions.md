@@ -538,20 +538,81 @@ deepSplit = 1
 Summary:
 
 * K1 - Weak selection for polarity
-* K2 - Anything but proline
-* K3 - Selects against threonine, glutamine & glutamate
+* K2 - Strong selection against aspartate, weak selection against glutamate, proline glycine and aromatics
+* K3 - Anything but proline
+* K4 - Strongly selects against threonine & glutamine
+* K5 - Strong selection against glutamate, weak selection against aspartate
 * KP - Permissive positions
 * KO - Outliers
 
 ### K1
 
+Weak selection for polarity
+
+Examples:
+
+* BRCA1 - 45 makes a polar contact with a nearby glutamate, 75 faces towards an asparagine, but is not predicted to make a polar contact in the side chain conformations found in the structure (which may not be correct)
+* CCR5 - Many positions in the intra-/extracellular domains, a couple make explicit polar contacts, most just face the solvent
+* GAL4 - all three positions are adjacent to the bound DNA, with 10 & 23 predicted to make hydrogen bonds to it, and 20 would be able to with a small change in side chain configuration
+* infA - two positions, facing the solvent
+* Protein G - 31 makes a polar contact with a glutamate in the next turn of the alpha-helix, as well as being solvent accessible
+
 ### K2
+
+Strong selection against aspartate, weak selection against glutamate, proline, glycine and aromatics. Some trend towards nucleic acid binding, so potentially these are substitutions that specifically disrupt this and other similar roles
+
+Examples:
+
+* CBS - many positions at the ends of helices or in the loops just after
+* GAL4 - 18 also faces the DNA, and is between two K1 residues seemingly contacting the DNA. Potentially it isn't as important for binding but proline substitutions disturb the binding residue positions too much. 45 is also next to a arginine that looks to contact the bound DNA. Other positions are in helices
+* PAB1 - three positions (131, 156 & 166) in a series of loops adjacent to the bound RNA, 166 is predicted to h-bond to the RNA but the others are not
+* Src - 301 is in the loop after a beta strand
 
 ### K3
 
+Anything but proline
+
+Examples:
+
+* CXCR4 - two transmembrane helix positions
+* HSP90 - two nearby positions, 98 & 102, in a loop between helices
+* TEM1 - five positions in secondary structures, with three being towards the ends
+* UBE2I - two secondary structure positions and one in a long loop between beta sheet strands
+
+### K4
+
+Selects against threonine & glutamine, majority of these positions are in CXCR4
+
+Examples:
+
+* CXCR4 - many positions at the base of the transmembrane helices
+* CBS - three surface positions
+
+### K5
+
+Strong selection against glutamate, weak selection against aspartate
+
+Examples:
+
+* ADRB2 - three positions at intracellular end of a transmembrane helix (267, 270 & 273) with another nearby (227), potentially a region needing to be positively charged, or at least not negatively charged. Two other positions further away on the intracellular domain (60 & 147)
+* Src - 346 is near to a glutamate residue, which would repel if another negative residue were substituted
+* Ras - 16 is near an Mg ion and the triphosphate end of GCP (in the structure), which is potentially doesn't interact well with negative charge. This position also tolerates other polar residues and aspartate.
+* PAB1 - 140 near to an aspartate
+* CXCR4 - 67 is somewhat near an aspartate
+
 ### KP
 
+78 permissive positions, very surface accessible (although all K positions are)
+
+Examples:
+
+* BRCA1 - positions on the surface of the domain
+* CBS - Surface positions, generally projecting outwards away from other side chains
+* HSP90 - Mostly surface positions, although not all
+
 ### KO
+
+Six positions, mostly broadly permissive, apart from ADRB2 372 which is strongly selective against arginine.
 
 ## L - Leucine
 
