@@ -633,23 +633,108 @@ Summary:
 
 ### L1
 
+Selects against charge and polarity
+
+Examples:
+
+* ADRB2 - transmembrane helix positions face the membrane, plus a position in the extracellular domain
+* BRCA1 - 82 faces into a helix bundle, other positions face into the core
+* CBS - Many core positions, 230 faces a bound haem group
+* GAL4 - 61 & 64 are on the face of the alpha helix interface between the two monomers, forming a leucine zipper type structure
+* PTEN - 320 extends between two beta sheets, 23, 25 & 57 project into an alpha/beta fold
+
 ### L2
+
+Only tolerates methionine and isoleucine (larger non-aromatic hydrophobics), but less conserved on average than L1 or L3.
+
+Examples:
+
+* CCR5 - three transmembrane helix positions (255, 257 & 285), 255 faces into the bundle, the others into the membrane
+* HA - Many positions, all facing into the core, potentially tend to fill larger spaces
+* SUMO1 - Three internally facing positions
+* TP53 - Again a number of internally facing positions
 
 ### L3
 
+Selects for hydrophobic residues
+
+Examples:
+
+* APH3II - Many hydrophobic internal positions
+* HSP90 - Three internal hydrophobic positions, two on an alpha helix (15 & 18) and one between beta sheets (175)
+* Ras - Two internal positions
+* TEM1 - Large proportion of positions in the core are L3 positions
+* UBI - Three core positions (50, 56 & 67) and one surface position (15)
+
 ### L4
+
+Strong selection against lysine, weaker against other charge. More often surface accessible than L1/2/3
+
+Examples:
+
+* ADRB2 - 311 faces the membrane, 53 interfaces between the transmembrane helix and intracellular domain, 230 and 342 protrude into the cytoplasm
+* CBS - Three standard surface positions (419, 456 & 468), plus one position (402) on the inner face of a loop that protrudes out from the protein, creating an void between loop and the main protein globule.
+* CCR5 - Main positions in the transmembrane helices, most of which face the membrane, but also several internal positions
+* CXCR4 - Same general pattern as CCR5
+* TPK1 - Three internal positions, all near phenylalanine residues (24 & 105 around one, 28 near another
 
 ### L5
 
+Selection against negative charge (much weaker against positive)
+
+Examples:
+
+* ADRB2 - two membrane facing transmembrane helix positions (45 & 84), two intracellular domain positions (145 & 266) and one extracellular position (11)
+* APH3II - 103 is at the mouth of a binding cleft, with a Na & Mg ion plus a KAN molecule in the structure, 94 is at the base if this cleft but away from any of the ligands in the structure, 184 is at the dimer interface, near an arginine - potentially too strong a binding here makes dimerisation too favoured
+* CALM1 - 2 surface positions and 1 buried. All look to be broadly in hydrophobic surroundings
+* CXCR4 - two positions inside the transmembrane helix bundle and two on the dimerisation interface of the transmembrane helices
+
 ### L6
+
+Anything but proline
+
+Examples:
+
+* GAL4 - 16 & 32 are at the end of alpha helices coordinating two zinc ions and binding DNA
+* HSP90 - Several general secondary structure positions
+* infA - Two loop positions
+* UBI - two positions in the final beta sheet, just before the polyubiquitination point
 
 ### L7
 
+Weak selection against isoleucine, proline, tyrosine & tryptophan (larger/branched residues)
+
+Examples:
+
+* TP53 - a collection of surface accessible positions
+* TPK1 - Two surface accessible positions, and various generic hydrophobic internal positions
+* CBS - 77 is on the face of a cleft in the protein and 397 & 423 is on the protein surface
+* CCR5 - 137 is on the extracellular surface, and 174 on the intracellular domain surface
+
 ### L8
+
+Strong selection against arginine
+
+Examples:
+
+* CXCR4 - 4 membrane facing positions, two facing the binding site (120 & 466), 317 is on the surface of the intracellular domain
+* TPMT - 235 is in a mostly hydrophobic pocket, apart from vaguely nearby a glutamate that's already facing an arginine
+* HSP90 - Two positions in the interface between helices and a beta sheet
+* CALM1 - Two symmetrical positions (49 & 106) either side of the fold, pointing into the core of helix turns
 
 ### LP
 
+46 permissive positions, often surface accessible ones
+
+Examples:
+
+* HSP90 - Many positions in the lower lobe, both internal and external. Potentially a region not strongly selected in the experiment
+* BRCA1 - 3 surface positions and one internal
+
 ### LO
+
+32 outlier positions, some with meaningful selection. Six positions are intolerant to isoleucine and two to valine, plus a number of weaker modes.
+These are more likely to be surface positions than most leucine positions.
 
 ## M - Methionine
 
