@@ -857,15 +857,66 @@ Summary:
 
 ### P1
 
+Selects moderately against everything, somewhat buried but not all
+
+Examples:
+
+* CBS - 170 is in a tight turn after a strand, 59 & 64 form two tight turns creating the shape of the haem binding pocket
+* GAL4 - 42 & 48 are along a loop running along the length of the bound DNA
+* Src - 465 & 467 form a tight hairpin in the middle of a loop
+* TPK1 - 167 & 234 are in the turns between strands of two sandwiched beta sheets
+
 ### P2
+
+Tolerates serine, threonine, glutamine, leucine and alanine. More surface accessible
+
+Examples:
+
+* ADRB2 - Selection of membrane facing and extracellular domain positions
+* CBS - Many positions, some surface others buried. No standout positions
+* TPMT - 193 & 196 are in a loop on the edge of the binding pocket, 139 is on a surface helix
+* SUMO1 - 58 is facing inwards on a surface loop, with the side chain in a hydrophobic pocket
+* CP - 117 is shown covalently bonded to asparagine 3
 
 ### P3
 
+Strong selection against aromatic, weaker against other large hydrophobic residues, surface accessible.
+They tend to be in a position that could clash or on the protein surface.
+Sometimes they seem to avoid a clash with a sharp turn.
+
+Examples:
+
+* amiE - 80 is on the surface, 333 is on a loop close to a tyrosine, which would clash
+* APH3II - 76 is near a phenylalanine, 45 & 98 are on the surface, 109 is on the surface near a tryptophan, 194 is adjacent to a bound NA ion
+* PTEN - 30 & 89 are on the surface
+* TP53 - 142 is in a surface pocket with potential clashes with overhanging protein, 223 faces another backbone loop, which would clash, 250 is on the surface that contacts DNA
+* UBE2I - 28 faces several other sidechains close by, 72 faces another backbone region, 128 faces a tyrosine, 88 is on the surface
+
 ### P4
+
+Selects against charge and polarity, mostly buried
+
+Examples:
+
+* CXCR4 - Many transmembrane helix positions, generally facing into the bundle but some also face the membrane/the other monomer
+* HA - 231 & 237 are buried in hydrophobic pockets
+* TPMT - 68 is deeply buried, 189 is on the surface
+* UBE2I - 73 is buried surrounded by hydrophobic and aromatic residues, 105 is on the surface
 
 ### PP
 
+56 permissive positions, very surface accessible
+
+Examples:
+
+* HSP90 - Surface positions
+* TEM1 - Surface positions
+* UBI - 37 & 38 are in an external helix, but facing inwards
+* CBS - Surface positions (but so are many other P positions)
+
 ### PO
+
+Three positions are broadly weakly selective, particularly against histidine, Src 506 appears to be improved be becoming positively charged (K/R), the other 8 are generally permissive.
 
 ## Q - Glutamine
 
