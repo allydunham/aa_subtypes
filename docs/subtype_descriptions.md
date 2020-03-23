@@ -749,6 +749,8 @@ Summary:
 
 ### M1
 
+Tolerates leucine, isoleucine, valine and threonine (longer aliphatic chains?). Strongly intolerant to negative charge and proline
+
 Examples:
 
 * HSP90 - 16 looks to interact with a phenylalanine ring, 589 is near to a tryptophan residue (interestingly the 589 position is classified M1 from the profile in Hietpas et al. 2011 and M2 when from Jiang et al. 2013).
@@ -762,11 +764,25 @@ Examples:
 
 ### M2
 
+Strong selection against proline, weak selection against negative charge
+
 Examples:
 
-* HSP90 84 is in a binding pocket for ATP, 116 fills a hydrophobic cleft,
+* ADRB2 - 4 transmembrane helix position, two facing the membrane and two facing into the bundle
+* APH3II - 148 is on the end of an alpha helix next to a glutamate
+* HSP90 - 84 is in a binding pocket for ATP, 116 fills a hydrophobic cleft, 589 is in an alpha helix adjacent to a glutamate (would repel with a negative charge)
+* NP - 105 is on a surface beta sheet, 222 faces inwards on a helix, 238 faces inwards on a helix next to an aspartate, 456 and 481 are on the surface
+* TEM1 - 127 & 209 are on the ends of alpha helices, 67 & 180 are buried in turns at the end of helices
 
 ### MP
+
+10 permissive positions
+
+Examples:
+
+* TPK1 - 1 is found to be permissive in the study, but this is potentially an artefact of the experiment or alternate start positions might be available. 193 is in a surface loop before a sheet
+* SUMO1/CALM1 - both also have position 1 listed as permissive, again potentially an artefact
+* HSP90 - 105 is in an open surface pocket
 
 ### MO
 
@@ -785,9 +801,41 @@ Summary:
 
 ### N1
 
+Moderately selective against everything, weakest against serine and threonine, range of surface accessibility
+
+Examples:
+
+* ADRB2 - 301 & 196 are in the extracellular domain facing the surface, 293 is in the extracellular binding site facing the ketone group of the P0G bound in the structure, 59, 61 & 322 are in the core of the helix bundle, all predicted to make hydrogen bonds
+* APH3II - 195 looks to be coordinating a Mg ion, 58 is near to an aspartate
+* CALM1 - 54 & 112 are on the surface
+* CCR5 - various transmembrane positions, several internal making h-bonds and positions in the intra/extracellular domains, some on the surface and others forming internal h-bonds
+* CP - 56 & 88 face into the viral capsid; 25 & 37 are on the edge of the protein, at the interface with other subunits; 126 is on another interface, also making internal h-bonds; 4 is shown covalently bonded to proline 118; 13 & 117 are on the external surface
+* HSP90 - 37 & 92 face an ATP binding pocket
+* PAB1 - 127 is in the RNA binding pocket, but not directly facing the RNA, 139 is a buried residue making internal h-bonds
+
 ### N2
 
+Anything but proline, much more surface accessible
+
+Examples:
+
+* ADRB2 - 148 is at the top of a transmembrane helix, 183 is in a short helix at the top of the binding site
+* GAL4 - 27 is in a helix near the DNA binding domain
+* infA - 43 is in a short surface helix
+* Protein G - 8 is at the end of a beta sheet and 37 at the end of an alpha helix
+* TP53 - 263 is in a loop between beta sheet strands, 345 is in a helix, 235 & 268 are in beta strands, 239 & 246 are in a long loop between strands
+* UBE2I - 37 is in a loop between strands and 124 is in a loop between helices
+
 ### NP
+
+31 permissive positions, vey surface accessible
+
+Examples:
+
+* CCR5 - Two positions in the extracellular domain
+* HSP90 - Various surface accessible positions
+* TEM1 - Four surface positions
+* UBI - 25 in on the surface in an alpha helix and 60 on a surface loop - potentially these are artefacts and are important in some contexts as all of UBI is highly conserved
 
 ### NO
 
