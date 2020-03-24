@@ -1100,17 +1100,38 @@ Summary:
 
 ### S1
 
+Only tolerates threonine
+
 ### S2
+
+Anything but proline
 
 ### S3
 
+Selects against negative charge
+
 ### S4
+
+Weak selection against polar
 
 ### S5
 
+Anything but alanine
+
 ### SP
 
+60 permissive positions
+
+Examples:
+
+* CCR5 - 63 is in the loop between transmembrane helices
+* HSP90 - 17, 25 & 155 are on the dimerisation interface, other positions are in a wide range of conditions
+* TEM1 - Four surface positions
+* UBI - Five externally facing positions
+
 ### SO
+
+14 outlier positions, mostly permissive apart from two positions in ADRB2 - 74 & 41 select against asparagine with 74 also selecting against proline.
 
 ## T - Threonine
 
@@ -1129,19 +1150,42 @@ Summary:
 
 ### T1
 
+Only tolerates serine
+
 ### T2
+
+Anything but proline
 
 ### T3
 
+Selects against aromatics and (less so) negative charge
+
 ### T4
+
+Selects against negative charge, glycine and proline
 
 ### T5
 
+Weak selection against cysteine only
+
 ### T6
+
+Strong selection against asparagine, weaker selection against other positive charge, negative charge, aromatics and cysteine
 
 ### TP
 
+58 permissive positions
+
+Examples:
+
+* CBS - 53 is on the surface just below the haem binding pocket, 193 & 318 are on the surface, 141 is in a mostly hydrophobic pocket between a helix and sheet
+* HSP90 - 5 positions, mostly exposed
+* Protein G - Mostly surface positions, apart from 16 which is semi exposed but also partly buried between the sheet and helix
+* TPMT - 190 is exposed on the surface, 38 is buried with aromatic and hydrophobic residues nearby
+
 ### TO
+
+Seven permissive positions
 
 ## V - Valine
 
@@ -1159,17 +1203,37 @@ Summary:
 
 ### V1
 
+Selects for hydrophobic residues and threonine
+
 ### V2
+
+Only tolerates isoleucine
 
 ### V3
 
+Selects against charged (apart from glutamate) and some polar, particularly histidine
+
 ### V4
+
+Similar to V3 but selects against glutamate instead of aspartate and particularly disfavours glutamine
 
 ### V5
 
+Anything but proline
+
 ### VP
 
+25 permissive positions
+
+Examples:
+
+* HSP90 - 6 surface positions
+* Protein G - 21 is exposed on one end
+* CBS - 252 is in the interface between a sheet and a helix, 414 is in a buried pocket that's mostly backbone
+
 ### VO
+
+29 outlier positions, mostly nonselective apart from a few positions with a strong selection pressure - for example ADRB2 114 strongly selects against leucine only and Src 326 is improved by substituting arginine
 
 ## W - Tryptophan
 
@@ -1209,7 +1273,15 @@ Examples:
 
 ### WP
 
+Three permissive positions:
+
+* TEM1 163 is flat to the surface
+* CBS 54 is buried but its backbone next to the haem binding pocket
+* CBS 410 is partially exposed flat to a an alpha helix
+
 ### WO
+
+Two outliers, both in Src. 285 is on the underside of a beta sheet, but seems to almost clash with the backbone of the neighbouring strand and is strongly improved when mutated to aliphatic hydrophobic residues. 289 is at the end of the same strand and is broadly permissive apart from lysine mutations which are measured to slightly improve fitness, potentially because of a nearby glutamate.
 
 ## Y - Tyrosine
 
@@ -1256,6 +1328,8 @@ Examples:
 
 ### Y3
 
+Generally selective, somewhat tolerates phenylalanine and histidine
+
 Examples:
 
 * CBS - Again a group appears in a sort of cluster (223, 308, 301) along a line, with a Y1 position (381) as well. 163 appears alone in a reasonably large pocket (potentially needing the size of the aromatic ring) and 484 fills a pocket near a pair of aromatics (phenylalanine/histidine)
@@ -1263,4 +1337,19 @@ Examples:
 
 ### Y4
 
+Anything but proline
+
+
+
+### YP
+
+Seven permissive positions:
+
+* Two infA positions (44 & 60) that are different amino acids in the homology model.
+* HSP90 - 47 is in a wide cleft between an alpha helix and the rest of the protein, 146 is on the surface, 184 is partially buried with a glutamate nearby
+* SUMO1 - 21 is full exposed
+* amiE - 339 is mostly exposed
+
 ### YO
+
+Two largely permissive outlier positions
