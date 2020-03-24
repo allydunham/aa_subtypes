@@ -933,15 +933,72 @@ Summary:
 
 ### Q1
 
+Generally selective, most tolerant to polarity or charge, strongest against aromatics
+
+Examples:
+
+* ADRB2 - 4 positions on the intracellular domain, 142, 247 & 337 are on the surface, 229 is slightly buried making an internal h-bond
+* amiE - 8 buried positions making internal h-bond
+* HSP90 - 14 is on the surface of a cleft into the protein
+* PTEN - 149 is on the surface
+* Src - 278 & 394 are surface positions
+* SUMO1 - 4 surface positions, 55 & 92 are predicted to make h-bonds as well whereas 69 & 94 are not
+* TPK1 - 134 is in a surface binding cleft, where PYI is bound in the structure. 109 is predicted to make h-bonds to E113 up the alpha helix
+
 ### Q2
+
+Anything but proline
+
+Examples:
+
+* ADRB2 - 224 is at the end of a transmembrane helix, 231 is in the intracellular domain alpha helix
+* HSP90 - 9 is in a chain between secondary structure elements, 119 is in a long loop, 135 is on the surface in the middle of a beta strand
+* Ras - 25 is at a kinked end of a helix, 99 & 129 are near the end of regular helices
+* TP53 - 104 & 165 are in hairpin turns, 136 is just after a strand and 331 at the end of one
+* UBI - 31 & 41 are before/after a tight turn with a short helix,
 
 ### Q3
 
+Weak selection against hydrophobic residues
+
+Examples:
+
+* CALM1 - 6 surface positions
+* CCR5 - One extracellular surface accessible position (313), 7 intracellular surface positions, 261 is a buried position making an h-bond
+* Ras - Two surface positions
+* UBE4B - Two surface positions
+
 ### Q4
+
+Strong selection against negative charge
+
+Examples:
+
+* ADRB2 - 170 & 179 are surface positions on the extracellular domain, 65 is directed at the base of a transmembrane helix, 250 is internal in the intracellular domain and 243 is on its surface
+* GAL4 - 9 is near the backbone of the bound DNA
+* SUMO1 - 4 & 29 are surface positions
+* TPK1 - 9 is in the PYI binding pocket and near an Mg ion, 166 is accessible bu directed inwards at a hydrophobic helix (it h-bonds to a threonine)
 
 ### Q5
 
+Improves on average, apart from lysine
+
+Examples:
+
+* YAP1 - 186 is on the surface but next to a tryptophan
+* CXCR4 - 210 is in the extracellular binding domain, 212 is on the membrane surface, in the dimerisation interface
+* TPK1 - 26 and 157 are adjacent to each other near the surface, 144 & 190 face phenylalanine residues, 194 is very surface accessible
+
 ### QP
+
+54 permissive positions.
+
+Examples:
+
+* amiE - surface positions
+* CCR5 - 194 is inside the bottom of the bottom of the transmembrane domain, mostly near hydrophobic positions
+* HSP90 - partially exposed positions, generally have hydrophobic and hydrophilic  residues nearby
+* TEM1 - 5 surface positions
 
 ## R - Arginine
 
@@ -949,7 +1006,7 @@ deepSplit = 1
 
 Summary:
 
-* R1 - intolerant of everything apart from lysine
+* R1 - Intolerant of everything apart from lysine
 * R2 - Anything but proline
 * R3 - Selects against negative charge and proline
 * R4 - Weak selection
@@ -959,13 +1016,23 @@ Summary:
 
 ### R1
 
+Intolerant of everything apart from lysine
+
 ### R2
+
+Anything but proline
 
 ### R3
 
+Selects against negative charge and proline
+
 ### R4
 
+Weak selection
+
 ### R5
+
+Selects against negative charge, aromatics and proline
 
 ### RP
 
