@@ -537,8 +537,8 @@ deepSplit = 1
 
 Summary:
 
-* K1 - Weak selection for polarity
-* K2 - Strong selection against aspartate, weak selection against glutamate, proline glycine and aromatics
+* K1 - Weak selection for polarity, most selective for positive charge
+* K2 - Strong selection against aspartate, slightly weaker selection against glutamate, proline, glycine and aromatics
 * K3 - Anything but proline
 * K4 - Strongly selects against threonine & glutamine
 * K5 - Strong selection against glutamate, weak selection against aspartate
@@ -977,7 +977,7 @@ Examples:
 * ADRB2 - 170 & 179 are surface positions on the extracellular domain, 65 is directed at the base of a transmembrane helix, 250 is internal in the intracellular domain and 243 is on its surface
 * GAL4 - 9 is near the backbone of the bound DNA
 * SUMO1 - 4 & 29 are surface positions
-* TPK1 - 9 is in the PYI binding pocket and near an Mg ion, 166 is accessible bu directed inwards at a hydrophobic helix (it h-bonds to a threonine)
+* TPK1 - 9 is in the PYI binding pocket and near an Mg ion, 166 is accessible but directed inwards at a hydrophobic helix (it h-bonds to a threonine)
 
 ### Q5
 
@@ -1100,7 +1100,13 @@ Summary:
 
 ### S1
 
-Only tolerates threonine
+Only tolerates threonine, generally the most buried subtype with the strongest decrease in hydrophobic solvation when mutated
+
+Examples:
+
+* ADRB2 - 111, 161, 165 & 220 are in transmembrane helices, predicted to form polar contacts with the backbone, 246 forms an h-bond linking the intracellular domain to the transmembrane helices, 329 is at the base of the short perpendicular intracellular helix, 203 is in the binding site forming an h-bond to the bound P0G in the crystal structure
+* amiE - A large number of buried positions forming polar contacts
+*
 
 ### S2
 
@@ -1146,7 +1152,7 @@ Summary:
 * T5 - Weak selection against cysteine only
 * T6 - Strong selection against asparagine, weaker selection against other positive charge, negative charge, aromatics and cysteine
 * TP - Permissive positions
-* TO - Outliers0
+* TO - Outliers
 
 ### T1
 
