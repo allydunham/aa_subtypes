@@ -1018,25 +1018,71 @@ Summary:
 
 Intolerant of everything apart from lysine
 
+Examples:
+
+* APH3II - 211 & 226 are in the binding pocket with KAN, 66 & 183 face aspartate residues
+* CALM1 - 75 & 87 face glutamate residues, 91 is on the surface
+* CBS - 51, 224 & 266 are in the haem binding pocket, 182 is near an aspartate, 161 is near a glutamate, other residues on the surface
+* GAL4 - 15, 46 & 51 are near the DNA backbone
+* NP - many surface positions
+
 ### R2
 
 Anything but proline
+
+Examples:
+
+* APH3II - Four positions in the middle of helices, 122 is at the beginning of a helix and 202 at the beginning of a beta sheet, 44 is in a tight turn between strands in a sheet
+* HA - 472 is in a tight turn between a helix a strand, 224 is in a turn between strands
+* Src - 480 is at the end of a helix with a tight turn after it, 419 is in a turn between helices, 463 is in a generic loop
+* TPK1 - 33 & 51 are in alpha helices, 171 is in a surface beta sheet
 
 ### R3
 
 Selects against negative charge and proline
 
+Examples:
+
+* CCR5 - Two surface positions at the bottom of the transmembrane domain
+* Ras - 41 faces an aspartate in another bound Ras monomer
+* TEM1 - 255 is next to a glutamate, 271 is somewhat near the bound CB4
+* TPMT - 140 & 215 are on the surface, 163 is somewhat near a glutamate, 152 is at the base of a binding pocket
+
 ### R4
 
 Weak selection
+
+Examples:
+
+* ADRB2 - 304 is exposed in the extracellular domain, 151 is membrane facing at the bottom of the transmembrane domain, 221 is near a glutamate in the intracellular domain, 260 is on the surface of the intracellular domain.
+* TPMT - 226 is partially exposed with both hydrophobic and hydrophilic residues
+* SUMO1 - 70 is on the surface, near an R2
+* TP53 - 213 is buried with mainly backbone nearby
 
 ### R5
 
 Selects against negative charge, aromatics and proline
 
+Examples:
+
+* ADRB2 - 328 is exposed in the intracellular domain, potentially near where the G-protein binds
+* APH3II - 253 is near two aspartate residues, 258 is buried in a reasonably cramped position
+* TEM1 - 241 is in a tight interface between a sheet and helices, 162 is on the surface near another arginine and a glutamate, 202 is mostly buried with the amine group exposed
+* UBE2I - 104 is very exposed on the surface
+
 ### RP
 
+43 permissive positions
+
+Examples:
+
+* TP53 - Three very exposed residues
+* HSP90 - Many surface positions
+* TEM1 - Many exposed positions
+
 ### RO
+
+Three outlier positions, all slightly improved by mutation.
 
 ## S - Serine
 
