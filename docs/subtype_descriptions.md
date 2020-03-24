@@ -1332,14 +1332,22 @@ Generally selective, somewhat tolerates phenylalanine and histidine
 
 Examples:
 
+* ADRB2 - 308 is in the extracellular binding site, 219 is in the transmembrane bundle, h-bonding to a fairly distant arginine, 70 is at the intracellular end of the transmembrane helices facing outward
 * CBS - Again a group appears in a sort of cluster (223, 308, 301) along a line, with a Y1 position (381) as well. 163 appears alone in a reasonably large pocket (potentially needing the size of the aromatic ring) and 484 fills a pocket near a pair of aromatics (phenylalanine/histidine)
 * HA - many positions, somewhat clustered at either in the binding domain lobe.
+* TPK1 - 53 is in a buried cleft with the alcohol group exposed and the aromatic group facing hydrophobic residues, 163 & 221 are buried near other aromatic/hydrophobic residues
+* TP53 - 163 is facing two glutamate residues, 205 is buried in a hydrophobic pocket
 
 ### Y4
 
 Anything but proline
 
+Examples:
 
+* CCR5 - 214 is buried in the transmembrane helix, at a kink in one of the helices, 307 is in the extracellular alpha helix
+* CXCR4 - 4 transmembrane helix positions, some buried, some exposed
+* PAB1 - 197 is in a buried loop, 143 is in a short helix, both near the bound RNA
+* Src - 439 is at the end of an exposed helix, 329 is at the end of a buried strand with a tight turn after it
 
 ### YP
 
