@@ -1192,27 +1192,72 @@ Summary:
 
 ### T1
 
-Only tolerates serine
+Only tolerates serine, generally buried
+
+Examples:
+
+* ADRB2 - 25 is an exposed extracellular position, 68 & 136 form h-bonds in the transmembrane helices
+* BRCA1 - 37 makes internal h-bonds, 69 & 77 are on the surface of the domain in the crystal structure, but it's not known where they are in the overall structure
+* CALM1 - 35 is fully exposed, 27 is on the surface but making h-bonds to other residues
+* CBS - 296, 383, 428 & 494 are surface accessible, the other positions are buried making internal h-bonds, 150,  257 & 260 interact with a bound PLP
+* CCR5 - 5 internal positions in the intracellular domain, various other positions make internal h-bonds between transmembrane helices
+* HSP90 - 171 is in the ATP binding pocket, 101 makes internal h-bonds near the bound ATP, 22 is buried
 
 ### T2
 
 Anything but proline
 
+Examples:
+
+* ADRB2 - Four transmembrane helix positions, one of which (110) is in the binding domain wall
+* APH3II - 73 is at the end of an alpha helix, 85 is at the end of a beta sheet, 130 is in a short alpha helix turn, 28 is in a beta turn and 146 is at the end of a helix
+* HSP90 - 157 is in a strand on the surface, 13 is at the start of an alpha helix and 95 in the hairpin turn after a helix
+* UBE2I - 135 is in a short surface helix, 29 at the end of a strand
+
 ### T3
 
 Selects against aromatics and (less so) negative charge
+
+Examples:
+
+* CALM1 - 69 & 77 are both on the surface of the protein and have nearby residues that could clash
+* SUMO1 - 41 & 42 are on the surface, near the dimerisation domain in the crystal structure, 95 is exposed but with residues that can potentially clash
+* HA - 147 and 151 are exposed, 228 is on the surface of a large cleft, partly facing another lobe of the protein
+* TEM1 - 27 is on the interface between two helices, 139 is on the surface but facing several large residues, 147 is on the surface but facing parallel to it towards other residues
 
 ### T4
 
 Selects against negative charge, glycine and proline
 
+Examples:
+
+* ADRB2 - 283 faces the membrane, 164 faces another transmembrane helix and 189 faces the extracellular surface
+* CALM1 - 45 is on the surface of the cleft between lobes
+* NP - 232 and 296 face each other on the protein surface, 23 & 130 are on the surface
+* Src - 292 is at the end of a strand on the surface, but facing another protein surface, 443 is on the protein surface
+* TP53 - 284 directly faces the DNA backbone, 25 is at the surface near the DNA backbone, 230 is at the end of a strand near various cramped residues, 256 is on the surface in a sheet
+
 ### T5
 
-Weak selection against cysteine only
+Weak selection against cysteine only, very surface accessible
+
+Examples:
+
+* ADRB2 - 100 & 177 are on the extracellular domain surface, 66 & 146 are on the surface of the intracellular domain
+* CXCR4 - 73 is at the interface between transmembrane helices, 142 is in a turn between helices at the intracellular end, facing several charged residues in the intracellular domain
+* Ras - Two exposed surface positions
+* Src - 293 is partially exposed near charged and polar residues and 304 is on the protein surface
 
 ### T6
 
 Strong selection against asparagine, weaker selection against other positive charge, negative charge, aromatics and cysteine
+
+Examples:
+
+* ADRB2 - 281 faces the membrane and 195 faces into the binding domain
+* CALM1 - Five surface accessible positions
+* CBS - 333 is very accessible, 460 is buried with two negatively charged residues close by as well as a tyrosine
+* TPK1 - 5 surface accessible positions, 141 is in a narrow interface between helices, 149 is partially buried forming h-bonds to a nearby glutamine
 
 ### TP
 
