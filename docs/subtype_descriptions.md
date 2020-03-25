@@ -1106,23 +1106,59 @@ Examples:
 
 * ADRB2 - 111, 161, 165 & 220 are in transmembrane helices, predicted to form polar contacts with the backbone, 246 forms an h-bond linking the intracellular domain to the transmembrane helices, 329 is at the base of the short perpendicular intracellular helix, 203 is in the binding site forming an h-bond to the bound P0G in the crystal structure
 * amiE - A large number of buried positions forming polar contacts
-*
+* CBS - 63 is in the haem binding pocket, many other internal positions making internal h-bonds
+* CCR5 -  75, 114 & 160 form internal h-bonds in the transmembrane domains, 6, 17 & 270 are surface positions in the intracellular domain
+* GAL4 - 22 & 47 form h-bonds on the protein surface
+* HSP90 - 4 internal positions making h-bonds
+* Ras - 17 coordinates a Mg ion, 89 makes internal h-bonds
+* TEM1 - 68 binds the bound CB4 ligand, 51 is on the surface, all other positions form internal h-bonds
+* TPK1 - 216 & 218 are in a binding pocket, making polar contacts with the bound PYI ligand in the crystal structure, 62 & 243 are on the surface and 74 is exposed but predicted to form an internal h-bond
 
 ### S2
 
-Anything but proline
+Anything but proline, generally more surface accessible
+
+Examples:
+
+* ADRB2 - 207 is in a kink in a transmembrane helix, 137 in a tight turn between helices, 120 in the middle of a transmembrane helix, 261 & 262 are in a coil between transmembrane helix and intracellular domain
+* APH3II - 68 & 114 are in alpha helices, 40 at the end of a strand, 204 in the middle of a strand, 32 & 104 sit in coils
+* HSP90 - 109 is in a turn before a helix and 198 at the end of a helix
+* TP53 - 240 is just before a S1 position contacting bound DNA, 261 in a turn between secondary structures and 215 is in the middle of a sheet
 
 ### S3
 
-Selects against negative charge
+Selects against negative charge, wide range of surface accessibility
+
+Examples:
+
+* CALM1 - 82 is between a D and E and 39 is at the base of a helix
+* CCR5 - 38 faces the membrane, 180 is buried
+* HSP90 - 36 & 39 are adjacent on one side of a helix, near to several negatively charged residues
+* PAB1 - 155 is buried
+* TEM1 - 233 is buried, near to an K ion and various other charged residues
 
 ### S4
 
-Weak selection against polar
+Weak selection against polar, very surface accessible
+
+Examples:
+
+* amiE - 233 is deeply buried surrounded by hydrophobic residues, 272 is buried near an asparagine and aspartate and 290 is on the surface but facing inwards towards hydrophobic residues
+* CALM1 - 18 & 102 are exposed on the surface
+* CXCR4 - 131 is buried within the transmembrane helices, 217 is exposed to the membrane and on the dimerisation interface, 285 is in the binding pocket, 178 is exposed on the extracellular surface
+* TPK1 - 92 is on the surface, 138 is buried surrounded by hydrophobic residues
+* TPMT - 229 is exposed on the surface
 
 ### S5
 
-Anything but alanine
+Anything but alanine, very surface accessible
+
+Examples:
+
+* ADRB2 - 204 is int he wall of the binding site, 236 is in the intracellular domain
+* Ras - 106 is on the protein surface
+* TP53 - 4 surface accessible positions
+* UBE2I - 7 is on the protein surface
 
 ### SP
 
