@@ -1290,23 +1290,63 @@ Summary:
 
 ### V1
 
-Selects for hydrophobic residues and threonine
+Selects for hydrophobic residues and threonine, strongly buried
+
+Examples:
+
+* ADRB2 - Many transmembrane helix domains, some facing the membrane and some in the helix interfaces
+* APH3II - Many mostly buried domains, near to other hydrophobics
+* CBS - Many buried hydrophobic positions
+* HSP90 - Buried hydrophobic core positions
+* PTEN - 343 is on the hydrophobic interface between beta sheets, 53 & 54 face inwards from a surface alpha helix
+* Src - One buried core position, three surface positions
 
 ### V2
 
-Only tolerates isoleucine
+Only tolerates isoleucine, buried
+
+Examples:
+
+* ADRB2 - similar distribution to V1 residues, not clear what the difference is
+* CP - 11, 19, 21 & 45 are in the interface between beta sheets, 29 is on the internal capsid face and 74 is on the interface to other capsid monomers
+* HA - Appear to be general buried positions, similar to V1 again
+* PTEN - 217 is in the interface between sheets
+* Src - 284 lines a cleft, 397 and 405 are buried in hydrophobic pockets
+* TP53 - 122 directly faces the bound DNA, 143, 197 & 216 are in the interface between sheets, 274 is in a hydrophobic pocket
 
 ### V3
 
-Selects against charged (apart from glutamate) and some polar, particularly histidine
+Selects against charged (apart from glutamate) and some polar, particularly histidine, less buried
+
+Examples:
+
+* amiE - buried hydrophobic positions, again look visually similar to V1/2
+* CALM1 - 36 & 143 are on interfaces between helices
+* CCR5 - Many transmembrane domain positions, most of which face the membrane
+* TPK1 - 208 & 226 are on the surface, 139 & 188 are deeply buried in the hydrophobic core
 
 ### V4
 
-Similar to V3 but selects against glutamate instead of aspartate and particularly disfavours glutamine
+Similar to V3 but selects against glutamate instead of aspartate and particularly disfavours glutamine, also more surface accessible
+
+Examples:
+
+* ADRB2 - seven membrane facing positions in the transmembrane helices
+* amiE - Many buried positions interfacing between helices/sheets
+* CALM1 - 109 & 122 are both partially accessible but interfacing with other hydrophobic residues
+* TEM1 - 29 & 101 are both on the protein surface
+* TPMT - 23 & 34 are surface accessible and 156 is buried in a hydrophobic pocket
 
 ### V5
 
-Anything but proline
+Anything but proline, somewhat buried
+
+Examples:
+
+* APH3II - 242 is in a surface helix, 83, 84 & 198 are in strands, 46 is just before a strand and 75 is in the turn after a helix
+* CXCR4 - Two transmembrane helix positions and 177 is in a strand forming part of the binding domain
+* HSP90 - 74, 136 & 158 are at the ends of strands in a beta sheet, 201 is in the turn between a helix and strand
+* TEM1 - 82 & 106 are both at the ends of helices
 
 ### VP
 
