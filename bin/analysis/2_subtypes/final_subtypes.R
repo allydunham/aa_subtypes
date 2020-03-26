@@ -182,6 +182,83 @@ breaks <- pivot_longer(cluster_positions, A:Y, names_to = 'mut', values_to = 'er
 plots$cluster_heatmaps <- group_map(cluster_positions, ~plot_cluster(., cluster = .y, breaks = breaks)) %>%
   set_names(group_keys(cluster_positions)$cluster)
 
+# Frequency of permissive/not proline subtypes
+not_proline_subtypes <- c('A3', 'D3', 'E2', 'G4', 'I3', 'K3', 'L6', 'M2', 'N2', 'Q2', 'R2', 'S2', 'T2', 'V5', 'Y4')
+most_selective_subtypes <- group_by(full_characterisation$profiles, cluster) %>%
+  summarise(mean_er = mean(er)) %>%
+  mutate(aa = str_sub(cluster, end = 1)) %>%
+  group_by(aa) %>%
+  filter(!mean_er > min(mean_er))
+
+freq_summary <- group_by(full_characterisation$summary, aa) %>%
+  mutate(freq = n / sum(n)) %>%
+  summarise(Permissive = freq[which(cluster == str_c(aa, 'P'))],
+            `Not Proline` = max(freq[which(cluster %in% not_proline_subtypes)], 0),
+            `Most Selective` = freq[which(cluster %in% most_selective_subtypes$cluster)],
+            Other = 1 - (Permissive + `Not Proline` + `Most Selective`)) %>%
+  pivot_longer(-aa, names_to = 'type', values_to = 'freq') %>%
+  mutate(type = factor(type, levels = c('Permissive', 'Not Proline', 'Other', 'Most Selective'))) %>%
+  left_join(select(most_selective_subtypes, aa, mean_er), by = 'aa')
+er_limits <- pretty_break(most_selective_subtypes$mean_er, rough_n = 4, sym = 0, sig_figs = 2)
+
+plots$subtype_freqs <- ggplot(freq_summary) +
+  geom_col(aes(x = freq, y = aa, fill = type)) +
+  geom_point(aes(x = -0.05, y = aa, colour = mean_er), shape = 15, size = 6) +
+  scale_fill_brewer(type = 'qual', palette = 'Paired') + 
+  scale_colour_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                       limits = er_limits$limits, breaks = er_limits$breaks, labels = er_limits$labels) +
+  guides(fill = guide_legend(title = 'Subtype'),
+         colour = guide_colourbar(title = str_wrap('Mean ER of Most Selective Subtype', width = 15))) +
+  labs(x = 'Frequency') +
+  theme(panel.grid.major.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(colour = AA_COLOURS[sort(unique(freq_summary$aa))]),
+        axis.ticks.y = element_blank())
+
+# G1 / G3 
+g1_g3_terms <- filter(dms, cluster %in% c('G1', 'G3')) %>%
+  select(cluster, solvation_polar, solvation_hydrophobic, van_der_waals, van_der_waals_clashes, entropy_sidechain,
+         entropy_mainchain, torsional_clash, backbone_clash, phi, psi, starts_with('angstroms_to')) %>%
+  mutate(Nearest_AA_Dist = apply(select(., angstroms_to_A:angstroms_to_Y), 1, function(x){min(x[x>3.9])})) %>% # shorter than this are neighbours in the chain
+  select(-starts_with('angstroms')) %>%
+  pivot_longer(-cluster, names_to = 'term', values_to = 'value') %>%
+  mutate(term = str_replace_all(term, '_', ' ') %>% str_to_title() %>% str_replace('Aa', 'AA'))
+
+plots$g1_vs_g3 <- (ggplot(g1_g3_terms, aes(x = value, y = ..scaled.., colour = cluster)) +
+                     facet_wrap(~term, scales = 'free_x', labeller = label_wrap_gen(20), strip.position = 'bottom', nrow = 3) +
+                     stat_density(geom = 'line', position = 'identity') +
+                     labs(y = 'Density') +
+                     scale_colour_brewer(type = 'qual', palette = 'Set1') + 
+                     guides(colour = guide_legend(title = '', override.aes = list(shape = 15))) +
+                     theme(strip.placement = 'outside',
+                           axis.title.x = element_blank())) %>%
+  labeled_plot(width = 20, height = 20, units = 'cm')
+
+# Large / Small hydrophobics
+large_hydrophobics <- c('I2', 'L2', 'M1')
+small_hydrophobics <- c('A1', 'G2', 'P3')
+aromatics <- c('F2', 'W1', 'Y1')
+hydro_groups <- structure(rep(c('Large', 'Small', 'Aromatic'), each=3), names = c(large_hydrophobics, small_hydrophobics, aromatics))
+
+hydrophobic_terms <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
+  select(cluster, solvation_polar, solvation_hydrophobic, van_der_waals, van_der_waals_clashes, entropy_sidechain,
+         entropy_mainchain, torsional_clash, backbone_clash, phi, psi, side_chain_abs, starts_with('angstroms_to')) %>%
+  mutate(Nearest_AA_Dist = apply(select(., angstroms_to_A:angstroms_to_Y), 1, function(x){min(x[x>3.9])})) %>% # shorter than this are neighbours in the chain
+  select(-starts_with('angstroms')) %>%
+  pivot_longer(-cluster, names_to = 'term', values_to = 'value') %>%
+  mutate(term = str_replace_all(term, '_', ' ') %>% str_to_title() %>% str_replace('Aa', 'AA'),
+         group = hydro_groups[cluster])
+
+plots$hydrophobic_size_difference <- (ggplot(hydrophobic_terms, aes(x = value, y = ..scaled.., colour = group)) +
+                                        facet_wrap(~term, scales = 'free_x', labeller = label_wrap_gen(20), strip.position = 'bottom', nrow = 3) +
+                                        stat_density(geom = 'line', position = 'identity') +
+                                        labs(y = 'Density') +
+                                        scale_colour_brewer(type = 'qual', palette = 'Dark2') + 
+                                        guides(colour = guide_legend(title = '', override.aes = list(shape = 15))) +
+                                        theme(strip.placement = 'outside',
+                                              axis.title.x = element_blank())) %>%
+  labeled_plot(width = 20, height = 20, units = 'cm')
+
 ### Save Results ###
 write_tsv(select(dms, cluster, study, gene, position, wt), 'data/subtypes/final_subtypes.tsv')
 saveRDS(clusters, file = 'data/subtypes/final_subtypes.rds')

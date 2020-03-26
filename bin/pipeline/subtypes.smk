@@ -114,6 +114,9 @@ rule final_subtypes:
         "data/subtypes/final_subtypes.tsv",
         "data/subtypes/final_subtypes.rds",
         "figures/2_subtypes/final_subtypes/outlier_profiles.pdf",
+        "figures/2_subtypes/final_subtypes/subtype_freqs.pdf",
+        "figures/2_subtypes/final_subtypes/g1_vs_g3.pdf",
+        "figures/2_subtypes/final_subtypes/hydrophobic_size_difference.pdf",
         directory("figures/2_subtypes/final_subtypes/cluster_heatmaps"),
         [f'figures/2_subtypes/final_subtypes/{x}' for x in diagnostic_plots],
         [f'figures/2_subtypes/final_subtypes/{x}' for x in characterisation_plots]
