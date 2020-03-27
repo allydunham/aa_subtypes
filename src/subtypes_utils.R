@@ -70,6 +70,43 @@ pretty_break <- function(x, step=NULL, rough_n=NULL, sig_figs=4, sym=NULL){
   return(list(limits=limits, breaks=breaks, labels=labels))
 }
 
+# Make colour lookup table for clusters
+cluster_colourmap <- function(x){
+  x <- as.character(unique(x))
+  structure(AA_COLOURS[str_sub(x, end = 1)], names=x)
+}
+
+# Add ggtext markdown features to a string or factor (features added as needed) based on lookup maps
+# returns a factor sorted by the original sort order (alphabetical or current levels)
+# Currently only works with simple 'span' class
+add_markdown <- function(x, colour=NULL, order=NULL){
+  if (is.null(order)){
+    if (is.factor(x)){
+      order <- levels(x)
+      x <- as.character(x)
+    } else {
+      order <- sort(unique(x))
+    }
+  } else {
+    x <- as.character(x)
+  }
+  
+  order_codes <- rep('', length(order))
+  x_codes <- rep('', length(x))
+  
+  if (!is.null(colour)){
+    order_codes <- str_c(order_codes, 'color:', colour[order], ';')
+    x_codes <- str_c(x_codes, 'color:', colour[x], ';')
+  }
+  
+  # Add other features when needed
+  
+  order <- str_c("<span style = '", str_remove(order_codes, ';$'), "'>", order, "</span>")
+  x <- str_c("<span style = '", str_remove(x_codes, ';$'), "'>", x, "</span>")
+  
+  return(factor(x, levels = order))
+}
+
 # Clamp a value between two limts
 clamp <- function(x, upper=Inf, lower=-Inf){
   x[x > upper] <- upper
@@ -172,7 +209,8 @@ plot_gene_er <- function(dms, target_gene){
   dms_gene <- filter(dms, gene == target_gene) %>% 
     select(position, wt, A:Y) %>% 
     pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>% 
-    mutate(er = clamp(er, 2, -2))
+    mutate(er = clamp(er, 2, -2),
+           mut = add_markdown(mut, colour = AA_COLOURS))
   breaks <- pretty_break(dms_gene$er, rough_n = 5, sig_figs = 3, sym = 0)
   
   ggplot(dms_gene, aes(x=mut, y=position, fill=er)) + 
@@ -186,7 +224,7 @@ plot_gene_er <- function(dms, target_gene){
           panel.grid.major.y = element_blank(),
           panel.background = element_blank(),
           axis.title = element_blank(),
-          axis.text.x = element_text(colour = AA_COLOURS[sort(unique(dms_gene$mut))]),
+          axis.text.x = element_markdown(),
           plot.caption = element_text(hjust = 0.5))
 }
 

@@ -12,12 +12,12 @@ filtered <- structure(ifelse(study_summary$filtered, 'red', 'black'), names = st
 
 p_studies <- select(study_summary, study, study_pretty, completeness, coverage, mutated_positions) %>%
   pivot_longer(one_of('completeness', 'coverage'), names_to = 'metric') %>%
+  mutate(study_pretty = add_markdown(study_pretty, colour = filtered)) %>%
   ggplot(aes(x = study_pretty, y = value, fill = mutated_positions)) +
   geom_col() +
   facet_wrap(~metric, ncol = 1, labeller = as_labeller(c(coverage='Proportion of Missense Variants', completeness='Proportion of Positions'))) +
   labs(x='', y='', title = 'Study Variants Summary') +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
-                                    colour = filtered[unique(study_summary$study_pretty)])) +
+  theme(axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5)) +
   guides(fill = guide_colourbar(title = '# Positions')) +
   scale_fill_viridis_c()
 ggsave('figures/0_data/study_variants_summary.pdf', p_studies, units = 'cm', width = 20, height = 20)

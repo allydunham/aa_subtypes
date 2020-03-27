@@ -27,7 +27,9 @@ filtered <- sapply(unique(sift_correlations$study), function(x){
 })
 names(filtered) <- sapply(names(filtered), format_study, USE.NAMES = FALSE)
   
-p_sift_cor <- ggplot(sift_correlations, aes(x = study_pretty, y = estimate, fill = p_cat)) +
+p_sift_cor <- ungroup(sift_correlations) %>%
+  mutate(study_pretty = add_markdown(study_pretty, colour = filtered)) %>%
+  ggplot(aes(x = study_pretty, y = estimate, fill = p_cat)) +
   facet_wrap(~method, ncol = 1) +
   geom_col(position = position_dodge()) +
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high), width=0.5, position = position_dodge(0.9)) +
@@ -36,8 +38,7 @@ p_sift_cor <- ggplot(sift_correlations, aes(x = study_pretty, y = estimate, fill
   xlab('') +
   ylab('Correlation') +
   scale_fill_viridis_d(guide=guide_legend(title='p-value'), drop=FALSE) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5,
-                                   colour = filtered[unique(sift_correlations$study_pretty)]))
+  theme(axis.text.x = element_markdown(angle = 90, hjust = 1, vjust = 0.5))
 ggsave('figures/0_data/sift_score_correlation.pdf', p_sift_cor, width = 20, height = 20, units = 'cm')
 
 p_sift_density <- ggplot(dms, aes(x = score, y = jitter(log10_sift, 0.1), colour = class)) +

@@ -12,7 +12,8 @@ mean_er_cors <- select(dms, wt, mean_score, backbone_hbond:energy_ionisation, al
   ungroup() %>%
   pivot_longer(-wt, names_to = 'term', values_to = 'cor') %>%
   mutate(type = get_factor_type(term), term = str_remove(term, 'ss_|within_10_0_')) %>%
-  add_factor_order(wt, term, cor)
+  add_factor_order(wt, term, cor) %>%
+  mutate(wt = add_markdown(wt, AA_COLOURS))
 
 term_labels <- c(structure(LETTERS, names=LETTERS), all_atom_abs="'All Atom Abs.'", FOLDX_TERMS_PLOTMATH, DSSP_CLASSES_PLOTMATH)
 p_er_cors <- ggplot(mean_er_cors, aes(x = wt, y = term, fill = cor)) +
@@ -24,7 +25,7 @@ p_er_cors <- ggplot(mean_er_cors, aes(x = wt, y = term, fill = cor)) +
         panel.background = element_blank(),
         panel.grid.major.y = element_blank(),
         axis.title = element_blank(),
-        axis.text.x = element_text(colour = AA_COLOURS[levels(mean_er_cors$wt)]))
+        axis.text.x = element_markdown())
 ggsave('figures/3_continuous/mean_er_correlations.pdf', p_er_cors, units = 'cm', width = 25, height = 30)
 
 ### Per AA PCA ###
@@ -40,6 +41,8 @@ aa_pca_rotations <- map(aa_pcas, ~as_tibble(t(.$rotation), rownames = 'pc')) %>%
 
 plot_aa_pca_loadings <- function(x, ...){
   breaks <- pretty_break(x$rotation, rough_n = 5, sym = 0)
+  x <- mutate(x, mut = add_markdown(mut, colour = AA_COLOURS))
+  
   (ggplot(x, aes(x = mut, y = pc, fill = rotation)) +
       geom_raster() +
       scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
@@ -50,7 +53,7 @@ plot_aa_pca_loadings <- function(x, ...){
             panel.background = element_blank(),
             panel.grid.major.y = element_blank(),
             axis.title = element_blank(),
-            axis.text.x = element_text(colour = AA_COLOURS[sort(unique(x$mut))]))) %>%
+            axis.text.x = element_markdown())) %>%
     labeled_plot(units = 'cm', width = 10, height = 10)
 }
 
@@ -63,4 +66,3 @@ save_plotlist(p_aa_pca, root = 'figures/3_continuous/per_aa_pca_loadings')
 dms_aa_pca <- map(unique(dms$wt), ~bind_cols(filter(dms, wt == .), as_tibble(aa_pcas[[.]]$x) %>% rename_all(~str_c('aa', .)))) %>%
   bind_rows() %>%
   arrange(study, position)
-

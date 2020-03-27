@@ -361,7 +361,8 @@ plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
   cols <- enquo(cols)
   
   tbl <- filter(tbl, !str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
-    mutate(silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method)) %>%
+    mutate(silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method),
+           cluster = add_markdown(cluster, colour = cluster_colourmap(cluster))) %>%
     select(cluster, study, position, wt, silhouette_score)
   
   ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
@@ -371,7 +372,7 @@ plot_silhouette <- function(tbl, cols, distance_method='manhattan'){
     labs(x = '', y = 'Silhouette Score (global)') +
     coord_flip() +
     theme(panel.grid.major.y = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
+          axis.text.y = element_markdown())
 }
 
 plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
@@ -381,7 +382,8 @@ plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
     group_by(wt) %>%
     group_modify(~mutate(., silhouette_score = cluster_silhouette(., !!cols, distance_method = distance_method))) %>%
     select(cluster, study, position, wt, silhouette_score) %>%
-    ungroup()
+    ungroup() %>%
+    mutate(cluster = add_markdown(cluster, colour = cluster_colourmap(cluster)))
   
   ggplot(tbl, aes(x = cluster, y = silhouette_score, fill=wt)) +
     geom_boxplot() +
@@ -390,7 +392,7 @@ plot_per_aa_silhouette <- function(tbl, cols, distance_method='manhattan'){
     labs(x = '', y = 'Silhouette Score (within AA)') +
     coord_flip() +
     theme(panel.grid.major.y = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(str_sub(unique(tbl$cluster), end = 1))]))
+          axis.text.y = element_markdown())
 }
 
 plot_cluster_umap <- function(x){

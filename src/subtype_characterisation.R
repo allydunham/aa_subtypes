@@ -253,7 +253,7 @@ plot_dend <- function(branches, leaves){
      geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
      geom_text(data = leaves, aes(x=x, y=y, label=label, colour=cluster), angle=90, hjust=1.2) +
      geom_point(data = leaves, aes(x=x, y=y, colour=cluster), shape=19) +
-     scale_y_continuous(expand = expand_scale(mult = 0.15)) +
+     scale_y_continuous(expand = expansion(mult = 0.15)) +
      theme(axis.line = element_blank(),
            axis.ticks = element_blank(),
            axis.text = element_blank(),
@@ -366,7 +366,9 @@ plot_cluster_profiles <- function(x, filter_outliers=5){
   
   breaks <- pretty_break(x$er, rough_n = 5, sig_figs = 3, sym = 0)
   
-  ggplot(x, aes(x=cluster, y=mut, fill=er)) +
+  mutate(x, cluster = add_markdown(cluster, colour = cluster_colourmap(cluster)),
+         mut = add_markdown(mut, colour = AA_COLOURS)) %>%
+  ggplot(aes(x=cluster, y=mut, fill=er)) +
     geom_tile() +
     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
                          limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
@@ -375,8 +377,8 @@ plot_cluster_profiles <- function(x, filter_outliers=5){
     theme(axis.ticks = element_blank(),
           panel.background = element_blank(),
           axis.title = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(unique(x$mut))]),
-          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(x$cluster)), end = 1)]))
+          axis.text.y = element_markdown(),
+          axis.text.x = element_markdown())
 }
 
 plot_cluster_profile_variation <- function(x){
@@ -407,7 +409,9 @@ plot_cluster_profile_correlation <- function(x){
   
   breaks <- pretty_break(cors$cor, rough_n = 5, sig_figs = 3, sym = 0)
   
-  ggplot(cors, aes(x=cluster1, y=cluster2, fill=cor)) +
+  mutate(cors, cluster1 = add_markdown(cluster1, colour = cluster_colourmap(cluster1)),
+         cluster2 = add_markdown(cluster2, colour = cluster_colourmap(cluster2))) %>%
+  ggplot(aes(x=cluster1, y=cluster2, fill=cor)) +
     geom_tile() +
     scale_fill_distiller(type = ER_COR_COLOURS$type, palette = ER_COR_COLOURS$palette, direction = ER_COR_COLOURS$direction,
                          limits = breaks$limits, breaks=breaks$breaks, labels=breaks$labels) +
@@ -416,8 +420,8 @@ plot_cluster_profile_correlation <- function(x){
     theme(axis.ticks = element_blank(),
           panel.background = element_blank(),
           axis.title = element_blank(),
-          axis.text.x = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster1), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
-          axis.text.y = element_text(colour = AA_COLOURS[str_sub(levels(cors$cluster2), end = 1)]))
+          axis.text.x = element_markdown(angle = 90, vjust = 0.5, hjust = 1),
+          axis.text.y = element_markdown())
 }
 
 plot_cluster_profile_distances <- function(x, method='manhattan'){
@@ -432,7 +436,10 @@ plot_cluster_profile_distances <- function(x, method='manhattan'){
     as_tibble(rownames = 'cluster1') %>%
     pivot_longer(cols = -cluster1, names_to = 'cluster2', values_to = 'dist')
   
-  ggplot(distances, aes(x = cluster1, y = cluster2, fill=dist)) +
+  mutate(distances,
+         cluster1 = add_markdown(cluster1, colour = cluster_colourmap(cluster1)),
+         cluster2 = add_markdown(cluster2, colour = cluster_colourmap(cluster2))) %>%
+  ggplot(aes(x = cluster1, y = cluster2, fill=dist)) +
     geom_tile() +
     scale_fill_distiller(type = ER_DIST_COLOURS$type, palette = ER_DIST_COLOURS$palette, direction = ER_DIST_COLOURS$direction) +
     coord_fixed() +
@@ -441,8 +448,8 @@ plot_cluster_profile_distances <- function(x, method='manhattan'){
           panel.grid.major.y = element_blank(),
           panel.background = element_blank(),
           axis.title = element_blank(),
-          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(distances$cluster1)), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
-          axis.text.y = element_text(colour = AA_COLOURS[str_sub(sort(unique(distances$cluster2)), end = 1)]))
+          axis.text.x = element_markdown(angle = 90, vjust = 0.5, hjust = 1),
+          axis.text.y = element_markdown())
 }
 
 plot_cluster_profile_cosine_sim <- function(x){
@@ -458,7 +465,9 @@ plot_cluster_profile_cosine_sim <- function(x){
     set_rownames(rownames(profs)) %>%
     as_tibble(rownames = 'cluster1') %>%
     pivot_longer(-cluster1, names_to = 'cluster2', values_to = 'cosine_sim') %>%
-    filter(!str_detect(cluster1, str_c("^", CLUSTER_OUTLIER_RE, "$")), !str_detect(cluster2, str_c("^", CLUSTER_OUTLIER_RE, "$")))
+    filter(!str_detect(cluster1, str_c("^", CLUSTER_OUTLIER_RE, "$")), !str_detect(cluster2, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
+    mutate(cluster1 = add_markdown(cluster1, colour = cluster_colourmap(cluster1)),
+           cluster2 = add_markdown(cluster2, colour = cluster_colourmap(cluster2)))
   
   ggplot(cosine_sim, aes(x = cluster1, y = cluster2, fill=cosine_sim)) +
     geom_tile() +
@@ -469,14 +478,14 @@ plot_cluster_profile_cosine_sim <- function(x){
           panel.grid.major.y = element_blank(),
           panel.background = element_blank(),
           axis.title = element_blank(),
-          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(cosine_sim$cluster1)), end = 1)], angle = 90, vjust = 0.5, hjust = 1),
-          axis.text.y = element_text(colour = AA_COLOURS[str_sub(sort(unique(cosine_sim$cluster2)), end = 1)]))
+          axis.text.x = element_markdown(angle = 90, vjust = 0.5, hjust = 1),
+          axis.text.y = element_markdown())
 }
 
 plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$foldx, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
-      mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
+      mutate(cluster = add_markdown(factor(cluster), colour = cluster_colourmap(cluster)), prop = str_c(n_structure, '/', n))
   }
   
   if (filter_outliers > 0){
@@ -502,7 +511,7 @@ plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
           panel.background = element_blank(),
           panel.grid.major.y = element_blank(),
           axis.title = element_blank(),
-          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(sort(unique(x$cluster)), end = 1)]),
+          axis.text.x.bottom = element_markdown(),
           axis.text.x.top = element_text(angle = 90, vjust = 0.5, hjust = 0),
           legend.title.align = 0.5)
 }
@@ -511,7 +520,9 @@ plot_cluster_foldx_profiles <- function(x, filter_outliers=5){
 plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$chem_env, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
-      mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
+      mutate(cluster = add_markdown(factor(cluster), colour = cluster_colourmap(cluster)),
+             prop = str_c(n_structure, '/', n),
+             aa = add_markdown(aa, colour = AA_COLOURS))
   }
   
   if (filter_outliers > 0){
@@ -536,8 +547,8 @@ plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
           panel.background = element_blank(),
           panel.grid.major.y = element_blank(),
           axis.title = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(unique(x$aa))]),
-          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(cluster_labs, end = 1)]),
+          axis.text.y = element_markdown(),
+          axis.text.x.bottom = element_markdown(),
           axis.text.x.top = element_text(angle = 90, vjust = 0.5, hjust = 0),
           legend.title.align = 0.5)
 }
@@ -545,7 +556,9 @@ plot_cluster_chem_env_profiles <- function(x, filter_outliers=5){
 plot_cluster_aa_distances <- function(x, filter_outliers=5){
   if ('cluster_characterisation' %in% class(x)){
     x <- left_join(x$aa_distance, select(x$summary, cluster, n, n_structure), by = 'cluster') %>%
-      mutate(cluster = factor(cluster), prop = str_c(n_structure, '/', n))
+      mutate(cluster = add_markdown(factor(cluster), colour = cluster_colourmap(cluster)),
+             prop = str_c(n_structure, '/', n),
+             aa = add_markdown(aa, colour = AA_COLOURS))
   }
   
   if (filter_outliers > 0){
@@ -570,8 +583,8 @@ plot_cluster_aa_distances <- function(x, filter_outliers=5){
           panel.background = element_blank(),
           panel.grid.major.y = element_blank(),
           axis.title = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[sort(unique(x$aa))]),
-          axis.text.x.bottom = element_text(colour = AA_COLOURS[str_sub(cluster_labs, end = 1)]),
+          axis.text.y = element_markdown(),
+          axis.text.x.bottom = element_markdown(),
           axis.text.x.top = element_text(angle = 90, vjust = 0.5, hjust = 0),
           legend.title.align = 0.5)
 }
@@ -587,7 +600,8 @@ plot_cluster_ss_profile <- function(x, filter_outliers=5){
   
   breaks <- pretty_break(x$rel_prob, rough_n = 5, sig_figs = 3, sym = 0)
   
-  ggplot(x, aes(x=cluster, y=ss, fill=rel_prob)) +
+  mutate(x, cluster = add_markdown(cluster, colour = cluster_colourmap(cluster))) %>%
+    ggplot(aes(x=cluster, y=ss, fill=rel_prob)) +
     geom_raster() +
     coord_equal() +
     labs(y = '', x = '') +
@@ -596,7 +610,7 @@ plot_cluster_ss_profile <- function(x, filter_outliers=5){
     scale_y_discrete(labels = sapply(DSSP_CLASSES_PLOTMATH, function(x){parse(text = x)})) + 
     guides(fill = guide_colourbar(title = expression('log'[2]~frac(italic(P)(SS~"|"~X), italic(P)(SS))))) +
     theme(axis.ticks = element_blank(),
-          axis.text.x = element_text(colour = AA_COLOURS[str_sub(sort(unique(x$cluster)), end = 1)]),
+          axis.text.x = element_markdown(),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
 }
@@ -664,6 +678,35 @@ plot_cluster_multiple_experiment_consistency <- function(x){
   
   ggarrange( p_detail, p_overview, ncol = 1, heights = c(3, 1))
 }
+
+# Plot Mean ER vs Surface Accessibility
+plot_er_vs_sa <- function(x){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$summary
+  }
+  
+  filter(x, !str_detect(cluster, '^[A-Z]0$')) %>%
+    ggplot(aes(x = mean_er, y = mean_sa, label = cluster, colour = aa)) +
+    facet_wrap(~aa) + 
+    geom_text() +
+    geom_smooth(method = 'lm', se = FALSE, fullrange = TRUE) + 
+    scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
+    labs(x = 'Mean Norm. ER', y = 'Mean Surface Accessibility')
+}
+
+# Plot Mean ER vs cluster size
+plot_er_vs_size <- function(x){
+  if ('cluster_characterisation' %in% class(x)){
+    x <- x$summary
+  }
+  
+  filter(x, !str_detect(cluster, '^[A-Z]0$')) %>%
+    ggplot(aes(x = mean_er, y = n, label = cluster, colour = aa)) +
+    facet_wrap(~aa) + 
+    geom_text() +
+    scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
+    labs(x = 'Mean Norm. ER', y = 'Count')
+}
 ########
 
 #### Full Characterisation Plot ####
@@ -682,11 +725,11 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   # global outliers
   global_outliers <- filter(data$summary, str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n < outlier_size) %>% pull(cluster)
   
-  cluster_cols <- AA_COLOURS[str_sub(cluster_order, end=1)]
+  cluster_cols <- cluster_colourmap(cluster_order)
   
   # Summarise subtype sizes (always include outliers in the cluster list here, for reference)
   p_sizes <- filter(data$summary, cluster %in% c(outliers, cluster_order)) %>%
-    mutate(cluster = factor(cluster, levels = c(outliers, rev(cluster_order))),
+    mutate(cluster = add_markdown(factor(cluster, levels = c(outliers, rev(cluster_order))), colour = cluster_cols),
            sum_str = str_c(n, ' (', n_structure, ')')) %>%
     ggplot(aes(x=cluster, fill=str_sub(cluster, end = 1))) +
     geom_col(aes(y=n), width = 0.5) +
@@ -698,12 +741,12 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     labs(x='', y='Count') +
     theme(panel.grid.major.y = element_blank(),
           panel.grid.major.x = element_line(colour = 'grey', linetype = 'dotted'),
-          axis.text.y = element_text(colour = cluster_cols),
+          axis.text.y = element_markdown(),
           axis.ticks.y = element_blank())
   
   # Histograms of subtype surface accessibility
   p_sa <- filter(data$tbl, cluster %in% cluster_order) %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols)) %>%
     ggplot(aes(x = all_atom_abs, fill = wt)) +
     facet_wrap(~cluster, ncol = 1, strip.position = 'left') +
     geom_density(alpha = 0.75, colour = NA) +
@@ -711,13 +754,13 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     labs(x = 'All Atom Abs.', y = '') +
     guides(fill = FALSE) +
     theme(strip.placement = 'outside',
-          strip.text.y = element_text(angle = 180, colour = cluster_cols),
+          strip.text.y = element_markdown(angle = 180),
           panel.spacing = unit(0.05, 'npc'))
   
   # Subtype secondary structure probability increases vs background
   ss_lims <- filter(data$secondary_structure, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_prob) %>% pretty_break(step = 1, sym = 0)
   p_ss <- filter(data$secondary_structure, cluster %in% cluster_order, !ss=='i') %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols)) %>%
     ggplot(aes(x=cluster, y=ss, fill=rel_prob)) +
     geom_raster() +
     coord_equal() +
@@ -727,14 +770,15 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     scale_y_discrete(labels = sapply(DSSP_CLASSES_PLOTMATH, function(x){parse(text = x)})) + 
     guides(fill = guide_colourbar(title = expression('log'[2]~frac(italic(P)(SS~"|"~X), italic(P)(SS))))) +
     theme(axis.ticks = element_blank(),
-          axis.text.x = element_text(colour = cluster_cols),
+          axis.text.x = element_markdown(),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean ER profiles
   er_lims <- filter(data$profiles, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>% pull(er) %>% pretty_break(step = 0.5, sym = 0)
   p_profile <- filter(data$profiles, cluster %in% cluster_order) %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols),
+           mut = add_markdown(mut, colour = AA_COLOURS)) %>%
     ggplot(aes(x = cluster, y = mut, fill = er)) +
     geom_raster() +
     coord_equal() +
@@ -743,15 +787,16 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
                          limits = er_lims$limits, breaks = er_lims$breaks, labels = er_lims$labels) +
     theme(axis.ticks = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
-          axis.text.x = element_text(colour = cluster_cols),
+          axis.text.y = element_markdown(),
+          axis.text.x = element_markdown(),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean sift profiles
   sift_lims <- filter(data$sift, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(log10_sift) %>% pretty_break(step = 1)
   p_sift <- filter(data$sift, cluster %in% cluster_order) %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols),
+           aa = add_markdown(aa, colour = AA_COLOURS)) %>%
     ggplot(aes(x = cluster, y = aa, fill = log10_sift)) +
     geom_raster() +
     coord_equal() +
@@ -760,15 +805,15 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
                          limits = sift_lims$limits, breaks = sift_lims$breaks, labels = sift_lims$labels) +
     guides(fill = guide_colourbar(title = expression(log[10]*'SIFT'))) + 
     theme(axis.ticks = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[unique(data$profiles$mut)]),
-          axis.text.x = element_text(colour = cluster_cols),
+          axis.text.y = element_markdown(),
+          axis.text.x = element_markdown(),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # Subtype mean foldx profiles
   foldx_lims <- filter(data$foldx, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_ddg) %>%  pretty_break(step = 1, sym = 0)
   p_foldx <- filter(data$foldx, cluster %in% cluster_order, !term == 'Total Energy') %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols)) %>%
     ggplot(aes(x = cluster, y = term, fill = rel_ddg)) +
     geom_raster() +
     coord_equal() +
@@ -778,15 +823,16 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
                          limits = foldx_lims$limits, breaks = foldx_lims$breaks, labels = foldx_lims$labels) +
     scale_y_discrete(labels = sapply(FOLDX_TERMS_PLOTMATH, function(x){parse(text = x)})) +
     theme(axis.ticks = element_blank(),
-          axis.text.x = element_text(colour = cluster_cols),
-          axis.text.y = element_text(colour = 'black'), # TODO colour code foldx terms?
+          axis.text.x = element_markdown(),
+          axis.text.y = element_text(colour = 'black'),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
   # subtype mean chemical environment profiles
   chem_env_lims <- filter(data$chem_env, cluster %in% cluster_order | global_scale, !cluster %in% global_outliers | !exclude_outliers) %>%  pull(rel_count) %>% pretty_break(rough_n = 4)
   p_chem_env <- filter(data$chem_env, cluster %in% cluster_order) %>%
-    mutate(cluster = factor(cluster, levels = cluster_order)) %>%
+    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols),
+           aa = add_markdown(aa, colour = AA_COLOURS)) %>%
     ggplot(aes(x = cluster, y = aa, fill = rel_count)) +
     geom_raster() +
     coord_equal() +
@@ -795,8 +841,8 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     scale_fill_distiller(type = CHEM_ENV_COLOURS$type, palette = CHEM_ENV_COLOURS$palette, direction = CHEM_ENV_COLOURS$direction,
                          limits = chem_env_lims$limits, breaks = chem_env_lims$breaks, labels = chem_env_lims$labels) +
     theme(axis.ticks = element_blank(),
-          axis.text.y = element_text(colour = AA_COLOURS[unique(data$chem_env$aa)]),
-          axis.text.x = element_text(colour = cluster_cols),
+          axis.text.y = element_markdown(),
+          axis.text.x = element_markdown(),
           panel.grid.major.y = element_blank(),
           plot.title = element_text(hjust = 0))
   
@@ -823,4 +869,82 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
               sift=p_sift, foldx=p_foldx, chemial_environment=p_chem_env))
 }
 
+########
+
+#### Make all plots ####
+plot_cluster_characterisation <- function(full_characterisation, selective_characterisation=NULL, clusters=NULL){
+  plots <- list()
+  n_clusters <- nrow(full_characterisation$summary)
+  n_clusters_selective <- ifelse(is.null(selective_characterisation), 0, nrow(full_characterisation$summary))
+  
+  # Simple plots
+  plots$ramachandran_angles <- labeled_plot(plot_cluster_ramachandran_angles(full_characterisation), units='cm', width=20, height=20)
+  plots$sizes <- labeled_plot(plot_cluster_sizes(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$er_profiles <- labeled_plot(plot_cluster_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$er_correlation <- labeled_plot(plot_cluster_profile_correlation(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
+  plots$er_distance <- labeled_plot(plot_cluster_profile_distances(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
+  plots$er_cosine <- labeled_plot(plot_cluster_profile_cosine_sim(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
+  plots$foldx <- labeled_plot(plot_cluster_foldx_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$chem_env <- labeled_plot(plot_cluster_chem_env_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$aa_distance <- labeled_plot(plot_cluster_aa_distances(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$ss_probability <- labeled_plot(plot_cluster_ss_profile(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
+  plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(full_characterisation), units='cm', height = 20, width=20)
+  plots$er_vs_surface_accessibility <- labeled_plot(plot_er_vs_sa(full_characterisation), width = 20, height = 15, units = 'cm')
+  plots$er_vs_size <- labeled_plot(plot_er_vs_size(full_characterisation), width = 20, height = 15, units = 'cm')
+  
+  plots$profile_variance <- group_by(full_characterisation$tbl, wt)
+  plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_cluster_profile_variation(.), units='cm', height=20, width=30), keep = TRUE) %>%
+    set_names(group_keys(plots$profile_variance)$wt)
+  
+  plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
+    group_map(~labeled_plot(plot_cluster_ss_density(.), units = 'cm', height = 20, width = 20), keep = TRUE) %>%
+    set_names(sort(unique(full_characterisation$tbl$wt)))
+  
+  # Plots with selective clusters only
+  if (n_clusters_selective > 1){
+    plots$er_correlation_selective <- labeled_plot(plot_cluster_profile_correlation(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+    plots$er_cosine_selective <- labeled_plot(plot_cluster_profile_cosine_sim(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
+  } else {
+    plots$er_correlation_selective <- ggplot()
+    plots$er_cosine_selective <- ggplot()
+  }
+  
+  # Per AA characterisations
+  # relative and global refer to the scales being shared among all AAs or specific to each
+  get_aa_plot <- function(x, global_scale=TRUE){
+    clusters <- full_characterisation$summary$cluster[str_starts(full_characterisation$summary$cluster, x)]
+    plot_full_characterisation(clusters, full_characterisation, exclude_outliers = TRUE, global_scale = global_scale)
+  }
+  
+  plots$aa_profiles <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=TRUE) %>%
+    map(extract2, 'overall')
+  
+  plots$aa_profiles_relative <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=FALSE) %>%
+    map(extract2, 'overall')
+
+  # Special plots for each cluster type
+  if (!is.null(clusters)){
+    if ('hclust' %in% names(clusters[[1]])){
+      plots$minimal_dends <- plot_compressed_dendrograms(clusters, dms)
+    }
+  }
+  
+  # Profile dendograms
+  profiles <- pivot_wider(full_characterisation$profiles, names_from = mut, values_from = er) 
+  plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
+  
+  if (n_clusters_selective > 1){
+    profiles_selective <- pivot_wider(selective_characterisation$profiles, names_from = mut, values_from = er) 
+    plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
+  } else {
+    plots$overall_dend_selective <- ggplot()
+  }
+  
+  grouped_profiles <- mutate(profiles, aa = str_sub(cluster, end = 1)) %>%
+    group_by(aa)
+  plots$aa_dends <- group_map(grouped_profiles, ~plot_profile_dendogram(., A:Y, distance_method = 'cosine')) %>% 
+    set_names(group_keys(grouped_profiles)$aa)
+  
+  return(plots)
+}
 ########

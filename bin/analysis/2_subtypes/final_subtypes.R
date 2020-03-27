@@ -3,7 +3,7 @@
 source('src/config.R')
 source('src/subtype_characterisation.R')
 
-#### Setup Data ####
+### Setup ###
 config <- read_yaml('meta/final_subtypes.yaml')
 
 # Import base data
@@ -40,100 +40,20 @@ outlier_clusters <- filter(full_characterisation$profiles, str_detect(cluster, C
   unique()
 selective_characterisation <- full_cluster_characterisation(filter(dms, !cluster %in% outlier_clusters))
 n_clusters_selective <- nrow(full_characterisation$summary)
-########
 
-#### Make standard analysis plots ####
+# Calculate Standard plots
 plots <- plot_cluster_diagnostics(dms, clusters, cols = PC2:PC20)
+plots <- c(plots, plot_cluster_characterisation(full_characterisation, selective_characterisation, clusters))
 
-plots$ramachandran_angles <- labeled_plot(plot_cluster_ramachandran_angles(full_characterisation), units='cm', width=20, height=20)
-plots$sizes <- labeled_plot(plot_cluster_sizes(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$er_profiles <- labeled_plot(plot_cluster_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$er_correlation <- labeled_plot(plot_cluster_profile_correlation(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
-plots$er_distance <- labeled_plot(plot_cluster_profile_distances(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
-plots$er_cosine <- labeled_plot(plot_cluster_profile_cosine_sim(full_characterisation), units='cm', width=0.25*n_clusters + 2, height=0.25*n_clusters + 2)
-plots$foldx <- labeled_plot(plot_cluster_foldx_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$chem_env <- labeled_plot(plot_cluster_chem_env_profiles(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$aa_distance <- labeled_plot(plot_cluster_aa_distances(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$ss_probability <- labeled_plot(plot_cluster_ss_profile(full_characterisation), units='cm', width=0.75*n_clusters + 2, height=20)
-plots$profile_variance <- group_by(full_characterisation$tbl, wt)
-plots$profile_variance <- group_map(plots$profile_variance, ~labeled_plot(plot_cluster_profile_variation(.), units='cm', height=20, width=30), keep = TRUE) %>%
-  set_names(group_keys(plots$profile_variance)$wt)
-plots$multi_position_subtype_consistency <- labeled_plot(plot_cluster_multiple_experiment_consistency(full_characterisation), units='cm', height = 20, width=20)
-
-if (n_clusters_selective > 1){
-  plots$er_correlation_selective <- labeled_plot(plot_cluster_profile_correlation(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
-  plots$er_cosine_selective <- labeled_plot(plot_cluster_profile_cosine_sim(selective_characterisation), units='cm', width=0.25*n_clusters_selective + 2, height=0.25*n_clusters_selective + 2)
-} else {
-  plots$er_correlation_selective <- ggplot()
-  plots$er_cosine_selective <- ggplot()
-}
-
-### Plot Per AA characterisations ###
-get_aa_plot <- function(x, global_scale=TRUE){
-  clusters <- full_characterisation$summary$cluster[str_starts(full_characterisation$summary$cluster, x)]
-  plot_full_characterisation(clusters, full_characterisation, exclude_outliers = TRUE, global_scale = global_scale)
-}
-
-# relative and global refer to the scales being shared among all AAs or specific to each
-plots_global <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=TRUE)
-plots_relative <- sapply(unique(str_sub(full_characterisation$summary$cluster, end = 1)), get_aa_plot, simplify = FALSE, global_scale=FALSE)
-
-plots$aa_profiles <- map(plots_global, extract2, 'overall')
-plots$aa_profiles_relative <- map(plots_relative, extract2, 'overall')
-
-### Plot all-subtype summaries ###
-plots$er_vs_surface_accessibility <- (filter(full_characterisation$summary, !str_detect(cluster, '^[A-Z]0$')) %>%
-                                        ggplot(aes(x = mean_er, y = mean_sa, label = cluster, colour = aa)) +
-                                        facet_wrap(~aa) + 
-                                        geom_text() +
-                                        geom_smooth(method = 'lm', se = FALSE, fullrange = TRUE) + 
-                                        scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
-                                        labs(x = 'Mean Norm. ER', y = 'Mean Surface Accessibility')) %>%
-  labeled_plot(width = 20, height = 15, units = 'cm')
-
-plots$er_vs_size <- (filter(full_characterisation$summary, !str_detect(cluster, '^[A-Z]0$')) %>%
-                       ggplot(aes(x = mean_er, y = n, label = cluster, colour = aa)) +
-                       facet_wrap(~aa) + 
-                       geom_text() +
-                       scale_colour_manual(values = AA_COLOURS, guide = FALSE) + 
-                       labs(x = 'Mean Norm. ER', y = 'Count')) %>%
-  labeled_plot(width = 20, height = 15, units = 'cm')
-
-plots$ss_probabilities <- group_by(full_characterisation$tbl, wt) %>%
-  group_map(~labeled_plot(plot_cluster_ss_density(.), units = 'cm', height = 20, width = 20), keep = TRUE) %>%
-  set_names(sort(unique(full_characterisation$tbl$wt)))
-
-### Plot compressed dendrograms for hclust ###
-if ('hclust' %in% names(clusters[[1]])){
-  plots$minimal_dends <- plot_compressed_dendrograms(clusters, dms)
-}
-
-### Plot profile dendograms ###
-profiles <- cluster_mean_profiles(dms) 
-plots$overall_dend <- labeled_plot(plot_profile_dendogram(profiles, A:Y, distance_method = 'cosine'), width=40, height=20)
-
-if (n_clusters_selective > 1){
-  profiles_selective <- cluster_mean_profiles(filter(dms, !cluster %in% outlier_clusters)) 
-  plots$overall_dend_selective <- labeled_plot(plot_profile_dendogram(profiles_selective, A:Y, distance_method = 'cosine'), width=40, height=20)
-} else {
-  plots$overall_dend_selective <- ggplot()
-}
-
-grouped_profiles <- mutate(profiles, aa = str_sub(cluster, end = 1)) %>%
-  group_by(aa)
-plots$aa_dends <- group_map(grouped_profiles, ~plot_profile_dendogram(., A:Y, distance_method = 'cosine')) %>% 
-  set_names(group_keys(grouped_profiles)$aa)
-########
-
-#### Additional analysis for final subtypes ####
-## Plot Subtypes Heatmaps
+### Subtypes Heatmaps ###
 # Outliers
 outlier_profiles <- filter(dms, str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$"))) %>%
   mutate(id = str_c(gene, position, sep = ' ')) %>%
   select(id, wt, A:Y) %>%
   pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
   mutate(er = clamp(er, 2, -2),
-         id = as.factor(id))
+         id = as.factor(id),
+         mut = add_markdown(mut, AA_COLOURS))
 
 plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = er)) +
                              lemon::facet_rep_grid(rows=vars(wt), space='free_y', scales = 'free', repeat.tick.labels = TRUE) +
@@ -141,7 +61,7 @@ plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = 
                              scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction) +
                              labs(caption = str_wrap('Note: outliers (|ER| > 2) have been clamped, affecting a few positions near to 2 and two extreme values (|ER| > 4)', width = 60)) +
                              theme(axis.ticks = element_blank(),
-                                   axis.text.x = element_text(colour = AA_COLOURS[sort(unique(outlier_profiles$mut))]),
+                                   axis.text.x = element_markdown(),
                                    axis.title = element_blank(),
                                    strip.placement = 'outside',
                                    strip.text.y = element_text(angle = 0),
@@ -152,7 +72,8 @@ plots$outlier_profiles <- (ggplot(outlier_profiles, aes(x = mut, y = id, fill = 
 plot_cluster <- function(tbl, cluster, breaks){
   tbl <- mutate(tbl, id = str_c(gene, position, sep = ' ')) %>%
     select(id, A:Y) %>%
-    pivot_longer(A:Y, names_to = 'mut', values_to = 'er')
+    pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+    mutate(mut = add_markdown(mut, AA_COLOURS))
   
   (ggplot(tbl, aes(x = mut, y = id, fill = er)) +
      geom_raster() +
@@ -161,7 +82,7 @@ plot_cluster <- function(tbl, cluster, breaks){
      labs(title = cluster,
           caption = str_wrap('Note: outliers (|ER| > 1.5) have been clamped, mainly affecting a small number of extreme values (|ER| > 3)', width = 60)) +
      theme(axis.ticks = element_blank(),
-           axis.text.x = element_text(colour = AA_COLOURS[sort(unique(outlier_profiles$mut))]),
+           axis.text.x = element_markdown(),
            axis.title = element_blank(),
            strip.placement = 'outside',
            strip.text.y = element_text(angle = 0),
@@ -182,7 +103,7 @@ breaks <- pivot_longer(cluster_positions, A:Y, names_to = 'mut', values_to = 'er
 plots$cluster_heatmaps <- group_map(cluster_positions, ~plot_cluster(., cluster = .y, breaks = breaks)) %>%
   set_names(group_keys(cluster_positions)$cluster)
 
-# Frequency of permissive/not proline subtypes
+### Frequency of permissive/not proline subtypes ###
 not_proline_subtypes <- c('A3', 'D3', 'E2', 'G4', 'I3', 'K3', 'L6', 'M2', 'N2', 'Q2', 'R2', 'S2', 'T2', 'V5', 'Y4')
 most_selective_subtypes <- group_by(full_characterisation$profiles, cluster) %>%
   summarise(mean_er = mean(er)) %>%
@@ -198,7 +119,8 @@ freq_summary <- group_by(full_characterisation$summary, aa) %>%
             Other = 1 - (Permissive + `Not Proline` + `Most Selective`)) %>%
   pivot_longer(-aa, names_to = 'type', values_to = 'freq') %>%
   mutate(type = factor(type, levels = c('Permissive', 'Not Proline', 'Other', 'Most Selective'))) %>%
-  left_join(select(most_selective_subtypes, aa, mean_er), by = 'aa')
+  left_join(select(most_selective_subtypes, aa, mean_er), by = 'aa') %>%
+  mutate(aa = add_markdown(aa, AA_COLOURS))
 er_limits <- pretty_break(most_selective_subtypes$mean_er, rough_n = 4, sym = 0, sig_figs = 2)
 
 plots$subtype_freqs <- ggplot(freq_summary) +
@@ -212,10 +134,10 @@ plots$subtype_freqs <- ggplot(freq_summary) +
   labs(x = 'Frequency') +
   theme(panel.grid.major.y = element_blank(),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(colour = AA_COLOURS[sort(unique(freq_summary$aa))]),
+        axis.text.y = element_markdown(),
         axis.ticks.y = element_blank())
 
-# G1 / G3 
+### G1 / G3 Differences ###
 g1_g3_terms <- filter(dms, cluster %in% c('G1', 'G3')) %>%
   select(cluster, solvation_polar, solvation_hydrophobic, van_der_waals, van_der_waals_clashes, entropy_sidechain,
          entropy_mainchain, torsional_clash, backbone_clash, phi, psi, starts_with('angstroms_to')) %>%
@@ -234,7 +156,7 @@ plots$g1_vs_g3 <- (ggplot(g1_g3_terms, aes(x = value, y = ..scaled.., colour = c
                            axis.title.x = element_blank())) %>%
   labeled_plot(width = 20, height = 20, units = 'cm')
 
-# Large / Small hydrophobics
+### Large / Small hydrophobic Differences ###
 large_hydrophobics <- c('I2', 'L2', 'M1')
 small_hydrophobics <- c('A1', 'G2', 'P3')
 aromatics <- c('F2', 'W1', 'Y1')
