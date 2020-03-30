@@ -48,6 +48,7 @@ include: 'bin/pipeline/foldx.smk'
 include: 'bin/pipeline/structure_statistics.smk'
 include: 'bin/pipeline/landscape.smk'
 include: 'bin/pipeline/subtypes.smk'
+include: 'bin/pipeline/figures.smk'
 
 #### Global rules ####
 rule all:
@@ -76,7 +77,9 @@ rule all:
         [f'figures/2_subtypes/{x}/aa_profiles/A.pdf' for x in STANDARD_CLUSTERINGS],
         rules.final_subtypes.output,
         rules.all_position_subtypes.output,
-        rules.continuous_characterisation.output
+        rules.continuous_characterisation.output,
+        rules.figure1.output,
+        rules.figure2.output
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -154,7 +157,8 @@ rule setup_directories:
 
         # figures
         shell('mkdir figures && echo "mkdir figures" || true')
-        dirs = ['0_data', '1_landscape', '1_landscape/pdb', '2_subtypes', '3_continuous']
+        dirs = ['0_data', '1_landscape', '1_landscape/pdb', '2_subtypes',
+                '3_continuous', '4_figures']
 
         for d in dirs:
             shell(f'mkdir figures/{d} && echo "mkdir figures/{d}" || true')
