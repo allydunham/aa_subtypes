@@ -21,7 +21,10 @@ rule figure1:
 
     output:
         "figures/4_figures/figure1.pdf",
-        "figures/4_figures/figure1.png"
+        "figures/4_figures/figure1.png",
+        "figures/4_figures/parts/figure1_A_raw.pdf",
+        "figures/4_figures/parts/figure1_A_trans.pdf",
+        "figures/4_figures/parts/figure1_A_norm.pdf"
 
     log:
         "logs/figure1.log"
@@ -31,7 +34,7 @@ rule figure1:
 
 rule figure2:
     """
-    Figure 1
+    Figure 2
     """
     input:
         "data/combined_mutational_scans.tsv"

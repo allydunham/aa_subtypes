@@ -15,7 +15,34 @@ raw <- sapply(dir('data/studies/', full.names = TRUE), import_study, fields = c(
 
 dms <- read_tsv('data/combined_mutational_scans.tsv')
 
-### Panel 1 - Gene Summary ###
+### Panel 1 - Normalisation Procedure ###
+p_norm_raw <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
+  ggplot(aes(x = raw_score, colour = study)) +
+  geom_density(size = 1.5) +
+  labs(y = '', x = 'Raw Score') + 
+  guides(colour = FALSE) +
+  theme(text = element_text(size = 12))
+ggsave('figures/4_figures/parts/figure1_a_raw.pdf', p_norm_raw, width = 8, height = 6, units = 'cm')
+p_norm_trans <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
+  ggplot(aes(x = transformed_score, colour = study)) +
+  geom_density(size = 1.5) +
+  labs(y = '', x = 'Transformed Score') + 
+  guides(colour = FALSE) +
+  theme(text = element_text(size = 12))
+ggsave('figures/4_figures/parts/figure1_a_trans.pdf', p_norm_trans, width = 8, height = 6, units = 'cm')
+p_norm_final <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
+  ggplot(aes(x = score, colour = study)) +
+  geom_density(size = 1.5) +
+  labs(y = '', x = 'Normalised Score') + 
+  guides(colour = FALSE) +
+  xlim(-2, 1) +
+  theme(text = element_text(size = 16))
+ggsave('figures/4_figures/parts/figure1_a_norm.pdf', p_norm_final, width = 8, height = 6, units = 'cm')
+
+convertPicture("figures/4_figures/parts/figure1_a.svg", "figures/4_figures/parts/figure1_a_cairo.svg")
+p_norm <- readPicture('')
+
+### Panel 2 - Gene Summary ###
 gene_summary <- group_by(dms, gene) %>%
   summarise(n = n_distinct(position),
             n_struct = n_distinct(position[!is.na(total_energy)])) %>%
@@ -39,15 +66,6 @@ p_genes <- ggplot(gene_summary, aes(x = as.integer(gene))) +
         axis.ticks.y = element_blank(),
         axis.title.y.left = element_blank(),
         axis.title.y.right = element_text(margin = margin(l = 10)))
-
-### Panel 2 - Normalisation Procedure ###
-p_norm <- ggplot(tibble(x = 1, y = 1), aes(x=x, y=y)) +
-  geom_point(colour = 'white') +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.grid.major.y = element_blank()) +
-  annotate('text', x = 1, y = 1, label = 'Normalisation Procedure')
 
 ### Panel 3 - Replicate Studies ###
 tem1_studys <- sapply(c('data/studies/firnberg_2014_tem1', 'data/studies/steinberg_2016_tem1'),
@@ -89,23 +107,35 @@ p_blosum <- ggplot(blosum_cor, aes(x = blosum62, y = score)) +
   geom_jitter(width = 0.2) +
   labs(x = 'BLOSUM62', y = 'Mean Normalised ER')
 
+### Panel 5 Sift correlation ###
+p_sift <- ggplot(tibble(x = 1, y = 1), aes(x=x, y=y)) +
+  geom_point(colour = 'white') +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  annotate('text', x = 1, y = 1, label = 'SIFT Correlation')
+
+
 ### Figure Assembly ###
 size <- theme(text = element_text(size = 10))
-p1 <- p_genes + labs(tag = 'A') + size
-p2 <- p_norm + labs(tag = 'B') + size
+p1 <- p_norm + labs(tag = 'A') + size
+p2 <- p_genes + labs(tag = 'B') + size
 p3_ubi <- p_rep_ubi + labs(tag = 'C') + size
 p3_legend <- as_ggplot(get_legend(p3_ubi))
 p3_ubi <- p3_ubi + guides(colour = FALSE)
 p3_tem1 <- p_rep_tem1 + size + guides(colour = FALSE)
 p4 <- p_blosum + labs(tag = 'D') + size
+p5 <- p_sift + labs(tag = 'E') + size
 
-figure1 <- multi_panel_figure(width = 300, height = 200, columns = 8, rows = 2,
+figure1 <- multi_panel_figure(width = 200, height = 200, columns = 9, rows = 3,
                               panel_label_type = 'none', row_spacing = 0.1) %>%
-  fill_panel(p1, row = 1, column = 1:3) %>%
-  fill_panel(p2, row = 1, column = 4:8) %>%
-  fill_panel(p3_ubi, row = 2, column = 1:2) %>%
-  fill_panel(p3_tem1, row = 2, column = 3:4) %>%
-  fill_panel(p3_legend, row = 2, column = 5) %>%
-  fill_panel(p4, row = 2, column = 6:8)
+  fill_panel(p1, row = 1:2, column = 1:3) %>%
+  fill_panel(p2, row = 1, column = 4:9) %>%
+  fill_panel(p3_ubi, row = 2, column = 4:6) %>%
+  fill_panel(p3_tem1, row = 2, column = 7:8) %>%
+  fill_panel(p3_legend, row = 2, column = 9) %>%
+  fill_panel(p4, row = 3, column = 1:3) %>%
+  fill_panel(p5, row = 3, column = 4:9)
 ggsave('figures/4_figures/figure1.pdf', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
 ggsave('figures/4_figures/figure1.png', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
