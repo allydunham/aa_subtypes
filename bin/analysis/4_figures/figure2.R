@@ -2,7 +2,15 @@
 # Produce figure 2 (Mutational Landscape)
 source('src/config.R')
 
-dms <- read_tsv('data/combined_mutational_scans.tsv')
+domains <- read_tsv('meta/uniprot_domains.gff', comment = '#', 
+                    col_names = c('uniprot_id', 'source', 'feature', 'start', 'end', 'tmp1', 'tmp2', 'tmp3', 'info', 'tmp4')) %>%
+  select(-starts_with('tmp')) %>%
+  filter(feature %in% c('Domain', 'Transmembrane', 'Topological domain')) %>%
+  mutate(name = str_extract(info, 'Note=[^;]*;?') %>% str_remove(';$') %>% str_remove(' [0-9]*$') %>% str_remove('^Note=') %>% str_remove('%.*$'),
+         name = ifelse(name == 'Helical', 'Transmembrane', name))
+
+dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
+  mutate(uniprot_id = unname(UNIPROT_IDS[gene]))
 
 ### Panel 1 - Mean Score ###
 p_mean_score <- ggplot(dms, aes(x = PC1, y = mean_score)) +
@@ -27,21 +35,27 @@ p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(colour = guide_colourbar(title = 'Hydrophobicity'))
 
-### Panel 4 - Similar Domains ###
-p_similar_domains <- ggplot(tibble(x = 1, y = 1), aes(x=x, y=y)) +
-  geom_point(colour = 'white') +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.grid.major.y = element_blank()) +
-  annotate('text', x = 1, y = 1, label = 'Similar domains\nmapped to UMAP')
+### Panel 4 - Domains ###
+dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=name), by = 'uniprot_id') %>%
+  filter(position <= end, position >= start) %>%
+  select(gene, position, wt, domain) %>%
+  distinct() %>%
+  left_join(dms, ., by = c('gene', 'position', 'wt'))
+
+p_domains <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
+  geom_point(data = dms, colour = 'grey90', shape = 20) +
+  geom_point(data = filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR4')), mapping = aes(shape = gene, colour = domain)) +
+  scale_colour_brewer(type = 'qual', palette = 'Dark2') +
+  scale_shape_manual(values = c(ADRB2 = 15, CCR5 = 17, CXCR4 = 18)) + 
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_legend(title = 'Domain'), shape = guide_legend(title = 'Gene'))
 
 ### Assemble Figure ###
 size <- theme(text = element_text(size = 10))
 p1 <- p_mean_score + labs(tag = 'A') + size
 p2 <- p_surface_accessibility + labs(tag = 'B') + size
 p3 <- p_hydrophobicity + labs(tag = 'C') + size
-p4 <- p_similar_domains + labs(tag = 'D') + size
+p4 <- p_domains + labs(tag = 'D') + size
 
 figure2 <- multi_panel_figure(width = 300, height = 200, columns = 2, rows = 2,
                               panel_label_type = 'none', row_spacing = 0.1) %>%

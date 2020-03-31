@@ -35,6 +35,7 @@ rule figure2:
     """
     input:
         "data/combined_mutational_scans.tsv"
+        "meta/uniprot_domains.gff"
 
     output:
         "figures/4_figures/figure2.pdf",
