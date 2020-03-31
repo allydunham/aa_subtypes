@@ -29,6 +29,10 @@ library(plotlistr)
 # Universal project functions
 source('src/subtypes_utils.R')
 
+# Gene Uniprot IDS
+UNIPROT_IDS <- structure(sapply(dir('data/studies/'), function(x){read_yaml(str_c('data/studies/', x, '/', x, '.yaml')) %>% extract2('uniprot_id')}),
+                         names = sapply(dir('data/studies/'), function(x){read_yaml(str_c('data/studies/', x, '/', x, '.yaml')) %>% extract2('gene')}))
+
 ### GGPlot theme ###
 # clean with centered title by default
 theme_set(theme_pubclean() + theme(legend.position = 'right',
