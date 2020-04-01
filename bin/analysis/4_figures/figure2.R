@@ -12,21 +12,16 @@ domains <- read_tsv('meta/uniprot_domains.gff', comment = '#',
 dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
   mutate(uniprot_id = unname(UNIPROT_IDS[gene]))
 
-### Panel 1 - Mean Score ###
-p_mean_score <- ggplot(dms, aes(x = PC1, y = mean_score)) +
+### Panel 1 - Mean SIFT ###
+p_sift <- drop_na(dms, mean_sift) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = mean_sift)) +
   geom_point() +
-  labs(x = 'PC1', y = 'Mean Normalised ER')
-
-### Panel 2 - Surface Accessibility ###
-p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = all_atom_abs)) +
-  geom_point() +
-  scale_colour_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'),
-                         values = c(0, 0.2, 1)) +
+  scale_color_distiller(type = 'seq', palette = 'RdPu', limits = c(min(dms$mean_sift), 0),
+                        breaks = 0:-4) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10)))
+  guides(colour = guide_colourbar(title = expression('log'[10]~'SIFT')))
 
-### Panel 3 - AA hydrophobicity ### 
+### Panel 2 - AA hydrophobicity ### 
 p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   ggplot(aes(x = umap1, y = umap2, colour = hydrophobicity)) +
   geom_point() +
@@ -35,14 +30,41 @@ p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(colour = guide_colourbar(title = 'Hydrophobicity'))
 
-### Panel 4 - Domains ###
+### Panel 3 - Surface Accessibility ###
+p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = all_atom_abs)) +
+  geom_point() +
+  scale_colour_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'),
+                         values = c(0, 0.2, 1)) +
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10)))
+
+### Panel 4 - Sidechain Entropy ###
+p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = clamp(entropy_sidechain, 1.5, -1.5))) +
+  geom_point() +
+  scale_colour_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_colorbar(title = 'Sidechain<br>Entropy<br>(kj mol<sup>-1</sup>)')) +
+  theme(legend.title = element_markdown())
+
+### Panel 5 - Van der Waals Clash ###
+p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = clamp(van_der_waals_clashes, 5, -5))) +
+  geom_point() +
+  scale_colour_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_colorbar(title = 'Van der Waals<br>Clashes<br>(kj mol<sup>-1</sup>)')) +
+  theme(legend.title = element_markdown())
+
+### Panel 6 - Transmembrane Domains ###
 dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=name), by = 'uniprot_id') %>%
   filter(position <= end, position >= start) %>%
   select(gene, position, wt, domain) %>%
   distinct() %>%
   left_join(dms, ., by = c('gene', 'position', 'wt'))
 
-p_domains <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
+p_transmembrane <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
   geom_point(data = dms, colour = 'grey90', shape = 20) +
   geom_point(data = filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR4')), mapping = aes(shape = gene, colour = domain)) +
   scale_colour_brewer(type = 'qual', palette = 'Dark2') +
@@ -51,18 +73,22 @@ p_domains <- ggplot(mapping = aes(x=umap1, y=umap2)) +
   guides(colour = guide_legend(title = 'Domain'), shape = guide_legend(title = 'Gene'))
 
 ### Assemble Figure ###
-size <- theme(text = element_text(size = 10))
-p1 <- p_mean_score + labs(tag = 'A') + size
-p2 <- p_surface_accessibility + labs(tag = 'B') + size
-p3 <- p_hydrophobicity + labs(tag = 'C') + size
-p4 <- p_domains + labs(tag = 'D') + size
+size <- theme(text = element_text(size = 8))
+p1 <- p_sift + labs(tag = 'A') + size
+p2 <- p_hydrophobicity + labs(tag = 'B') + size
+p3 <- p_surface_accessibility + labs(tag = 'C') + size
+p4 <- p_side_entropy + labs(tag = 'D') + size
+p5 <- p_vdw_clash + labs(tag = 'E') + size
+p6 <- p_transmembrane + labs(tag = 'F') + size
 
-figure2 <- multi_panel_figure(width = 300, height = 200, columns = 2, rows = 2,
+figure2 <- multi_panel_figure(width = 300, height = 150, columns = 3, rows = 2,
                               panel_label_type = 'none', row_spacing = 0.1) %>%
   fill_panel(p1, row = 1, column = 1) %>%
   fill_panel(p2, row = 1, column = 2) %>%
-  fill_panel(p3, row = 2, column = 1) %>%
-  fill_panel(p4, row = 2, column = 2)
+  fill_panel(p3, row = 1, column = 3) %>%
+  fill_panel(p4, row = 2, column = 1) %>%
+  fill_panel(p5, row = 2, column = 2) %>%
+  fill_panel(p6, row = 2, column = 3)
 ggsave('figures/4_figures/figure2.pdf', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 ggsave('figures/4_figures/figure2.png', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 
