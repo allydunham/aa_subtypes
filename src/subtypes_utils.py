@@ -27,7 +27,7 @@ class SubtypesColourMap:
     Colour mappings for deep mutational landscape properties, looking up colours
     and adjusting scales specifically for this projects factors
     """
-    # Discrete palettes. (name, colourmap, na colour)
+    # Discrete palettes. (name, colourmap, na colour, order)
     palettes = {
         'wt': ('WT AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
         'mut': ('Mutant AA', AMINO_ACID_COLOURS, '0xDCDCDC', None),
@@ -36,7 +36,19 @@ class SubtypesColourMap:
             '3': '0x4DAF4A', '4': '0x984EA3', '5': '0xFF7F00', '6': '0xFFFF33',
             '7': '0xA65628', '8': '0xF781BF', '9': '0x08f0f6', '10': '0x09ff00',
             '11': '0x9f3131', '12': '0x2e00fb'
-        }, '0x808080', None)
+        }, '0x808080', None),
+        'gene': ('Gene', {
+            'Src': '0x03C33F', 'YAP1': '0x47D0E0', 'Ras': '0xE494D3',
+            'STE12': '0xFCB249', 'NP': '0x936ED4', 'DBR1': '0xFF6961',
+            'TP53': '0x03C33F', 'CP': '0x47D0E0', 'CCR5': '0xE494D3',
+            'CXCR4': '0xFCB249', 'HSP90': '0x936ED4', 'ADRB2': '0xFF6961',
+            'infA': '0x03C33F', 'GAL4': '0x47D0E0', 'HA': '0xE494D3',
+            'PTEN': '0xFCB249', 'TPMT': '0x936ED4', 'PAB1': '0xFF6961',
+            'APH3II': '0x03C33F', 'Protein G': '0x47D0E0', 'UBI': '0xE494D3',
+            'UBE4B': '0xFCB249', 'BRCA1': '0x936ED4', 'TEM1': '0xFF6961',
+            'CBS': '0x03C33F', 'CALM1': '0x47D0E0', 'SUMO1': '0xE494D3',
+            'TPK1': '0xFCB249', 'UBE2I': '0x936ED4', 'amiE': '0xFF6961'
+        },'0x808080', None)
     }
 
     # (name, scale, midpoint, na_colour) for properties
