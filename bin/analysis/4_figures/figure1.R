@@ -14,7 +14,8 @@ raw <- sapply(dir('data/studies/', full.names = TRUE), import_study, fields = c(
   ungroup()
 
 dms <- read_tsv('data/combined_mutational_scans.tsv')
-
+dms_long <- read_tsv('data/long_combined_mutational_scans.tsv')
+  
 ### Panel 1 - Normalisation Procedure ###
 p_norm_raw <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = raw_score, colour = study)) +
@@ -39,8 +40,10 @@ p_norm_final <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_cc
   theme(text = element_text(size = 16))
 ggsave('figures/4_figures/parts/figure1_a_norm.pdf', p_norm_final, width = 8, height = 6, units = 'cm')
 
-convertPicture("figures/4_figures/parts/figure1_a.svg", "figures/4_figures/parts/figure1_a_cairo.svg")
-p_norm <- readPicture('')
+p_norm <- ggplot() +
+  geom_blank() +
+  annotation_custom(readPNG('figures/4_figures/parts/figure1_a.png') %>% rasterGrob(interpolate = TRUE),
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
 
 ### Panel 2 - Gene Summary ###
 gene_summary <- group_by(dms, gene) %>%
@@ -108,14 +111,29 @@ p_blosum <- ggplot(blosum_cor, aes(x = blosum62, y = score)) +
   labs(x = 'BLOSUM62', y = 'Mean Normalised ER')
 
 ### Panel 5 Sift correlation ###
-p_sift <- ggplot(tibble(x = 1, y = 1), aes(x=x, y=y)) +
-  geom_point(colour = 'white') +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        panel.grid.major.y = element_blank()) +
-  annotate('text', x = 1, y = 1, label = 'SIFT Correlation')
+format_gene <- function(gene, study){
+  year <- str_split_fixed(study, fixed('_'), n = 3)[,2]
+  ifelse(gene %in% c('UBI', 'HSP90'), str_c(gene, ' (', year, ')'), gene)
+}
 
+sift_correlations <- select(dms_long, study, gene, position, wt, mut, score, log10_sift) %>%
+  drop_na(score, log10_sift) %>%
+  group_by(study, gene) %>% 
+  group_modify(~tidy(cor.test(.$score, .$log10_sift, method = 'pearson'))) %>%
+  ungroup() %>%
+  mutate(study_pretty = sapply(study, format_study, USE.NAMES = FALSE),
+         p_cat = pretty_p_values(p.value, breaks = c(1e-48, 1e-12, 1e-06, 1e-3, 0.01, 0.05)),
+         gene_pretty = format_gene(gene, study))
+  
+
+p_sift <- ggplot(sift_correlations, aes(x = gene_pretty, y = estimate, fill = p_cat)) +
+  geom_col(position = position_dodge()) +
+  geom_errorbar(aes(ymin=conf.low, ymax=conf.high), width=0.5, position = position_dodge(0.9)) +
+  geom_hline(yintercept = 0) +
+  xlab('') +
+  ylab(expression("Pearson's"~rho)) +
+  scale_fill_viridis_d(guide=guide_legend(title='p-value'), drop=FALSE) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 
 ### Figure Assembly ###
 size <- theme(text = element_text(size = 10))
