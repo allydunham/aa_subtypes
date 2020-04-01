@@ -12,10 +12,14 @@ domains <- read_tsv('meta/uniprot_domains.gff', comment = '#',
 dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
   mutate(uniprot_id = unname(UNIPROT_IDS[gene]))
 
-### Panel 1 - Mean Score ###
-p_mean_score <- ggplot(dms, aes(x = PC1, y = mean_score)) +
+### Panel 1 - AA hydrophobicity ### 
+p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = hydrophobicity)) +
   geom_point() +
-  labs(x = 'PC1', y = 'Mean Normalised ER')
+  scale_colour_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
+                         values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2))) +
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_colourbar(title = 'Hydrophobicity'))
 
 ### Panel 2 - Surface Accessibility ###
 p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
@@ -26,29 +30,41 @@ p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10)))
 
-### Panel 3 - AA hydrophobicity ### 
-p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = hydrophobicity)) +
+### Panel 4 - Sidechain Entropy ###
+p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = clamp(entropy_sidechain, 1.5, -1.5))) +
   geom_point() +
-  scale_colour_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
-                         values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2))) +
+  scale_colour_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'Hydrophobicity'))
+  guides(colour = guide_colorbar(title = 'Sidechain<br>Entropy<br>(kj mol<sup>-1</sup>)')) +
+  theme(legend.title = element_markdown())
 
-### Panel 4 - Domains ###
+### Panel 3 - Sidechain Entropy ###
+p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
+  ggplot(aes(x = umap1, y = umap2, colour = clamp(van_der_waals_clashes, 5, -5))) +
+  geom_point() +
+  scale_colour_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
+  labs(x = 'UMAP1', y = 'UMAP2') + 
+  guides(colour = guide_colorbar(title = 'Sidechain<br>Entropy<br>(kj mol<sup>-1</sup>)')) +
+  theme(legend.title = element_markdown())
+
+### Panel 5 - Transmembrane Domains ###
 dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=name), by = 'uniprot_id') %>%
   filter(position <= end, position >= start) %>%
   select(gene, position, wt, domain) %>%
   distinct() %>%
   left_join(dms, ., by = c('gene', 'position', 'wt'))
 
-p_domains <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
+p_transmembrane <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
   geom_point(data = dms, colour = 'grey90', shape = 20) +
   geom_point(data = filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR4')), mapping = aes(shape = gene, colour = domain)) +
   scale_colour_brewer(type = 'qual', palette = 'Dark2') +
   scale_shape_manual(values = c(ADRB2 = 15, CCR5 = 17, CXCR4 = 18)) + 
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(colour = guide_legend(title = 'Domain'), shape = guide_legend(title = 'Gene'))
+
+### Panel 6 - Other Domains ###
+
 
 ### Assemble Figure ###
 size <- theme(text = element_text(size = 10))
