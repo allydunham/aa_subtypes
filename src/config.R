@@ -51,8 +51,8 @@ AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
                 F='gold', W='yellow3', Y='khaki3',
                 N='cadetblue1', C='cornflowerblue', Q='cyan', S='blue', T='darkslateblue',
                 R='green', H='green4', K='seagreen1',
-                D='purple', E='pink',
-                G='antiquewhite2', P='black', X='grey')
+                D='purple', E='mediumorchid1',
+                G='lightskyblue4', P='black', X='grey')
 
 # Colourbrewer scales for various metrics
 CLUSTER_COLOURS <- list(type='qual', palette='Set3', direction = -1)
