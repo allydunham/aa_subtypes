@@ -30,15 +30,16 @@ rule figure1:
         "logs/figure1.log"
 
     shell:
-        "Rscript bin/4_figures/figure1.R &> {log}"
+        "Rscript bin/figures/figure1.R &> {log}"
 
 rule figure2:
     """
     Figure 2
     """
     input:
-        "data/combined_mutational_scans.tsv"
-        "meta/uniprot_domains.gff"
+        "data/combined_mutational_scans.tsv",
+        "meta/uniprot_domains.gff",
+        ["figures/4_figures/proteins/{p}.png" for p in UNFILTERED_GENES]
 
     output:
         "figures/4_figures/figure2.pdf",
@@ -48,4 +49,4 @@ rule figure2:
         "logs/figure2.log"
 
     shell:
-        "Rscript bin/4_figures/figure2.R &> {log}"
+        "Rscript bin/figures/figure2.R &> {log}"
