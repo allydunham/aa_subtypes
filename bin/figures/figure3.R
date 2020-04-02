@@ -25,14 +25,41 @@ aromatics <- c('F2', 'W1', 'Y1')
 polar <- c('D1', 'D2', 'E1', 'K1', 'N1', 'Q1', 'Q3', 'R1', 'S1', 'T1')
 
 ### Panel 1 - Schematic? ###
-p_initial_profiles <- filter(dms, study %in% c('roscoe_2013_ubi', 'kitzman_2015_gal4', 'matreyek_2018_tpmt')) %>%
-  select(study, position, wt, A:Y) %>%
+position_profs <- filter(dms, wt %in% c('A', 'C', 'D', 'W', 'Y')) %>%
+  select(study, cluster, position, wt, A:Y) %>%
   pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+  mutate(er = clamp(er, 1, -1))
+
+p_initial_profiles <- ggplot(position_profs, aes(x = str_c(study, position), y = mut, fill = er)) +
+  geom_raster() +
+  facet_wrap(~wt, nrow = 1, scales = 'free_x') +
+  scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                       limits = c(min(position_profs$er), -min(position_profs$er))) +
+  guides(fill = FALSE) +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        strip.text = element_text(size = 6))
+ggsave('figures/4_figures/parts/figure3_cluster_schematic_initial_profiles.pdf', p_initial_profiles, width = 6, height = 2, units = 'cm')
+
+p_a_permissive_profiles <- filter(position_profs, wt == 'A') %>%
+  mutate(cat = ifelse(cluster == 'AP', 'AP', 'Rest')) %>%
   ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
   geom_raster() +
-  facet_wrap(~wt, nrow = 1)
+  facet_wrap(~cat, nrow = 1, scales = 'free_x') +
+  scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                       limits = c(min(position_profs$er), -min(position_profs$er))) +
+  guides(fill = FALSE) +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        strip.text = element_text(size = 6))
+ggsave('figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf', p_a_permissive_profiles, width = 3, height = 2, units = 'cm')
 
-p_schematic <- blank_plot('Clustering Schematic')
+p_schematic <- ggplot() +
+  geom_blank() +
+  annotation_custom(readPNG('figures/4_figures/parts/figure3_cluster_schematic.png') %>% rasterGrob(interpolate = TRUE),
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
 
 ### Panel 2 - Correlation plot/dendrogram with labels ###
 p_heatmap <- blank_plot('Correlation Heatmap')

@@ -17,14 +17,15 @@ rule figure1:
         "data/studies/roscoe_2013_ubi/roscoe_2013_ubi.tsv",
         "data/studies/roscoe_2013_ubi/roscoe_2013_ubi.yaml",
         "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.tsv",
-        "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml"
+        "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml",
+        "figures/4_figures/parts/figure1_norm_schematic.png"
 
     output:
         "figures/4_figures/figure1.pdf",
         "figures/4_figures/figure1.png",
-        "figures/4_figures/parts/figure1_A_raw.pdf",
-        "figures/4_figures/parts/figure1_A_trans.pdf",
-        "figures/4_figures/parts/figure1_A_norm.pdf"
+        "figures/4_figures/parts/figure1_norm_schematic_raw.pdf",
+        "figures/4_figures/parts/figure1_norm_schematic_trans.pdf",
+        "figures/4_figures/parts/figure1_norm_schematic_norm.pdf"
 
     log:
         "logs/figure1.log"
@@ -57,11 +58,14 @@ rule figure3:
     """
     input:
         "data/combined_mutational_scans.tsv",
-        "data/subtypes/final_subtypes.tsv"
+        "data/subtypes/final_subtypes.tsv",
+        "figures/4_figures/parts/figure3_cluster_schematic.png"
 
     output:
         "figures/4_figures/figure3.pdf",
-        "figures/4_figures/figure3.png"
+        "figures/4_figures/figure3.png",
+        "figures/4_figures/parts/figure3_cluster_schematic_initial_profiles.pdf",
+        "figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf"
 
     log:
         "logs/figure3.log"

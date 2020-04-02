@@ -39,14 +39,14 @@ p_norm_raw <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5
   labs(y = '', x = 'Raw Score') + 
   guides(colour = FALSE) +
   theme(text = element_text(size = 12))
-ggsave('figures/4_figures/parts/figure1_a_raw.pdf', p_norm_raw, width = 8, height = 6, units = 'cm')
+ggsave('figures/4_figures/parts/figure1_norm_schematic_raw.pdf', p_norm_raw, width = 8, height = 6, units = 'cm')
 p_norm_trans <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = transformed_score, colour = study)) +
   geom_density(size = 1.5) +
   labs(y = '', x = 'Transformed Score') + 
   guides(colour = FALSE) +
   theme(text = element_text(size = 12))
-ggsave('figures/4_figures/parts/figure1_a_trans.pdf', p_norm_trans, width = 8, height = 6, units = 'cm')
+ggsave('figures/4_figures/parts/figure1_norm_schematic_trans.pdf', p_norm_trans, width = 8, height = 6, units = 'cm')
 p_norm_final <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = score, colour = study)) +
   geom_density(size = 1.5) +
@@ -54,11 +54,11 @@ p_norm_final <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_cc
   guides(colour = FALSE) +
   xlim(-2, 1) +
   theme(text = element_text(size = 16))
-ggsave('figures/4_figures/parts/figure1_a_norm.pdf', p_norm_final, width = 8, height = 6, units = 'cm')
+ggsave('figures/4_figures/parts/figure1_norm_schematic_norm.pdf', p_norm_final, width = 8, height = 6, units = 'cm')
 
 p_norm <- ggplot() +
   geom_blank() +
-  annotation_custom(readPNG('figures/4_figures/parts/figure1_a.png') %>% rasterGrob(interpolate = TRUE),
+  annotation_custom(readPNG('figures/4_figures/parts/figure1_norm_schematic.png') %>% rasterGrob(interpolate = TRUE),
                     xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
 
 ### Panel 3 - Replicate Studies ###
