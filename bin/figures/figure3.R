@@ -25,6 +25,13 @@ aromatics <- c('F2', 'W1', 'Y1')
 polar <- c('D1', 'D2', 'E1', 'K1', 'N1', 'Q1', 'Q3', 'R1', 'S1', 'T1')
 
 ### Panel 1 - Schematic? ###
+p_initial_profiles <- filter(dms, study %in% c('roscoe_2013_ubi', 'kitzman_2015_gal4', 'matreyek_2018_tpmt')) %>%
+  select(study, position, wt, A:Y) %>%
+  pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+  ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
+  geom_raster() +
+  facet_wrap(~wt, nrow = 1)
+
 p_schematic <- blank_plot('Clustering Schematic')
 
 ### Panel 2 - Correlation plot/dendrogram with labels ###
