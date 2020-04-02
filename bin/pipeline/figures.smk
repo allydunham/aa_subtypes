@@ -50,3 +50,39 @@ rule figure2:
 
     shell:
         "Rscript bin/figures/figure2.R &> {log}"
+
+rule figure3:
+    """
+    Figure 3
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figure3.pdf",
+        "figures/4_figures/figure3.png"
+
+    log:
+        "logs/figure3.log"
+
+    shell:
+        "Rscript bin/figures/figure3.R &> {log}"
+
+rule figure4:
+    """
+    Figure 4
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figure4.pdf",
+        "figures/4_figures/figure4.png"
+
+    log:
+        "logs/figure4.log"
+
+    shell:
+        "Rscript bin/figures/figure4.R &> {log}"

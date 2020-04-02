@@ -79,7 +79,9 @@ rule all:
         rules.all_position_subtypes.output,
         rules.continuous_characterisation.output,
         rules.figure1.output,
-        rules.figure2.output
+        rules.figure2.output,
+        rules.figure3.output,
+        rules.figure4.output
 
 # Only remove rapidly generated results
 def quick_clean_files():
