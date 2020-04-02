@@ -62,7 +62,56 @@ p_schematic <- ggplot() +
                     xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
 
 ### Panel 2 - Correlation plot/dendrogram with labels ###
-p_heatmap <- blank_plot('Correlation Heatmap')
+## Subparts
+cors <- filter(dms, !str_detect(cluster, CLUSTER_OUTLIER_RE), !str_detect(cluster, CLUSTER_PERMISSIVE_RE)) %>%
+  cluster_profile_correlation(A:Y)
+
+hc <- select(cors, cluster1, cluster2, cor) %>%
+  pivot_wider(id_cols = cluster1, names_from = cluster2, values_from = cor) %>%
+  tibble_to_matrix(-cluster1, row_names = 'cluster1') %>%
+  subtract(1, .) %>%
+  as.dist() %>%
+  hclust()
+dend_data <- dendro_data(hc)
+branches <- dend_data$segments
+leaves <- dend_data$labels %>%
+  mutate(wt = str_sub(label, end = 1))
+
+cors <- mutate(cors,
+               cluster1 = factor(cluster1, levels = leaves$label),
+               cluster2 = factor(cluster2, levels = leaves$label))
+
+p_cor_heatmap <- ggplot(cors, aes(x=cluster1, y=cluster2, fill=cor)) +
+  geom_tile() +
+  scale_fill_distiller(type = ER_COR_COLOURS$type, palette = ER_COR_COLOURS$palette, direction = ER_COR_COLOURS$direction,
+                       limits = c(-1, 1)) +
+  coord_fixed() +
+  guides(fill = guide_colourbar(title = 'Pearson\nCorrelation')) +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        panel.background = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major.y = element_blank())
+ggsave('figures/4_figures/parts/figure3_cor_heatmap.pdf', p_cor_heatmap, width = 12, height = 12, units = 'cm')
+
+p_cor_dend <- ggplot() +
+  geom_segment(data = branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+  geom_point(data = leaves, aes(x=x, y=y, colour = wt), shape=19) +
+  scale_y_continuous(expand = expansion(mult = 0.15)) +
+  scale_colour_manual(values = AA_COLOURS) +
+  guides(colour = FALSE) +
+  theme(axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major.y = element_blank())
+ggsave('figures/4_figures/parts/figure3_cor_dendrogram.pdf', p_cor_dend, width = 12, height = 3, units = 'cm')
+
+## Main plot
+p_heatmap <- ggplot() +
+  geom_blank() +
+  annotation_custom(readPNG('figures/4_figures/parts/figure3_cor.png') %>% rasterGrob(interpolate = TRUE),
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
 
 ### Panel 3 - Clusters mapped to UMAP ###
 classify_cluster <- function(x){
