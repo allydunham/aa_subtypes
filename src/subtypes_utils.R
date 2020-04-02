@@ -245,3 +245,17 @@ plot_gene_pcs <- function(dms, target_gene){
           panel.grid.major.y = element_blank(),
           panel.background = element_blank())
 }
+
+# Blank placeholder ggplot
+blank_plot <- function(text = NULL){
+  p <- ggplot(tibble(x=c(0, 1)), aes(x=x, y=x)) + 
+    geom_blank() +
+    theme(panel.grid.major.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank())
+  
+  if (!is.null(text)){
+    p <- p + annotate(geom = 'text', x = 0.5, y = 0.5, label = text)
+  }
+}
