@@ -63,6 +63,7 @@ p_schematic <- ggplot() +
 
 ### Panel 2 - Correlation plot/dendrogram with labels ###
 ## Subparts
+# Correlation heatmap/dendrogram
 cors <- filter(dms, !str_detect(cluster, CLUSTER_OUTLIER_RE), !str_detect(cluster, CLUSTER_PERMISSIVE_RE)) %>%
   cluster_profile_correlation(A:Y)
 
@@ -106,6 +107,38 @@ p_cor_dend <- ggplot() +
         axis.title = element_blank(),
         panel.grid.major.y = element_blank())
 ggsave('figures/4_figures/parts/figure3_cor_dendrogram.pdf', p_cor_dend, width = 12, height = 3, units = 'cm')
+
+# Profiles of key groups
+plot_profile_block <- function(set){
+  filter(full_characterisation$profiles, cluster %in% set) %>%
+    mutate(cluster = add_markdown(cluster, cluster_colourmap(cluster), order = levels(leaves$label)[levels(leaves$label) %in% set]),
+           mut = add_markdown(mut, AA_COLOURS)) %>%
+    ggplot(aes(x = mut, y = cluster, fill = er)) +
+    geom_raster() +
+    coord_fixed() +
+    scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                         limits = c(min(full_characterisation$profiles$er), -min(full_characterisation$profiles$er))) +
+    guides(fill = guide_colourbar(title = 'Mean ER')) +
+    theme(axis.ticks = element_blank(),
+          axis.text.y = element_markdown(),
+          axis.text.x = element_markdown(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          panel.grid.major.y = element_blank())
+}
+
+ggsave('figures/4_figures/parts/figure3_cor_set_not_proline.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('I3', 'Y4', 'T2', 'E2', 'D3', 'L6', 'N2', 'R2', 'K3', 'A3', 'V5', 'S2', 'Q2', 'M2')))
+ggsave('figures/4_figures/parts/figure3_cor_set_positive.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('Q4', 'K5', 'R3', 'K2', 'R5', 'K1', 'R1')))
+ggsave('figures/4_figures/parts/figure3_cor_set_aromatic.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('Y3', 'Y1', 'H1', 'W1', 'F2')))
+ggsave('figures/4_figures/parts/figure3_cor_set_aliphatic.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('C2', 'A2', 'G7', 'S3', 'V1', 'L3', 'I1')))
+ggsave('figures/4_figures/parts/figure3_cor_set_larger_aliphatic.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('P4', 'L4', 'T4', 'L5', 'L1', 'F1', 'Y2', 'V3', 'V2', 'M1', 'I2', 'L2')))
+ggsave('figures/4_figures/parts/figure3_cor_set_not_aromatic.pdf', width = 10, height = 7, units = 'cm',
+       plot = plot_profile_block(c('T6', 'P2', 'T1', 'A1', 'P3', 'A4', 'T3', 'R4')))
 
 ## Main plot
 p_heatmap <- ggplot() +
