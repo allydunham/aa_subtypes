@@ -65,7 +65,15 @@ rule figure3:
         "figures/4_figures/figure3.pdf",
         "figures/4_figures/figure3.png",
         "figures/4_figures/parts/figure3_cluster_schematic_initial_profiles.pdf",
-        "figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf"
+        "figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf",
+        "figures/4_figures/parts/figure3_cor_set_small_aliphatic.pdf",
+        "figures/4_figures/parts/figure3_cor_set_not_proline.pdf",
+        "figures/4_figures/parts/figure3_cor_set_positive.pdf",
+        "figures/4_figures/parts/figure3_cor_set_aromatic.pdf",
+        "figures/4_figures/parts/figure3_cor_set_aliphatic.pdf",
+        "figures/4_figures/parts/figure3_cor_set_larger_aliphatic.pdf",
+        "figures/4_figures/parts/figure3_cor_set_not_aromatic.pdf",
+        "figures/4_figures/parts/figure3_cor_set_negative.pdf"
 
     log:
         "logs/figure3.log"
