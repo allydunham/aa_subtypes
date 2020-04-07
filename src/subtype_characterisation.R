@@ -725,13 +725,13 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   # global outliers
   global_outliers <- filter(data$summary, str_detect(cluster, str_c("^", CLUSTER_OUTLIER_RE, "$")), n < outlier_size) %>% pull(cluster)
   
-  cluster_cols <- cluster_colourmap(cluster_order)
+  cluster_cols <- cluster_colourmap(c(cluster_order, outliers))
   
   # Summarise subtype sizes (always include outliers in the cluster list here, for reference)
   p_sizes <- filter(data$summary, cluster %in% c(outliers, cluster_order)) %>%
-    mutate(cluster = add_markdown(factor(cluster, levels = c(outliers, rev(cluster_order))), colour = cluster_cols),
+    mutate(cluster_col = add_markdown(factor(cluster, levels = c(outliers, rev(cluster_order))), colour = cluster_cols),
            sum_str = str_c(n, ' (', n_structure, ')')) %>%
-    ggplot(aes(x=cluster, fill=str_sub(cluster, end = 1))) +
+    ggplot(aes(x=cluster_col, fill=str_sub(cluster, end = 1))) +
     geom_col(aes(y=n), width = 0.5) +
     geom_errorbar(aes(ymin=n_structure, ymax=n_structure), colour='white', width=0.4) +
     geom_text(aes(y = max(n) + 10, label = sum_str), hjust=0, size=3) +
@@ -746,7 +746,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   
   # Histograms of subtype surface accessibility
   p_sa <- filter(data$tbl, cluster %in% cluster_order) %>%
-    mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols)) %>%
+    #mutate(cluster = add_markdown(factor(cluster, levels = cluster_order), colour = cluster_cols)) %>%
     ggplot(aes(x = all_atom_abs, fill = wt)) +
     facet_wrap(~cluster, ncol = 1, strip.position = 'left') +
     geom_density(alpha = 0.75, colour = NA) +
@@ -754,7 +754,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
     labs(x = 'All Atom Abs.', y = '') +
     guides(fill = FALSE) +
     theme(strip.placement = 'outside',
-          strip.text.y = element_markdown(angle = 180),
+          strip.text = element_markdown(colour = cluster_cols, angle = 90),
           panel.spacing = unit(0.05, 'npc'))
   
   # Subtype secondary structure probability increases vs background
