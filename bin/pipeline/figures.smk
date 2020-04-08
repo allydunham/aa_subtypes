@@ -40,7 +40,7 @@ rule figure2:
     input:
         "data/combined_mutational_scans.tsv",
         "meta/uniprot_domains.gff",
-        ["figures/4_figures/proteins/{p}.png" for p in UNFILTERED_GENES]
+        [f"figures/4_figures/proteins/{p}.png" for p in UNFILTERED_GENES]
 
     output:
         "figures/4_figures/figure2.pdf",
