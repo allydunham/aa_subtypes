@@ -48,7 +48,12 @@ class SubtypesColourMap:
             'UBE4B': '0xFCB249', 'BRCA1': '0x936ED4', 'TEM1': '0xFF6961',
             'CBS': '0x03C33F', 'CALM1': '0x47D0E0', 'SUMO1': '0xE494D3',
             'TPK1': '0xFCB249', 'UBE2I': '0x936ED4', 'amiE': '0xFF6961'
-        },'0x808080', None)
+        },'0x808080', None),
+        'domain': ('Domain', {
+            'Cytoplasmic': '0x1B9E77',
+            'Extracellular': '0xD95F02',
+            'Transmembrane': '0x7570B3'
+        }, '0x808080', None)
     }
 
     # (name, scale, midpoint, na_colour) for properties
