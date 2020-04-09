@@ -76,6 +76,12 @@ cluster_colourmap <- function(x){
   structure(AA_COLOURS[str_sub(x, end = 1)], names=x)
 }
 
+cluster_number_colourmap <- function(x){
+  x <- as.character(unique(x))
+  nums <- str_sub(x, 2)
+  structure(CLUSTER_NUM_COLOURS[nums], names=x)
+}
+
 # Add ggtext markdown features to a string or factor (features added as needed) based on lookup maps
 # returns a factor sorted by the original sort order (alphabetical or current levels)
 # Currently only works with simple 'span' class

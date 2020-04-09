@@ -54,6 +54,11 @@ AA_COLOURS <- c(A='red', I='salmon', L='firebrick', M='orange', V='tomato',
                 D='purple', E='mediumorchid1',
                 G='lightskyblue4', P='black', X='grey')
 
+CLUSTER_NUM_COLOURS <- c(`O`= '#8689C0', `P`='#FFD700', `1`='#E41A1C', `2`='#377EB8',
+                         `3`= '#4DAF4A', `4`='#984EA3', `5`='#FF7F00', `6`='#FFFF33',
+                         `7`= '#A65628', `8`='#F781BF', `9`='#08F0F6', `10`='#09FF00',
+                         `11`= '#9F3131', `12`='#2E00FB')
+
 # Colourbrewer scales for various metrics
 CLUSTER_COLOURS <- list(type='qual', palette='Set3', direction = -1)
 ER_PROFILE_COLOURS <- list(type='div', palette='RdBu', direction = 1)
