@@ -502,7 +502,7 @@ Examples:
 
 * ADRB2 - again a collection of positions in the transmembrane helices, but this time all facing into the core of the bundle
 * CBS - Many internal positions, potentially in larger spaces than I1 positions. For example, 143 & 166 are in a beta sheet, projecting onto one side while their neighbours 142 & 167 (I1 positions) project onto the other side. The I2 side appears to be more open.
-* CXCR4 - Many positions in the transmembrane helices, not clearly distributed differently yo I1 positions however.
+* CXCR4 - Many positions in the transmembrane helices, not clearly distributed differently to I1 positions however.
 * HA - many core residues, especially in the lower lobe
 * TPK1 - 153-156 are a run of four I2 positions in a row on a beta sheet, seeming to have a lot of space above and below the strand. There are various other internal positions too
 
