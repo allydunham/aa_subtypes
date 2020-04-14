@@ -85,7 +85,7 @@ cluster_number_colourmap <- function(x){
 # Add ggtext markdown features to a string or factor (features added as needed) based on lookup maps
 # returns a factor sorted by the original sort order (alphabetical or current levels)
 # Currently only works with simple 'span' class
-add_markdown <- function(x, colour=NULL, order=NULL){
+add_markdown <- function(x, colour=NULL, order=NULL, universal=''){
   if (is.null(order)){
     if (is.factor(x)){
       order <- levels(x)
@@ -106,6 +106,10 @@ add_markdown <- function(x, colour=NULL, order=NULL){
   }
   
   # Add other features when needed
+  
+  # Add universal features
+  order_codes <- str_c(order_codes, universal)
+  x_codes <- str_c(x_codes, universal)
   
   order <- str_c("<span style = '", str_remove(order_codes, ';$'), "'>", order, "</span>")
   x <- str_c("<span style = '", str_remove(x_codes, ';$'), "'>", x, "</span>")
