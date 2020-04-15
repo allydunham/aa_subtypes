@@ -288,14 +288,23 @@ p2 <- ggplot() +
   size + 
   labs(tag = 'B') +
   annotation_custom(ggplotGrob(p_charge_profiles + size), xmin = 0, xmax = 1, ymin = 0.35, ymax = 0.68) +
-  annotate('text', x = 0.5, y = 0.975, label = str_wrap('Ligand binding is generally done by positive and negative subtype positions', 80)) +
+  annotate('text', x = 0.5, y = 0.975, label = str_wrap('Charged subtype positions have the strongest electrostatic interactions', 80)) +
   annotation_raster(readPNG('figures/4_figures/position_examples/cbs_asp_ionic.png'), interpolate = TRUE,
                     xmin = 0.025, xmax = 0.225, ymin = 0.725, ymax = 0.925) +
   annotate('text', x = 0.125, y = 0.7, label = str_wrap('Ionic interactions', 30)) +
   annotation_raster(readPNG('figures/4_figures/position_examples/tem1_asp_ligand.png'), interpolate = TRUE,
                     xmin = 0.275, xmax = 0.475, ymin = 0.725, ymax = 0.925) +
-  annotate('text', x = 0.375, y = 0.7, label = str_wrap('Ion binding', 30)) + 
-  annotation_custom(ggplotGrob(p_charge_foldx + size), xmin = 0.025, xmax = 0.475, ymin = 0.1, ymax = 0.325)
+  annotate('text', x = 0.375, y = 0.7, label = str_wrap('Ligand binding', 30)) + 
+  annotation_custom(ggplotGrob(p_charge_foldx + size), xmin = 0.5, xmax = 1, ymin = 0.65, ymax = 0.925) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/tem1_asp_sa.png'), interpolate = TRUE,
+                    xmin = 0, xmax = 0.25, ymin = 0, ymax = 0.25) +
+  annotate('text', x = 0.125, y = 0.3, label = str_wrap('Many polar positions are surface accessible', 30)) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/aph3ii_arg_not_proline.png'), interpolate = TRUE,
+                    xmin = 0.375, xmax = 0.625, ymin = 0, ymax = 0.25) +
+  annotate('text', x = 0.5, y = 0.3, label = str_wrap('Not proline positions are often in secondary structures or tight turns', 30)) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/pab1_arg_not_neg.png'), interpolate = TRUE,
+                    xmin = 0.75, xmax = 1, ymin = 0, ymax = 0.25) +
+  annotate('text', x = 0.875, y = 0.3, label = str_wrap('Positions near negative residues or ligands (e.g. DNA backbone) need to not be negative them selves', 30))
 
 # Panel 3
 p3 <- ggplot() +
