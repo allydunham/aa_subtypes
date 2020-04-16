@@ -102,14 +102,14 @@ ubi_studys <- sapply(c('data/studies/roscoe_2013_ubi', 'data/studies/roscoe_2014
   pivot_wider(names_from = study, values_from = score)
 
 p_rep_ubi <- ggplot(ubi_studys, aes(x=roscoe_2013_ubi, y=roscoe_2014_ubi, colour=class)) +
-  geom_point(shape=20, show.legend = FALSE) +
+  geom_point(shape=20) +
   geom_smooth(method = 'lm', formula = y ~ x, colour = 'black') +
   geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
   scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  guides(colour = FALSE) +
   coord_equal() +
   labs(x = 'Roscoe et al. 2013', y = 'Roscoe & Bolon 2014') +
-  theme(legend.title = element_blank(),
-        panel.grid.major.y = element_blank())
+  theme(panel.grid.major.y = element_blank())
 
 ### Panel 4 - Blosum Correlation ###
 blosum_cor <- group_by(raw, wt, mut) %>%
@@ -118,8 +118,8 @@ blosum_cor <- group_by(raw, wt, mut) %>%
   mutate(mut_class = get_variant_class(wt, mut))
 
 p_blosum <- ggplot(blosum_cor, aes(x = blosum62, y = score, colour = mut_class)) +
-  geom_smooth(data = filter(blosum_cor, mut_class == 'Missense'), mapping = aes(x = blosum62, y = score), colour = 'black', method = 'lm', formula = y ~ x, inherit.aes = FALSE) +
   geom_jitter(width = 0.2, shape = 20) +
+  geom_smooth(data = filter(blosum_cor, mut_class == 'Missense'), mapping = aes(x = blosum62, y = score), colour = 'black', method = 'lm', formula = y ~ x, inherit.aes = FALSE) +
   scale_colour_manual(values = MUT_CLASS_COLOURS) +
   guides(colour = guide_legend(title = '', override.aes = list(size = 2))) +
   labs(x = 'BLOSUM62', y = 'Mean Normalised ER')
