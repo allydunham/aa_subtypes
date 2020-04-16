@@ -21,14 +21,30 @@ format_study <- function(x, max_width=60, study_dir='data/studies', mark_filtere
 }
 
 # Make pretty p value categories for plots
-pretty_p_values <- function(p, breaks = c(0.001, 0.01, 0.05)){
-  p_out <- rep(str_c('> ', breaks[length(breaks)]), length(p))
-  for (cutoff in sort(breaks, decreasing = TRUE)){
-    p_out[p < cutoff] <- str_c('< ', cutoff)
+pretty_p_values <- function(p, breaks = c(0.001, 0.01, 0.05), markdown_exp=FALSE, prefix_p=FALSE){
+  breaks <- sort(breaks, decreasing = TRUE)
+  break_str <- as.character(breaks)
+  gt <- '>'
+  lt <- '<'
+  
+  if (markdown_exp){
+    break_str <- str_replace(break_str, "^1?e(-?[0-9]*\\.?[0-9]*)", "10<sup>\\1</sup>")
+    gt <- '&gt;'
+    lt <- '&lt;'
   }
-  p_out <- factor(p_out, levels = c(str_c('> ', breaks[length(breaks)]),
-                                    sapply(sort(breaks, decreasing = TRUE), function(x){str_c('< ', x)})))
-  return(p_out)
+  
+  p_out <- rep(str_c(gt, ' ', breaks[length(breaks)]), length(p))
+  for (i in 1:length(breaks)){
+    p_out[p < breaks[i]] <- str_c(lt, ' ', break_str[i])
+  }
+  break_levels <- c(str_c(gt, ' ', break_str[1]), unlist(map(break_str, ~str_c(lt, ' ', .))))
+  
+  if (prefix_p){
+    p_out <- str_c('p ', p_out)
+    break_levels <- str_c('p ', break_levels)
+  }
+  
+  return(factor(p_out, levels = break_levels))
 }
 
 # Split numeric vector into limits/break points/labels inteligently for display on legends etc.
