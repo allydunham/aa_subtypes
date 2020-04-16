@@ -14,6 +14,10 @@ dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
 
 umap2_breaks <- c(-2.5, 0, 2.5)
 
+lheight <- unit(20, 'mm')
+lwidth <- unit(4, 'mm')
+ltitlewidth <- unit(25, 'mm')
+
 ### Panel 1 - Transmembrane Domains ###
 dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=name), by = 'uniprot_id') %>%
   filter(position <= end, position >= start) %>%
@@ -52,7 +56,8 @@ p_sift <- drop_na(dms, mean_sift) %>%
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = expression('log'[10]~'SIFT')))
+  guides(colour = guide_colourbar(title = 'log<sub>10</sub>SIFT', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth))
 
 ### Panel 3 - AA hydrophobicity ### 
 p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
@@ -60,11 +65,12 @@ p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   geom_point(colour = 'grey90', shape = 20) +
   geom_point(shape = 20) +
   scale_colour_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
-                         values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2))) +
+                         values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2)), limits = c(-0.4, 1.201)) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'Hydrophobicity'))
+  guides(colour = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth))
 
 ### Panel 4 - Surface Accessibility ###
 p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
@@ -76,7 +82,8 @@ p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10)))
+  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth))
 
 ### Panel 5 - Sidechain Entropy ###
 p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
@@ -87,8 +94,8 @@ p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Sidechain<br>Entropy<br>(kj mol<sup>-1</sup>)')) +
-  theme(legend.title = element_markdown())
+  guides(colour = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth))
 
 ### Panel 6 - Van der Waals Clash ###
 p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
@@ -99,8 +106,8 @@ p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Van der Waals<br>Clashes<br>(kj mol<sup>-1</sup>)')) +
-  theme(legend.title = element_markdown())
+  guides(colour = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth))
 
 ### Assemble Figure ###
 size <- theme(text = element_text(size = 8))
@@ -111,14 +118,14 @@ p4 <- p_surface_accessibility + labs(tag = 'D') + size
 p5 <- p_side_entropy + labs(tag = 'E') + size
 p6 <- p_vdw_clash + labs(tag = 'F') + size
 
-figure2 <- multi_panel_figure(width = 200, height = 200, columns = 6, rows = 5,
+figure2 <- multi_panel_figure(width = 340, height = 200, columns = 6, rows = 5,
                               panel_label_type = 'none', row_spacing = 0.1, column_spacing = 0.1) %>%
-  fill_panel(p1, row = 1:3, column = 1:6) %>%
-  fill_panel(p2, row = 4, column = 1:2) %>%
-  fill_panel(p3, row = 4, column = 3:4) %>%
-  fill_panel(p4, row = 4, column = 5:6) %>%
-  fill_panel(p5, row = 5, column = 1:3) %>%
-  fill_panel(p6, row = 5, column = 4:6)
+  fill_panel(p1, row = 1:5, column = 1:4) %>%
+  fill_panel(p2, row = 1, column = 5:6) %>%
+  fill_panel(p3, row = 2, column = 5:6) %>%
+  fill_panel(p4, row = 3, column = 5:6) %>%
+  fill_panel(p5, row = 4, column = 5:6) %>%
+  fill_panel(p6, row = 5, column = 5:6)
 ggsave('figures/4_figures/figure2.pdf', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 ggsave('figures/4_figures/figure2.png', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 
