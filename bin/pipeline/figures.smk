@@ -10,22 +10,14 @@ rule figure1:
         "data/combined_mutational_scans.tsv",
         expand('data/studies/{study}/{study}.{ext}',
                study=UNFILTERED_STUDIES, ext=('yaml', 'tsv')),
-        "data/studies/firnberg_2014_tem1/firnberg_2014_tem1.tsv",
-        "data/studies/firnberg_2014_tem1/firnberg_2014_tem1.yaml",
-        "data/studies/steinberg_2016_tem1/steinberg_2016_tem1.tsv",
-        "data/studies/steinberg_2016_tem1/steinberg_2016_tem1.yaml",
         "data/studies/roscoe_2013_ubi/roscoe_2013_ubi.tsv",
         "data/studies/roscoe_2013_ubi/roscoe_2013_ubi.yaml",
         "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.tsv",
-        "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml",
-        "figures/4_figures/parts/figure1_norm_schematic.png"
+        "data/studies/roscoe_2014_ubi/roscoe_2014_ubi.yaml"
 
     output:
         "figures/4_figures/figure1.pdf",
-        "figures/4_figures/figure1.png",
-        "figures/4_figures/parts/figure1_norm_schematic_raw.pdf",
-        "figures/4_figures/parts/figure1_norm_schematic_trans.pdf",
-        "figures/4_figures/parts/figure1_norm_schematic_norm.pdf"
+        "figures/4_figures/figure1.png"
 
     log:
         "logs/figure1.log"
