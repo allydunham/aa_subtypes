@@ -29,48 +29,74 @@ cor_subtype_sets <- list(small_aliphatic = c('G1', 'G2', 'A5', 'G3', 'S1'),
 
 ### Panel 1 - Schematic ###
 ## Subparts
-position_profs <- filter(dms, wt %in% c('A', 'C', 'D', 'W', 'Y')) %>%
-  select(study, cluster, position, wt, A:Y) %>%
-  pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
-  mutate(er = clamp(er, 1, -1))
+p_initial_profiles <- map(c('A', 'C', 'D', 'W', 'Y'), ~filter(dms, wt == .) %>%
+                            select(study, cluster, position, wt, A:Y) %>%
+                            extract(1:20, 1:24) %>%
+                            pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+                            mutate(er = clamp(er, 1, -1)) %>%
+                            ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
+                            geom_raster() +
+                            coord_fixed() +
+                            labs(title = .) +
+                            scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                                                 limits = c(min(position_profs$er), -min(position_profs$er))) +
+                            guides(fill = FALSE) +
+                            theme(axis.text = element_blank(),
+                                  axis.title = element_blank(),
+                                  axis.ticks = element_blank(),
+                                  panel.grid.major.y = element_blank())
+  ) %>% set_names(c('A', 'C', 'D', 'W', 'Y'))
 
-p_initial_profiles <- ggplot(position_profs, aes(x = str_c(study, position), y = mut, fill = er)) +
-  geom_raster() +
-  facet_wrap(~wt, nrow = 1, scales = 'free_x') +
-  scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
-                       limits = c(min(position_profs$er), -min(position_profs$er))) +
-  guides(fill = FALSE) +
-  theme(axis.text = element_blank(),
-        axis.title = element_blank(),
+p_a_permissive_profiles <- map(c('AP', 'Rest'), ~filter(dms, wt == 'A') %>%
+                                 mutate(cat = ifelse(cluster == 'AP', 'AP', 'Rest')) %>%
+                                 filter(cat == .x) %>%
+                                 select(study, cluster, position, wt, A:Y) %>%
+                                 extract(1:20, 1:24) %>%
+                                 pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+                                 mutate(er = clamp(er, 1, -1)) %>%
+                                 drop_na(er) %>%
+                                 ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
+                                 geom_raster() +
+                                 coord_fixed() +
+                                 labs(title = .x) +
+                                 scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                                                      limits = c(min(position_profs$er), -min(position_profs$er))) +
+                                 guides(fill = FALSE) +
+                                 theme(axis.text = element_blank(),
+                                       axis.title = element_blank(),
+                                       axis.ticks = element_blank(),
+                                       panel.grid.major.y = element_blank())
+) %>% set_names(c('AP', 'Rest'))
+
+schematic_profiles <- pivot_wider(full_characterisation$profiles, cluster, names_from = 'mut', values_from = 'er') %>% filter(str_starts(cluster, 'A'))
+schematic_distance <- tibble_to_matrix(schematic_profiles, A:Y, row_names = 'cluster') %>% cosine_distance_matrix() %>% as.dist()
+schematic_hc <- hclust(schematic_distance)
+schematic_dend_data <- dendro_data(schematic_hc)
+schematic_branches <- schematic_dend_data$segments
+schematic_leaves <- schematic_dend_data$labels
+p_schematic_dend <- ggplot() +
+  geom_segment(data = schematic_branches, aes(x=x, y=y, xend=xend, yend=yend)) +
+  geom_point(data = schematic_leaves, aes(x=x, y=y, colour=label), shape=19, size=3, show.legend = FALSE) +
+  scale_y_continuous(expand = expansion(mult = 0.15)) +
+  theme(axis.line = element_blank(),
         axis.ticks = element_blank(),
-        strip.text = element_text(size = 6))
-ggsave('figures/4_figures/parts/figure3_cluster_schematic_initial_profiles.pdf', p_initial_profiles, width = 6, height = 2, units = 'cm')
-
-p_a_permissive_profiles <- filter(position_profs, wt == 'A') %>%
-  mutate(cat = ifelse(cluster == 'AP', 'AP', 'Rest')) %>%
-  ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
-  geom_raster() +
-  facet_wrap(~cat, nrow = 1, scales = 'free_x') +
-  scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
-                       limits = c(min(position_profs$er), -min(position_profs$er))) +
-  guides(fill = FALSE) +
-  theme(axis.text = element_blank(),
+        axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank(),
-        strip.text = element_text(size = 6))
-ggsave('figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf', p_a_permissive_profiles, width = 3, height = 2, units = 'cm')
+        panel.grid.major.y = element_blank()) +
+  scale_colour_brewer(type = 'qual', palette = 'Dark2', na.value = 'grey', direction = -1)
 
-(pivot_wider(full_characterisation$profiles, cluster, names_from = 'mut', values_from = 'er') %>%
-    filter(str_starts(cluster, 'A')) %>%
-    plot_profile_dendogram(A:Y) +
-    guides(colour = FALSE)) %>%
-  ggsave('figures/4_figures/parts/figure3_cluster_schematic_dend.pdf', ., width = 10, height = 7, units = 'cm')
+p_schematic_dend_cuts <- p_schematic_dend +
+  annotate('line', x = c(1.8, 2.05), y = c(0.25, 0.26), size=1.5, colour='red') +
+  annotate('line', x = c(3.65, 3.85), y = c(0.16, 0.17), size=1.5, colour='red') +
+  annotate('line', x = c(6.4, 6.6), y = c(0.45, 0.46), size=1.5, colour='red')
 
 ## Full Figure
-p_schematic <- ggplot() +
+#p_schematic <-
+ggplot() +
   geom_blank() +
-  annotation_custom(readPNG('figures/4_figures/parts/figure3_cluster_schematic.png') %>% rasterGrob(interpolate = TRUE),
-                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
+  lims(x = c(0, 1.5), y = c(0, 2)) + 
+  coord_fixed(clip = 'off') +
+  labs(title = 'Clustering Amino Acid ER Profiles')
 
 ### Panel 2 - Cluster Sizes ###
 subtype_size <- group_by(dms, cluster, wt) %>%
