@@ -51,14 +51,10 @@ rule figure3:
     input:
         "data/combined_mutational_scans.tsv",
         "data/subtypes/final_subtypes.tsv",
-        "figures/4_figures/parts/figure3_cluster_schematic.png"
 
     output:
         "figures/4_figures/figure3.pdf",
         "figures/4_figures/figure3.png",
-        "figures/4_figures/parts/figure3_cluster_schematic_initial_profiles.pdf",
-        "figures/4_figures/parts/figure3_cluster_schematic_permissive_profs.pdf",
-        "figures/4_figures/parts/figure3_cluster_schematic_dend.pdf",
         "figures/4_figures/parts/figure3_cor_heatmap.pdf",
         "figures/4_figures/parts/figure3_cor_dendrogram.pdf",
         "figures/4_figures/parts/figure3_cor_set_small_aliphatic.pdf",

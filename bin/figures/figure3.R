@@ -37,35 +37,35 @@ p_initial_profiles <- map(c('A', 'C', 'D', 'W', 'Y'), ~filter(dms, wt == .) %>%
                             ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
                             geom_raster() +
                             coord_fixed() +
-                            labs(title = .) +
                             scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
-                                                 limits = c(min(position_profs$er), -min(position_profs$er))) +
+                                                 limits = c(-1, 1)) +
                             guides(fill = FALSE) +
                             theme(axis.text = element_blank(),
                                   axis.title = element_blank(),
                                   axis.ticks = element_blank(),
-                                  panel.grid.major.y = element_blank())
+                                  panel.grid.major.y = element_blank(),
+                                  plot.margin = unit(c(0, 0, 0, 0), 'mm'))
   ) %>% set_names(c('A', 'C', 'D', 'W', 'Y'))
 
-p_a_permissive_profiles <- map(c('AP', 'Rest'), ~filter(dms, wt == 'A') %>%
-                                 mutate(cat = ifelse(cluster == 'AP', 'AP', 'Rest')) %>%
-                                 filter(cat == .x) %>%
-                                 select(study, cluster, position, wt, A:Y) %>%
-                                 extract(1:20, 1:24) %>%
-                                 pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
-                                 mutate(er = clamp(er, 1, -1)) %>%
-                                 drop_na(er) %>%
-                                 ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
-                                 geom_raster() +
-                                 coord_fixed() +
-                                 labs(title = .x) +
-                                 scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
-                                                      limits = c(min(position_profs$er), -min(position_profs$er))) +
-                                 guides(fill = FALSE) +
-                                 theme(axis.text = element_blank(),
-                                       axis.title = element_blank(),
-                                       axis.ticks = element_blank(),
-                                       panel.grid.major.y = element_blank())
+p_a_profiles <- map(c('AP', 'Rest'), ~filter(dms, wt == 'A') %>%
+                      mutate(cat = ifelse(cluster == 'AP', 'AP', 'Rest')) %>%
+                      filter(cat == .x) %>%
+                      select(study, cluster, position, wt, A:Y) %>%
+                      extract(1:20, 1:24) %>%
+                      pivot_longer(A:Y, names_to = 'mut', values_to = 'er') %>%
+                      mutate(er = clamp(er, 1, -1)) %>%
+                      drop_na(er) %>%
+                      ggplot(aes(x = str_c(study, position), y = mut, fill = er)) +
+                      geom_raster() +
+                      coord_fixed() +
+                      scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
+                                           limits = c(-1, 1)) +
+                      guides(fill = FALSE) +
+                      theme(axis.text = element_blank(),
+                            axis.title = element_blank(),
+                            axis.ticks = element_blank(),
+                            panel.grid.major.y = element_blank(),
+                            plot.margin = unit(c(0, 0, 0, 0), 'mm'))
 ) %>% set_names(c('AP', 'Rest'))
 
 schematic_profiles <- pivot_wider(full_characterisation$profiles, cluster, names_from = 'mut', values_from = 'er') %>% filter(str_starts(cluster, 'A'))
@@ -76,27 +76,82 @@ schematic_branches <- schematic_dend_data$segments
 schematic_leaves <- schematic_dend_data$labels
 p_schematic_dend <- ggplot() +
   geom_segment(data = schematic_branches, aes(x=x, y=y, xend=xend, yend=yend)) +
-  geom_point(data = schematic_leaves, aes(x=x, y=y, colour=label), shape=19, size=3, show.legend = FALSE) +
+  geom_point(data = schematic_leaves, aes(x=x, y=y, colour=label), shape=19, size=2, show.legend = FALSE) +
   scale_y_continuous(expand = expansion(mult = 0.15)) +
   theme(axis.line = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank(),
-        panel.grid.major.y = element_blank()) +
+        panel.grid.major.y = element_blank(),
+        plot.background = element_blank(),
+        panel.background = element_blank()) +
   scale_colour_brewer(type = 'qual', palette = 'Dark2', na.value = 'grey', direction = -1)
 
 p_schematic_dend_cuts <- p_schematic_dend +
-  annotate('line', x = c(1.8, 2.05), y = c(0.25, 0.26), size=1.5, colour='red') +
-  annotate('line', x = c(3.65, 3.85), y = c(0.16, 0.17), size=1.5, colour='red') +
-  annotate('line', x = c(6.4, 6.6), y = c(0.45, 0.46), size=1.5, colour='red')
+  annotate('line', x = c(1.6, 2.25), y = c(0.27, 0.28), size=1.2, colour='red') +
+  annotate('line', x = c(3.45, 4.05), y = c(0.17, 0.18), size=1.2, colour='red') +
+  annotate('line', x = c(6.2, 6.8), y = c(0.47, 0.48), size=1.2, colour='red')
 
 ## Full Figure
-#p_schematic <-
-ggplot() +
+p_schematic <- ggplot() +
   geom_blank() +
-  lims(x = c(0, 1.5), y = c(0, 2)) + 
+  lims(x = c(0, 1.6), y = c(0, 2)) + 
   coord_fixed(clip = 'off') +
-  labs(title = 'Clustering Amino Acid ER Profiles')
+  labs(title = 'Clustering Amino Acid ER Profiles') +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_blank())+
+  
+  # Initial profile heatmaps
+  annotation_custom(ggplotGrob(p_initial_profiles$A), xmin = 0.08, xmax = 0.38, ymin = 1.6, ymax = 2) +
+  annotate('text', x = 0.24, y = 2, label = 'A') +
+  annotation_custom(ggplotGrob(p_initial_profiles$C), xmin = 0.4, xmax = 0.7, ymin = 1.6, ymax = 2) +
+  annotate('text', x = 0.56, y = 2, label = 'C') +
+  annotation_custom(ggplotGrob(p_initial_profiles$D), xmin = 0.72, xmax = 1.02, ymin = 1.6, ymax = 2) +
+  annotate('text', x = 0.88, y = 2, label = 'D') +
+  annotate('point', x = c(1.04, 1.07, 1.1), y = 1.8, shape = 20) +
+  annotation_custom(ggplotGrob(p_initial_profiles$W), xmin = 1.12, xmax = 1.42, ymin = 1.6, ymax = 2) +
+  annotate('text', x = 1.28, y = 2, label = 'W') +
+  annotation_custom(ggplotGrob(p_initial_profiles$Y), xmin = 1.42, xmax = 1.72, ymin = 1.6, ymax = 2) +
+  annotate('text', x = 1.58, y = 2, label = 'Y') +
+  
+  # Connecting arrows
+  annotate('segment', x = 0.25, xend = 0.25, y = 1.66, yend = 1.6) +
+  annotate('curve', x = 0.25, xend = 0.32, y = 1.6, yend = 1.53, curvature = 0.35) +
+  annotate('curve', x = 0.32, xend = 0.41, y = 1.53, yend = 1.45, curvature = -0.35) +
+  annotate('segment', x = 0.41, xend = 0.41, y = 1.44, yend = 1.43,
+           arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
+  annotate('curve', x = 0.25, xend = 0.18, y = 1.6, yend = 1.53, curvature = -0.35) +
+  annotate('curve', x = 0.18, xend = 0.11, y = 1.53, yend = 1.45, curvature = 0.35) +
+  annotate('segment', x = 0.11, xend = 0.11, y = 1.44, yend = 1.43,
+           arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
+  
+  # Permssive / Other A positions
+  annotation_custom(ggplotGrob(p_a_profiles$AP), xmin = -0.05, xmax = 0.25, ymin = 0.95, ymax = 1.45) +
+  annotate('text', x = 0.11, y = 1.4, label = 'AP') +
+  annotation_custom(ggplotGrob(p_a_profiles$Rest), xmin = 0.25, xmax = 0.55, ymin = 0.95, ymax = 1.45) +
+  annotate('text', x = 0.41, y = 1.4, label = 'Rest') +
+  
+  # Dendrograms and arrows
+  annotation_custom(ggplotGrob(p_schematic_dend), xmin = 0, xmax = 0.5, ymin = 0.55, ymax = 0.95) +
+  annotate('curve', x = 0.41, xend = 0.34, y = 1.05, yend = 1, curvature = -0.35) +
+  annotate('curve', x = 0.34, xend = 0.27, y = 1, yend = 0.93, curvature = 0.35) +
+  annotate('segment', x = 0.27, xend = 0.27, y = 0.92, yend = 0.91,
+           arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
+  
+  annotation_custom(ggplotGrob(p_schematic_dend_cuts), xmin = 0, xmax = 0.5, ymin = 0.05, ymax = 0.45) +
+  annotate('segment', x = 0.27, xend = 0.27, y = 0.575, yend = 0.425, arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
+  
+  # Text
+  annotate('text', x = 0.8, y = 1.5, label = '1. Process each AA independantly', hjust = 0) +
+  annotate('text', x = 0.8, y = 1.25, label = '2. Split permissive positions (|ER| < 0.4)', hjust = 0) +
+  annotate('text', x = 0.8, y = 0.9, label = '3.', hjust = 0, vjust = 1) +
+  annotate('TextBox', x = 0.85, y = 0.9, width = unit(0.7, 'npc'), hjust = 0, vjust = 0.875, fill = NA, box.colour = NA,
+           label = 'Heirarchical clustering using cosine distance between PC2:20 profiles and average linkage') +
+  annotate('text', x = 0.8, y = 0.4, label = '4.', hjust = 0) +
+  annotate('TextBox', x = 0.85, y = 0.4, width = unit(0.7, 'npc'), hjust = 0, vjust = 0.875, fill = NA, box.colour = NA,
+           label = 'Hybrid dynamic tree cutting to determine subtypes, with deepSplit = 0 or 1 depending on the amino acid')
 
 ### Panel 2 - Cluster Sizes ###
 subtype_size <- group_by(dms, cluster, wt) %>%
