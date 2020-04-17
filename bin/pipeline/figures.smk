@@ -79,3 +79,57 @@ rule figure4:
 
     shell:
         "Rscript bin/figures/figure4.R &> {log}"
+
+rule figure5:
+    """
+    Figure 5
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figure5.pdf",
+        "figures/4_figures/figure5.png"
+
+    log:
+        "logs/figure5.log"
+
+    shell:
+        "Rscript bin/figures/figure5.R &> {log}"
+
+rule figure6:
+    """
+    Figure 6
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figure6.pdf",
+        "figures/4_figures/figure6.png"
+
+    log:
+        "logs/figure6.log"
+
+    shell:
+        "Rscript bin/figures/figure6.R &> {log}"
+
+rule figure7:
+    """
+    Figure 7
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figure7.pdf",
+        "figures/4_figures/figure7.png"
+
+    log:
+        "logs/figure7.log"
+
+    shell:
+        "Rscript bin/figures/figure7.R &> {log}"

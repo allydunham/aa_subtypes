@@ -1,0 +1,103 @@
+#!/usr/bin/env Rscript
+# Produce figure 7 (Tyrosine Subtype Examples)
+source('src/config.R')
+source('src/subtype_characterisation.R')
+
+dms <- full_join(read_tsv('data/subtypes/final_subtypes.tsv'),
+                 read_tsv('data/combined_mutational_scans.tsv'),
+                 by = c('study', 'gene', 'position', 'wt')) %>%
+  arrange(study, position)
+
+full_characterisation <- full_cluster_characterisation(dms)
+n_clusters <- nrow(full_characterisation$summary)
+
+er_limits <- c(min(full_characterisation$profiles$er), -min(full_characterisation$profiles$er))
+
+plot_profiles <- function(clusters, legend = FALSE){
+  filter(full_characterisation$profiles, cluster %in% clusters) %>%
+    mutate(mut = add_markdown(mut, AA_COLOURS),
+           cluster = add_markdown(cluster, cluster_number_colourmap(cluster))) %>%
+    ggplot(aes(x = mut, y = cluster, fill = er)) +
+    geom_raster(show.legend = legend) +
+    coord_fixed() +
+    scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction, limits = er_limits) +
+    guides(fill = guide_colourbar(title = 'Normalised ER')) + 
+    theme(axis.text.x = element_markdown(),
+          axis.text.y = element_markdown(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          panel.grid.major.y = element_blank())
+}
+
+p_tyr_profiles <- plot_profiles(c('Y1', 'Y2', 'Y3', 'Y4', 'YP'))
+
+p_tyr_surface_acc <- filter(dms, cluster %in% c('Y1', 'Y2', 'Y3', 'Y4', 'YP')) %>%
+  ggplot(aes(x = all_atom_abs, y = ..scaled.., colour = cluster)) +
+  geom_line(stat = 'density', show.legend = FALSE) +
+  scale_colour_brewer(type = 'qual', palette = 'Set1') +
+  labs(x = 'Surface Accessibility (All Atom Abs)', y = 'Scaled Density') +
+  theme(legend.title = element_blank())
+
+tyr_dssp <- filter(dms, cluster %in% c('Y1', 'Y2', 'Y3', 'Y4', 'YP')) %>%
+  select(cluster, study, position, starts_with('ss_')) %>%
+  pivot_longer(starts_with('ss_'), names_to = 'term', names_prefix = 'ss_', values_to = 'p') %>%
+  group_by(cluster, study, position) %>%
+  summarise(ss = DSSP_CLASSES_PLOTMATH[term[which.max(p)]]) %>%
+  ungroup() %>%
+  count(cluster, ss) %>%
+  group_by(cluster) %>%
+  mutate(prop = n / sum(n))
+
+p_tyr_dssp <- ggplot(tyr_dssp, aes(x = cluster, y = prop, fill = ss)) +
+  geom_col() +
+  scale_fill_brewer(labels = function(x){parse(text=x)}, type = 'qual', palette = 'Dark2') +
+  coord_flip() +
+  labs(y = 'Proportion', x = '') +
+  guides(fill = guide_legend(title = '', reverse = TRUE)) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = 'top')
+
+p_tyr_haem <- ggplot() +
+  geom_blank() +
+  annotation_custom(readPNG('figures/4_figures/position_examples/cbs_tyr_haem.png') %>% rasterGrob(interpolate = TRUE),
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
+
+p_tyr_pi <- ggplot() +
+  geom_blank() +
+  annotation_custom(readPNG('figures/4_figures/position_examples/tp53_tyr_pi.png') %>% rasterGrob(interpolate = TRUE),
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
+
+### Assemble figure ###
+size <- theme(text = element_text(size = 8))
+er_legend <- plot_profiles('A1', legend = TRUE) %>% get_legend() %>% as_ggplot() + size
+
+figure7 <- ggplot() +
+  geom_blank() +
+  lims(x = c(0, 1), y = c(0, 1)) +
+  coord_fixed() +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.grid.major.x = element_line(colour = 'grey', linetype = 'dotted')) +
+  size + 
+  labs(tag = 'C') +
+  annotation_custom(ggplotGrob(p_tyr_profiles + size), xmin = 0, xmax = 1, ymin = 0.38, ymax = 0.62) + 
+  annotation_custom(ggplotGrob(p_tyr_surface_acc + size), xmin = 0.025, xmax = 0.475, ymin = 0.75, ymax = 1) +
+  annotate('text', x = 0.25, y = 0.7, label = str_wrap('Permissive positions are surface accessible', 30)) +
+  annotation_custom(ggplotGrob(p_tyr_dssp + size), xmin = 0.525, xmax = 0.975, ymin = 0.75, ymax = 1) + 
+  annotation_raster(readPNG('figures/4_figures/position_examples/cbs_tyr_haem.png'), interpolate = TRUE,
+                    xmin = 0.025, xmax = 0.225, ymin = 0.15, ymax = 0.35) +
+  annotate('text', x = 0.125, y = 0.125, label = str_wrap('Y1 ligand binding', 30)) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/tp53_tyr_pi.png'), interpolate = TRUE,
+                    xmin = 0.275, xmax = 0.475, ymin = 0.15, ymax = 0.35) +
+  annotate('text', x = 0.375, y = 0.125, label = str_wrap('Pi orbital interactions', 30)) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/aph3ii_tyr_buried.png'), interpolate = TRUE,
+                    xmin = 0.525, xmax = 0.725, ymin = 0.15, ymax = 0.35) +
+  annotate('text', x = 0.625, y = 0.125, label = str_wrap('Y2 positions are buried', 30)) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/pab1_tyr_not_proline.png'), interpolate = TRUE,
+                    xmin = 0.775, xmax = 0.975, ymin = 0.15, ymax = 0.35) +
+  annotate('text', x = 0.875, y = 0.125, label = str_wrap('Y4 maintaining backbone orientation', 30))
+  
+ggsave('figures/4_figures/figure7.pdf', figure7, width = 200, height = 200, units = 'mm')
+ggsave('figures/4_figures/figure7.png', figure7, width = 200, height = 200, units = 'mm')
