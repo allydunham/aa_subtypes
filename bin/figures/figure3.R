@@ -105,16 +105,16 @@ p_schematic <- ggplot() +
   
   # Initial profile heatmaps
   annotation_custom(ggplotGrob(p_initial_profiles$A), xmin = 0.08, xmax = 0.38, ymin = 1.6, ymax = 2) +
-  annotate('text', x = 0.24, y = 2, label = 'A') +
+  annotate('richtext', x = 0.24, y = 2, label = "<span style='font-size:8pt'>A</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   annotation_custom(ggplotGrob(p_initial_profiles$C), xmin = 0.4, xmax = 0.7, ymin = 1.6, ymax = 2) +
-  annotate('text', x = 0.56, y = 2, label = 'C') +
+  annotate('richtext', x = 0.56, y = 2, label = "<span style='font-size:8pt'>C</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   annotation_custom(ggplotGrob(p_initial_profiles$D), xmin = 0.72, xmax = 1.02, ymin = 1.6, ymax = 2) +
-  annotate('text', x = 0.88, y = 2, label = 'D') +
+  annotate('richtext', x = 0.88, y = 2, label = "<span style='font-size:8pt'>D</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   annotate('point', x = c(1.04, 1.07, 1.1), y = 1.8, shape = 20) +
   annotation_custom(ggplotGrob(p_initial_profiles$W), xmin = 1.12, xmax = 1.42, ymin = 1.6, ymax = 2) +
-  annotate('text', x = 1.28, y = 2, label = 'W') +
+  annotate('richtext', x = 1.28, y = 2, label = "<span style='font-size:8pt'>W</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   annotation_custom(ggplotGrob(p_initial_profiles$Y), xmin = 1.42, xmax = 1.72, ymin = 1.6, ymax = 2) +
-  annotate('text', x = 1.58, y = 2, label = 'Y') +
+  annotate('richtext', x = 1.58, y = 2, label = "<span style='font-size:8pt'>Y</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   
   # Connecting arrows
   annotate('segment', x = 0.25, xend = 0.25, y = 1.66, yend = 1.6) +
@@ -129,9 +129,9 @@ p_schematic <- ggplot() +
   
   # Permssive / Other A positions
   annotation_custom(ggplotGrob(p_a_profiles$AP), xmin = -0.05, xmax = 0.25, ymin = 0.95, ymax = 1.45) +
-  annotate('text', x = 0.11, y = 1.4, label = 'AP') +
+  annotate('richtext', x = 0.11, y = 1.4, label = "<span style='font-size:8pt'>AP</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   annotation_custom(ggplotGrob(p_a_profiles$Rest), xmin = 0.25, xmax = 0.55, ymin = 0.95, ymax = 1.45) +
-  annotate('text', x = 0.41, y = 1.4, label = 'Rest') +
+  annotate('richtext', x = 0.41, y = 1.4, label = "<span style='font-size:8pt'>Rest</span>", fill = NA, label.colour = NA, label.padding = unit(c(0, 0, 0, 0), "pt")) +
   
   # Dendrograms and arrows
   annotation_custom(ggplotGrob(p_schematic_dend), xmin = 0, xmax = 0.5, ymin = 0.55, ymax = 0.95) +
@@ -144,14 +144,22 @@ p_schematic <- ggplot() +
   annotate('segment', x = 0.27, xend = 0.27, y = 0.575, yend = 0.425, arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
   
   # Text
-  annotate('text', x = 0.8, y = 1.5, label = '1. Process each AA independantly', hjust = 0) +
-  annotate('text', x = 0.8, y = 1.25, label = '2. Split permissive positions (|ER| < 0.4)', hjust = 0) +
-  annotate('text', x = 0.8, y = 0.9, label = '3.', hjust = 0, vjust = 1) +
-  annotate('TextBox', x = 0.85, y = 0.9, width = unit(0.7, 'npc'), hjust = 0, vjust = 0.875, fill = NA, box.colour = NA,
-           label = 'Heirarchical clustering using cosine distance between PC2:20 profiles and average linkage') +
-  annotate('text', x = 0.8, y = 0.4, label = '4.', hjust = 0) +
-  annotate('TextBox', x = 0.85, y = 0.4, width = unit(0.7, 'npc'), hjust = 0, vjust = 0.875, fill = NA, box.colour = NA,
-           label = 'Hybrid dynamic tree cutting to determine subtypes, with deepSplit = 0 or 1 depending on the amino acid')
+  annotate('TextBox', x = 0.75, y = 1.55, hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>1.<br></span>") +
+  annotate('TextBox', x = 0.85, y = 1.55, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>Process each AA independantly<br></span>") +
+  annotate('TextBox', x = 0.75, y = 1.25, hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>2.<br></span>") +
+  annotate('TextBox', x = 0.85, y = 1.25, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>Split permissive positions (|ER| < 0.4)<br></span>") +
+  annotate('TextBox', x = 0.75, y = 0.9, hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>3.<br></span>") +
+  annotate('TextBox', x = 0.85, y = 0.9, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>Heirarchical clustering using cosine distance between PC2:20 profiles and average linkage<br></span>") +
+  annotate('TextBox', x = 0.75, y = 0.4, hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>4.<br></span>") +
+  annotate('TextBox', x = 0.85, y = 0.4, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, box.padding = unit(c(0, 0, 0, 0), "pt"),
+           label = "<span style='font-size:8pt'>Hybrid dynamic tree cutting to determine subtypes, with deepSplit = 0 or 1 depending on the amino acid<br></span>")
 
 ### Panel 2 - Cluster Sizes ###
 subtype_size <- group_by(dms, cluster, wt) %>%
