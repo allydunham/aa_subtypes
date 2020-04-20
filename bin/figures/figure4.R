@@ -49,7 +49,8 @@ p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), !is.na(disulfide)) %>%
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   theme(axis.text.y = element_markdown(),
         panel.grid.major.y = element_blank(),
-        plot.margin = unit(c(0.05, 0.05, 0.05, 0.22), 'npc'))
+        plot.margin = unit(c(0.05, 0.05, 0.05, 0.22), 'npc'),
+        plot.tag.position = c(0, 1))
 
 p_ligand_ex <- ggplot() +
   geom_blank() +
@@ -63,41 +64,34 @@ p_ligand_ex <- ggplot() +
         axis.ticks = element_blank(),
         panel.grid.major.y = element_blank())
 
-p_zinc_ex <- ggplot() +
+p_aromatic_ex <- ggplot() +
   geom_blank() +
+  lims(x = c(0, 1.9), y = c(0, 0.9)) +
   coord_fixed() +
-  annotation_raster(readPNG('figures/4_figures/position_examples/gal4_cys_zinc.png'), interpolate = TRUE, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
-
-p_aromatic_ex1 <- ggplot() +
-  geom_blank() +
-  coord_fixed() +
-  annotation_raster(readPNG('figures/4_figures/position_examples/np_cys_aromatic.png'), interpolate = TRUE, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
-
-p_aromatic_ex2 <- ggplot() +
-  geom_blank() +
-  coord_fixed() +
-  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_cys_aromatic.png'), interpolate = TRUE, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf)
+  annotation_raster(readPNG('figures/4_figures/position_examples/np_cys_aromatic.png'), interpolate = TRUE, xmin=0, xmax=0.9, ymin=0, ymax=0.9) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_cys_aromatic.png'), interpolate = TRUE, xmin=1, xmax=1.9, ymin=0, ymax=0.9) +
+  labs(title = 'C1/C2 Aromatic Interaction') +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_blank())
 
 ### Assemble figure ###
 size <- theme(text = element_text(size = 8))
 
-p1 <- p_profiles + size + labs(tag = 'A')
-p2_ex <- p_disulphide_ex + size + labs(tag = 'B')
-p2_bars <- p_disulphide + size + labs(tag = ' ')
-p3 <- p_surface_acc + size + labs(tag = 'C')
-p4 <- p_zinc_ex + size + labs(tag = 'D')
-p5_1 <- p_aromatic_ex1 + size + labs(tag = 'E')
-p5_2 <- p_aromatic_ex2 + size + labs(tag = ' ')
+p1 <- p_profiles + size
+p2 <- p_disulphide + size
+p3 <- p_surface_acc + size
+p4 <- p_ligand_ex + size
+p5 <- p_aromatic_ex + size
  
-figure4 <- multi_panel_figure(width = 200, height = 167, columns = 6, rows = 5,
-                              panel_label_type = 'none', row_spacing = 1, column_spacing = 1) %>%
-  fill_panel(p1, row = 1:2, column = 1:6) %>%
-  fill_panel(p2_ex, row = 3, column = 1) %>%
-  fill_panel(p2_bars, row = 3, column = 2:3) %>%
-  fill_panel(p3, row = 3, column = 4:6) %>%
-  fill_panel(p4, row = 4:5, column = 1:2) %>%
-  fill_panel(p5_1, row = 4:5, column = 3:4) %>%
-  fill_panel(p5_2, row = 4:5, column = 5:6)
+figure4 <- multi_panel_figure(width = 200, height = 167, columns = 2, rows = 3,
+                              panel_label_type = 'upper-alpha', row_spacing = 5, column_spacing = 5) %>%
+  fill_panel(p1, row = 1, column = 1:2) %>%
+  fill_panel(p2, row = 2, column = 1) %>%
+  fill_panel(p3, row = 2, column = 2) %>%
+  fill_panel(p4, row = 3, column = 1) %>%
+  fill_panel(p5, row = 3, column = 2)
 
-ggsave('figures/4_figures/figure4.pdf', figure4, figure_width(figure4), height = figure_height(figure4), units = 'mm')
-ggsave('figures/4_figures/figure4.png', figure4, figure_width(figure4), height = figure_height(figure4), units = 'mm')
+ggsave('figures/4_figures/figure4.pdf', figure4, width = figure_width(figure4), height = figure_height(figure4), units = 'mm')
+ggsave('figures/4_figures/figure4.png', figure4, width = figure_width(figure4), height = figure_height(figure4), units = 'mm')
