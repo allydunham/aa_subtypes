@@ -49,8 +49,7 @@ p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), !is.na(disulfide)) %>%
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   theme(axis.text.y = element_markdown(),
         panel.grid.major.y = element_blank(),
-        plot.margin = unit(c(0.05, 0.05, 0.05, 0.22), 'npc'),
-        plot.tag.position = c(0, 1))
+        plot.margin = unit(c(0.05, 0.05, 0.05, 0.22), 'npc'))
 
 p_ligand_ex <- ggplot() +
   geom_blank() +
