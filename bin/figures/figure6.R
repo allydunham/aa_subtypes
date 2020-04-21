@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Produce figure 6 (Large/Small Subtype Examples)
+# Produce figure 6 (Large/Small Aliphatic Subtype Examples)
 source('src/config.R')
 source('src/subtype_characterisation.R')
 
@@ -35,7 +35,7 @@ subtype_labs <- map(levels(hydro_profiles$group),
   set_names(group_labs) %>% unlist()
 
 p_profiles <- ggplot(hydro_profiles, aes(x = mut, y = as.integer(group), fill = er)) +
-  geom_raster() +
+  geom_tile(colour = 'grey') +
   coord_fixed() +
   scale_y_continuous(breaks = 1:length(group_labs), labels = group_labs,
                      sec.axis = sec_axis(~., breaks = 1:length(subtype_labs), labels = subtype_labs)) +
@@ -60,13 +60,13 @@ p_foldx_entropy_sidechain <- filter(dms, cluster %in% c(large_hydrophobics, smal
   scale_x_continuous(expand = expansion(0), limits = c(0, 7)) +
   coord_fixed(ratio = 2, clip = 'off') +
   scale_fill_brewer(type = 'qual', palette = 'Dark2', direction = -1) +
-  labs(y = parse(text = str_c(FOLDX_TERMS_PLOTMATH['entropy_sidechain'],"~Delta*Delta*'G (kj mol'^-1*')'"))) +
+  labs(y = expression(Delta*Delta*'G (kj mol'^-1*')'), title = parse(text = FOLDX_TERMS_PLOTMATH['entropy_sidechain'])) +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
         plot.margin = unit(c(0,0,0,0), 'mm'))
-  
+
 p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = van_der_waals_clashes, fill = group)) +
@@ -77,7 +77,7 @@ p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, 
   scale_x_continuous(expand = expansion(0), limits = c(0, 7)) +
   coord_fixed(ratio = 0.15, clip = 'off') +
   scale_fill_brewer(type = 'qual', palette = 'Dark2', direction = -1) +
-  labs(y = parse(text = str_c(FOLDX_TERMS_PLOTMATH['van_der_waals_clashes'],"~Delta*Delta*'G (kj mol'^-1*')'"))) +
+  labs(y = expression(Delta*Delta*'G (kj mol'^-1*')'), title = parse(text = FOLDX_TERMS_PLOTMATH['van_der_waals_clashes'])) +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
@@ -94,7 +94,7 @@ p_foldx_solvation_hydrophobic <- filter(dms, cluster %in% c(large_hydrophobics, 
   scale_x_continuous(expand = expansion(0), limits = c(0, 7)) +
   coord_fixed(ratio = 0.75, clip = 'off') +
   scale_fill_brewer(type = 'qual', palette = 'Dark2', direction = -1) +
-  labs(y = parse(text = str_c(FOLDX_TERMS_PLOTMATH['solvation_hydrophobic'],"~Delta*Delta*'G (kj mol'^-1*')'"))) +
+  labs(y = expression(Delta*Delta*'G (kj mol'^-1*')'), title = parse(text = FOLDX_TERMS_PLOTMATH['solvation_hydrophobic'])) +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
@@ -111,7 +111,24 @@ p_foldx_van_der_waals <- filter(dms, cluster %in% c(large_hydrophobics, small_hy
   scale_x_continuous(expand = expansion(0), limits = c(0, 7)) +
   coord_fixed(clip = 'off') +
   scale_fill_brewer(type = 'qual', palette = 'Dark2', direction = -1) +
-  labs(y = parse(text = str_c(FOLDX_TERMS_PLOTMATH['van_der_waals'],"~Delta*Delta*'G (kj mol'^-1*')'"))) +
+  labs(y = expression(Delta*Delta*'G (kj mol'^-1*')'), title = parse(text = FOLDX_TERMS_PLOTMATH['van_der_waals'])) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        plot.margin = unit(c(0,0,0,0), 'mm'))
+
+p_sa <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
+  mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
+  ggplot(aes(x = as.integer(group), y = all_atom_abs, fill = group)) +
+  geom_boxplot(show.legend = FALSE) +
+  annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
+  annotation_raster(readPNG('figures/4_figures/position_examples/tem1_trp_surface.png'), interpolate = TRUE, xmin=4, xmax=8, ymin=41.667, ymax=208.333) +
+  scale_y_continuous(limits = c(0, 250)) +
+  scale_x_continuous(expand = expansion(0), limits = c(0, 7)) +
+  coord_fixed(ratio = 0.024, clip = 'off') +
+  scale_fill_brewer(type = 'qual', palette = 'Dark2', direction = -1) +
+  labs(y = 'All Atom Abs.', title = 'Surface Accessibility') +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
@@ -125,7 +142,7 @@ p1 <- p_profiles + size
 p2 <- p_foldx_entropy_sidechain + size
 p3 <- p_foldx_van_der_waals_clashes + size
 p4 <- p_foldx_van_der_waals + size
-p5 <- p_foldx_solvation_hydrophobic + size
+p5 <- p_sa + size
 
 figure6 <- multi_panel_figure(width = 160, height = 150, columns = 2, rows = 3,
                               panel_label_type = 'upper-alpha', row_spacing = 5, column_spacing = 5) %>%
