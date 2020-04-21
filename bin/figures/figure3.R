@@ -230,7 +230,7 @@ annotate_set_rect <- function(set){
 }
 
 p_cor_heatmap <- ggplot(cors, aes(x=as.integer(cluster1), y=as.integer(cluster2), fill=cor)) +
-  geom_tile() +
+  geom_tile(colour = 'grey') +
   geom_segment(data = branches, aes(x=-5*y-1, y=x, xend=-5*yend-1, yend=xend), inherit.aes = FALSE) +
   geom_point(data = leaves, aes(x=-5*y-1, y=x, colour = type), shape=19, inherit.aes = FALSE) +
   annotate_set_rect("Small Aliphatic") +
@@ -263,7 +263,7 @@ plot_profile_block <- function(set, guide=FALSE){
     mutate(cluster = factor(cluster, levels = levels(leaves$label)[levels(leaves$label) %in% set]),
            mut = factor(mut)) %>%
     ggplot(aes(x = mut, y = cluster, fill = er)) +
-    geom_raster() +
+    geom_tile(colour = 'grey') +
     coord_fixed() +
     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
                          limits = c(-1, 1)) +
