@@ -16,13 +16,20 @@ er_limits <- c(min(full_characterisation$profiles$er), -min(full_characterisatio
 charge_groups <- c(D1='Negative', D2='Polar', D3='Not Proline', E1='Negative', E2='Not Proline', E3='Polar',
                    K1='Positive', K2='Not Negative', K3='Not Proline', R1='Positive', R2='Not Proline', R3='Not Negative')
 
+charge_group_order <- mutate(dms, g = charge_groups[cluster]) %>%
+  drop_na(g) %>%
+  group_by(g) %>%
+  summarise(f = mean(electrostatics, na.rm = TRUE)) %>%
+  arrange(f) %>%
+  pull(g)
+
 charge_profiles <- filter(full_characterisation$profiles, cluster %in% names(charge_groups)) %>%
   mutate(group = charge_groups[cluster]) %>%
   group_by(group, mut) %>%
   summarise(er = mean(er)) %>%
   ungroup() %>%
   mutate(mut = add_markdown(mut, AA_COLOURS),
-         group = as.factor(group))
+         group = factor(group, levels = charge_group_order))
 
 group_labs <- levels(charge_profiles$group)
 subtype_labs <- c(Negative="<span style = 'color:#e41a1c'>D1</span>, <span style = 'color:#e41a1c'>E1</span>",
@@ -32,7 +39,7 @@ subtype_labs <- c(Negative="<span style = 'color:#e41a1c'>D1</span>, <span style
                   `Not Negative`="<span style = 'color:#377eb8'>K2</span>, <span style = 'color:#4daf4a'>R3</span>")[group_labs]
 
 p_profiles <- ggplot(charge_profiles, aes(x = mut, y = as.integer(group), fill = er)) +
-  geom_raster() +
+  geom_tile(colour = 'grey') +
   coord_fixed() +
   scale_y_continuous(breaks = 1:length(group_labs), labels = group_labs,
                      sec.axis = sec_axis(~., breaks = 1:length(subtype_labs), labels = subtype_labs)) +
@@ -47,7 +54,7 @@ p_profiles <- ggplot(charge_profiles, aes(x = mut, y = as.integer(group), fill =
         legend.title = element_text(vjust = 0.85))
 
 p_foldx <- filter(dms, cluster %in% names(charge_groups)) %>%
-  mutate(group = charge_groups[cluster]) %>%
+  mutate(group = factor(charge_groups[cluster], levels = charge_group_order)) %>%
   ggplot(aes(x = group, y = electrostatics)) +
   geom_boxplot(show.legend = FALSE, fill = '#377eb8', outlier.shape = 20) +
   geom_hline(yintercept = 0, linetype = 'dotted', colour = 'black') +
