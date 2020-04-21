@@ -17,7 +17,7 @@ p_profiles <- filter(full_characterisation$profiles, cluster %in% c('Y1', 'Y2', 
   mutate(mut = add_markdown(mut, AA_COLOURS),
          cluster = add_markdown(cluster, cluster_number_colourmap(cluster))) %>%
   ggplot(aes(x = mut, y = cluster, fill = er)) +
-  geom_raster(show.legend = TRUE) +
+  geom_tile(colour = 'grey') +
   coord_fixed() +
   scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction, limits = er_limits) +
   guides(fill = guide_colourbar(title = 'Normalised ER', direction = 'horizontal')) + 
