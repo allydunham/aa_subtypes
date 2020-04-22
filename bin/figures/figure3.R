@@ -67,7 +67,7 @@ schematic_branches <- schematic_dend_data$segments
 schematic_leaves <- schematic_dend_data$labels
 p_schematic_dend <- ggplot() +
   geom_segment(data = schematic_branches, aes(x=x, y=y, xend=xend, yend=yend)) +
-  geom_point(data = schematic_leaves, aes(x=x, y=y, colour=label), shape=19, size=2, show.legend = FALSE) +
+  geom_point(data = schematic_leaves, aes(x=x, y=y, colour=label), shape=20, size=1.5, show.legend = FALSE) +
   scale_y_continuous(expand = expansion(mult = 0.15)) +
   theme(axis.line = element_blank(),
         axis.ticks = element_blank(),
@@ -86,71 +86,71 @@ p_schematic_dend_cuts <- p_schematic_dend +
 ## Full Figure
 p_schematic <- ggplot() +
   geom_blank() +
-  lims(x = c(0, 1.6), y = c(0, 2)) + 
+  lims(x = c(0, 1.1), y = c(0, 1.1)) + 
   coord_fixed(clip = 'off') +
-  labs(title = 'Clustering Amino Acid ER Profiles') +
   theme(axis.title = element_blank(),
         axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.grid.major.y = element_blank()) +
+  annotate('richtext', x = 0.5, y = 1.1, label = "<span style='font-size:9pt'>Clustering ER Profiles</span>", fill = NA, label.colour = NA) +
   
   # Initial profile heatmaps
-  annotation_custom(ggplotGrob(p_initial_profiles$A), xmin = 0.08, xmax = 0.38, ymin = 1.6, ymax = 2) +
-  annotate('richtext', x = 0.24, y = 2, label = "<span style='font-size:9pt'>A</span>", fill = NA, label.colour = NA) +
-  annotation_custom(ggplotGrob(p_initial_profiles$C), xmin = 0.4, xmax = 0.7, ymin = 1.6, ymax = 2) +
-  annotate('richtext', x = 0.56, y = 2, label = "<span style='font-size:9pt'>C</span>", fill = NA, label.colour = NA) +
-  annotation_custom(ggplotGrob(p_initial_profiles$D), xmin = 0.72, xmax = 1.02, ymin = 1.6, ymax = 2) +
-  annotate('richtext', x = 0.88, y = 2, label = "<span style='font-size:9pt'>D</span>", fill = NA, label.colour = NA) +
-  annotate('point', x = c(1.04, 1.07, 1.1), y = 1.8, shape = 20) +
-  annotation_custom(ggplotGrob(p_initial_profiles$W), xmin = 1.12, xmax = 1.42, ymin = 1.6, ymax = 2) +
-  annotate('richtext', x = 1.28, y = 2, label = "<span style='font-size:9pt'>W</span>", fill = NA, label.colour = NA) +
-  annotation_custom(ggplotGrob(p_initial_profiles$Y), xmin = 1.42, xmax = 1.72, ymin = 1.6, ymax = 2) +
-  annotate('richtext', x = 1.58, y = 2, label = "<span style='font-size:9pt'>Y</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_initial_profiles$A), xmin = 0.14, xmax = 0.29, ymin = 0.8, ymax = 1) +
+  annotate('richtext', x = 0.22, y = 1.01, label = "<span style='font-size:8pt'>A</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_initial_profiles$C), xmin = 0.3, xmax = 0.45, ymin = 0.8, ymax = 1) +
+  annotate('richtext', x = 0.38, y = 1.01, label = "<span style='font-size:8pt'>C</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_initial_profiles$D), xmin = 0.46, xmax = 0.61, ymin = 0.8, ymax = 1) +
+  annotate('richtext', x = 0.54, y = 1.01, label = "<span style='font-size:8pt'>D</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_initial_profiles$W), xmin = 0.66, xmax = 0.81, ymin = 0.8, ymax = 1) +
+  annotate('richtext', x = 0.74, y = 1.01, label = "<span style='font-size:8pt'>W</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_initial_profiles$Y), xmin = 0.81, xmax = 0.96, ymin = 0.8, ymax = 1) +
+  annotate('richtext', x = 0.89, y = 1.01, label = "<span style='font-size:8pt'>Y</span>", fill = NA, label.colour = NA) +
+  annotate('point', x = c(0.62, 0.635, 0.65), y = 0.9, shape = 20, size = 0.8) +
   
   # Connecting arrows
-  annotate('segment', x = 0.25, xend = 0.25, y = 1.66, yend = 1.62) +
-  annotate('curve', x = 0.25, xend = 0.32, y = 1.62, yend = 1.55, curvature = 0.35) +
-  annotate('curve', x = 0.32, xend = 0.41, y = 1.55, yend = 1.47, curvature = -0.35) +
-  annotate('segment', x = 0.41, xend = 0.41, y = 1.46, yend = 1.45,
+  annotate('segment', x = 0.225, xend = 0.225, y = 0.84, yend = 0.83) +
+  annotate('curve', x = 0.225, xend = 0.26, y = 0.83, yend = 0.795, curvature = 0.35) +
+  annotate('curve', x = 0.26, xend = 0.295, y = 0.795, yend = 0.755, curvature = -0.35) +
+  annotate('segment', x = 0.295, xend = 0.295, y = 0.75, yend = 0.745,
            arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
-  annotate('curve', x = 0.25, xend = 0.18, y = 1.62, yend = 1.55, curvature = -0.35) +
-  annotate('curve', x = 0.18, xend = 0.11, y = 1.55, yend = 1.47, curvature = 0.35) +
-  annotate('segment', x = 0.11, xend = 0.11, y = 1.46, yend = 1.45,
+  annotate('curve', x = 0.225, xend = 0.19, y = 0.83, yend = 0.795, curvature = -0.35) +
+  annotate('curve', x = 0.19, xend = 0.155, y = 0.795, yend = 0.755, curvature = 0.35) +
+  annotate('segment', x = 0.155, xend = 0.155, y = 0.75, yend = 0.745,
            arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
   
   # Permssive / Other A positions
-  annotation_custom(ggplotGrob(p_a_profiles$AP), xmin = -0.05, xmax = 0.25, ymin = 0.95, ymax = 1.45) +
-  annotate('richtext', x = 0.11, y = 1.4, label = "<span style='font-size:9pt'>AP</span>", fill = NA, label.colour = NA) +
-  annotation_custom(ggplotGrob(p_a_profiles$Rest), xmin = 0.25, xmax = 0.55, ymin = 0.95, ymax = 1.45) +
-  annotate('richtext', x = 0.41, y = 1.4, label = "<span style='font-size:9pt'>Rest</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_a_profiles$AP), xmin = 0.075, xmax = 0.225, ymin = 0.445, ymax = 0.745) +
+  annotate('richtext', x = 0.155, y = 0.7, label = "<span style='font-size:8pt'>AP</span>", fill = NA, label.colour = NA) +
+  annotation_custom(ggplotGrob(p_a_profiles$Rest), xmin = 0.225, xmax = 0.375, ymin = 0.445, ymax = 0.745) +
+  annotate('richtext', x = 0.305, y = 0.7, label = "<span style='font-size:8pt'>Rest</span>", fill = NA, label.colour = NA) +
   
   # Dendrograms and arrows
-  annotation_custom(ggplotGrob(p_schematic_dend), xmin = 0, xmax = 0.5, ymin = 0.55, ymax = 0.95) +
-  annotate('curve', x = 0.41, xend = 0.34, y = 1.05, yend = 1, curvature = -0.35) +
-  annotate('curve', x = 0.34, xend = 0.27, y = 1, yend = 0.93, curvature = 0.35) +
-  annotate('segment', x = 0.27, xend = 0.27, y = 0.92, yend = 0.91,
+  annotation_custom(ggplotGrob(p_schematic_dend), xmin = 0, xmax = 0.45, ymin = 0.24, ymax = 0.5) +
+  annotate('curve', x = 0.305, xend = 0.27, y = 0.525, yend = 0.5, curvature = -0.35) +
+  annotate('curve', x = 0.27, xend = 0.235, y = 0.5, yend = 0.465, curvature = 0.35) +
+  annotate('segment', x = 0.235, xend = 0.235, y = 0.457, yend = 0.452,
            arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
   
-  annotation_custom(ggplotGrob(p_schematic_dend_cuts), xmin = 0, xmax = 0.5, ymin = 0.05, ymax = 0.45) +
-  annotate('segment', x = 0.27, xend = 0.27, y = 0.575, yend = 0.425, arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
+  annotation_custom(ggplotGrob(p_schematic_dend_cuts), xmin = 0, xmax = 0.45, ymin = 0, ymax = 0.26) +
+  annotate('segment', x = 0.235, xend = 0.235, y = 0.2875, yend = 0.2125, arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
   
   # Text
-  annotate('TextBox', x = 0.75, y = 1.55, hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>1.<br></span>") +
-  annotate('TextBox', x = 0.85, y = 1.55, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>Process each AA independantly<br></span>") +
-  annotate('TextBox', x = 0.75, y = 1.25, hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>2.<br></span>") +
-  annotate('TextBox', x = 0.85, y = 1.25, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>Split permissive positions (|ER|&nbsp;<&nbsp;0.4)<br></span>") +
-  annotate('TextBox', x = 0.75, y = 0.9, hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>3.<br></span>") +
-  annotate('TextBox', x = 0.85, y = 0.9, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>Heirarchical clustering using cosine distance between PC2:20 profiles and average linkage<br></span>") +
-  annotate('TextBox', x = 0.75, y = 0.4, hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>4.<br></span>") +
-  annotate('TextBox', x = 0.85, y = 0.4, width = unit(0.7, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA,
-           label = "<span style='font-size:8pt'>Hybrid dynamic tree cutting to determine subtypes, with deepSplit = 0 or 1 depending on the amino acid<br></span>")
+  annotate('TextBox', x = 0.405, y = 0.825, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>1.<br></span>") +
+  annotate('TextBox', x = 0.455, y = 0.825, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>Process each AA independantly<br></span>") +
+  annotate('TextBox', x = 0.405, y = 0.665, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>2.<br></span>") +
+  annotate('TextBox', x = 0.455, y = 0.675, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>Split permissive positions (|ER|&nbsp;<&nbsp;0.4)<br></span>") +
+  annotate('TextBox', x = 0.405, y = 0.5, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>3.<br></span>") +
+  annotate('TextBox', x = 0.455, y = 0.5, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>Heirarchical clustering using cosine distance between PC2:20 profiles<br></span>") +
+  annotate('TextBox', x = 0.405, y = 0.25, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>4.<br></span>") +
+  annotate('TextBox', x = 0.455, y = 0.25, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+           label = "<span style='font-size:7pt'>Determines subtypes with hybrid dynamic tree cutting<br></span>")
 
 ### Panel 2 - Cluster Sizes ###
 subtype_size <- group_by(dms, cluster, wt) %>%
@@ -160,7 +160,7 @@ subtype_size <- group_by(dms, cluster, wt) %>%
   ungroup() %>%
   mutate(freq = size / n_aa,
          cluster_num = str_sub(cluster, -1),
-         wt = factor(wt, levels = sort(unique(wt))),
+         wt = factor(wt, levels = rev(sort(unique(wt)))),
          cluster_num = factor(cluster_num, levels = c('O', 'P', 8:1)))
 
 aa_labs <- levels(subtype_size$wt)
@@ -172,26 +172,33 @@ p_sizes <- ggplot(subtype_size, aes(y = as.integer(wt), x = freq, fill = cluster
                      sec.axis = sec_axis(~., breaks = 1:length(n_aa_labs), labels = n_aa_labs, name = ' Total Positions'), expand = expansion(0, 0)) +
   scale_x_continuous(expand = expansion(0, 0)) +
   scale_fill_manual(values = CLUSTER_NUM_COLOURS) +
-  guides(fill = guide_legend(title = 'Subtype', reverse = TRUE, nrow = 1, label.position = 'bottom', title.vjust = 0.85, direction = 'horizontal')) +
-  labs(x = 'Subtype Frequency') +
+  guides(fill = guide_legend(title = 'Subtype', reverse = TRUE, nrow = 1, label.position = 'top', title.hjust = 0.5,
+                             direction = 'horizontal', title.position = 'top')) +
+  labs(x = 'Frequency') +
   theme(axis.title.y.left = element_blank(),
         axis.ticks.y = element_blank(),
         panel.grid.major.y = element_blank(),
-        legend.position = 'bottom')
+        legend.position = 'top',
+        legend.key.height = unit(3, 'mm'),
+        legend.key.width = unit(3, 'mm'),
+        legend.margin = margin(0, 0, 0, 0, 'mm'),
+        legend.box.margin = margin(0, 0, -2, 0, 'mm'),
+        legend.box.background = element_blank(),
+        legend.background = element_blank())
 
 ### Panel 3 - Correlation plot/dendrogram with labels ###
 cor_subtype_sets <- list(`Small Aliphatic` = c('G1', 'G2', 'A5', 'G3', 'S1'),
                          `Not Proline` = c('I3', 'Y4', 'T2', 'E2', 'D3', 'L6', 'N2', 'R2', 'K3', 'A3', 'V5', 'S2', 'Q2', 'M2'),
-                         `Polar (Positive)` = c('Q4', 'K5', 'R3', 'K2', 'R5', 'K1', 'R1'),
+                         `Positive` = c('Q4', 'K5', 'R3', 'K2', 'R5', 'K1', 'R1'),
                          Aromatic = c('Y3', 'Y1', 'H1', 'W1', 'F2'),
                          Aliphatic = c('C2', 'A2', 'G7', 'S3', 'V1', 'L3', 'I1', 'P4', 'L4'),
                          `Large Aliphatic` = c('T4', 'L5', 'L1', 'F1', 'Y2', 'V3', 'V2', 'M1', 'I2', 'L2'),
                          `Not Aromatic` = c('T6', 'P2', 'T1', 'A1', 'P3', 'A4', 'T3', 'R4'),
-                         `Polar (Negative)` = c('T5', 'Q3', 'N1', 'Q1', 'E3', 'L7', 'G4', 'D2', 'D1', 'E1'))
+                         `Negative` = c('T5', 'Q3', 'N1', 'Q1', 'E3', 'L7', 'G4', 'D2', 'D1', 'E1'))
 
 cor_set_colours <- c(`Small Aliphatic` = '#ff7f00', Aliphatic = '#ffff33', `Large Aliphatic` = '#a65628',
                      `Not Proline` = '#4daf4a', Permissive = '#999999',
-                     `Polar (Positive)` = '#984ea3', `Polar (Negative)` = '#f781bf',
+                     `Positive` = '#984ea3', `Negative` = '#f781bf',
                      Aromatic = '#377eb8', `Not Aromatic` = '#e41a1c') # Manual assignment of colourbrewer2 Set1 colours
 
 classify_cluster <- function(x){
@@ -230,23 +237,23 @@ annotate_set_rect <- function(set){
 }
 
 p_cor_heatmap <- ggplot(cors, aes(x=as.integer(cluster1), y=as.integer(cluster2), fill=cor)) +
-  geom_tile(colour = 'grey') +
+  geom_tile() +
   geom_segment(data = branches, aes(x=-5*y-1, y=x, xend=-5*yend-1, yend=xend), inherit.aes = FALSE) +
-  geom_point(data = leaves, aes(x=-5*y-1, y=x, colour = type), shape=19, inherit.aes = FALSE) +
+  geom_point(data = leaves, aes(x=-5*y-1, y=x, colour = type), shape=20, size = 0.8, inherit.aes = FALSE) +
   annotate_set_rect("Small Aliphatic") +
   annotate_set_rect("Not Proline") +
-  annotate_set_rect("Polar (Positive)") +
+  annotate_set_rect("Positive") +
   annotate_set_rect("Aromatic") +
   annotate_set_rect("Aliphatic") +
   annotate_set_rect("Large Aliphatic") +
   annotate_set_rect("Not Aromatic") +
-  annotate_set_rect("Polar (Negative)") +
+  annotate_set_rect("Negative") +
   scale_fill_distiller(type = ER_COR_COLOURS$type, palette = ER_COR_COLOURS$palette, direction = ER_COR_COLOURS$direction,
                        limits = c(-1, 1)) +
   scale_colour_manual(values = cor_set_colours, na.value='grey') +
   coord_fixed() +
   guides(fill = guide_colourbar(title = 'Pearson\nCorrelation', barwidth = unit(3, 'mm'), barheight = unit(15, 'mm')), colour = FALSE) +
-  theme(text = element_text(size = 8),
+  theme(text = element_text(size = 6),
         axis.ticks = element_blank(),
         axis.text = element_blank(),
         panel.background = element_blank(),
@@ -263,11 +270,11 @@ plot_profile_block <- function(set, guide=FALSE){
     mutate(cluster = factor(cluster, levels = levels(leaves$label)[levels(leaves$label) %in% set]),
            mut = factor(mut)) %>%
     ggplot(aes(x = mut, y = cluster, fill = er)) +
-    geom_tile(colour = 'grey') +
+    geom_tile(colour = 'grey', size = 0.05) +
     coord_fixed() +
     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
                          limits = c(-1, 1)) +
-    theme(text = element_text(size = 8),
+    theme(text = element_text(size = 6),
           axis.ticks = element_blank(),
           axis.text.y = element_markdown(),
           axis.text.x = element_markdown(),
@@ -275,7 +282,8 @@ plot_profile_block <- function(set, guide=FALSE){
           axis.title = element_blank(),
           panel.grid.major.y = element_blank(),
           legend.background = element_blank(),
-          plot.background = element_blank())
+          plot.background = element_blank(),
+          plot.margin = unit(c(0, 0, 0, 0), 'mm'))
   if (guide){
     p <- p + guides(fill = guide_colourbar(title = 'Mean ER', barwidth = unit(3, 'mm'), barheight = unit(15, 'mm')))
   } else {
@@ -285,12 +293,12 @@ plot_profile_block <- function(set, guide=FALSE){
 }
 
 prof_title <- function(x){
-  str_c("<span style='font-size:16pt; color:", cor_set_colours[x],"'>&#9679;</span> ", x)
+  str_c("<span style='font-size:12pt; color:", cor_set_colours[x],"'>&#9679;</span> ", x)
 }
 
 p_cor_set_profiles <- map(names(cor_subtype_sets), ~plot_profile_block(cor_subtype_sets[[.]]) + 
                             labs(title = prof_title(.)) + 
-                            theme(plot.title = element_markdown())) %>%
+                            theme(plot.title = element_markdown(size = 7))) %>%
   set_names(names(cor_subtype_sets))
 p_cor_profiles_legend <- plot_profile_block(cor_subtype_sets$small_aliphatic, guide = TRUE) %>% 
   get_legend() %>% 
@@ -301,22 +309,22 @@ p_heatmap <- ggplot() +
   geom_blank() +
   lims(x = c(0, 1), y = c(0, 1)) + 
   coord_fixed(clip = 'off') +
- theme(axis.title = element_blank(),
-       axis.text = element_blank(),
-       axis.ticks = element_blank(),
-       panel.grid.major.y = element_blank()) +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_blank()) +
 
   annotation_custom(ggplotGrob(p_cor_heatmap), xmin = 0, xmax = 0.8, ymin = 0.2, ymax = 0.8) +
   annotation_custom(ggplotGrob(p_cor_heatmap_legend), xmin = -0.05, xmax = 0.1, ymin = 0.5, ymax = 0.75) +
-  annotation_custom(ggplotGrob(p_cor_profiles_legend), xmin = -0.05, xmax = 0.1, ymin = 0.25, ymax = 0.5) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Polar (Positive)`), xmin = -0.05, xmax = 0.33, ymin = 0.8, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Proline`), xmin = 0.28, xmax = 0.66, ymin = 0.78, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Small Aliphatic`), xmin = 0.66, xmax = 1, ymin = 0.8, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$Aromatic), xmin = 0.7, xmax = 1, ymin = 0.6, ymax = 0.8) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$Aliphatic), xmin = 0.7, xmax = 1, ymin = 0.4, ymax = 0.6) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Large Aliphatic`), xmin = 0.7, xmax = 1, ymin = 0.15, ymax = 0.4) +
+  annotation_custom(ggplotGrob(p_cor_profiles_legend), xmin = -0.075, xmax = 0.1, ymin = 0.25, ymax = 0.5) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Positive`), xmin = -0.05, xmax = 0.33, ymin = 0.8, ymax = 1) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Small Aliphatic`), xmin = 0.33, xmax = 0.71, ymin = 0.8, ymax = 1) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Proline`), xmin = 0.75, xmax = 1.05, ymin = 0.65, ymax = 1) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$Aromatic), xmin = 0.75, xmax = 1.05, ymin = 0.45, ymax = 0.65) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$Aliphatic), xmin = 0.75, xmax = 1.05, ymin = 0.25, ymax = 0.45) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Large Aliphatic`), xmin = 0.75, xmax = 1.05, ymin = 0, ymax = 0.25) +
   annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Aromatic`), xmin = 0.33, xmax = 0.66, ymin = 0, ymax = 0.2) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Polar (Negative)`), xmin = 0, xmax = 0.33, ymin = 0, ymax = 0.2)
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Negative`), xmin = 0, xmax = 0.33, ymin = 0, ymax = 0.2)
 
 ### Panel 4 - Clusters mapped to UMAP ###
 cluster_dms <- mutate(dms, cluster_type = classify_cluster(cluster)) %>%
@@ -324,13 +332,19 @@ cluster_dms <- mutate(dms, cluster_type = classify_cluster(cluster)) %>%
   drop_na(cluster_type)
 
 p_umap <- ggplot() +
-  geom_point(data = dms, mapping = aes(x = umap1, y = umap2), colour = 'grey90', shape = 20) +
-  geom_point(data = cluster_dms, mapping = aes(x = umap1, y = umap2, colour = cluster_type)) +
+  geom_point(data = dms, mapping = aes(x = umap1, y = umap2), colour = 'grey90', shape = 20, size = 1) +
+  geom_point(data = cluster_dms, mapping = aes(x = umap1, y = umap2, colour = cluster_type), shape = 20, size = 1) +
   scale_color_manual(values = cor_set_colours) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_legend(title = '', nrow = 3)) +
+  guides(colour = guide_legend(title = '', nrow = 3, override.aes = list(size = 2))) +
   theme(legend.position = 'top',
-        legend.title = element_blank())
+        legend.title = element_blank(),
+        legend.key.height = unit(4, 'mm'),
+        legend.key.width = unit(2, 'mm'),
+        legend.margin = margin(0, 0, 0, 0, 'mm'),
+        legend.box.margin = margin(0, 0, -5, -10, 'mm'),
+        legend.box.background = element_blank(),
+        legend.background = element_blank())
 
 ### Panel 5 - Subtype frequencies ###
 freq_summary <- group_by(full_characterisation$summary, aa) %>%
@@ -344,30 +358,40 @@ freq_summary <- group_by(full_characterisation$summary, aa) %>%
   left_join(select(most_selective_subtypes, aa, mean_er), by = 'aa')
 
 p_subtype_freqs <- ggplot(freq_summary) +
-  geom_col(aes(x = freq, y = aa, fill = type)) +
+  geom_col(aes(x = freq, y = reorder(aa, desc(aa)), fill = type)) +
   scale_fill_brewer(type = 'qual', palette = 'Paired') + 
-  guides(fill = guide_legend(title = '', direction = 'horizontal', reverse = TRUE)) +
+  guides(fill = guide_legend(title = '', direction = 'horizontal', reverse = TRUE, label.position = 'top')) +
   labs(x = 'Frequency') +
   theme(panel.grid.major.y = element_blank(),
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.position = 'top')
+        legend.position = 'top',
+        legend.key.height = unit(3, 'mm'),
+        legend.key.width = unit(3, 'mm'),
+        legend.margin = margin(0, 0, 0, 0, 'mm'),
+        legend.box.margin = margin(0, 0, -2, 0, 'mm'),
+        legend.box.background = element_blank(),
+        legend.background = element_blank())
 
 ### Panel 6 - Profile of most selective subtype ###
 most_selective_profiles <- filter(full_characterisation$profiles, cluster %in% most_selective_subtypes$cluster) %>%
   mutate(wt = str_sub(cluster, end = 1))
 
-p_selective_profiles <- ggplot(most_selective_profiles, aes(y = wt, x = mut, fill = er)) +
-  geom_raster() +
-  facet_wrap(~cluster, ncol = 1, scales = 'free_y', strip.position = 'left') +
+p_selective_profiles <- ggplot(most_selective_profiles, aes(y = reorder(wt, desc(wt)), x = mut, fill = er)) +
+  geom_tile(colour = 'grey') +
   scale_fill_distiller(type = 'seq', palette = 'Reds', direction = -1, limits = c(-0.8, max(most_selective_profiles$er))) +
   labs(x = 'Substitution', y = '') +
-  guides(fill = guide_colourbar(title = 'ER', reverse = TRUE, direction = 'horizontal', title.vjust = 0.75)) +
+  guides(fill = guide_colourbar(title = 'ER', reverse = TRUE, direction = 'horizontal', title.vjust = 0,
+                                barheight = unit(2.5, 'mm'), label.position = 'top')) +
   theme(axis.ticks = element_blank(),
         strip.text = element_blank(),
         panel.spacing = unit(0.1, 'lines'),
         panel.grid.major.y = element_blank(),
-        legend.position = 'top')
+        legend.position = 'top',
+        legend.margin = margin(0, 0, 0, 0, 'mm'),
+        legend.box.margin = margin(0, 0, -2, -5, 'mm'),
+        legend.box.background = element_blank(),
+        legend.background = element_blank())
 
 ### Assemble figure ###
 size <- theme(text = element_text(size = 8))
@@ -378,8 +402,8 @@ p4 <- p_umap + labs(tag = 'D') + size
 p5 <- p_subtype_freqs + labs(tag = 'E') + size
 p6 <- p_selective_profiles + labs(tag = 'F') + size
 
-figure3 <- multi_panel_figure(width = 300, height = 300, columns = 9, rows = 3,
-                              panel_label_type = 'none', row_spacing = 0.1) %>%
+figure3 <- multi_panel_figure(width = 183, height = 183, columns = 9, rows = 3,
+                              panel_label_type = 'none', row_spacing = 0, column_spacing = 0) %>%
   fill_panel(p1, row = 1, column = 1:3) %>%
   fill_panel(p2, row = 2, column = 1:3) %>%
   fill_panel(p3, row = 1:2, column = 4:9) %>%
