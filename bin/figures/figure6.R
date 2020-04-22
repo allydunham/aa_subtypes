@@ -40,20 +40,24 @@ p_profiles <- ggplot(hydro_profiles, aes(x = mut, y = as.integer(group), fill = 
   scale_y_continuous(breaks = 1:length(group_labs), labels = group_labs,
                      sec.axis = sec_axis(~., breaks = 1:length(subtype_labs), labels = subtype_labs)) +
   scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction, limits = er_limits) +
-  guides(fill = guide_colourbar(title = 'Normalised ER', direction = 'horizontal')) + 
+  guides(fill = guide_colourbar(title = 'Normalised ER', direction = 'horizontal', barheight = unit(2, 'mm'))) + 
   theme(axis.text.x = element_markdown(),
         axis.text.y.right = element_markdown(),
         axis.text.y.left = element_markdown(),
         axis.title = element_blank(),
         axis.ticks = element_blank(),
         panel.grid.major.y = element_blank(),
+        panel.spacing = unit(1, 'mm'),
         legend.position = 'bottom',
-        legend.title = element_text(vjust = 0.85))
+        legend.title = element_text(vjust = 0.85),
+        legend.margin = margin(0, 0, 0, 0, 'mm'),
+        legend.box.margin = margin(-3, 0, 0, 0, 'mm'),
+        legend.background = element_blank())
 
 p_foldx_entropy_sidechain <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = entropy_sidechain, fill = group)) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
   annotation_raster(readPNG('figures/4_figures/position_examples/ras_aliphatic_entropy.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-1, ymax=1) +
   scale_y_continuous(breaks = seq(-1.5, 1.5, 0.5), limits = c(-1.5, 1.5)) +
@@ -70,7 +74,7 @@ p_foldx_entropy_sidechain <- filter(dms, cluster %in% c(large_hydrophobics, smal
 p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = van_der_waals_clashes, fill = group)) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
   annotation_raster(readPNG('figures/4_figures/position_examples/adrb2_ala_small_hydro.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=7.667, ymax=33.333) +
   lims(y = c(0, 40)) +
@@ -87,7 +91,7 @@ p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, 
 p_foldx_solvation_hydrophobic <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = solvation_hydrophobic, fill = group)) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
   annotation_raster(readPNG('figures/4_figures/position_examples/ras_met_buried.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-2.667, ymax=2.667) +
   lims(y = c(-4, 4)) +
@@ -104,7 +108,7 @@ p_foldx_solvation_hydrophobic <- filter(dms, cluster %in% c(large_hydrophobics, 
 p_foldx_van_der_waals <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = van_der_waals, fill = group)) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
   annotation_raster(readPNG('figures/4_figures/position_examples/cbs_phe_pi.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-2, ymax=2) +
   scale_y_continuous(breaks = seq(-3, 3, 1), limits = c(-3, 3)) +
@@ -121,7 +125,7 @@ p_foldx_van_der_waals <- filter(dms, cluster %in% c(large_hydrophobics, small_hy
 p_sa <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = all_atom_abs, fill = group)) +
-  geom_boxplot(show.legend = FALSE) +
+  geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotate('line', x = c(0, 3.75), y = 0, colour = 'grey', linetype = 'dashed') +
   annotation_raster(readPNG('figures/4_figures/position_examples/tem1_trp_surface.png'), interpolate = TRUE, xmin=4, xmax=8, ymin=41.667, ymax=208.333) +
   scale_y_continuous(limits = c(0, 250)) +
@@ -136,16 +140,16 @@ p_sa <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aroma
         plot.margin = unit(c(0,0,0,0), 'mm'))
 
 ### Assemble figure ###
-size <- theme(text = element_text(size = 8))
+size <- theme(text = element_text(size = 6))
 
-p1 <- p_profiles + size
-p2 <- p_foldx_entropy_sidechain + size
-p3 <- p_foldx_van_der_waals_clashes + size
-p4 <- p_foldx_van_der_waals + size
-p5 <- p_sa + size
+p1 <- p_profiles + size + labs(tag = 'A')
+p2 <- p_foldx_entropy_sidechain + size + labs(tag = 'B')
+p3 <- p_foldx_van_der_waals_clashes + size + labs(tag = 'C')
+p4 <- p_foldx_van_der_waals + size + labs(tag = 'D')
+p5 <- p_sa + size + labs(tag = 'E')
 
-figure6 <- multi_panel_figure(width = 160, height = 150, columns = 2, rows = 3,
-                              panel_label_type = 'upper-alpha', row_spacing = 5, column_spacing = 5) %>%
+figure6 <- multi_panel_figure(width = 89, height = 89, columns = 2, rows = 3,
+                              panel_label_type = 'none', row_spacing = 0, column_spacing = 0) %>%
   fill_panel(p1, row = 1, column = 1:2) %>%
   fill_panel(p2, row = 2, column = 1) %>%
   fill_panel(p3, row = 2, column = 2) %>%
