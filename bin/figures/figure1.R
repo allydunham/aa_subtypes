@@ -22,7 +22,7 @@ gene_summary <- group_by(dms, gene) %>%
             n_struct = n_distinct(position[!is.na(total_energy)])) %>%
   mutate(percent_struct = n_struct / n * 100,
          x = str_c(n, " (", signif(percent_struct, 3), "%)"),
-         img = str_c("<img src='figures/4_figures/proteins/", gene_to_filename(gene), ".png", "' width='55' />"))
+         img = str_c("<img src='figures/4_figures/proteins/", gene_to_filename(gene), ".png", "' width='53' />"))
 
 p_genes <- ggplot(gene_summary, aes(x = x, y = n, label = img)) +
   geom_richtext(fill = NA, label.color = NA, label.padding = grid::unit(rep(0, 4), "pt")) +
