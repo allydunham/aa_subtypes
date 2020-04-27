@@ -11,4 +11,5 @@ subtypes/*.yaml
 residue_hydrophobicity.tsv
 graveyard/*/*.yaml
 graveyard/*/*.R
-hclust_pca_no_sig_dynamic_cos.md
+foldx_eqn.md
+subtype_descriptions.md
