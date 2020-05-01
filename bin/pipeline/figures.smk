@@ -116,24 +116,6 @@ rule figure6:
     shell:
         "Rscript bin/figures/figure6.R &> {log}"
 
-rule figure7:
-    """
-    Figure 7
-    """
-    input:
-        "data/combined_mutational_scans.tsv",
-        "data/subtypes/final_subtypes.tsv"
-
-    output:
-        "figures/4_figures/figure7.pdf",
-        "figures/4_figures/figure7.png"
-
-    log:
-        "logs/figure7.log"
-
-    shell:
-        "Rscript bin/figures/figure7.R &> {log}"
-
 rule figureS1:
     """
     Figure S1
