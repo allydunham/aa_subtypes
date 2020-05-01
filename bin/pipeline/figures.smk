@@ -151,3 +151,21 @@ rule figureS1:
 
     shell:
         "Rscript bin/figures/figureS1.R &> {log}"
+
+rule figureS2:
+    """
+    Figure S2
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/subtypes/final_subtypes.tsv"
+
+    output:
+        "figures/4_figures/figureS2.pdf",
+        "figures/4_figures/figureS2.png"
+
+    log:
+        "logs/figureS2.log"
+
+    shell:
+        "Rscript bin/figures/figureS2.R &> {log}"
