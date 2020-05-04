@@ -84,7 +84,11 @@ rule all:
         rules.figure4.output,
         rules.figure5.output,
         rules.figure6.output,
-        rules.figure7.output
+        rules.figureS1.output,
+        rules.figureS2.output,
+        rules.figureS3.output,
+        rules.figureS4.output
+
 
 # Only remove rapidly generated results
 def quick_clean_files():
