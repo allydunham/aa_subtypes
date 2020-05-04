@@ -19,7 +19,7 @@ seq: "MASETFEFQAEITQLMSLIINTVYSNKEIFLRELISNASDALDKIRYKSLSDPK\
       TEMEEVD"
 experiment: 'Growth'
 transform: 'None'
-authour: 'Heitpas et al.'
+authour: 'Hietpas et al.'
 year: 2011
 title: 'Experimental illumination of a fitness landscape'
 lab: ['Bolon']
