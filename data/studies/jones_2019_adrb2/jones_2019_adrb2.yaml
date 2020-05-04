@@ -13,7 +13,7 @@ seq: "MGQPGNGSAFLLAPNGSHAPDHDVTQERDEVWVVGMGIVMSLIVLAIVFGNVLV\
       EDLPGTEDFVGHQGTVPSDNIDSQGRNCSTNDSLL" 
 experiment: 'Expression of reporter gene'
 transform: "log2(x/mean(x_{subs with blosum62 >= 2}))"
-authour: 'Jones et al'
+authour: 'Jones et al.'
 year: 2019
 title: 'Structural and Functional Characterization of G Protein-Coupled Receptors with Deep Mutational Scanning'
 lab: ['Kosuri', 'Dror', 'Babu']
