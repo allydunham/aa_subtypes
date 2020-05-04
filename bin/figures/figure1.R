@@ -84,7 +84,7 @@ p_norm <- ggplot() +
   annotate('richtext', label = "<span style='font-size:8pt'>Process double<br>mutants and<br>multiple mutations</span>", x = 0.25, y = 1.85, fill = NA, label.colour = NA) +
   annotate('richtext', label = "<span style='font-size:8pt'>Transform scores<br>to standard scale</span>", x = 0.25, y = 1.45, fill = NA, label.colour = NA) +
   annotate('richtext', label = "<span style='font-size:8pt'>Normalise against<br>mean of lowest<br>10% of scores</span>", x = 0.25, y = 1, fill = NA, label.colour = NA) +
-  annotate('richtext', label = "<span style='font-size:8pt'>Filter positions<br>with scores for<br>&lt;16 substitutions</span>", x = 0.25, y = 0.5, fill = NA, label.colour = NA) +
+  annotate('richtext', label = "<span style='font-size:8pt'>Filter positions<br>with scores for<br>&lt;15 substitutions</span>", x = 0.25, y = 0.5, fill = NA, label.colour = NA) +
   annotate('richtext', label = "<span style='font-size:10pt'>**Comparable<br>ER Scores**</span>", x = 0.25, y = 0.15, fill = NA, label.colour = NA) +
   annotation_custom(ggplotGrob(p_norm_raw), xmin = 0.55, xmax = 1.1, ymin = 1.5, ymax = 2.1) +
   annotation_custom(ggplotGrob(p_norm_trans), xmin = 0.55, xmax = 1.1, ymin = 0.8, ymax = 1.5) + 
