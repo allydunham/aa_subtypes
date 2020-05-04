@@ -5,6 +5,33 @@ source('src/config.R')
 AA_THREE_2_ONE <- structure(names(Biostrings::AMINO_ACID_CODE), names = Biostrings::AMINO_ACID_CODE)
 AA_THREE_2_ONE['Ter'] <- '*'
 
+
+# Make summary table about studies
+study_summary_tbl <- function(){
+  study_summary <- function(study){
+    yaml <- read_yaml(str_c('data/studies/', study, '/', study, '.yaml'))
+    tbl <- import_study(str_c('data/studies/', study)) %>%
+      group_by(study, position, wt) %>%
+      filter(sum(!mut == wt) >= 15) %>% # Only keep positions with a maximum of 4 missing scores
+      ungroup()
+    
+    tibble(
+      study = str_c(yaml$authour, ' ', yaml$year),
+      gene = yaml$gene,
+      npos = n_distinct(tbl$position),
+      nvar = sum(!tbl$mut == '*'),
+      experiment = yaml$experiment,
+      multi_condition = NA,
+      multi_variant = NA,
+      transform = yaml$transform,
+      filter = ifelse(yaml$qc$filter, yaml$qc$notes, '')
+    )
+  }
+  
+  map(dir('data/studies/'), study_summary) %>%
+    bind_rows()
+}
+
 # Transform standardised data table to wide format
 make_dms_wide <- function(dms){
   foldx_averages <- select(dms, study, position, wt, total_energy:entropy_complex) %>%
