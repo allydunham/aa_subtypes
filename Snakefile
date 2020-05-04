@@ -87,7 +87,8 @@ rule all:
         rules.figureS1.output,
         rules.figureS2.output,
         rules.figureS3.output,
-        rules.figureS4.output
+        rules.figureS4.output,
+        rules.figureS5.output
 
 
 # Only remove rapidly generated results

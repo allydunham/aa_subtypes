@@ -190,3 +190,25 @@ rule figureS4:
 
     shell:
         "Rscript bin/figures/figureS4.R &> {log}"
+
+rule figureS5:
+    """
+    Figure S5
+    """
+    input:
+        "data/studies/araya_2012_yap1/araya_2012_yap1.yaml",
+        "data/studies/araya_2012_yap1/raw/urn_mavedb_00000002-a-2_scores.csv",
+        "data/studies/dorrity_2018_ste12/dorrity_2018_ste12.yaml",
+        "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx",
+        "data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml",
+        "data/studies/starita_2013_ube4b/raw/sd01.xlsx"
+
+    output:
+        "figures/4_figures/figureS5.pdf",
+        "figures/4_figures/figureS5.png"
+
+    log:
+        "logs/figureS5.log"
+
+    shell:
+        "Rscript bin/figures/figureS5.R &> {log}"
