@@ -285,3 +285,36 @@ blank_plot <- function(text = NULL){
     p <- p + annotate(geom = 'text', x = 0.5, y = 0.5, label = text)
   }
 }
+
+# Count phosphosites in a tbl
+count_phosphosites <- function(tbl, uniprot_phosphosites='meta/uniprot_ptms.tsv'){
+  transform_uniprot_phos <- function(s){
+    if (is.na(s)){
+      return(tibble(position = NA, type = NA))
+    }
+    str_split(s, 'MOD_RES') %>% 
+      extract2(1) %>% 
+      str_split(';', simplify = TRUE) %>% 
+      extract(,1:2) %>% 
+      set_colnames(c('position', 'type')) %>% 
+      as_tibble() %>% 
+      tidyr::extract(type, 'type', '/note="([^"]*)"?') %>% 
+      mutate(position = as.integer(position)) %>% 
+      drop_na() %>% 
+      filter(str_starts(type, 'Phospho'))
+  }
+  
+  phos <- suppressMessages(read_tsv(uniprot_phosphosites)) %>% 
+    select(uniprot_id = Entry, r=`Modified residue`)
+  
+  phos <- map(phos$r, transform_uniprot_phos) %>%
+    set_names(phos$uniprot_id) %>%
+    bind_rows(.id = 'uniprot_id') %>%
+    drop_na()
+  
+  mutate(tbl, uniprot_id = unname(UNIPROT_IDS[gene])) %>%
+    select(gene, uniprot_id, wt, position) %>%
+    distinct() %>%
+    left_join(., phos, c('uniprot_id', 'position')) %>%
+    drop_na()
+}
