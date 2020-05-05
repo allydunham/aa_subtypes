@@ -135,21 +135,21 @@ p_schematic <- ggplot() +
   annotate('segment', x = 0.235, xend = 0.235, y = 0.2875, yend = 0.2125, arrow.fill = 'black', arrow = arrow(type = 'closed', length = unit(0.02, 'npc'))) +
   
   # Text
-  annotate('TextBox', x = 0.405, y = 0.825, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.405, y = 0.825, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>1.<br></span>") +
-  annotate('TextBox', x = 0.455, y = 0.825, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.455, y = 0.825, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>Process each AA independantly<br></span>") +
-  annotate('TextBox', x = 0.405, y = 0.665, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.405, y = 0.665, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>2.<br></span>") +
-  annotate('TextBox', x = 0.455, y = 0.675, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.455, y = 0.675, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>Split permissive positions (|ER|&nbsp;<&nbsp;0.4)<br></span>") +
-  annotate('TextBox', x = 0.405, y = 0.5, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.405, y = 0.5, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>3.<br></span>") +
-  annotate('TextBox', x = 0.455, y = 0.5, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.455, y = 0.5, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>Heirarchical clustering using cosine distance between PC2:20 profiles<br></span>") +
-  annotate('TextBox', x = 0.405, y = 0.25, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.405, y = 0.25, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>4.<br></span>") +
-  annotate('TextBox', x = 0.455, y = 0.25, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.55,
+  annotate('TextBox', x = 0.455, y = 0.25, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>Determines subtypes with hybrid dynamic tree cutting<br></span>")
 
 ### Panel 2 - Cluster Sizes ###
@@ -275,9 +275,10 @@ plot_profile_block <- function(set, guide=FALSE){
     scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction,
                          limits = c(-1, 1)) +
     theme(text = element_text(size = 6),
+          plot.title = element_text(margin = margin(0, 0, 0, 0, 'mm')),
           axis.ticks = element_blank(),
-          axis.text.y = element_markdown(),
-          axis.text.x = element_markdown(),
+          axis.text.y = element_markdown(margin = margin(0, 0, 0, 0, 'mm')),
+          axis.text.x = element_markdown(margin = margin(0, 0, 0, 0, 'mm')),
           panel.background = element_blank(),
           axis.title = element_blank(),
           panel.grid.major.y = element_blank(),
@@ -314,17 +315,17 @@ p_heatmap <- ggplot() +
         axis.ticks = element_blank(),
         panel.grid.major.y = element_blank()) +
 
-  annotation_custom(ggplotGrob(p_cor_heatmap), xmin = 0, xmax = 0.8, ymin = 0.2, ymax = 0.8) +
-  annotation_custom(ggplotGrob(p_cor_heatmap_legend), xmin = -0.05, xmax = 0.1, ymin = 0.5, ymax = 0.75) +
-  annotation_custom(ggplotGrob(p_cor_profiles_legend), xmin = -0.075, xmax = 0.1, ymin = 0.25, ymax = 0.5) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Positive`), xmin = -0.05, xmax = 0.33, ymin = 0.8, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Small Aliphatic`), xmin = 0.33, xmax = 0.71, ymin = 0.8, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Proline`), xmin = 0.75, xmax = 1.05, ymin = 0.65, ymax = 1) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$Aromatic), xmin = 0.75, xmax = 1.05, ymin = 0.45, ymax = 0.65) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$Aliphatic), xmin = 0.75, xmax = 1.05, ymin = 0.25, ymax = 0.45) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Large Aliphatic`), xmin = 0.75, xmax = 1.05, ymin = 0, ymax = 0.25) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Aromatic`), xmin = 0.33, xmax = 0.66, ymin = 0, ymax = 0.2) +
-  annotation_custom(ggplotGrob(p_cor_set_profiles$`Negative`), xmin = 0, xmax = 0.33, ymin = 0, ymax = 0.2)
+  annotation_custom(ggplotGrob(p_cor_heatmap), xmin = 0, xmax = 0.75, ymin = 0.13, ymax = 0.87) +
+  annotation_custom(ggplotGrob(p_cor_heatmap_legend), xmin = -0.075, xmax = 0.075, ymin = 0.5, ymax = 0.75) +
+  annotation_custom(ggplotGrob(p_cor_profiles_legend), xmin = -0.1, xmax = 0.075, ymin = 0.25, ymax = 0.5) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Positive`), xmin = -0.05, xmax = 0.3, ymin = 0.79, ymax = 1.03) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Small Aliphatic`), xmin = 0.31, xmax = 0.71, ymin = 0.8, ymax = 1) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Proline`), xmin = 0.72, xmax = 1.07, ymin = 0.65, ymax = 1) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$Aromatic), xmin = 0.72, xmax = 1.07, ymin = 0.475, ymax = 0.675) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$Aliphatic), xmin = 0.72, xmax = 1.07, ymin = 0.25, ymax = 0.47) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Large Aliphatic`), xmin = 0.72, xmax = 1.07, ymin = 0, ymax = 0.25) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Not Aromatic`), xmin = 0.3, xmax = 0.7, ymin = 0, ymax = 0.2) +
+  annotation_custom(ggplotGrob(p_cor_set_profiles$`Negative`), xmin = -0.1, xmax = 0.33, ymin = 0, ymax = 0.2)
 
 ### Panel 4 - Clusters mapped to UMAP ###
 cluster_dms <- mutate(dms, cluster_type = classify_cluster(cluster)) %>%
@@ -394,13 +395,12 @@ p_selective_profiles <- ggplot(most_selective_profiles, aes(y = reorder(wt, desc
         legend.background = element_blank())
 
 ### Assemble figure ###
-size <- theme(text = element_text(size = 8))
-p1 <- p_schematic + labs(tag = 'A') + size
-p2 <- p_sizes + labs(tag = 'B') + size
-p3 <- p_heatmap + labs(tag = 'C') + size
-p4 <- p_umap + labs(tag = 'D') + size
-p5 <- p_subtype_freqs + labs(tag = 'E') + size
-p6 <- p_selective_profiles + labs(tag = 'F') + size
+p1 <- p_schematic + labs(tag = 'A') + theme(text = element_text(size = 8))
+p2 <- p_sizes + labs(tag = 'B') + theme(text = element_text(size = 7.5))
+p3 <- p_heatmap + labs(tag = 'C') + theme(text = element_text(size = 8.5))
+p4 <- p_umap + labs(tag = 'D') + theme(text = element_text(size = 8))
+p5 <- p_subtype_freqs + labs(tag = 'E') + theme(text = element_text(size = 8))
+p6 <- p_selective_profiles + labs(tag = 'F') + theme(text = element_text(size = 8.5))
 
 figure3 <- multi_panel_figure(width = 183, height = 183, columns = 9, rows = 3,
                               panel_label_type = 'none', row_spacing = 0, column_spacing = 0) %>%
