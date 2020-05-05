@@ -33,8 +33,8 @@ read_araya <- function(){
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
-    mutate(n_mut = as.integer(n_mut),
-           study = str_c('Araya et al. 2012 (YAP1)\nFraction of single variants = ', signif(single_frac, digits = 4)))
+    mutate(n_mut = str_c(n_mut, ' (', signif(frac, digits = 4)*100, '%)'),
+           study = str_c('Araya et al. 2012 (YAP1)\n', signif(single_frac, digits = 4)*100, '% measures as single variants'))
 }
 
 # Dorrity 2018
@@ -79,8 +79,8 @@ read_dorrity <- function(){
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
-    mutate(n_mut = as.integer(n_mut),
-           study = str_c('Dorrity et al. 2018 (STE12)\nFraction of single variants = ', signif(single_frac, digits = 4)))
+    mutate(n_mut = str_c(n_mut, ' (', signif(frac, digits = 4)*100, '%)'),
+           study = str_c('Dorrity et al. 2018 (STE12)\n', signif(single_frac, digits = 4)*100, '% measures as single variants'))
 }
 
 # Starita 2013
@@ -116,14 +116,21 @@ read_starita <- function(){
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
-    mutate(n_mut = as.integer(n_mut),
+    mutate(n_mut = str_c(n_mut, ' (', signif(frac, digits = 4)*100, '%)'),
            position = as.integer(position),
-           study = str_c('Starita et al. 2013 (UBE4B)\nFraction of single variants = ', signif(single_frac, digits = 4)))
+           study = str_c('Starita et al. 2013 (UBE4B)\n', signif(single_frac, digits = 4)*100, '% single variant coverage'))
 }
 
 # Combine and plot
 mut_count_data <- list(read_araya(), read_dorrity(), read_starita()) %>%
-  bind_rows()
+  bind_rows() %>%
+  mutate(n_mut = factor(n_mut,
+                        levels = unique(n_mut)[unique(n_mut) %>% 
+                                                 str_match('([0-9]*) \\([0-9\\.]*%\\)') %>% 
+                                                 extract(,2) %>% 
+                                                 as.integer %>% 
+                                                 order()]))
+
 
 panels <- group_by(mut_count_data, study) %>% 
   group_map(~ggplot(., aes(x = single_score, y = multi_score)) +
@@ -131,7 +138,6 @@ panels <- group_by(mut_count_data, study) %>%
               coord_cartesian(clip = 'off') +
               geom_point(colour = 'cornflowerblue', shape = 20) + 
               geom_abline(slope = 1, linetype='dashed') +
-              geom_text(x = -Inf, y = Inf, aes(label = str_c('frac = ', signif(frac, digits = 4))), hjust = 1) +
               labs(x = 'Score (Single Variants)',
                    y = 'Score (Mean Over Multiple Variants)',
                    title = .y$study))
