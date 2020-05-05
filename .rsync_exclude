@@ -13,3 +13,5 @@ graveyard/*/*.yaml
 graveyard/*/*.R
 foldx_eqn.md
 subtype_descriptions.md
+uniprot_*
+
