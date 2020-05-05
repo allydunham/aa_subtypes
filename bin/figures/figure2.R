@@ -31,19 +31,20 @@ p_transmembrane <- ggplot(mapping = aes(x=umap1, y=umap2)) +
   geom_point(data = filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR4')), mapping = aes(shape = gene, colour = domain), show.legend = FALSE) +
   scale_colour_brewer(type = 'qual', palette = 'Dark2') +
   scale_shape_manual(values = c(ADRB2 = 15, CCR5 = 17, CXCR4 = 18)) + 
-  scale_y_continuous(breaks = umap2_breaks) +
-  coord_equal(ratio = 1.2, clip = 'off') +
+  scale_y_continuous(breaks = umap2_breaks, limits = c(-2.7, 7.9)) +
+  scale_x_continuous(limits = c(-6.5, 6.5)) +
+  coord_equal(ratio = 1.5, clip = 'off') +
   labs(x = 'UMAP1', y = 'UMAP2') +
   theme(axis.title.x = element_text(hjust = 0.525),
         axis.title.y = element_text(hjust = 0.24)) +
-  annotation_raster(readPNG('figures/4_figures/position_examples/adrb2_domains.png'), interpolate = TRUE, xmin=-6, xmax=-1.2, ymin=4, ymax=8) +
-  annotation_raster(readPNG('figures/4_figures/position_examples/cxcr4_domains.png'), interpolate = TRUE, xmin=-2.5, xmax=2.3, ymin=3, ymax=7.5) +
-  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_domains.png'), interpolate = TRUE, xmin=2.25, xmax=7.05, ymin=4.25, ymax=8.75) +
-  annotate('richtext', x = c(-3.6, 0, 4.3), y = 8.5, label = c('ADRB2', 'CXCR4', 'CCR5'), hjust = 0.5, fill = NA, label.color = NA, size = 3.3) + 
-  annotate('point', x = c(-3.6, 0, 4.3), y = 8, shape = c(15, 18, 17), size = 2) +
-  annotate('line', x = c(-5.25, 6), y = 6.5, linetype = 'dashed', colour = 'grey') + 
-  annotate('line', x = c(-5.25, 6), y = 5.25, linetype = 'dashed', colour = 'grey') +
-  annotate('richtext', x = -5.5, y = c(6.75, 5.875, 5), hjust = 1, fill = NA, label.color = NA,
+  annotation_raster(readPNG('figures/4_figures/position_examples/adrb2_domains.png'), interpolate = TRUE, xmin=-6, xmax=-1.05, ymin=4, ymax=7.3) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/cxcr4_domains.png'), interpolate = TRUE, xmin=-2.6, xmax=2.5, ymin=3.4, ymax=6.8) +
+  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_domains.png'), interpolate = TRUE, xmin=2, xmax=7.1, ymin=4.2, ymax=7.65) +
+  annotate('richtext', x = c(-3.6, 0, 4.3), y = 7.5, label = c('ADRB2', 'CXCR4', 'CCR5'), hjust = 0.5, fill = NA, label.color = NA, size = 3.3) + 
+  annotate('point', x = c(-3.6, 0, 4.3), y = 7, shape = c(15, 18, 17), size = 2) +
+  annotate('line', x = c(-5.25, 6), y = 6, linetype = 'dashed', colour = 'grey') + 
+  annotate('line', x = c(-5.25, 6), y = 5.1, linetype = 'dashed', colour = 'grey') +
+  annotate('richtext', x = -5.5, y = c(6.25, 5.5, 4.75), hjust = 1, fill = NA, label.color = NA,
            label = c('Extracellular', 'Transmembrane', 'Cytoplasmic'), size = 3.1,
            colour = c('#d95f02', '#7570b3', '#1b9e77'))
 
@@ -124,19 +125,19 @@ p5_legend <- get_legend(p_side_entropy + size) %>% as_ggplot()
 p6 <- p_vdw_clash + guides(colour = FALSE) + labs(tag = 'F') + size
 p6_legend <- get_legend(p_vdw_clash + size) %>% as_ggplot()
 
-figure2 <- multi_panel_figure(width = 183, height = 130, columns = 12, rows = 5,
+figure2 <- multi_panel_figure(width = c(125, 43, 15), height = 150, rows = 5,
                               panel_label_type = 'none', row_spacing = 0, column_spacing = 0) %>%
-  fill_panel(p1, row = 1:5, column = 1:8) %>%
-  fill_panel(p2, row = 1, column = 9:11) %>%
-  fill_panel(p2_legend, row = 1, column = 12) %>%
-  fill_panel(p3, row = 2, column = 9:11) %>%
-  fill_panel(p3_legend, row = 2, column = 12) %>%
-  fill_panel(p4, row = 3, column = 9:11) %>%
-  fill_panel(p4_legend, row = 3, column = 12) %>%
-  fill_panel(p5, row = 4, column = 9:11) %>%
-  fill_panel(p5_legend, row = 4, column = 12) %>%
-  fill_panel(p6, row = 5, column = 9:11) %>%
-  fill_panel(p6_legend, row = 5, column = 12)
+  fill_panel(p1, row = 1:5, column = 1) %>%
+  fill_panel(p2, row = 1, column = 2) %>%
+  fill_panel(p2_legend, row = 1, column = 3) %>%
+  fill_panel(p3, row = 2, column = 2) %>%
+  fill_panel(p3_legend, row = 2, column = 3) %>%
+  fill_panel(p4, row = 3, column = 2) %>%
+  fill_panel(p4_legend, row = 3, column = 3) %>%
+  fill_panel(p5, row = 4, column = 2) %>%
+  fill_panel(p5_legend, row = 4, column = 3) %>%
+  fill_panel(p6, row = 5, column = 2) %>%
+  fill_panel(p6_legend, row = 5, column = 3)
 ggsave('figures/4_figures/figure2.pdf', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 ggsave('figures/4_figures/figure2.png', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 
