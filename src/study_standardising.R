@@ -19,6 +19,7 @@ study_summary_tbl <- function(){
       study = str_c(yaml$authour, ' ', yaml$year),
       species = yaml$species,
       gene = yaml$gene,
+      uniprot_id = yaml$uniprot_id,
       npos = n_distinct(tbl$position),
       nvar = sum(!tbl$mut == '*'),
       experiment = yaml$experiment,
