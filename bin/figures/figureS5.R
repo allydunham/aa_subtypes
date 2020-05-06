@@ -34,7 +34,7 @@ read_araya <- function(){
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
     mutate(n_mut = str_c(n_mut, ' (', signif(frac, digits = 4)*100, '%)'),
-           study = str_c('Araya et al. 2012 (YAP1)\n', signif(single_frac, digits = 4)*100, '% measures as single variants'))
+           study = str_c('Araya et al. 2012 (YAP1)\n', signif(single_frac, digits = 4)*100, '% single variant coverage'))
 }
 
 # Dorrity 2018
@@ -80,7 +80,7 @@ read_dorrity <- function(){
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
     mutate(n_mut = str_c(n_mut, ' (', signif(frac, digits = 4)*100, '%)'),
-           study = str_c('Dorrity et al. 2018 (STE12)\n', signif(single_frac, digits = 4)*100, '% measures as single variants'))
+           study = str_c('Dorrity et al. 2018 (STE12)\n', signif(single_frac, digits = 4)*100, '% single variant coverage'))
 }
 
 # Starita 2013
