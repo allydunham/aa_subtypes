@@ -10,7 +10,10 @@ dms <- full_join(read_tsv('data/subtypes/final_subtypes.tsv'),
 
 cluster_order <- sort_clusters(unique(dms$cluster))
 
-dupes <- group_by(dms, gene, position, wt) %>%
+dupes <- mutate(dms, cluster = factor(cluster, levels = cluster_order)) %>%
+  arrange(desc(cluster)) %>%
+  mutate(cluster = as.character(cluster)) %>%
+  group_by(gene, position, wt) %>%
   filter(n() > 1) %>%
   summarise(clusters = str_c(cluster, collapse = ',')) %>%
   ungroup() %>%
@@ -42,6 +45,7 @@ dupe_counts <- group_by(dupes, cluster1, cluster2) %>%
 p_detail <- ggplot(dupe_counts, aes(x=num1, y=num2, size=n, colour=match)) +
   facet_wrap(~wt, scales = 'free') +
   geom_point() +
+  coord_cartesian(clip = 'off') +
   scale_colour_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
   scale_size_area() +
   scale_x_discrete() +
