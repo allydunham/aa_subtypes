@@ -14,8 +14,8 @@ figure_inputs = {
 
     '4': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"] +
           ["figures/4_figures/position_examples/gal4_cys_zinc.png",
-           "figures/4_figures/position_examples/cbs_cys_haem.png"
-           "figures/4_figures/position_examples/np_cys_aromatic.png"
+           "figures/4_figures/position_examples/cbs_cys_haem.png",
+           "figures/4_figures/position_examples/np_cys_aromatic.png",
            "figures/4_figures/position_examples/ccr5_cys_aromatic.png"],
 
     '5': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"] +
