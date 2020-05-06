@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Produce figure S1 (Frequency over time)
+# Produce figure S1 (Frequency of rarer subtypes)
 source('src/config.R')
 source('src/subtype_characterisation.R')
 
