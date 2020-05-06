@@ -78,17 +78,8 @@ rule all:
         rules.final_subtypes.output,
         rules.all_position_subtypes.output,
         rules.continuous_characterisation.output,
-        rules.figure1.output,
-        rules.figure2.output,
-        rules.figure3.output,
-        rules.figure4.output,
-        rules.figure5.output,
-        rules.figure6.output,
-        rules.figureS1.output,
-        rules.figureS2.output,
-        rules.figureS3.output,
-        rules.figureS4.output,
-        rules.figureS5.output
+        [f"figures/4_figures/figure{n}.pdf" for n in ['1', '2', '3', '4', '5', '6', 'S1',
+                                                      'S2', 'S3', 'S4', 'S5']]
 
 
 # Only remove rapidly generated results
