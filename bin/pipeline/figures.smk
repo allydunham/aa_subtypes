@@ -33,24 +33,24 @@ figure_inputs = {
            "figures/4_figures/position_examples/cbs_phe_pi.png",
            "figures/4_figures/position_examples/tem1_trp_surface.png"],
 
-    'S1': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
+    'S1': ["data/studies/araya_2012_yap1/araya_2012_yap1.yaml",
+          "data/studies/araya_2012_yap1/raw/urn_mavedb_00000002-a-2_scores.csv",
+          "data/studies/dorrity_2018_ste12/dorrity_2018_ste12.yaml",
+          "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx",
+          "data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml",
+          "data/studies/starita_2013_ube4b/raw/sd01.xlsx"],
 
-    'S2': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
-
-    'S3': expand('data/studies/{study}/{study}.{ext}', ext=['yaml', 'tsv'],
+    'S2': expand('data/studies/{study}/{study}.{ext}', ext=['yaml', 'tsv'],
                  study=['findlay_2018_brca1', 'starita_2015_brca1',
                         'hietpas_2011_hsp90', 'jiang_2013_hsp90',
                         'firnberg_2014_tem1', 'steinberg_2016_tem1',
                         'roscoe_2013_ubi', 'roscoe_2014_ubi']),
 
-    'S4': "data/combined_mutational_scans.tsv",
+    'S3': "data/combined_mutational_scans.tsv",
 
-    'S5': ["data/studies/araya_2012_yap1/araya_2012_yap1.yaml",
-          "data/studies/araya_2012_yap1/raw/urn_mavedb_00000002-a-2_scores.csv",
-          "data/studies/dorrity_2018_ste12/dorrity_2018_ste12.yaml",
-          "data/studies/dorrity_2018_ste12/raw/pnas.1805882115.sd01.xlsx",
-          "data/studies/starita_2013_ube4b/starita_2013_ube4b.yaml",
-          "data/studies/starita_2013_ube4b/raw/sd01.xlsx"]
+    'S4': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
+
+    'S5': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"]
 }
 
 rule figure:

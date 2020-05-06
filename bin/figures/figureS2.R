@@ -1,62 +1,91 @@
 #!/usr/bin/env Rscript
-# Produce figure S2 (Cluster consistency)
+# Produce figure S2 (Gene Repeats)
 source('src/config.R')
-source('src/subtype_characterisation.R')
+source('src/study_standardising.R')
 
-dms <- full_join(read_tsv('data/subtypes/final_subtypes.tsv'),
-                 read_tsv('data/combined_mutational_scans.tsv'),
-                 by = c('study', 'gene', 'position', 'wt')) %>%
-  arrange(study, position)
+### BRCA1 ###
+brca1_studys <- sapply(c('data/studies/findlay_2018_brca1', 'data/studies/starita_2015_brca1'), import_study, fields = 'gene', simplify = FALSE) %>%
+  bind_rows() %>%
+  select(-transformed_score, -raw_score, -gene) %>%
+  pivot_wider(names_from = study, values_from = score) %>% 
+  drop_na()
 
-cluster_order <- sort_clusters(unique(dms$cluster))
-
-dupes <- mutate(dms, cluster = factor(cluster, levels = cluster_order)) %>%
-  arrange(desc(cluster)) %>%
-  mutate(cluster = as.character(cluster)) %>%
-  group_by(gene, position, wt) %>%
-  filter(n() > 1) %>%
-  summarise(clusters = str_c(cluster, collapse = ',')) %>%
-  ungroup() %>%
-  separate(clusters, c('cluster1', 'cluster2'), sep = ',') %>%
-  mutate(same = if_else(cluster1 == cluster2, 'Match', 'Mismatch'))
-
-p_overview <- ggplot(dupes, aes(x = same, fill=same)) +
-  geom_bar(width=0.5) +
-  scale_fill_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
-  guides(fill=FALSE) +
-  labs(x = '', y = 'Count') +
-  coord_flip() +
-  theme(panel.grid.major.y = element_blank())
-
-dupe_counts <- group_by(dupes, cluster1, cluster2) %>%
-  tally() %>%
-  ungroup() %>%
-  mutate(cluster1 = factor(cluster1, levels = cluster_order),
-         cluster2 = factor(cluster2, levels = cluster_order)) %>%
-  complete(cluster1, cluster2) %>%
-  mutate(n = ifelse(is.na(n), 0, n),
-         wt = str_sub(cluster1, end = 1),
-         match = if_else(cluster1 == cluster2, 'Match', 'Mismatch'),
-         num1 = factor(str_sub(cluster1, 2), levels = c(1:10, 'P', 'O')),
-         num2 = factor(str_sub(cluster2, 2), levels = c(1:10, 'P', 'O'))) %>%
-  filter(str_sub(cluster2, end = 1) == wt,
-         n > 0 | match == 'Match')
-
-p_detail <- ggplot(dupe_counts, aes(x=num1, y=num2, size=n, colour=match)) +
-  facet_wrap(~wt, scales = 'free') +
+p_brca1 <- ggplot(brca1_studys, aes(x=findlay_2018_brca1, y=starita_2015_brca1, colour=class)) +
   geom_point() +
-  coord_cartesian(clip = 'off') +
-  scale_colour_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
-  scale_size_area() +
-  scale_x_discrete() +
-  scale_y_discrete() +
-  labs(x='', y='') +
+  geom_smooth(method = 'lm', formula = y ~ x, colour = 'black') +
+  geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
+  scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  labs(x = 'Findlay et al. 2018', y = 'Starita et al. 2015', title = 'BRCA1') +
+  guides(colour = FALSE) +
   theme(panel.grid.major.y = element_blank(),
-        legend.position = 'top') +
-  guides(size = guide_legend(title = ''), colour = guide_legend(title = ''))
+        axis.ticks = element_blank())
 
-p_combined <- multi_panel_figure(width = 183, height = c(160, 23), unit = 'mm', columns = 1) %>%
-  fill_panel(p_detail, row = 1, column = 1) %>%
-  fill_panel(p_overview, row = 2, column = 1)
-ggsave('figures/4_figures/figureS2.pdf', p_combined, width = figure_width(p_combined), height = figure_height(p_combined), units = 'mm')
-ggsave('figures/4_figures/figureS2.png', p_combined, width = figure_width(p_combined), height = figure_height(p_combined), units = 'mm')
+### HSP90 ###
+# No overlap between hietpas/jiang and mishra studies
+hsp90_studys <- sapply(c('data/studies/hietpas_2011_hsp90', 'data/studies/jiang_2013_hsp90'),
+                       import_study, fields = 'gene', simplify = FALSE) %>%
+  bind_rows() %>%
+  select(-transformed_score, -raw_score, -gene) %>%
+  pivot_wider(names_from = study, values_from = score)
+
+p_hsp90 <- ggplot(hsp90_studys, aes(x=hietpas_2011_hsp90, y=jiang_2013_hsp90, colour=class)) +
+  geom_point() +
+  geom_smooth(method = 'lm', formula = y ~ x, colour = 'black') +
+  geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
+  scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  labs(x = 'Hietpas et al. 2011', y = 'Jiang et al. 2013', title = 'HSP90') +
+  guides(colour = FALSE) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.ticks = element_blank())
+
+### TEM1 ###
+## Both same lab
+tem1_studys <- sapply(c('data/studies/firnberg_2014_tem1', 'data/studies/steinberg_2016_tem1'),
+                      import_study, fields = 'gene', simplify = FALSE) %>%
+  bind_rows() %>%
+  select(-transformed_score, -raw_score, -gene) %>%
+  pivot_wider(names_from = study, values_from = score)
+
+p_tem1 <- ggplot(tem1_studys, aes(x=firnberg_2014_tem1, y=steinberg_2016_tem1, colour=class)) +
+  geom_point() +
+  geom_smooth(method = 'lm', formula = y ~ x, colour = 'black') +
+  geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
+  scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  labs(x = 'Firnberg et al. 2014', y = 'Steinberg & Ostermeier 2016', title = 'TEM1') +
+  guides(colour = FALSE) +
+  theme(panel.grid.major.y = element_blank(),
+        axis.ticks = element_blank())
+
+# Ubi
+ubi_studys <- sapply(c('data/studies/roscoe_2013_ubi', 'data/studies/roscoe_2014_ubi'),
+                     import_study, fields = 'gene', simplify = FALSE) %>%
+  bind_rows() %>%
+  select(-transformed_score, -raw_score, -gene) %>%
+  pivot_wider(names_from = study, values_from = score)
+
+p_ubi <- ggplot(ubi_studys, aes(x=roscoe_2013_ubi, y=roscoe_2014_ubi, colour=class)) +
+  geom_point(shape=20) +
+  geom_smooth(method = 'lm', formula = y ~ x, colour = 'black') +
+  geom_abline(slope = 1, colour = 'black', linetype = 'dotted') +
+  scale_colour_manual(values = MUT_CLASS_COLOURS) +
+  scale_x_continuous(expand = expansion(0.01)) +
+  scale_y_continuous(expand = expansion(0.01)) +
+  guides(colour = guide_legend(title = '', direction = 'horizontal')) +
+  labs(x = 'Roscoe et al. 2013', y = 'Roscoe & Bolon 2014', title = 'UBI') +
+  theme(panel.grid.major.y = element_blank(),
+        axis.ticks = element_blank())
+
+p_legend <- get_legend(p_ubi) %>% as_ggplot()
+p_ubi <- p_ubi + guides(colour = FALSE)
+
+# Assemble
+figure <- multi_panel_figure(width = c(89, 89), height = c(5, 89, 89), unit = 'mm',
+                             row_spacing = 0, column_spacing = 0, panel_label_type = 'none') %>%
+  fill_panel(p_legend, row = 1, column = 1:2) %>%
+  fill_panel(p_brca1 + labs(tag = 'A'), row = 2, column = 1) %>%
+  fill_panel(p_hsp90 + labs(tag = 'B'), row = 2, column = 2) %>%
+  fill_panel(p_tem1 + labs(tag = 'C'), row = 3, column = 1) %>%
+  fill_panel(p_ubi + labs(tag = 'D'), row = 3, column = 2)
+ggsave('figures/4_figures/figureS2.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS2.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+
