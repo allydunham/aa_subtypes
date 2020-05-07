@@ -451,7 +451,7 @@ Examples:
 
 * ADRB2 - Positions in the intracellular and extracellular domains, but none in the transmembrane helices. Looking at the actual profile all these positions have strong selection pressures beyond the subtype pattern. Four positions (92, 172, 178 & 296) are around the binding pocket
 * amiE - 3, 232 & 275 are deeply buried, 281 is on the surface adjacent to a phenylalanine, 107 is just below the surface next to a tyrosine, 26 is on the surface
-* BRCA1 - 41 is next to a Zn+ ion, which is also coordinated by 3 cysteines. This is a known interaction - Zhou et al. 013
+* BRCA1 - 41 is next to a Zn+ ion, which is also coordinated by 3 cysteines. This is a known interaction - Zhou et al. 2013
 * HSP90 - 197 is in a very positive pocket near two arginines
 * UBE2I - 20 is in an open cleft in the protein, 83 is buried near various, with two tyrosines somewhat nearby.
 
@@ -1421,6 +1421,7 @@ Summary:
 * Y3 - Generally selective, somewhat tolerates phenylalanine and histidine
 * Y4 - Anything but proline
 * YP - Permissive positions
+* YO - Outliers
 
 Subtypes are fairly intermixed in the original hierarchical clustering dendrogram, and there is not a large, obvious difference when looking at Y1 and Y2 positions.
 
