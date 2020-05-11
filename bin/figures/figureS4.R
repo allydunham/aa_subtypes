@@ -1,62 +1,49 @@
 #!/usr/bin/env Rscript
-# Produce figure S4 (Cluster consistency)
+# Produce figure S4 (COnsistency of positions in UMAP space)
 source('src/config.R')
 source('src/subtype_characterisation.R')
 
-dms <- full_join(read_tsv('data/subtypes/final_subtypes.tsv'),
-                 read_tsv('data/combined_mutational_scans.tsv'),
-                 by = c('study', 'gene', 'position', 'wt')) %>%
-  arrange(study, position)
+dms <- read_tsv('data/combined_mutational_scans.tsv')
+dms <- left_join(dms, count(dms, gene, position), by = c('gene', 'position'))
 
-cluster_order <- sort_clusters(unique(dms$cluster))
+repeated <- filter(dms, n > 1) %>%
+  select(study, gene, position, umap1, umap2) %>%
+  group_by(gene, position) %>%
+  summarise(umap1_1 = umap1[1],
+            umap1_2 = umap1[2],
+            umap2_1 = umap2[1],
+            umap2_2 = umap2[2])
 
-dupes <- mutate(dms, cluster = factor(cluster, levels = cluster_order)) %>%
-  arrange(desc(cluster)) %>%
-  mutate(cluster = as.character(cluster)) %>%
-  group_by(gene, position, wt) %>%
-  filter(n() > 1) %>%
-  summarise(clusters = str_c(cluster, collapse = ',')) %>%
-  ungroup() %>%
-  separate(clusters, c('cluster1', 'cluster2'), sep = ',') %>%
-  mutate(same = if_else(cluster1 == cluster2, 'Match', 'Mismatch'))
+p_umap <- ggplot() +
+  geom_point(data = dms, mapping = aes(x = umap1, y = umap2), colour = 'grey90', shape = 20, size = 0.8) +
+  geom_segment(data = repeated, aes(x = umap1_1, y = umap2_1, xend = umap1_2, yend = umap2_2)) +
+  geom_point(data = filter(dms, n > 1), mapping = aes(x = umap1, y = umap2, colour = gene)) +
+  scale_colour_brewer(type = 'qual', palette = 'Set1') +
+  guides(colour = guide_legend(title = '')) +
+  labs(x = 'UMAP1', y = 'UMAP2')
 
-p_overview <- ggplot(dupes, aes(x = same, fill=same)) +
-  geom_bar(width=0.5) +
-  scale_fill_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
-  guides(fill=FALSE) +
-  labs(x = '', y = 'Count') +
-  coord_flip() +
-  theme(panel.grid.major.y = element_blank())
+# Distribution of distances n > 1/n == 1
+distances <- mutate(dms, gene_pos = str_c(gene, '_', position)) %>%
+  tibble_to_matrix(umap1, umap2, row_names = 'gene_pos') %>%
+  dist() %>%
+  as.matrix()
+distances[upper.tri(distances, diag = TRUE)] <- NA
+distances <- as_tibble(distances, rownames = 'gene_pos1') %>%
+  pivot_longer(-gene_pos1, names_to = 'gene_pos2', values_to = 'dist') %>%
+  drop_na() %>%
+  mutate(rep = ifelse(gene_pos1 == gene_pos2, 'Repeated Position', 'Background'))
 
-dupe_counts <- group_by(dupes, cluster1, cluster2) %>%
-  tally() %>%
-  ungroup() %>%
-  mutate(cluster1 = factor(cluster1, levels = cluster_order),
-         cluster2 = factor(cluster2, levels = cluster_order)) %>%
-  complete(cluster1, cluster2) %>%
-  mutate(n = ifelse(is.na(n), 0, n),
-         wt = str_sub(cluster1, end = 1),
-         match = if_else(cluster1 == cluster2, 'Match', 'Mismatch'),
-         num1 = factor(str_sub(cluster1, 2), levels = c(1:10, 'P', 'O')),
-         num2 = factor(str_sub(cluster2, 2), levels = c(1:10, 'P', 'O'))) %>%
-  filter(str_sub(cluster2, end = 1) == wt,
-         n > 0 | match == 'Match')
+# t.test
+# wilcox.test(x = filter(distances, rep == 'Repeated Position')$dist, y = filter(distances, rep == 'Background')$dist, alternative = 'less')
 
-p_detail <- ggplot(dupe_counts, aes(x=num1, y=num2, size=n, colour=match)) +
-  facet_wrap(~wt, scales = 'free') +
-  geom_point() +
-  coord_cartesian(clip = 'off') +
-  scale_colour_manual(values = c(Match='cornflowerblue', Mismatch='firebrick2')) +
-  scale_size_area() +
-  scale_x_discrete() +
-  scale_y_discrete() +
-  labs(x='', y='') +
-  theme(panel.grid.major.y = element_blank(),
-        legend.position = 'top') +
-  guides(size = guide_legend(title = ''), colour = guide_legend(title = ''))
+p_dists <- ggplot(distances, aes(x = dist, y = ..scaled.., colour = rep)) +
+  stat_density(geom = 'line', position = 'identity') +
+  labs(x = 'UMAP Space Euclidean Distance', y = 'Scaled Density') + 
+  guides(colour = guide_legend(title = ''))
+  
+figure <- multi_panel_figure(width = 183, height = c(89, 89), unit = 'mm', columns = 1) %>%
+  fill_panel(p_umap, row = 1, column = 1) %>%
+  fill_panel(p_dists, row = 2, column = 1)
+ggsave('figures/4_figures/figureS4.pdf', figure, width = 183, height = 185, units = 'mm')
+ggsave('figures/4_figures/figureS4.png', figure, width = 183, height = 185, units = 'mm')
 
-figure <- multi_panel_figure(width = 183, height = c(160, 23), unit = 'mm', columns = 1) %>%
-  fill_panel(p_detail, row = 1, column = 1) %>%
-  fill_panel(p_overview, row = 2, column = 1)
-ggsave('figures/4_figures/figureS4.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureS4.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
