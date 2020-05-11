@@ -39,6 +39,7 @@ distances <- as_tibble(distances, rownames = 'gene_pos1') %>%
 p_dists <- ggplot(distances, aes(x = dist, y = ..scaled.., colour = rep)) +
   stat_density(geom = 'line', position = 'identity') +
   labs(x = 'UMAP Space Euclidean Distance', y = 'Scaled Density') + 
+  scale_colour_brewer(type = 'qual', palette = 'Dark2') +
   guides(colour = guide_legend(title = ''))
   
 figure <- multi_panel_figure(width = 183, height = c(89, 89), unit = 'mm', columns = 1) %>%
