@@ -105,7 +105,7 @@ p_schematic <- ggplot() +
   annotate('richtext', x = 0.74, y = 1.01, label = "<span style='font-size:8pt'>W</span>", fill = NA, label.colour = NA) +
   annotation_custom(ggplotGrob(p_initial_profiles$Y), xmin = 0.81, xmax = 0.96, ymin = 0.8, ymax = 1) +
   annotate('richtext', x = 0.89, y = 1.01, label = "<span style='font-size:8pt'>Y</span>", fill = NA, label.colour = NA) +
-  annotate('point', x = c(0.62, 0.635, 0.65), y = 0.9, shape = 20, size = 0.8) +
+  annotate('point', x = c(0.625, 0.6425, 0.66), y = 0.9, shape = 20, size = 0.5) +
   
   # Connecting arrows
   annotate('segment', x = 0.225, xend = 0.225, y = 0.84, yend = 0.83) +
