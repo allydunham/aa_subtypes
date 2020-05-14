@@ -50,9 +50,11 @@ figure_inputs = {
 
     'S4': "data/combined_mutational_scans.tsv",
 
-    'S5': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
+    'S5': "data/combined_mutational_scans.tsv",
 
-    'S6': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"]
+    'S6': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
+
+    'S7': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"]
 }
 
 rule figure:
