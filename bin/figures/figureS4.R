@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Produce figure S4 (COnsistency of positions in UMAP space)
+# Produce figure S4 (Consistency of positions in UMAP space)
 source('src/config.R')
 source('src/subtype_characterisation.R')
 
