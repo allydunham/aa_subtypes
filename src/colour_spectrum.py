@@ -4,7 +4,7 @@ and discrete options. Currently setup to produce PyMol style hexcodes (0xRRGGBB)
 """
 import re
 import numpy as np
-from  matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 from matplotlib import cm
 
 NA_COLOUR_DEFAULT = '0xDCDCDC'
