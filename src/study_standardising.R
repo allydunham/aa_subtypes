@@ -8,13 +8,32 @@ AA_THREE_2_ONE['Ter'] <- '*'
 
 # Make summary table about studies
 study_summary_tbl <- function(){
+  structure_config <- read_yaml('meta/structures.yaml')
+  import_fx_gene <- function(x){
+    x <- gene_to_filename(x)
+    suppressMessages(import_foldx(str_c('data/foldx/', x, '/', 'average_', x, '.fxout'),
+                     structure_config[[x]]$sections))
+  }
+  foldx <- names(structure_config) %>%
+    extract(!. %in% c('braf', 'gfp')) %>%
+    sapply(import_fx_gene, simplify = FALSE) %>%
+    bind_rows(.id = 'gene')
+  
   study_summary <- function(study){
     yaml <- read_yaml(str_c('data/studies/', study, '/', study, '.yaml'))
-    tbl <- import_study(str_c('data/studies/', study)) %>%
+    tbl <- suppressMessages(import_study(str_c('data/studies/', study))) %>%
       group_by(study, position, wt) %>%
       filter(sum(!mut == wt) >= 15) %>% # Only keep positions with a maximum of 4 missing scores
-      ungroup()
+      ungroup() 
     
+    prop_fx <- filter(foldx, gene == gene_to_filename(yaml$gene)) %>%
+      select(position, wt, mut, total_energy) %>%
+      left_join(tbl, ., by = c('position', 'wt', 'mut')) %>%
+      group_by(position) %>%
+      summarise(f=any(!is.na(total_energy))) %>%
+      pull(f)
+    prop_fx <- sum(prop_fx)/length(prop_fx)*100
+      
     tibble(
       study = str_c(yaml$authour, ' ', yaml$year),
       species = yaml$species,
@@ -22,6 +41,7 @@ study_summary_tbl <- function(){
       uniprot_id = yaml$uniprot_id,
       npos = n_distinct(tbl$position),
       nvar = sum(!tbl$mut == '*'),
+      prop_struct = prop_fx,
       experiment = yaml$experiment,
       multi_condition = NA,
       multi_variant = NA,
