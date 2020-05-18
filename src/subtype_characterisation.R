@@ -925,7 +925,7 @@ plot_cluster_characterisation <- function(full_characterisation, selective_chara
   # Special plots for each cluster type
   if (!is.null(clusters)){
     if ('hclust' %in% names(clusters[[1]])){
-      plots$minimal_dends <- plot_compressed_dendrograms(clusters, dms)
+      plots$minimal_dends <- plot_compressed_dendrograms(clusters, full_characterisation$tbl)
     }
   }
   
