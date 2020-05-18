@@ -75,7 +75,7 @@ p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 4 - Surface Accessibility ###
-p_surface_accessibility <- drop_na(dms, side_chain_rel) %>%
+p_surface_accessibility <- drop_na(dms, all_atom_abs) %>%
   ggplot(aes(x = umap1, y = umap2, colour = all_atom_abs)) +
   geom_point(colour = 'grey90', shape = 20, size = 0.8) +
   geom_point(shape = 20, size = 0.8) +
