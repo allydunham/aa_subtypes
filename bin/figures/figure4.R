@@ -40,18 +40,18 @@ p_surface_acc <- filter(dms, cluster %in% c('C1', 'C2')) %>%
   labs(x = 'Surface Accessibility (All Atom Abs)', y = 'Scaled Density') +
   theme(legend.title = element_blank())
 
-p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), !is.na(disulfide)) %>%
+p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), disulfide > 0) %>%
   count(cluster) %>%
   mutate(cluster = factor(cluster, levels = c('C1', 'C2')),
          cluster_int = as.integer(cluster)) %>%
   ggplot(aes(xmin = 0, xmax = n, ymin = as.integer(cluster) - 0.4, ymax = as.integer(cluster) + 0.4 , fill = cluster)) +
   geom_rect(show.legend = FALSE) +
-  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_cys_disulphide.png'), interpolate = TRUE, xmin=-35, xmax=-15, ymin=1, ymax=2) +
-  coord_fixed(ratio = 20, clip = 'off') +
+  annotation_raster(readPNG('figures/4_figures/position_examples/ccr5_cys_disulphide.png'), interpolate = TRUE, xmin=-10.9375, xmax=-4.6875, ymin=1, ymax=2) +
+  coord_fixed(ratio = 6.25, clip = 'off') +
   # Fake y axis to position image beyond it
-  annotate('richtext', x = -7.5, y = c(1, 2), fill = NA, label.color = NA, size = 2,
+  annotate('richtext', x = -2.3, y = c(1, 2), fill = NA, label.color = NA, size = 2,
            label = c("<span style='color:#E41A1C'>**C1**</span>", "<span style='color:#377EB8'>**C2**</span>")) +
-  scale_x_continuous(name = 'Disulphide Bonds', expand = expansion(0.01), limits = c(-40, 80), breaks = seq(0, 80, 20)) +
+  scale_x_continuous(name = 'Disulphide Bonds', expand = expansion(0.01), limits = c(-12.5, 25), breaks = seq(0, 25, 5)) +
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
