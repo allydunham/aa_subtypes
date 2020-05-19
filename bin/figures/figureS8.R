@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Analyse SIFT score UMAP landscape
+# figure S8 (Analyse SIFT score UMAP/PC landscape)
 source('src/config.R')
 
 domains <- read_tsv('meta/uniprot_domains.gff', comment = '#', 
@@ -18,10 +18,7 @@ sift_umap <- select(dms_long, study, gene, position, wt, mut, sift) %>%
   pivot_wider(names_from = mut, values_from = sift) %>%
   tibble_to_matrix(A:Y) %>%
   umap(metric = 'manhattan')
-sift_pca <- select(dms_long, study, gene, position, wt, mut, sift) %>%
-  filter(!mut == '*') %>%
-  pivot_wider(names_from = mut, values_from = sift) %>%
-  tibble_pca(A:Y)
+sift_pca <- tibble_pca(dms, log10_sift_A:log10_sift_Y)
 
 dms <- bind_cols(dms,
                  set_colnames(sift_umap, c('sift_umap1', 'sift_umap2')) %>% as_tibble(),
@@ -105,10 +102,10 @@ p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
 p_pc_score <- ggplot(dms, aes(x = sift_PC1, y = mean_sift, z = mean_score)) +
   stat_summary_hex(bins = 40) +
   scale_fill_distiller(type = 'div', palette = 'Spectral', direction = 1) +
-  labs(x = 'PC1', y = 'Mean log<sub>10</sub>SIFT') +
+  labs(x = 'log<sub>10</sub>SIFT PC1', y = 'Mean log<sub>10</sub>SIFT') +
   guides(fill = guide_colourbar(title = 'Mean ER', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
-        axis.title.y = element_markdown())
+        axis.title = element_markdown())
 
 ### Assemble figure ###
 size <- theme(text = element_text(size = 7))
@@ -131,5 +128,5 @@ figure <- multi_panel_figure(width = 183, height = c(55, 50, 50), columns = 3,
   fill_panel(p6, row = 3, column = 2) %>%
   fill_panel(p7, row = 3, column = 3)
 
-ggsave('figures/4_figures/figureSX.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureSX.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS8.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS8.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
