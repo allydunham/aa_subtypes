@@ -11,10 +11,12 @@ sift <- read_tsv('data/long_combined_mutational_scans.tsv') %>%
   pivot_wider(names_from = mut, values_from = sift)
 
 pca <- tibble_pca(sift, A:Y)
+log10_pca <- tibble_pca(dms, starts_with('log10_sift'))
 tsne <- tibble_tsne(sift, A:Y)
 umap <- tibble_to_matrix(sift, A:Y) %>% umap(metric = 'manhattan')
 
-sift <- bind_cols(tsne$tbl, as_tibble(pca$x), set_colnames(umap, c('umap1', 'umap2')) %>% as_tibble()) %>%
+sift <- bind_cols(tsne$tbl, as_tibble(pca$x), as_tibble(log10_pca$x) %>% rename_all(~str_c('log10_', .)),
+                  set_colnames(umap, c('umap1', 'umap2')) %>% as_tibble()) %>%
   left_join(.,
             select(dms, -matches('^.$'), -starts_with('PC'), -tSNE1, -tSNE2, -umap1, -umap2),
             by = c('study', 'gene', 'position', 'wt'))
@@ -30,7 +32,7 @@ sift_permissive <- filter(sift, permissive_positions) %>%
 
 sift <- filter(sift, !permissive_positions)
 
-cluster_func <- function(tbl, ...){make_dynamic_hclust_clusters(tbl, PC2:PC20, distance_method = 'cosine', treecut_args = list('deepSplit'=2))}
+cluster_func <- function(tbl, ...){make_dynamic_hclust_clusters(tbl, log10_PC2:log10_PC20, distance_method = 'cosine', treecut_args = list('deepSplit'=1))}
 
 clusters <- group_by(sift, wt) %>%
   group_map(cluster_func, keep = TRUE) %>%
@@ -61,5 +63,5 @@ plots <- plot_cluster_characterisation(full_characterisation, selective_characte
 write_tsv(select(sift, cluster, study, gene, position, wt), 'data/subtypes/sift_scores.tsv')
 saveRDS(clusters, file = 'data/subtypes/sift_scores.rds')
 save_plotlist(diagnostic_plots, root = 'figures/2_subtypes/sift_scores', overwrite = 'all')
-save_plotlist(plots, 'figures/2_subtypes/sift_scores', verbose = 2)
+save_plotlist(plots, 'figures/2_subtypes/sift_scores', verbose = 2, overwrite = 'all')
 
