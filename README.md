@@ -1,11 +1,12 @@
 # Characterising amino acid positions and their subtypes using deep mutational landscapes
+
 This repo contains the code for the publication XXX
 
 ## Abstract
 
 ## Project Overview
 
-```
+```plaintext
 subtypes
 |-- Snakefile                                    - Main pipeline
 |-- bin                                          - Scripts (mainly R & Python), split into various sections
@@ -31,29 +32,54 @@ subtypes
 ```
 
 ## Running the pipeline
-### Overview
+
+The pipeline is managed by Snakemake, with various convenience rules supplied:
+
+* all - Generate the subtypes and figures for the paper along with a few additional
+analyses.
+* full\_analysis - Perform all these and various additional analyses, primarily generating
+subtypes using other tested methods and generating many more summary plots for the various
+stages of the pipeline. This includes mapping various factors onto the protein structures
+and longer clustering algorithms, so takes significantly more time.
+* full\_clean - Remove all generated files, including the main data files (combined\_mutational\_scans.tsv).
+This is mainly useful when running the pipeline from raw data downloaded from individual studies.
+* quick\_clean - Remove all generated files apart from those that take a long time to
+generate (FoldX results, SIFT results etc.) and the main data files.
+
+### Setup Overview
+
 1. Clone this repo - `git clone https://github.com/allydunham/aa_subtypes.git`
-2. Download raw data files
+2. Download data files (optional)
 3. Install dependancies
 4. Setup local environment settings
 
-I used a combination of local python virtual environments (managed with pipenv) and a 
+I used a combination of local python virtual environments and a
 `conda` environment on our computer cluster for running the heavier programs.
 Conda can be used for all but a few packages, which were just installed manually.
 
-### 2. Raw Data Files
-To run the full pipeline the required files need to be downloaded from each study website, 
+### 2. Data Files
+
+To run the full pipeline the required files need to be downloaded from each study website,
 as indicated in the study YAML files, and placed in the appropriate `raw/` folder.
-However, the data analysis pipeline can be run using the supplied aggrgated data files, 
-continaing processed data from each study and associated results from various tools (SIFT,
+However, the data analysis pipeline can be run using the supplied aggregated data files,
+containing processed data from each study and associated results from various tools (SIFT,
 FoldX etc.).
+
+For analyses using the clinvar dataset clinvar\_20200106.vcf.gz and
+clinvar\_20200106.vcf.gz.tbi must be downloaded from the Clinvar website and placed in
+data/clinvar.
+Newer releases can also be used if the appropriate script is updated
+(bin/analysis/0\_data/clinvar\_classification.R).
+If these files are not available Snakemake will proceed without this analysis, which
+is supplementary to the main focus.
 
 ### 3. Dependancies
 
 Python 3.7 and R 3.6.3 were used
 
 #### Python packages
-* Biopython
+
+* biopython
 * colorama
 * numpy
 * matplotlib
@@ -61,9 +87,9 @@ Python 3.7 and R 3.6.3 were used
 * ruamel.yaml
 
 In addition the python modules in src/ must be able to be imported.
-These are also listed in the Pipfile.
 
 #### R packages
+
 * Biostrings
 * broom
 * cluster
@@ -87,21 +113,33 @@ These are also listed in the Pipfile.
 * uwot
 * yaml
 
+Clinvar analyses also requires:
+
+* BSgenome.Hsapiens.UCSC.hg38
+* Homo.sapiens
+* TxDb.Hsapiens.UCSC.hg38.knownGene
+* VariantAnnotation
+
 #### Other Tools
+
 * SIFT4G (patched to output 4 decimal places)
-* FoldX 5 
+* FoldX 5
 * Naccess 2.1.1
-* Porter5 
+* Porter5
 * Pymol 2.3.0 open source (and requires pymol2 to be importable)
 
-Of these only Pymol is required for the analysis part of the pipeline, with the results 
-of the other tool being included in the supplied data files.
+Of these only Pymol is required for the analysis part of the pipeline, and then
+only when running the complete pipeline which generates various plots of features mapped
+to protein structures.
+The standard `Snakemake` command doesn't produce these extra plots by default so doesn't require
+pymol.
+The results of the other tool are all pregenerated and included in the supplied data files,
+so are only required to run the pipeline from raw data.
 
 ### 4. Local Environment
-1. Add this repos `src` directory to your PYTHONPATH
+
+1. Add this repos `src` directory to your $PYTHONPATH
 2. Update the Porter5 and uniref90 paths in snakemake.yaml
 3. Update cluster.yaml if you have different preferences for running snakemake in
    cluster mode. I used [snakemake-lsf](https://github.com/Snakemake-Profiles/snakemake-lsf)
    to manage cluster mode, but the required setup will depend on your setup.
-
-

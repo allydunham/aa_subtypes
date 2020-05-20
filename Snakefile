@@ -40,6 +40,8 @@ PDB_LANDSCAPE_FACTORS = ['PC1', 'PC2', 'PC3', 'PC4', 'total_energy', 'mean_sift'
                          'tSNE1', 'tSNE2', 'umap1', 'umap2']
 PDB_LANDSCAPE_FACTORS.extend(list(AA_ALPHABET))
 
+FIGURES = ['1', '2', '3', '4', '5', '6', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9']
+
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'
 include: 'bin/pipeline/standardisation.smk'
@@ -53,13 +55,20 @@ include: 'bin/pipeline/figures.smk'
 #### Global rules ####
 rule all:
     """
-    Run complete pipeline:
-        - Standardise all studies
-        - Run SIFT and FoldX on all genes
-        - Calculate other statistics from structures
-        - Combine all data
-        - Produce standard clusterings
-        - Also generates various summary and diagnostic tables/plots
+    Run main pipeline, generating the subtypes and figures from the paper.
+    """
+    input:
+        'data/combined_mutational_scans.tsv', # Covers standardisation, SIFT, FoldX + other stats
+        rules.summarise_study_set.output,
+        rules.summarise_standardised_data.output,
+        rules.compare_hclust_dynamic_deep_split.output,
+        rules.final_subtypes.output,
+        rules.sift_subtypes.output,
+        [f"figures/4_figures/figure{n}.pdf" for n in FIGURES]
+
+rule full_analysis:
+    """
+    Run complete pipeline, including suplementary anlyses
     """
     input:
         'data/combined_mutational_scans.tsv', # Covers standardisation, SIFT, FoldX + other stats
@@ -78,9 +87,8 @@ rule all:
         rules.final_subtypes.output,
         rules.all_position_subtypes.output,
         rules.continuous_characterisation.output,
-        [f"figures/4_figures/figure{n}.pdf" for n in ['1', '2', '3', '4', '5', '6', 'S1',
-                                                      'S2', 'S3', 'S4', 'S5', 'S6', 'S7']]
-
+        rules.sift_subtypes.output,
+        [f"figures/4_figures/figure{n}.pdf" for n in FIGURES]
 
 # Only remove rapidly generated results
 def quick_clean_files():
@@ -96,8 +104,6 @@ def quick_clean_files():
     output_files.append('meta/study_summary.tsv')
     output_files.append('meta/gene_summary.tsv')
     output_files.append('meta/overall_summary')
-    output_files.append('data/combined_mutational_scans.tsv')
-    output_files.append('data/long_combined_mutational_scans.tsv')
     output_files.append('data/subtypes/*')
     output_files.append('data/backbone_angles/*')
     output_files.append('data/chemical_environment/*')
@@ -120,6 +126,10 @@ rule full_clean:
     """
     run:
         output_files = quick_clean_files()
+
+        # Main data files
+        output_files.append('data/combined_mutational_scans.tsv')
+        output_files.append('data/long_combined_mutational_scans.tsv')
 
         # Quick to generate but dependancy for SIFT/Porter5
         output_files.append('data/fasta/*')

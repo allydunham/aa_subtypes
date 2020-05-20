@@ -5,6 +5,7 @@ Expects global variables:
 - STUDIES: dictionary ofall study dicts (as read from the yamls)
 - GENES: dictionary mapping genes to lists of their study IDs
 """
+import os
 
 #### Validate standardiation methods ####
 rule validate_melnikov:
@@ -228,7 +229,13 @@ rule clinvar_prediction:
 VALIDATION_RULES = [rules.validate_melnikov, rules.validate_kitzman, rules.validate_giacomelli,
                     rules.validate_heredia, rules.validate_sarkisyan, rules.validate_dorrity,
                     rules.validate_araya, rules.validate_starita, rules.sift_correlation,
-                    rules.gene_repeats, rules.clinvar_prediction]
+                    rules.gene_repeats]
+
+if (os.path.isfile("data/clinvar/clinvar_20200106.vcf.gz") and
+    os.path.isfile("data/clinvar/clinvar_20200106.vcf.gz.tbi")):
+    VALIDATION_RULES.append(rules.clinvar_prediction)
+else:
+    print('Warning: Clinvar data unavailable, not performing supplementary analyses with this data')
 
 rule validate_data:
     """
