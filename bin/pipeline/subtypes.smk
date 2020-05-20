@@ -379,3 +379,24 @@ rule characterise_subtypes_gmm:
 
     shell:
         "Rscript bin/analysis/2_subtypes/characterise_subtypes.R --dms {input.dms} --figures figures/2_subtypes/gmm_{wildcards.name} data/subtypes/gmm_{wildcards.name} &> {log}"
+
+# Sift based subtypes
+rule sift_subtypes:
+    """
+    Make subtypes based on SIFT scores
+    """
+    input:
+        "data/combined_mutational_scans.tsv",
+        "data/long_combined_mutational_scans.tsv"
+
+    output:
+        "data/subtypes/sift_scores.tsv",
+        "data/subtypes/sift_scores.rds",
+        [f'figures/2_subtypes/sift_scores/{x}' for x in diagnostic_plots],
+        [f'figures/2_subtypes/sift_scores/{x}' for x in characterisation_plots]
+
+    log:
+        "logs/sift_subtypes.log"
+
+    shell:
+        "Rscript bin/analysis/2_subtypes/sift_subtypes.R"
