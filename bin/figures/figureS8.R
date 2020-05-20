@@ -105,7 +105,8 @@ p_pc_score <- ggplot(dms, aes(x = sift_PC1, y = mean_sift, z = mean_score)) +
   labs(x = 'log<sub>10</sub>SIFT PC1', y = 'Mean log<sub>10</sub>SIFT') +
   guides(fill = guide_colourbar(title = 'Mean ER', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
-        axis.title = element_markdown())
+        axis.title.x = element_markdown(),
+        axis.title.y = element_markdown())
 
 ### Assemble figure ###
 size <- theme(text = element_text(size = 7))
