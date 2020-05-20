@@ -54,7 +54,13 @@ figure_inputs = {
 
     'S6': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
 
-    'S7': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"]
+    'S7': ["data/combined_mutational_scans.tsv", "data/subtypes/final_subtypes.tsv"],
+
+    'S8': ["meta/uniprot_domains.gff", "data/long_combined_mutational_scans.tsv",
+           "data/combined_mutational_scans.tsv"]
+
+    'S9': ["data/subtypes/final_subtypes.tsv", "data/subtypes/sift_scores.tsv",
+           "data/combined_mutational_scans.tsv"]
 }
 
 rule figure:
