@@ -849,11 +849,7 @@ plot_full_characterisation <- function(clusters, data, exclude_outliers=TRUE, gl
   text_theme <- theme(text = element_text(size = 9))
   legend_theme <- theme(legend.key.height = unit(0.5, 'cm'), legend.key.width = unit(0.5, 'cm'))
   
-  if (length(cluster_order) < 7){
-    size <- c(21, 21)
-  } else {
-    size <- c(29.7, 21)
-  }
+  size <- c(29.7, 21)
   
   p_overall <- multi_panel_figure(width = size[1], height = size[2], columns = 7, rows = 4, unit = 'cm', 
                                   row_spacing = 0.3, column_spacing = 0.3, panel_label_type = 'upper-alpha') %>%
