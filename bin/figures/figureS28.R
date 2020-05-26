@@ -9,14 +9,11 @@ domains <- read_tsv('meta/uniprot_domains.gff', comment = '#',
   mutate(name = str_extract(info, 'Note=[^;]*;?') %>% str_remove(';$') %>% str_remove(' [0-9]*$') %>% str_remove('^Note=') %>% str_remove('%.*$'),
          name = ifelse(name == 'Helical', 'Transmembrane', name))
 
-dms_long <- read_tsv('data/long_combined_mutational_scans.tsv')
 dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
   mutate(uniprot_id = unname(UNIPROT_IDS[gene]))
 
-sift_umap <- select(dms_long, study, gene, position, wt, mut, sift) %>%
-  filter(!mut == '*') %>%
-  pivot_wider(names_from = mut, values_from = sift) %>%
-  tibble_to_matrix(A:Y) %>%
+sift_umap <- tibble_to_matrix(dms, log10_sift_A:log10_sift_Y) %>%
+  raise_to_power(10, .) %>%
   umap(metric = 'manhattan')
 sift_pca <- tibble_pca(dms, log10_sift_A:log10_sift_Y)
 
