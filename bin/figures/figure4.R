@@ -91,8 +91,8 @@ size <- theme(text = element_text(size = 5))
 
 p1 <- p_profiles + labs(tag = 'A') + size
 p2 <- p_disulphide + labs(tag = 'B') + size
-p3 <- p_surface_acc + labs(tag = 'C') + size
-p4 <- p_ligand_ex + labs(tag = 'D') + size
+p3 <- p_ligand_ex + labs(tag = 'C') + size
+p4 <- p_surface_acc + labs(tag = 'D') + size
 p5 <- p_aromatic_ex + labs(tag = 'E') + size
  
 figure4 <- multi_panel_figure(width = 89, height = 74.315, columns = 2, rows = 3,
