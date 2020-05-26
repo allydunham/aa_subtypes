@@ -72,7 +72,8 @@ rule figureS8_27:
         "data/subtypes/final_subtypes.tsv"
 
     output:
-        expand("figures/4_figures/figureS{i}.{ext}", i=range(8,28), ext=['pdf', 'png'])
+        expand("figures/4_figures/figureS{i}.{ext}", i=range(8,28), ext=['pdf', 'png']),
+        "figures/4_figures/figureS8_27.pdf"
 
     log:
         "logs/figureS8_27.log"
