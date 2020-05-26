@@ -153,8 +153,8 @@ size <- theme(text = element_text(size = 7))
 
 p1 <- p_profiles + labs(tag = 'A') + size
 p2 <- p_foldx + labs(tag = 'B') + size
-p3 <- p_ionic_ex + labs(tag = 'C') + size
-p4 <- p_polar_ex + labs(tag = 'D') + size
+p3 <- p_polar_ex + labs(tag = 'C') + size
+p4 <- p_ionic_ex + labs(tag = 'D') + size
 p5 <- p_positive_ex + labs(tag = 'E') + size
 p6 <- p_negative_ex + labs(tag = 'F') + size
 p7 <- p_not_negative_ex + labs(tag = 'G') + size
