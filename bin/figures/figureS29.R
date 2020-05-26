@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# Figure S9 (SIFT subtypes)
+# Figure S29 (SIFT subtypes)
 source('src/config.R')
 
 dms <- left_join(read_tsv('data/subtypes/final_subtypes.tsv'),
@@ -38,5 +38,5 @@ figure <- ggplot(cosine, aes(x = type, y = cosine, fill = type)) +
   theme(axis.text.x = element_markdown(),
         axis.ticks.x = element_blank())
 
-ggsave('figures/4_figures/figureS9.pdf', figure, width = 120, height = 120, units = 'mm')
-ggsave('figures/4_figures/figureS9.png', figure, width = 120, height = 120, units = 'mm')
+ggsave('figures/4_figures/figureS29.pdf', figure, width = 120, height = 120, units = 'mm')
+ggsave('figures/4_figures/figureS29.png', figure, width = 120, height = 120, units = 'mm')

@@ -40,7 +40,7 @@ PDB_LANDSCAPE_FACTORS = ['PC1', 'PC2', 'PC3', 'PC4', 'total_energy', 'mean_sift'
                          'tSNE1', 'tSNE2', 'umap1', 'umap2']
 PDB_LANDSCAPE_FACTORS.extend(list(AA_ALPHABET))
 
-FIGURES = ['1', '2', '3', '4', '5', '6', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9']
+FIGURES = list(range(1,7)) + [f'S{i}' for i in range (1, 30)]
 
 #### Include subroutines ####
 include: 'bin/pipeline/data_validation.smk'

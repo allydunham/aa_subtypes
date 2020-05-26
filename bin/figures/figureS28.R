@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# figure S8 (Analyse SIFT score UMAP/PC landscape)
+# figure S28 (Analyse SIFT score UMAP/PC landscape)
 source('src/config.R')
 
 domains <- read_tsv('meta/uniprot_domains.gff', comment = '#', 
@@ -129,5 +129,5 @@ figure <- multi_panel_figure(width = 183, height = c(55, 50, 50), columns = 3,
   fill_panel(p6, row = 3, column = 2) %>%
   fill_panel(p7, row = 3, column = 3)
 
-ggsave('figures/4_figures/figureS8.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureS8.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS28.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS28.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
