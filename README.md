@@ -30,11 +30,11 @@ subtypes
 |   `-- (long_)combined_mutational_scans.tsv     - Processed, combined data tables, with full details for each mutation or averaged over the position
 |-- docs                                         - Document describing final subtypes
 |-- figures                                      - Directories of figures for each stage of the project
-|   |-- 0\_data
-|   |-- 1\_landscape
-|   |-- 2\_subtypes
-|   |-- 3\_continuous
-|   `-- 4\_figures                               - Final paper figures (including subparts)
+|   |-- 0_data
+|   |-- 1_landscape
+|   |-- 2_subtypes
+|   |-- 3_continuous
+|   `-- 4_figures                                - Final paper figures (including subparts)
 |-- logs                                         - Logs from snakemake
 |-- meta                                         - Various metadata files (uniprot domains, residue hydrophobicity etc.)
 |   `-- subtypes                                 - Configuration files for subtyping algorithms
