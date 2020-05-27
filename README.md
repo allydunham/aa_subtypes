@@ -1,8 +1,7 @@
 # Exploring amino acid functions in a deep mutational landscape 
 Alistair Dunham & Pedro Beltrao
 
-This repo contains the code used to generate the results of the paper ([bioRxiv](https://www.biorxiv.org/))
-XX ADD LINK XX
+This repo contains the code used to generate the results of the paper ([bioRxiv](https://www.biorxiv.org/content/10.1101/2020.05.26.116756v1))
 
 ## Abstract
 
