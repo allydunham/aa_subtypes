@@ -98,9 +98,11 @@ dms_wide <- bind_cols(dms_wide, as_tibble(pca$x))
 tsne <- tibble_tsne(dms_wide, A:Y)
 dms_wide <- tsne$tbl
 dms_umap <- tibble_to_matrix(dms_wide, A:Y) %>%
-  umap(metric = 'manhattan')
-dms_wide <- bind_cols(dms_wide, set_colnames(dms_umap, c('umap1', 'umap2')) %>% as_tibble())
+  umap(metric = 'manhattan', ret_model = TRUE)
+dms_wide <- bind_cols(dms_wide, set_colnames(dms_umap$embedding, c('umap1', 'umap2')) %>% as_tibble())
 
 # Write combined data
 write_tsv(dms, 'data/long_combined_mutational_scans.tsv')
 write_tsv(dms_wide, 'data/combined_mutational_scans.tsv')
+saveRDS(pca, 'data/dms_pca.rds')
+uwot::save_uwot(model = dms_umap, file = "./dms_umap", unload = FALSE, verbose = TRUE)
