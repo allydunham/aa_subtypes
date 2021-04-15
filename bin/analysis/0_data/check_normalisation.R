@@ -35,8 +35,8 @@ plots$score_group_density <- ggplot(score_groups, aes(x = value, y = ..scaled..,
 
 plots$score_group_box <- ggplot(score_groups, aes(x = class, y = value, fill = class)) +
   geom_boxplot() +
-  facet_wrap(~metric, nrow = 1, scales = "free_x") +
+  facet_wrap(~metric, nrow = 1, scales = "free_y") +
   stat_compare_means(comparisons = list(c("with10", "without10"), c("with10", "neutral"), c("without10", "neutral")))
 
 ### Save plots ###
-save_plotlist(plots, "figures/0_data/")
+save_plotlist(plots, "figures/0_data/", overwrite = "all")
