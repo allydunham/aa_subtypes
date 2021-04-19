@@ -32,7 +32,7 @@ cosine <- tibble(type=c(rep('dms', length(dms_dist)), rep('sift', length(sift_di
 figure <- ggplot(cosine, aes(x = type, y = cosine, fill = type)) +
   geom_boxplot(show.legend = FALSE) +
   stat_compare_means(paired = FALSE, comparisons = list(c('dms', 'sift'))) +
-  scale_x_discrete(name = 'Profiles used for clustering', labels = c(dms='ER', sift='log<sub>10</sub>SIFT')) +
+  scale_x_discrete(name = 'Profiles used for clustering', labels = c(dms='ER', sift='log<sub>10</sub>SIFT4G')) +
   scale_y_continuous(name = 'Mean Cosine Distance', limits = c(0, 0.6)) +
   scale_fill_manual(values = c(dms='firebrick2', sift='cornflowerblue')) +
   theme(axis.text.x = element_markdown(),

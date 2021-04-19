@@ -142,7 +142,7 @@ p_schematic <- ggplot() +
   annotate('TextBox', x = 0.405, y = 0.665, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>2.<br></span>") +
   annotate('TextBox', x = 0.455, y = 0.675, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
-           label = "<span style='font-size:7pt'>Split permissive positions (|ER|&nbsp;<&nbsp;0.4)<br></span>") +
+           label = "<span style='font-size:7pt'>Split permissive positions (|ER|&nbsp;<&nbsp;0.4, labeled AP)<br></span>") +
   annotate('TextBox', x = 0.405, y = 0.5, hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,
            label = "<span style='font-size:7pt'>3.<br></span>") +
   annotate('TextBox', x = 0.455, y = 0.5, width = unit(0.65, 'npc'), hjust = 0, vjust = 1, fill = NA, box.colour = NA, lineheight = 0.6,

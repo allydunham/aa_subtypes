@@ -27,7 +27,7 @@ dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=nam
   left_join(dms, ., by = c('gene', 'position', 'wt'))
 
 p_transmembrane <- ggplot(mapping = aes(x=umap1, y=umap2)) + 
-  geom_point(data = dms, colour = 'grey90', shape = 20) +
+  geom_hex(data = dms, fill = 'grey90', bins = 40) +
   geom_point(data = filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR4')), mapping = aes(shape = gene, colour = domain), show.legend = FALSE) +
   scale_colour_brewer(type = 'qual', palette = 'Dark2') +
   scale_shape_manual(values = c(ADRB2 = 15, CCR5 = 17, CXCR4 = 18)) + 
@@ -50,79 +50,77 @@ p_transmembrane <- ggplot(mapping = aes(x=umap1, y=umap2)) +
 
 ### Panel 2 - Mean SIFT ###
 p_sift <- drop_na(dms, mean_sift) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = mean_sift)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_color_distiller(type = 'seq', palette = 'RdPu', limits = c(min(dms$mean_sift), 0),
-                        breaks = 0:-4) +
+  ggplot(aes(x = umap1, y = umap2, z = mean_sift)) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_distiller(type = 'seq', palette = 'RdPu', limits = c(min(dms$mean_sift), 0), breaks = 0:-4) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'log<sub>10</sub>SIFT', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colourbar(title = 'log<sub>10</sub>SIFT4G', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.background = element_blank())
 
 ### Panel 3 - AA hydrophobicity ### 
 p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = hydrophobicity)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
+  ggplot(aes(x = umap1, y = umap2, z = hydrophobicity)) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
                          values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2)), limits = c(-0.4, 1.201)) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.background = element_blank())
 
 ### Panel 4 - Surface Accessibility ###
 p_surface_accessibility <- drop_na(dms, all_atom_abs) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = all_atom_abs)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'),
-                         values = c(0, 0.2, 1)) +
+  ggplot(aes(x = umap1, y = umap2, z = all_atom_abs)) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'), values = c(0, 0.2, 1)) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.background = element_blank())
 
 ### Panel 5 - Sidechain Entropy ###
 p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = clamp(entropy_sidechain, 1.5, -1.5))) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
+  ggplot(aes(x = umap1, y = umap2, z = clamp(entropy_sidechain, 1.25, -1.25))) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_distiller(type = 'div', palette = 'PuOr', limits = c(-1.25, 1.25)) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.background = element_blank())
 
 ### Panel 6 - Van der Waals Clash ###
 p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
-  ggplot(aes(x = umap1, y = umap2, colour = clamp(van_der_waals_clashes, 5, -5))) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
+  ggplot(aes(x = umap1, y = umap2, z = clamp(van_der_waals_clashes, 5, -5))) +
+  stat_summary_hex(bins = 40) +
+  scale_fill_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
   scale_y_continuous(breaks = umap2_breaks) +
   coord_equal() +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.background = element_blank())
 
 ### Assemble Figure ###
 size <- theme(text = element_text(size = 7))
 p1 <- p_transmembrane + labs(tag = 'A') + size
-p2 <- p_sift + guides(colour = FALSE) + labs(tag = 'B') + size
+p2 <- p_sift + guides(fill = FALSE) + labs(tag = 'B') + size
 p2_legend <- get_legend(p_sift + size) %>% as_ggplot()
-p3 <- p_hydrophobicity + guides(colour = FALSE) + labs(tag = 'C') + size
+p3 <- p_hydrophobicity + guides(fill = FALSE) + labs(tag = 'C') + size
 p3_legend <- get_legend(p_hydrophobicity + size) %>% as_ggplot()
-p4 <- p_surface_accessibility + guides(colour = FALSE) + labs(tag = 'D') + size
+p4 <- p_surface_accessibility + guides(fill = FALSE) + labs(tag = 'D') + size
 p4_legend <- get_legend(p_surface_accessibility + size) %>% as_ggplot()
-p5 <- p_side_entropy + guides(colour = FALSE) + labs(tag = 'E') + size
+p5 <- p_side_entropy + guides(fill = FALSE) + labs(tag = 'E') + size
 p5_legend <- get_legend(p_side_entropy + size) %>% as_ggplot()
-p6 <- p_vdw_clash + guides(colour = FALSE) + labs(tag = 'F') + size
+p6 <- p_vdw_clash + guides(fill = FALSE) + labs(tag = 'F') + size
 p6_legend <- get_legend(p_vdw_clash + size) %>% as_ggplot()
 
 figure2 <- multi_panel_figure(width = c(125, 43, 15), height = 150, rows = 5,

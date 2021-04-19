@@ -35,11 +35,14 @@ p_genes <- ggplot(gene_summary, aes(x = x, y = n, label = img)) +
 ### Panel 2 - Normalisation Procedure ###
 p_norm_raw <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = raw_score, colour = study)) +
-  geom_density(size = 1.1) +
+  geom_density(size = 0.9) +
   labs(title = 'Raw') +
   guides(colour = FALSE) +
+  scale_x_continuous(breaks = c(0),
+                     labels = c("<span style='font-size:6pt'><span style='line-height:4'>0</span><br>Studies on<br>different scales</span>")) +
   theme(text = element_text(size = 8),
-        axis.text = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_markdown(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
         panel.grid.major.y = element_blank(),
@@ -47,7 +50,7 @@ p_norm_raw <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5
 
 p_norm_trans <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = transformed_score, colour = study)) +
-  geom_density(size = 1.1) +
+  geom_density(size = 0.9) +
   labs(title = 'Transformed') + 
   guides(colour = FALSE) +
   coord_cartesian(clip = 'off') +
@@ -63,7 +66,7 @@ p_norm_trans <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_cc
 
 p_norm_final <- filter(raw, study %in% c('steinberg_2016_tem1', 'heredia_2018_ccr5', 'matreyek_2018_tpmt')) %>%
   ggplot(aes(x = score, colour = study)) +
-  geom_density(size = 1.1) +
+  geom_density(size = 0.9) +
   labs(title = 'Normalised') + 
   guides(colour = FALSE) +
   scale_x_continuous(limits = c(-2, 1), breaks = c(0, -1), labels = c('0', '-1\nMean of 10%\nmost deleterious')) +

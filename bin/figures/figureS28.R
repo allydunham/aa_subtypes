@@ -44,55 +44,50 @@ p_transmembrane <- ggplot(filter(dms_domains, gene %in% c('ADRB2', 'CCR5', 'CXCR
 
 ### Panel 2 - Mean Score ###
 p_sift <- drop_na(dms, mean_sift) %>%
-  ggplot(aes(x = sift_umap1, y = sift_umap2, colour = mean_sift)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_color_distiller(type = 'seq', palette = 'RdPu', limits = c(min(dms$mean_sift), 0),
+  ggplot(aes(x = sift_umap1, y = sift_umap2, z = mean_sift)) +
+  stat_summary_hex(bins = 50) +
+  scale_fill_distiller(type = 'seq', palette = 'RdPu', limits = c(min(dms$mean_sift), 0),
                         breaks = 0:-4) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'log<sub>10</sub>SIFT', barheight = lheight, barwidth = lwidth)) +
+  guides(fill = guide_colourbar(title = 'log<sub>10</sub>SIFT4G', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 3 - AA hydrophobicity ### 
 p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
-  ggplot(aes(x = sift_umap1, y = sift_umap2, colour = hydrophobicity)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
+  ggplot(aes(x = sift_umap1, y = sift_umap2, z = hydrophobicity)) +
+  stat_summary_hex(bins = 50) +
+  scale_fill_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
                          values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2)), limits = c(-0.4, 1.201)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
+  guides(fill = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 4 - Surface Accessibility ###
 p_surface_accessibility <- drop_na(dms, all_atom_abs) %>%
-  ggplot(aes(x = sift_umap1, y = sift_umap2, colour = all_atom_abs)) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'),
+  ggplot(aes(x = sift_umap1, y = sift_umap2, z = all_atom_abs)) +
+  stat_summary_hex(bins = 50) +
+  scale_fill_gradientn(colours = c('#1a2a6c', '#b21f1f', '#fdbb2d'),
                          values = c(0, 0.2, 1)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
+  guides(fill = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 5 - Sidechain Entropy ###
 p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
-  ggplot(aes(x = sift_umap1, y = sift_umap2, colour = clamp(entropy_sidechain, 1.5, -1.5))) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
+  ggplot(aes(x = sift_umap1, y = sift_umap2, z = clamp(entropy_sidechain, 1.5, -1.5))) +
+  stat_summary_hex(bins = 50) +
+  scale_fill_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  guides(fill = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 6 - Van der Waals Clash ###
 p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
-  ggplot(aes(x = sift_umap1, y = sift_umap2, colour = clamp(van_der_waals_clashes, 5, -5))) +
-  geom_point(colour = 'grey90', shape = 20, size = 0.8) +
-  geom_point(shape = 20, size = 0.8) +
-  scale_colour_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
+  ggplot(aes(x = sift_umap1, y = sift_umap2, z = clamp(van_der_waals_clashes, 5, -5))) +
+  stat_summary_hex(bins = 50) +
+  scale_fill_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
+  guides(fill = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
 
 ### Panel 7 - Score correlation ###
