@@ -167,7 +167,7 @@ aa_labs <- levels(subtype_size$wt)
 n_aa_labs <- structure(subtype_size$n_aa, names = as.character(subtype_size$wt))[aa_labs]
 
 p_sizes <- ggplot(subtype_size, aes(y = as.integer(wt), x = freq, fill = cluster_num)) +
-  geom_col() +
+  geom_col(orientation = "y") +
   scale_y_continuous(breaks = 1:length(aa_labs), labels = aa_labs,
                      sec.axis = sec_axis(~., breaks = 1:length(n_aa_labs), labels = n_aa_labs, name = ' Total Positions'), expand = expansion(0, 0)) +
   scale_x_continuous(expand = expansion(0, 0)) +
@@ -267,7 +267,7 @@ p_cor_heatmap <- p_cor_heatmap + guides(fill = FALSE)
 # Profiles of key groups
 plot_profile_block <- function(set, guide=FALSE){
   p <- filter(full_characterisation$profiles, cluster %in% set) %>%
-    mutate(cluster = factor(cluster, levels = levels(leaves$label)[levels(leaves$label) %in% set]),
+    mutate(cluster = factor(cluster, levels = leaves$label[leaves$label %in% set]),
            mut = factor(mut)) %>%
     ggplot(aes(x = mut, y = cluster, fill = er)) +
     geom_tile(colour = 'grey', size = 0.05) +
@@ -330,14 +330,20 @@ p_heatmap <- ggplot() +
 ### Panel 4 - Clusters mapped to UMAP ###
 cluster_dms <- mutate(dms, cluster_type = classify_cluster(cluster)) %>%
   select(gene, position, wt, umap1, umap2, cluster, cluster_type) %>%
-  drop_na(cluster_type)
+  drop_na(cluster_type) %>%
+  mutate(cluster_type = as.factor(cluster_type),
+         cluster_num = as.integer(cluster_type))
 
-p_umap <- ggplot() +
-  geom_point(data = dms, mapping = aes(x = umap1, y = umap2), colour = 'grey90', shape = 20, size = 1) +
-  geom_point(data = cluster_dms, mapping = aes(x = umap1, y = umap2, colour = cluster_type), shape = 20, size = 1) +
-  scale_color_manual(values = cor_set_colours) +
+most_common_group <- function(x) {
+  x <- table(x)
+  return(levels(cluster_dms$cluster_type)[as.integer(names(x)[which.max(x)])])
+}
+
+p_umap <- ggplot(cluster_dms, aes(x = umap1, y = umap2, z = cluster_num)) +
+  ggplot2::stat_summary_hex(fun = most_common_group, bins = 35) + 
+  scale_fill_manual(values = cor_set_colours) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(colour = guide_legend(title = '', nrow = 3, override.aes = list(size = 2))) +
+  guides(fill = guide_legend(title = '', nrow = 3, override.aes = list(size = 2))) +
   theme(legend.position = 'top',
         legend.title = element_blank(),
         legend.key.height = unit(4, 'mm'),
