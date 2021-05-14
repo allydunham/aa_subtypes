@@ -18,7 +18,7 @@ plots$norm_quantiles <- ggplot(filter(quantiles, nonsense), aes(x = with, y = wi
   labs(x = "With Nonsense", y = "Without Nonsense")
 
 ### Check distribution of bottom 10% scores predictor metrics ###
-dms_scores <- select(dms, study, score, transformed_score, log10_sift, total_energy) %>%
+dms_scores <- select(dms, study, score, transformed_score, sift, log10_sift, total_energy) %>%
   left_join(quantiles, by = "study") %>%
   mutate(with10 = transformed_score < with,
          without10 = transformed_score < without,
@@ -38,5 +38,23 @@ plots$score_group_box <- ggplot(score_groups, aes(x = class, y = value, fill = c
   facet_wrap(~metric, nrow = 1, scales = "free_y") +
   stat_compare_means(comparisons = list(c("with10", "without10"), c("with10", "neutral"), c("without10", "neutral")))
 
+### SIFT4G Scores across studies
+
+plots$per_study_sift_dist <- ggplot(filter(dms_scores, with10), aes(x = study, y = log10_sift)) +
+  geom_boxplot(fill = "cornflowerblue") +
+  geom_hline(yintercept = log10(0.05)) +
+  coord_flip() +
+  labs(y = expression("log"[10]~"SIFT4G"), x = "") +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_line(linetype = "dotted", colour = "grey"))
+
+plots$per_study_foldx_dist <- ggplot(filter(dms_scores, with10), aes(x = study, y = total_energy)) +
+  geom_boxplot(fill = "cornflowerblue") +
+  geom_hline(yintercept = c(-1, 1)) +
+  coord_flip() +
+  labs(y = expression(Delta*Delta*"G"), x = "") +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_line(linetype = "dotted", colour = "grey"))
+
 ### Save plots ###
-save_plotlist(plots, "figures/0_data/", overwrite = "all")
+save_plotlist(plots, "figures/0_data/normalisation", overwrite = "all")
