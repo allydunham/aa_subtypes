@@ -29,7 +29,7 @@ read_araya <- function(){
       select(!!str_c('score_', x))
   }) %>%
     bind_cols(singles, .) %>%
-    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_ptypes = list(n_mut=integer())) %>%
+    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_transform  = list(n_mut=as.integer)) %>%
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
@@ -75,7 +75,7 @@ read_dorrity <- function(){
       select(!!str_c('score_', x))
   }) %>%
     bind_cols(singles, .) %>%
-    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_ptypes = list(n_mut=integer())) %>%
+    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_transform  = list(n_mut=as.integer)) %>%
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
@@ -112,7 +112,7 @@ read_starita <- function(){
       select(!!str_c('score_', x))
   }) %>%
     bind_cols(singles, .) %>%
-    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_ptypes = list(n_mut=integer())) %>%
+    pivot_longer(starts_with('score_'), names_to = 'n_mut', values_to = 'multi_score', names_prefix = 'score_', names_transform  = list(n_mut=as.integer)) %>%
     group_by(n_mut) %>%
     mutate(frac = sum(!is.na(multi_score))/length(multi_score)) %>%
     ungroup() %>%
@@ -148,3 +148,5 @@ figure <- multi_panel_figure(width = 183, height = 270, columns = 1, rows = 3, u
   fill_panel(panels[[3]], row = 3, column = 1)
 ggsave('figures/4_figures/figureS1.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
 ggsave('figures/4_figures/figureS1.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS1.tiff', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS1.eps', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm', device=cairo_ps, fallback_resolution = 600)

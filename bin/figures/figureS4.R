@@ -47,4 +47,6 @@ figure <- multi_panel_figure(width = 183, height = c(89, 89), unit = 'mm', colum
   fill_panel(p_dists, row = 2, column = 1)
 ggsave('figures/4_figures/figureS4.pdf', figure, width = 183, height = 185, units = 'mm')
 ggsave('figures/4_figures/figureS4.png', figure, width = 183, height = 185, units = 'mm')
+ggsave('figures/4_figures/figureS4.tiff', figure, width = 183, height = 185, units = 'mm')
+ggsave('figures/4_figures/figureS4.eps', figure, width = 183, height = 185, units = 'mm', device=cairo_ps, fallback_resolution = 600)
 

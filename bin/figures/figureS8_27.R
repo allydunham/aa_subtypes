@@ -17,6 +17,8 @@ figures <- group_by(dms, wt) %>%
 
 save_plotlist(figures, 'figures/4_figures/', default_format = 'pdf')
 save_plotlist(figures, 'figures/4_figures/', default_format = 'png')
+save_plotlist(figures, 'figures/4_figures/', default_format = 'eps')
+save_plotlist(figures, 'figures/4_figures/', default_format = 'tiff')
 
 # Save single PDF version
 pdf('figures/4_figures/figureS8_27.pdf', onefile = TRUE, width = 11.7, height = 8.3)

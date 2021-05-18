@@ -182,3 +182,5 @@ figure1 <- multi_panel_figure(width = 183, height = 220, columns = 20, rows = 20
   fill_panel(p5, row = 15:20, column = 11:20)
 ggsave('figures/4_figures/figure1.pdf', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
 ggsave('figures/4_figures/figure1.png', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
+ggsave('figures/4_figures/figure1.tiff', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
+ggsave('figures/4_figures/figure1.eps', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm', device=cairo_ps, fallback_resolution = 600)

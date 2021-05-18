@@ -20,3 +20,5 @@ figure <- mutate(dms, study_pretty = study_pretty[study]) %>%
   guides(colour = FALSE)
 ggsave('figures/4_figures/figureS3.pdf', figure, width = 183, height = 270, units = 'mm')
 ggsave('figures/4_figures/figureS3.png', figure, width = 183, height = 270, units = 'mm')
+ggsave('figures/4_figures/figureS3.tiff', figure, width = 183, height = 270, units = 'mm')
+ggsave('figures/4_figures/figureS3.eps', figure, width = 183, height = 270, units = 'mm', device=cairo_ps, fallback_resolution = 600)

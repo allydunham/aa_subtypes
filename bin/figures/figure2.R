@@ -138,4 +138,6 @@ figure2 <- multi_panel_figure(width = c(125, 43, 15), height = 150, rows = 5,
   fill_panel(p6_legend, row = 5, column = 3)
 ggsave('figures/4_figures/figure2.pdf', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
 ggsave('figures/4_figures/figure2.png', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
+ggsave('figures/4_figures/figure2.tiff', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm')
+ggsave('figures/4_figures/figure2.eps', figure2, width = figure_width(figure2), height = figure_height(figure2), units = 'mm', device=cairo_ps, fallback_resolution = 600)
 

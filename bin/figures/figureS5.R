@@ -18,3 +18,5 @@ figure <- ggplot(pca_summary, aes(x = pc)) +
   labs(x = 'Principal Component', y = 'Proportion of Variance')
 ggsave('figures/4_figures/figureS5.pdf', figure, width = 183, height = 100, units = 'mm')
 ggsave('figures/4_figures/figureS5.png', figure, width = 183, height = 100, units = 'mm')
+ggsave('figures/4_figures/figureS5.tiff', figure, width = 183, height = 100, units = 'mm')
+ggsave('figures/4_figures/figureS5.eps', figure, width = 183, height = 100, units = 'mm', device=cairo_ps, fallback_resolution = 600)

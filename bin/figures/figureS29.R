@@ -40,3 +40,6 @@ figure <- ggplot(cosine, aes(x = type, y = cosine, fill = type)) +
 
 ggsave('figures/4_figures/figureS29.pdf', figure, width = 120, height = 120, units = 'mm')
 ggsave('figures/4_figures/figureS29.png', figure, width = 120, height = 120, units = 'mm')
+ggsave('figures/4_figures/figureS29.tiff', figure, width = 120, height = 120, units = 'mm')
+ggsave('figures/4_figures/figureS29.eps', figure, width = 120, height = 120, units = 'mm', device=cairo_ps, fallback_resolution = 600)
+

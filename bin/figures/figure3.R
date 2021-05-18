@@ -419,3 +419,5 @@ figure3 <- multi_panel_figure(width = 183, height = 183, columns = 9, rows = 3,
 
 ggsave('figures/4_figures/figure3.pdf', figure3, width = figure_width(figure3), height = figure_height(figure3), units = 'mm', device = cairo_pdf)
 ggsave('figures/4_figures/figure3.png', figure3, width = figure_width(figure3), height = figure_height(figure3), units = 'mm')
+ggsave('figures/4_figures/figure3.tiff', figure3, width = figure_width(figure3), height = figure_height(figure3), units = 'mm')
+ggsave('figures/4_figures/figure3.eps', figure3, width = figure_width(figure3), height = figure_height(figure3), units = 'mm', device=cairo_ps, fallback_resolution = 600)

@@ -60,3 +60,5 @@ figure <- multi_panel_figure(width = 183, height = c(160, 23), unit = 'mm', colu
   fill_panel(p_overview, row = 2, column = 1)
 ggsave('figures/4_figures/figureS6.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
 ggsave('figures/4_figures/figureS6.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS6.tiff', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
+ggsave('figures/4_figures/figureS6.eps', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm', device=cairo_ps, fallback_resolution = 600)
