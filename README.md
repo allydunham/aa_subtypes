@@ -1,7 +1,7 @@
 # Exploring amino acid functions in a deep mutational landscape 
 Alistair Dunham & Pedro Beltrao
 
-This repo contains the code used to generate the results of the paper ([bioRxiv](https://www.biorxiv.org/content/10.1101/2020.05.26.116756v1))
+This repo contains the code used to generate the results of the paper ([bioRxiv](https://www.biorxiv.org/content/10.1101/2020.05.26.116756v1)). The [DeepScanScape](https://github.com/allydunham/deepscanscape) package allows users to apply a similar analysis to their own data.
 
 ## Abstract
 
