@@ -68,6 +68,7 @@ p_foldx <- filter(dms, cluster %in% names(charge_groups)) %>%
   labs(x = '', y = expression('Electrostatic'~Delta*Delta*'G (kj mol'^-1*')')) +
   theme(panel.grid.major.y = element_blank(),
         axis.ticks.y = element_blank(),
+        axis.ticks.length.x = unit(0.5, "mm"),
         axis.title.x = element_text(hjust = 1))
 
 p_ionic_ex <- ggplot() +
@@ -175,3 +176,4 @@ ggsave('figures/4_figures/figure5.pdf', figure5, width = figure_width(figure5), 
 ggsave('figures/4_figures/figure5.png', figure5, width = figure_width(figure5), height = figure_height(figure5), units = 'mm')
 ggsave('figures/4_figures/figure5.tiff', figure5, width = figure_width(figure5), height = figure_height(figure5), units = 'mm')
 ggsave('figures/4_figures/figure5.eps', figure5, width = figure_width(figure5), height = figure_height(figure5), units = 'mm', device=cairo_ps, fallback_resolution = 600)
+
