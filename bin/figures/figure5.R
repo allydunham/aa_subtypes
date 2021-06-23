@@ -67,7 +67,7 @@ p_foldx <- filter(dms, cluster %in% names(charge_groups)) %>%
   guides(fill = guide_legend(title = 'Subtype')) +
   labs(x = '', y = expression('Electrostatic'~Delta*Delta*'G (kj mol'^-1*')')) +
   theme(panel.grid.major.y = element_blank(),
-        axis.ticks = element_blank(),
+        axis.ticks.y = element_blank(),
         axis.title.x = element_text(hjust = 1))
 
 p_ionic_ex <- ggplot() +
