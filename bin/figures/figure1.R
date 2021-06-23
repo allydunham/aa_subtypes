@@ -113,8 +113,7 @@ p_rep_ubi <- ggplot(ubi_studys, aes(x=roscoe_2013_ubi, y=roscoe_2014_ubi, colour
   scale_y_continuous(expand = expansion(0.01)) +
   guides(colour = FALSE) +
   labs(x = 'Roscoe et al. 2013', y = 'Roscoe & Bolon 2014') +
-  theme(panel.grid.major.y = element_blank(),
-        axis.ticks = element_blank())
+  theme(panel.grid.major.y = element_blank())
 
 ### Panel 4 - Blosum Correlation ###
 blosum_cor <- group_by(raw, wt, mut) %>%
@@ -142,25 +141,31 @@ format_gene <- function(gene, study){
 sift_correlations <- select(dms_long, study, gene, position, wt, mut, score, log10_sift) %>%
   drop_na(score, log10_sift) %>%
   group_by(study, gene) %>% 
-  group_modify(~tidy(cor.test(.$score, .$log10_sift, method = 'pearson'))) %>%
+  group_modify(~mutate(tidy(cor.test(.$score, .$log10_sift, method = 'pearson')), n = length(.$score))) %>%
   ungroup() %>%
   mutate(study_pretty = sapply(study, format_study, USE.NAMES = FALSE),
          p_cat = pretty_p_values(p.value, breaks = c(1e-48, 1e-12, 1e-06, 1e-3, 0.01, 0.05), markdown_exp = TRUE, prefix_p = TRUE),
-         gene_pretty = format_gene(gene, study))
+         gene_pretty = as.factor(format_gene(gene, study))) %>%
+  arrange(gene_pretty)
 
-p_sift <- ggplot(sift_correlations, aes(x = gene_pretty, y = estimate, fill = p_cat)) +
+p_sift <- ggplot(sift_correlations, aes(x = as.integer(gene_pretty), y = estimate, fill = p_cat, label = str_c("n = ", n))) +
   geom_col(position = position_dodge()) +
   geom_errorbar(aes(ymin=conf.low, ymax=conf.high), width=0.5, position = position_dodge(0.9)) +
   geom_hline(yintercept = 0, colour = 'grey') +
+  scale_x_continuous(breaks = 1:length(levels(sift_correlations$gene_pretty)), labels = as.character(sift_correlations$gene_pretty),
+                     sec.axis = dup_axis(name = "", labels = sift_correlations$n), expand = expansion(0.01)) +
   scale_y_continuous(expand = expansion(mult = c(0.01, 0.05))) +
   labs(x='', y=expression("Pearson's"~rho)) +
   scale_fill_viridis_d(drop=FALSE) +
   guides(fill = guide_legend(nrow = 2)) +
   theme(axis.ticks.x = element_blank(),
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7),
+        axis.text.x.bottom = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7),
+        axis.text.x.top = element_text(angle = 90, hjust = 0, vjust = 0.5, size = 7),
         legend.title = element_blank(),
         legend.text = element_markdown(size = 6),
         legend.key.size = unit(2, 'mm'),
+        legend.margin = margin(-10,0,0,0, unit = "pt"),
+        legend.box.spacing = unit(1, "mm"),
         legend.position = 'bottom')
 
 ### Figure Assembly ###
