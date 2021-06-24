@@ -9,6 +9,9 @@
    id="svg5"
    inkscape:version="1.2-dev (9ee32be, 2021-06-19)"
    sodipodi:docname="summary.svg"
+   inkscape:export-filename="/Users/ally/phd/subtypes/figures/summary.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -27,14 +30,14 @@
      units="px"
      inkscape:snap-global="false"
      inkscape:zoom="0.89973239"
-     inkscape:cx="392.33888"
+     inkscape:cx="71.132262"
      inkscape:cy="183.94358"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
      inkscape:window-x="1"
      inkscape:window-y="26"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer3" />
   <defs
      id="defs2">
     <marker
@@ -13123,7 +13126,19 @@
     </clipPath>
   </defs>
   <g
-     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="background">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.497073;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect194331"
+       width="145.02376"
+       height="105.33626"
+       x="0.24853647"
+       y="0.24853647" />
+  </g>
+  <g
+     inkscape:label="image"
      inkscape:groupmode="layer"
      id="layer1"
      style="display:inline">
@@ -21544,7 +21559,7 @@
          sodipodi:role="line"
          style="font-size:4.23333px;text-align:start;text-anchor:start;fill:#a65628;fill-opacity:0.988235;stroke-width:0.264583"
          x="121.75105"
-         y="60.50449"
+         y="60.504494"
          id="tspan113244">Aliphatic</tspan></text>
     <text
        xml:space="preserve"
@@ -24955,7 +24970,7 @@
          id="g127294" />
     </g>
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.52916665;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker186458);stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker186458)"
        d="m 20.585872,23.289073 c 0,0 -2.911133,16.011231 15.595359,23.912882"
        id="path137273"
        sodipodi:nodetypes="cc" />
@@ -25984,7 +25999,8 @@
        style="font-size:4.93889px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="11.448099"
        y="38.365852"
-       id="text149543"><tspan
+       id="text149543"
+       transform="translate(26.613237,-2.6466202)"><tspan
          sodipodi:role="line"
          id="tspan149541"
          style="font-size:4.93889px;stroke-width:0.264583"
@@ -26033,42 +26049,32 @@
            x="11.989501"
            y="84.941338">UMAP1</tspan></text>
     </g>
-    <rect
-       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#fffff7;stroke-width:2.13756;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
-       id="rect184136"
-       width="57.918274"
-       height="3.4790733"
-       x="46.923901"
-       y="54.853844" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2"
-     style="display:inline">
-    <rect
-       style="display:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.885795;stroke-linejoin:bevel;paint-order:stroke fill markers"
-       id="rect183718"
-       width="59.148491"
-       height="3.8425467"
-       x="42.889538"
-       y="55.898655" />
     <g
-       id="g63637"
-       transform="matrix(0.35277776,0,0,-0.35277776,-141.29289,67.645773)"
-       style="display:inline;fill:#000000;fill-opacity:1">
-      <text
-         xml:space="preserve"
-         style="font-size:12px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.75"
-         x="615.66504"
-         y="-27.276035"
-         id="text63399"
-         transform="scale(1,-1)"><tspan
-           sodipodi:role="line"
-           id="tspan63397"
-           style="font-size:12px;fill:#000000;fill-opacity:1;stroke-width:0.75"
+       id="g194307">
+      <rect
+         style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#fffff7;stroke-width:2.13756;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         id="rect184136"
+         width="57.918274"
+         height="3.4790733"
+         x="46.923901"
+         y="54.853844" />
+      <g
+         id="g63637"
+         transform="matrix(0.35277776,0,0,-0.35277776,-141.29289,67.645773)"
+         style="display:inline;fill:#000000;fill-opacity:1">
+        <text
+           xml:space="preserve"
+           style="font-size:12px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.75"
            x="615.66504"
-           y="-27.276035">Deep Mutational Landscape</tspan></text>
+           y="-27.276035"
+           id="text63399"
+           transform="scale(1,-1)"><tspan
+             sodipodi:role="line"
+             id="tspan63397"
+             style="font-size:12px;fill:#000000;fill-opacity:1;stroke-width:0.75"
+             x="615.66504"
+             y="-27.276035">Deep Mutational Landscape</tspan></text>
+      </g>
     </g>
   </g>
 </svg>
