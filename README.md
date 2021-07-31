@@ -1,15 +1,14 @@
 # Exploring amino acid functions in a deep mutational landscape 
-Alistair Dunham & Pedro Beltrao
+Alistair Dunham & Pedro Beltrao, Molecular Systems Biology, 2021
 
-This repo contains the code used to generate the results of the paper ([bioRxiv](https://www.biorxiv.org/content/10.1101/2020.05.26.116756v1)). The [DeepScanScape](https://github.com/allydunham/deepscanscape) package allows users to apply a similar analysis to their own data.
+This repo contains the code used to generate the results of [Dunham & Beltrao (2021)](https://doi.org/10.15252/msb.202110305). The accompanying [DeepScanScape](https://github.com/allydunham/deepscanscape) package allows users to apply a similar analysis to their own data.
 
 ## Abstract
 
 Amino acids fulfil a diverse range of roles in proteins, each utilising its chemical properties in different ways in different contexts to create required functions.
-For example, cysteines form disulphide or hydrogen bonds in different circumstances and charged amino acids do not always make use of their charge. 
-The repertoire of amino acid functions and the frequency at which they occur in proteins remains understudied.
-Measuring large numbers of mutational consequences, which can elucidate the role an amino acid plays, was prohibitively time consuming until recent developments in deep mutational scanning.
-In this study we gathered data from 28 deep mutational scanning studies, covering 6291 positions in 30 proteins, and used the consequences of mutation at each position to define a mutational landscape.
+For example, cysteines form disulphide or hydrogen bonds in different circumstances and charged amino acids do not always make use of their charge. The repertoire of amino acid functions and the frequency at which they occur in proteins remains understudied.
+Measuring large numbers of mutational consequences, which can elucidate the role an amino acid plays, was prohibitively time-consuming until recent developments in deep mutational scanning.
+In this study, we gathered data from 28 deep mutational scanning studies, covering 6,291 positions in 30 proteins, and used the consequences of mutation at each position to define a mutational landscape.
 We demonstrated rich relationships between this landscape and biophysical or evolutionary properties.
 Finally, we identified 100 functional amino acid subtypes with a data-driven clustering analysis and studied their features, including their frequencies and chemical properties such as tolerating polarity, hydrophobicity or being intolerant of charge or specific amino acids.
 The mutational landscape and amino acid subtypes provide a foundational catalogue of amino acid functional diversity, which will be refined as the number of studied protein positions increases.
