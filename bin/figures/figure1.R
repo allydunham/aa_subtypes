@@ -189,3 +189,23 @@ ggsave('figures/4_figures/figure1.pdf', figure1, width = figure_width(figure1), 
 ggsave('figures/4_figures/figure1.png', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
 ggsave('figures/4_figures/figure1.tiff', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm')
 ggsave('figures/4_figures/figure1.eps', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm', device=cairo_ps, fallback_resolution = 600)
+
+### Thesis Figure Assembly ###
+sizet <- theme(text = element_text(size = 12))
+pt1 <- p_rep_ubi + labs(tag = 'A') + sizet
+pt2 <- p_blosum + labs(tag = 'B') + sizet
+pt12_legend <- p_variant_legend + sizet
+pt3 <- p_sift + 
+  scale_fill_viridis_d(drop=FALSE, direction = -1) + 
+  guides(fill = guide_legend(byrow = TRUE, nrow = 1)) + 
+  labs(tag = 'C') +
+  sizet
+
+figuret1 <- multi_panel_figure(width = 140, height = c(60, 10, 70), columns = 2,
+                              panel_label_type = 'none', row_spacing = 0, column_spacing = 0) %>%
+  fill_panel(pt1, row = 1, column = 1) %>%
+  fill_panel(pt2, row = 1, column = 2) %>%
+  fill_panel(pt12_legend, row = 2, column = 1:2) %>%
+  fill_panel(pt3, row = 3, column = 1:2)
+ggsave('figures/5_thesis/figure1_2.pdf', figuret1, width = figure_width(figuret1), height = figure_height(figuret1),
+       units = 'mm', device = cairo_pdf())

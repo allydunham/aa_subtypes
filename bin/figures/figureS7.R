@@ -58,7 +58,8 @@ p_count_all <- ggplot(filter(count_means, type == "All Amino Acids"), aes(x = po
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd)) +
   scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000, 6357)) +
   labs(x = "Positions Clustered", y = "Functional Subtypes") +
-  lims(y = c(0, 100))
+  lims(y = c(0, 100)) +
+  theme(axis.text.x = element_text(hjust = c(rep(0.5, 6), 0)))
 
 p_count_aas <- ggplot(filter(count_means, type != "All Amino Acids"), aes(x = positions, colour = type)) +
   geom_point(aes(y = mean), show.legend = FALSE) +
@@ -66,10 +67,11 @@ p_count_aas <- ggplot(filter(count_means, type != "All Amino Acids"), aes(x = po
   scale_colour_manual(name = "", values = AA_COLOURS) +
   scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000, 6357)) +
   labs(x = "Positions Clustered", y = "Functional Subtypes") +
-  theme(legend.position = "top")
+  theme(legend.position = "top",
+        axis.text.x = element_text(hjust = c(rep(0.5, 6), 0)))
 
 ### Assemble Figure ###
-size <- theme(text = element_text(size = 8))
+size <- theme(text = element_text(size = 11))
 p1 <- p_freq + labs(tag = 'A') + size
 p2 <- p_count_all + labs(tag = 'B') + size
 p3 <- p_count_aas + labs(tag = 'C') + size
@@ -80,8 +82,4 @@ figure <- multi_panel_figure(width = 183, height = 183, columns = 2, rows = 2,
   fill_panel(p2, row = 2, column = 1) %>%
   fill_panel(p3, row = 2, column = 2)
 
-ggsave('figures/4_figures/figureS7.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureS7.png', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureS7.tiff', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm')
-ggsave('figures/4_figures/figureS7.eps', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm', device=cairo_ps, fallback_resolution = 600)
-
+ggsave('figures/5_thesis/figureS7.pdf', figure, width = figure_width(figure), height = figure_height(figure), units = 'mm', device = cairo_pdf)

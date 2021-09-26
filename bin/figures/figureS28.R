@@ -24,7 +24,7 @@ dms <- bind_cols(dms,
 lheight <- unit(14, 'mm')
 lwidth <- unit(4, 'mm')
 ltitlewidth <- unit(15, 'mm')
-ltitlesize <- 6
+ltitlesize <- 9
 
 ### Panel 1 - Transmembrane Domains ###
 dms_domains <- left_join(dms, select(domains, uniprot_id, start, end, domain=name), by = 'uniprot_id') %>%
@@ -50,7 +50,9 @@ p_sift <- drop_na(dms, mean_sift) %>%
                         breaks = 0:-4) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(fill = guide_colourbar(title = 'log<sub>10</sub>SIFT4G', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Panel 3 - AA hydrophobicity ### 
 p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
@@ -59,8 +61,10 @@ p_hydrophobicity <- drop_na(dms, hydrophobicity) %>%
   scale_fill_gradientn(colours = c('#4575b4', '#e0f3f8', '#fee090', '#fc8d59', '#d73027'),
                          values = rescale01(c(-0.4, 0, 0.4, 0.8, 1.2)), limits = c(-0.4, 1.201)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
-  guides(fill = guide_colourbar(title = 'Hydrophobicity', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  guides(fill = guide_colourbar(title = 'Hydro-\nphobicity', barheight = lheight, barwidth = lwidth)) +
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = 9),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Panel 4 - Surface Accessibility ###
 p_surface_accessibility <- drop_na(dms, all_atom_abs) %>%
@@ -70,7 +74,9 @@ p_surface_accessibility <- drop_na(dms, all_atom_abs) %>%
                          values = c(0, 0.2, 1)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(fill = guide_colourbar(title = str_wrap('Surface Accessibility', 10), barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Panel 5 - Sidechain Entropy ###
 p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
@@ -79,7 +85,9 @@ p_side_entropy <- drop_na(dms, entropy_sidechain) %>%
   scale_fill_distiller(type = 'div', palette = 'PuOr', limits = c(-1.5, 1.5)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(fill = guide_colorbar(title = 'Sidechain Entropy (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Panel 6 - Van der Waals Clash ###
 p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
@@ -88,7 +96,9 @@ p_vdw_clash <- drop_na(dms, van_der_waals_clashes) %>%
   scale_fill_distiller(type = 'div', palette = 'RdYlGn', limits = c(-5, 5)) +
   labs(x = 'UMAP1', y = 'UMAP2') + 
   guides(fill = guide_colorbar(title = 'Van der Waals Clashes (kj&nbsp;mol<sup>-1</sup>)', barheight = lheight, barwidth = lwidth)) +
-  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize))
+  theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Panel 7 - Score correlation ###
 p_pc_score <- ggplot(dms, aes(x = sift_PC1, y = mean_sift, z = mean_score)) +
@@ -98,10 +108,12 @@ p_pc_score <- ggplot(dms, aes(x = sift_PC1, y = mean_sift, z = mean_score)) +
   guides(fill = guide_colourbar(title = 'Mean ER', barheight = lheight, barwidth = lwidth)) +
   theme(legend.title = element_textbox_simple(minwidth = ltitlewidth, maxwidth = ltitlewidth, size = ltitlesize),
         axis.title.x = element_markdown(),
-        axis.title.y = element_markdown())
+        axis.title.y = element_markdown(),
+        legend.margin = margin(0,0,0,0),
+        legend.box.margin = margin(0, -10, 0, -10))
 
 ### Assemble figure ###
-size <- theme(text = element_text(size = 7))
+size <- theme(text = element_text(size = 11))
 p1 <- p_transmembrane + labs(tag = 'A') + size
 p2 <- p_sift + labs(tag = 'B') + size
 p3 <- p_hydrophobicity + labs(tag = 'C') + size
