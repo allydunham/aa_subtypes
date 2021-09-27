@@ -8,7 +8,16 @@ dms <- read_tsv('data/combined_mutational_scans.tsv') %>%
 
 umap2_breaks <- c(-2.5, 0, 2.5)
 
-study_pretty <- sapply(unique(dms$study), format_study, max_width = 20)
+# Alternative format study normalising newline and correcting Ras/Src capitals. Not used in paper, where RAS and SRC were incorrectly lowercase
+alt_format_study <- function(x){
+  yaml <- read_yaml(str_c('data/studies/', x, '/', x, '.yaml'))
+  
+  study <- str_c(yaml$authour, ' ', yaml$year, '\n(', ifelse(yaml$gene == "Ras", "RAS", ifelse(yaml$gene == "Src", "SRC", yaml$gene)), ')')
+    
+  return(study)
+}
+
+study_pretty <- sapply(unique(dms$study), alt_format_study)
 
 figure <- mutate(dms, study_pretty = study_pretty[study]) %>%
   ggplot(aes(x = umap1, y = umap2, colour = study_pretty)) +
