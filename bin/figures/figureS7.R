@@ -31,7 +31,7 @@ p_freq <- ggplot(sub_freqs, aes(x = num, y = freq)) +
   scale_colour_manual(values = AA_COLOURS) +
   scale_x_continuous(breaks = 1:8) +
    guides(colour = guide_legend(title = '', direction = 'horizontal', nrow = 2, byrow = TRUE)) +
-   labs(x = 'Subtype', y = 'Frequency') +
+   labs(x = 'Subtype number', y = 'Frequency') +
    theme(legend.position = 'bottom')
 
 ### Panel 2 - Number of subtypes ###
@@ -56,19 +56,17 @@ count_means <- group_by(counts, rep, positions) %>%
 p_count_all <- ggplot(filter(count_means, type == "All Amino Acids"), aes(x = positions)) +
   geom_point(aes(y = mean)) +
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd)) +
-  scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000, 6357)) +
+  scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000)) +
   labs(x = "Positions Clustered", y = "Functional Subtypes") +
-  lims(y = c(0, 100)) +
-  theme(axis.text.x = element_text(hjust = c(rep(0.5, 6), 0)))
+  lims(y = c(0, 100))
 
 p_count_aas <- ggplot(filter(count_means, type != "All Amino Acids"), aes(x = positions, colour = type)) +
   geom_point(aes(y = mean), show.legend = FALSE) +
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), show.legend = FALSE) +
   scale_colour_manual(name = "", values = AA_COLOURS) +
-  scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000, 6357)) +
+  scale_x_continuous(breaks = c(1000, 2000, 3000, 4000, 5000, 6000)) +
   labs(x = "Positions Clustered", y = "Functional Subtypes") +
-  theme(legend.position = "top",
-        axis.text.x = element_text(hjust = c(rep(0.5, 6), 0)))
+  theme(legend.position = "top")
 
 ### Assemble Figure ###
 size <- theme(text = element_text(size = 11))

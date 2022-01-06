@@ -191,9 +191,9 @@ ggsave('figures/4_figures/figure1.tiff', figure1, width = figure_width(figure1),
 ggsave('figures/4_figures/figure1.eps', figure1, width = figure_width(figure1), height = figure_height(figure1), units = 'mm', device=cairo_ps, fallback_resolution = 600)
 
 ### Thesis Figure Assembly ###
-sizet <- theme(text = element_text(size = 12))
-pt1 <- p_rep_ubi + labs(tag = 'A') + sizet
-pt2 <- p_blosum + labs(tag = 'B') + sizet
+sizet <- theme(text = element_text(size = 11))
+pt1 <- p_rep_ubi + labs(tag = 'A', x = 'Roscoe et al. (2013)', y = 'Roscoe & Bolon (2014)') + sizet
+pt2 <- p_blosum + labs(tag = 'B', x = "BLOSUM62 Score") + scale_x_continuous(breaks = c(-4, 0, 5, 10)) + scale_y_continuous(limits = c(-1, 0.03)) + sizet
 pt12_legend <- p_variant_legend + sizet
 pt3 <- p_sift + 
   scale_fill_viridis_d(drop=FALSE, direction = -1) + 
