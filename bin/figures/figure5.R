@@ -39,7 +39,7 @@ subtype_labs <- c(Negative="<span style = 'color:#e41a1c'>D1</span>, <span style
                   `Not Negative`="<span style = 'color:#377eb8'>K2</span>, <span style = 'color:#4daf4a'>R3</span>")[group_labs]
 
 p_profiles <- ggplot(charge_profiles, aes(x = mut, y = as.integer(group), fill = er)) +
-  geom_tile(colour = 'grey') +
+  geom_tile(colour = 'grey', size = 0.1) +
   coord_fixed() +
   scale_y_continuous(breaks = 1:length(group_labs), labels = group_labs,
                      sec.axis = sec_axis(~., breaks = 1:length(subtype_labs), labels = subtype_labs)) +
@@ -61,7 +61,7 @@ p_foldx <- filter(dms, cluster %in% names(charge_groups)) %>%
   mutate(group = factor(charge_groups[cluster], levels = charge_group_order)) %>%
   ggplot(aes(x = group, y = electrostatics)) +
   geom_boxplot(show.legend = FALSE, fill = '#377eb8', outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
-  geom_hline(yintercept = 0, linetype = 'dotted', colour = 'black') +
+  geom_hline(yintercept = 0, linetype = 'dotted', colour = 'black', size = 0.25) +
   coord_flip() +
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   guides(fill = guide_legend(title = 'Subtype')) +

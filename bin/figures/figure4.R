@@ -17,7 +17,7 @@ p_profiles <- filter(full_characterisation$profiles, cluster %in% c('C1', 'C2'))
   mutate(mut = add_markdown(mut, AA_COLOURS),
          cluster = add_markdown(cluster, cluster_number_colourmap(cluster))) %>%
   ggplot(aes(x = mut, y = cluster, fill = er)) +
-  geom_tile(colour = 'grey') +
+  geom_tile(colour = 'grey', size = 0.1) +
   coord_fixed() +
   scale_fill_distiller(type = ER_PROFILE_COLOURS$type, palette = ER_PROFILE_COLOURS$palette, direction = ER_PROFILE_COLOURS$direction, limits = er_limits) +
   guides(fill = guide_colourbar(title = 'Normalised ER', direction = 'horizontal', barheight = unit(2, 'mm'))) + 
@@ -38,7 +38,10 @@ p_surface_acc <- filter(dms, cluster %in% c('C1', 'C2')) %>%
   geom_line(stat = 'density', show.legend = FALSE) +
   scale_colour_brewer(type = 'qual', palette = 'Set1') +
   labs(x = 'Surface Accessibility (All Atom Abs)', y = 'Scaled Density') +
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank(),
+        panel.grid.major.y = element_line(colour = "grey", linetype = "dotted", size = 0.25),
+        axis.ticks.length = unit(0.5, "mm"),
+        axis.ticks = element_line(size = 0.25))
 
 p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), disulfide > 0) %>%
   count(cluster) %>%
@@ -55,6 +58,8 @@ p_disulphide <- filter(dms, cluster %in% c('C1', 'C2'), disulfide > 0) %>%
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   theme(axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
+        axis.ticks.length.x = unit(0.5, "mm"),
+        axis.ticks.x = element_line(size = 0.25),
         axis.title.y = element_blank(),
         axis.title.x = element_text(hjust = 0.7),
         panel.grid.major.y = element_blank(),
