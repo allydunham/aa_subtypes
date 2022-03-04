@@ -57,7 +57,9 @@ p_profiles <- ggplot(hydro_profiles, aes(x = mut, y = as.integer(group), fill = 
 p_foldx_entropy_sidechain <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = entropy_sidechain, fill = group)) +
-  annotate('line', x = c(0, 3.75), y = 0, colour = 'black', linetype = 'dashed', size = 0.25) +
+  annotate('segment', x = 0, xend = 3.75, y = c(-1.5, -1, -0.5, 0, 0.5, 1, 1.5), yend = c(-1.5, -1, -0.5, 0, 0.5, 1, 1.5),
+           colour = c('grey', 'grey', 'grey', 'black', 'grey', 'grey', 'grey'),
+           linetype = c('dotted', 'dotted', 'dotted', 'dashed', 'dotted', 'dotted', 'dotted'), size = 0.25) +
   geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotation_raster(readPNG('figures/4_figures/position_examples/ras_aliphatic_entropy.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-1, ymax=1) +
   scale_y_continuous(breaks = seq(-1.5, 1.5, 0.5), limits = c(-1.5, 1.5)) +
@@ -76,7 +78,9 @@ p_foldx_entropy_sidechain <- filter(dms, cluster %in% c(large_hydrophobics, smal
 p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = van_der_waals_clashes, fill = group)) +
-  annotate('line', x = c(0, 3.75), y = 0, colour = 'black', linetype = 'dashed', size = 0.25) +
+  annotate('segment', x = 0, xend = 3.75, y = c(0, 10, 20, 30, 40), yend = c(0, 10, 20, 30, 40),
+           colour = c('black', 'grey', 'grey', 'grey', 'grey'),
+           linetype = c('dashed', 'dotted', 'dotted', 'dotted', 'dotted'), size = 0.25) +
   geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotation_raster(readPNG('figures/4_figures/position_examples/adrb2_ala_small_hydro.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=7.667, ymax=33.333) +
   lims(y = c(0, 40)) +
@@ -95,7 +99,9 @@ p_foldx_van_der_waals_clashes <- filter(dms, cluster %in% c(large_hydrophobics, 
 p_foldx_solvation_hydrophobic <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = solvation_hydrophobic, fill = group)) +
-  annotate('line', x = c(0, 3.75), y = 0, colour = 'black', linetype = 'dashed', size = 0.25) +
+  annotate('segment', x = 0, xend = 3.75, y = c(-4, -2, 0, 2, 4), yend = c(-4, -2, 0, 2, 4),
+           colour = c('grey', 'grey', 'black', 'grey', 'grey'),
+           linetype = c('dotted', 'dotted', 'dashed', 'dotted', 'dotted'), size = 0.25) +
   geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotation_raster(readPNG('figures/4_figures/position_examples/ras_met_buried.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-2.667, ymax=2.667) +
   lims(y = c(-4, 4)) +
@@ -114,7 +120,9 @@ p_foldx_solvation_hydrophobic <- filter(dms, cluster %in% c(large_hydrophobics, 
 p_foldx_van_der_waals <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = van_der_waals, fill = group)) +
-  annotate('line', x = c(0, 3.75), y = 0, colour = 'black', linetype = 'dashed', size = 0.25) +
+  annotate('segment', x = 0, xend = 3.75, y = c(-3, -2, -1, 0, 1, 2, 3), yend = c(-3, -2, -1, 0, 1, 2, 3),
+           colour = c('grey', 'grey', 'grey', 'black', 'grey', 'grey', 'grey'),
+           linetype = c('dotted', 'dotted', 'dotted', 'dashed', 'dotted', 'dotted', 'dotted'), size = 0.25) +
   geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotation_raster(readPNG('figures/4_figures/position_examples/cbs_phe_pi.png'), interpolate = TRUE, xmin=4.5, xmax=8.5, ymin=-2, ymax=2) +
   scale_y_continuous(breaks = seq(-3, 3, 1), limits = c(-3, 3)) +
@@ -133,7 +141,9 @@ p_foldx_van_der_waals <- filter(dms, cluster %in% c(large_hydrophobics, small_hy
 p_sa <- filter(dms, cluster %in% c(large_hydrophobics, small_hydrophobics, aromatics)) %>%
   mutate(group = factor(hydro_groups[cluster], levels = c('Small Aliphatic', 'Large Aliphatic', 'Aromatic'))) %>%
   ggplot(aes(x = as.integer(group), y = all_atom_abs, fill = group)) +
-  annotate('line', x = c(0, 3.75), y = 0, colour = 'black', linetype = 'dashed', size = 0.25) +
+  annotate('segment', x = 0, xend = 3.75, y = c(0, 50, 100, 150, 200, 250), yend = c(0, 50, 100, 150, 200, 250),
+           colour = c('black', 'grey', 'grey', 'grey', 'grey', 'grey'),
+           linetype = c('dashed', 'dotted', 'dotted', 'dotted', 'dotted', 'dotted'), size = 0.25) +
   geom_boxplot(show.legend = FALSE, outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
   annotation_raster(readPNG('figures/4_figures/position_examples/tem1_trp_surface.png'), interpolate = TRUE, xmin=4, xmax=8, ymin=41.667, ymax=208.333) +
   scale_y_continuous(limits = c(0, 250)) +

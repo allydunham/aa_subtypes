@@ -61,7 +61,7 @@ p_foldx <- filter(dms, cluster %in% names(charge_groups)) %>%
   mutate(group = factor(charge_groups[cluster], levels = charge_group_order)) %>%
   ggplot(aes(x = group, y = electrostatics)) +
   geom_boxplot(show.legend = FALSE, fill = '#377eb8', outlier.shape = 20, outlier.size = 0.25, lwd = 0.1) +
-  geom_hline(yintercept = 0, linetype = 'dotted', colour = 'black', size = 0.25) +
+  geom_hline(yintercept = c(-2, 0, 2, 4), linetype = 'dotted', colour = c('grey', 'black', 'grey', 'grey'), size = 0.25) +
   coord_flip() +
   scale_fill_brewer(type = 'qual', palette = 'Set1') +
   guides(fill = guide_legend(title = 'Subtype')) +
