@@ -92,7 +92,7 @@ p_aromatic_ex <- ggplot() +
         plot.margin = unit(c(0, 0, 0, 0), 'mm'))
 
 ### Assemble figure ###
-size <- theme(text = element_text(size = 11))
+size <- theme(text = element_text(size = 11.5))
 
 p1 <- p_profiles + labs(tag = 'A') + size
 p2 <- p_disulphide + labs(tag = 'B') + size
